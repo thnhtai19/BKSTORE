@@ -1,0 +1,20 @@
+RewriteEngine On
+Options -Indexes
+
+#CLIENT ROUTERS FRONTEND
+RewriteRule ^$ /app/views/home.php [L]
+RewriteRule ^about$ /app/views/about.php [L]
+
+#USER ROUTERS FRONTEND
+RewriteRule ^user$ /app/views/client/user.php [L]
+
+#ADMIN ROUTERS FRONTEND
+RewriteRule ^admin/home$ /app/views/admin/home.php [L]
+
+
+
+#CLIENT ROUTERS BACKEND
+
+#USER ROUTERS BACKEND
+
+#ADMIN ROUTERS BACKEND
