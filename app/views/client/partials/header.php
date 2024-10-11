@@ -1,7 +1,7 @@
-<div class="bg-custom-background border-b text-black p-4 sticky top-0 z-50">
+<div class="fixed w-full bg-custom-background border-b text-black p-4 top-0 z-50">
     <div class="container max-w-screen-1200 mx-auto flex items-center justify-between">
-        <div class="flex items-center justify-between gap-2 text-2xl font-bold text-white">
-            <img src="/public/image/logo.png" alt="logo web" class="w-8 h-8 cursor-pointer" id="logo">
+        <div class="flex items-center justify-between gap-2 text-2xl font-bold text-white cursor-pointer" onclick="window.location.href='/'">
+            <img src="/public/image/logo.png" alt="logo web" class="w-8 h-8" id="logo">
             <div class="hidden md:block">BKSTORE</div>
         </div>
         <div class="flex items-center mx-4 ml-6 flex-1 justify-center">
