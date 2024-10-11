@@ -2,11 +2,10 @@ RewriteEngine On
 Options -Indexes
 
 #CLIENT ROUTERS FRONTEND
-RewriteRule ^$ /app/views/home.php [L]
-RewriteRule ^about$ /app/views/about.php [L]
+RewriteRule ^$ /app/views/public/home.php [L]
+RewriteRule ^contact$ /app/views/public/contact.php [L]
 
 #USER ROUTERS FRONTEND
-RewriteRule ^user$ /app/views/client/user.php [L]
 
 #ADMIN ROUTERS FRONTEND
 RewriteRule ^admin/home$ /app/views/admin/home.php [L]
@@ -18,3 +17,13 @@ RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 #USER ROUTERS BACKEND
 
 #ADMIN ROUTERS BACKEND
+
+
+
+#CUSTOM 404 ERROR PAGE
+ErrorDocument 404 /app/views/public/404.php
+
+# Ensure directories without index.php return a 404 error
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME}/index.php !-f
+RewriteRule ^.*$ /app/views/public/404.php [L]

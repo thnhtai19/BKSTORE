@@ -1,3 +1,4 @@
+// js cho swipper
 const swiper = new Swiper('.swiper-container', {
     loop: true,
     slidesPerView: 1,
@@ -26,4 +27,17 @@ const swiper = new Swiper('.swiper-container', {
             });
         }
     },
+});
+
+// allow heart
+const heartButton = document.getElementById('heart-button');
+const heartIcon = document.getElementById('heart-icon');
+
+heartButton.addEventListener('click', function () {
+    const isFilled = heartIcon.getAttribute('fill') === 'currentColor';
+    if (isFilled) {
+        heartIcon.setAttribute('fill', 'none');
+    } else {
+        heartIcon.setAttribute('fill', 'currentColor');
+    }
 });
