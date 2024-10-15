@@ -10,7 +10,7 @@
                 placeholder="Tìm kiếm sản phẩm..." 
                 class="border rounded-l-md p-2 h-10 w-full lg:w-4/6 focus:outline-none" 
             >
-            <button class="bg-blue-800 text-white rounded-r-md p-2 hover:bg-blue-600 h-10">
+            <button class="bg-white text-white rounded-r-md p-2 hover:bg-gray-200 h-10">
                 <img src="/public/image/search.png" alt="Search" class="w-5 h-5">
             </button>
         </div>
