@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
@@ -170,168 +170,34 @@
                     </div>
                     <div class="swiper-container-product overflow-hidden">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide-product overflow-hidden">
-                                <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                                    <div class="h-44 flex justify-center">
-                                        <img src="/public/image/book1.webp" alt="Product Image"
-                                            class="object-cover h-full rounded-md">
-                                    </div>
-                                    <div class="pt-4 pb-4 text-sm">
-                                        <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                            Bản
-                                            2020</div>
-                                        <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <?php echo renderStars(sao: 4); ?>
+                            <?php for ($i = 0; $i < 10; $i++) { ?>
+                                <div class="swiper-slide-product overflow-hidden">
+                                    <div class="bg-white p-2 rounded-lg shadow-lg w-full">
+                                        <div class="h-44 flex justify-center">
+                                            <img src="/public/image/book1.webp" alt="Product Image"
+                                                class="object-cover h-full rounded-md">
                                         </div>
-                                        <button id="heart-button" class="focus:outline-none">
-                                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                            </svg>
-                                        </button>
+                                        <div class="pt-4 pb-4 text-sm">
+                                            <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
+                                                Bản 2020</div>
+                                            <p class="text-custom-blue font-bold text-base">42.500đ</p>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <div class="flex items-center">
+                                                <?php echo renderStars(sao: 4); ?>
+                                            </div>
+                                            <button class="heart-button focus:outline-none">
+                                                <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="swiper-slide-product overflow-hidden">
-                                <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                                    <div class="h-44 flex justify-center">
-                                        <img src="/public/image/book1.webp" alt="Product Image"
-                                            class="object-cover h-full rounded-md">
-                                    </div>
-                                    <div class="pt-4 pb-4 text-sm">
-                                        <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                            Bản
-                                            2020</div>
-                                        <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <?php echo renderStars(sao: 4); ?>
-                                        </div>
-                                        <button id="heart-button" class="focus:outline-none">
-                                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide-product overflow-hidden">
-                                <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                                    <div class="h-44 flex justify-center">
-                                        <img src="/public/image/book1.webp" alt="Product Image"
-                                            class="object-cover h-full rounded-md">
-                                    </div>
-                                    <div class="pt-4 pb-4 text-sm">
-                                        <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                            Bản
-                                            2020</div>
-                                        <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <?php echo renderStars(sao: 4); ?>
-                                        </div>
-                                        <button id="heart-button" class="focus:outline-none">
-                                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide-product overflow-hidden">
-                                <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                                    <div class="h-44 flex justify-center">
-                                        <img src="/public/image/book1.webp" alt="Product Image"
-                                            class="object-cover h-full rounded-md">
-                                    </div>
-                                    <div class="pt-4 pb-4 text-sm">
-                                        <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                            Bản
-                                            2020</div>
-                                        <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <?php echo renderStars(sao: 4); ?>
-                                        </div>
-                                        <button id="heart-button" class="focus:outline-none">
-                                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide-product overflow-hidden">
-                                <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                                    <div class="h-44 flex justify-center">
-                                        <img src="/public/image/book1.webp" alt="Product Image"
-                                            class="object-cover h-full rounded-md">
-                                    </div>
-                                    <div class="pt-4 pb-4 text-sm">
-                                        <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                            Bản
-                                            2020</div>
-                                        <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <?php echo renderStars(sao: 4); ?>
-                                        </div>
-                                        <button id="heart-button" class="focus:outline-none">
-                                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide-product overflow-hidden">
-                                <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                                    <div class="h-44 flex justify-center">
-                                        <img src="/public/image/book1.webp" alt="Product Image"
-                                            class="object-cover h-full rounded-md">
-                                    </div>
-                                    <div class="pt-4 pb-4 text-sm">
-                                        <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                            Bản
-                                            2020</div>
-                                        <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <?php echo renderStars(sao: 4); ?>
-                                        </div>
-                                        <button id="heart-button" class="focus:outline-none">
-                                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -340,181 +206,33 @@
                         TẤT CẢ SẢN PHẨM
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                        <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                            <div class="h-44 flex justify-center">
-                                <img src="/public/image/book1.webp" alt="Product Image"
-                                    class="object-cover h-full rounded-md">
-                            </div>
-                            <div class="pt-4 pb-4 text-sm">
-                                <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                    Bản
-                                    2020</div>
-                                <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <?php echo renderStars(sao: 4); ?>
+                        <?php for ($i = 0; $i < 15; $i++) { ?>
+                            <div class="bg-white p-2 rounded-lg shadow-lg w-full">
+                                <div class="h-44 flex justify-center">
+                                    <img src="/public/image/book1.webp" alt="Product Image"
+                                        class="object-cover h-full rounded-md">
                                 </div>
-                                <button id="heart-button" class="focus:outline-none">
-                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor"
-                                        class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                            <div class="h-44 flex justify-center">
-                                <img src="/public/image/book1.webp" alt="Product Image"
-                                    class="object-cover h-full rounded-md">
-                            </div>
-                            <div class="pt-4 pb-4 text-sm">
-                                <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                    Bản
-                                    2020</div>
-                                <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <?php echo renderStars(sao: 4); ?>
+                                <div class="pt-4 pb-4 text-sm">
+                                    <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
+                                        Bản
+                                        2020</div>
+                                    <p class="text-custom-blue font-bold text-base">42.500đ</p>
                                 </div>
-                                <button id="heart-button" class="focus:outline-none">
-                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor"
-                                        class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                            <div class="h-44 flex justify-center">
-                                <img src="/public/image/book1.webp" alt="Product Image"
-                                    class="object-cover h-full rounded-md">
-                            </div>
-                            <div class="pt-4 pb-4 text-sm">
-                                <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                    Bản
-                                    2020</div>
-                                <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <?php echo renderStars(sao: 4); ?>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <?php echo renderStars(4); ?>
+                                    </div>
+                                    <button class="heart-button focus:outline-none">
+                                        <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <button id="heart-button" class="focus:outline-none">
-                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor"
-                                        class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                    </svg>
-                                </button>
                             </div>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                            <div class="h-44 flex justify-center">
-                                <img src="/public/image/book1.webp" alt="Product Image"
-                                    class="object-cover h-full rounded-md">
-                            </div>
-                            <div class="pt-4 pb-4 text-sm">
-                                <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                    Bản
-                                    2020</div>
-                                <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <?php echo renderStars(sao: 4); ?>
-                                </div>
-                                <button id="heart-button" class="focus:outline-none">
-                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor"
-                                        class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                            <div class="h-44 flex justify-center">
-                                <img src="/public/image/book1.webp" alt="Product Image"
-                                    class="object-cover h-full rounded-md">
-                            </div>
-                            <div class="pt-4 pb-4 text-sm">
-                                <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                    Bản
-                                    2020</div>
-                                <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <?php echo renderStars(sao: 4); ?>
-                                </div>
-                                <button id="heart-button" class="focus:outline-none">
-                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor"
-                                        class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                            <div class="h-44 flex justify-center">
-                                <img src="/public/image/book1.webp" alt="Product Image"
-                                    class="object-cover h-full rounded-md">
-                            </div>
-                            <div class="pt-4 pb-4 text-sm">
-                                <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                    Bản
-                                    2020</div>
-                                <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <?php echo renderStars(sao: 4); ?>
-                                </div>
-                                <button id="heart-button" class="focus:outline-none">
-                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor"
-                                        class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                            <div class="h-44 flex justify-center">
-                                <img src="/public/image/book1.webp" alt="Product Image"
-                                    class="object-cover h-full rounded-md">
-                            </div>
-                            <div class="pt-4 pb-4 text-sm">
-                                <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                    Bản
-                                    2020</div>
-                                <p class="text-custom-blue font-bold text-base">42.500đ</p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <?php echo renderStars(sao: 4); ?>
-                                </div>
-                                <button id="heart-button" class="focus:outline-none">
-                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor"
-                                        class="w-6 h-6 text-red-500 transition duration-300 ease-in-out">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 </div>
             </main>
