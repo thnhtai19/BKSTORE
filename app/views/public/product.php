@@ -108,8 +108,8 @@ function renderStars($sao)
                                 <div class="pt-2 flex gap-5">
                                     <div class="text-sm w-1/2">
                                         <div class="flex gap-1">
-                                            <div>Nhà cung cấp:</div>
-                                            <div class="font-bold">Nhà xuất bản Kim Đồng</div>
+                                            <div>Thể loại:</div>
+                                            <div class="font-bold">Văn học</div>
                                         </div>
                                         <div class="flex gap-1 pt-2">
                                             <div>Nhà xuất bản:</div>
@@ -330,9 +330,6 @@ function renderStars($sao)
                                                 <div class="flex gap-2 items-center">
                                                     <div class="text-base font-bold">Trần Thành Tài</div>
                                                     <div class="text-xs">10/10/2024 00:38</div>
-                                                </div>
-                                                <div class="flex items-center">
-                                                    <?php echo renderStars(sao: 4); ?>
                                                 </div>
                                                 <div class="text-sm pt-1 text-justify">
                                                     Sau khi mua và đọc qua, mình thấy sách có chất lượng in tốt, giấy dày và bìa cứng cáp. Nội dung rất cuốn hút, mang lại nhiều giá trị và kiến thức bổ ích. Đây là một cuốn sách đáng để sở hữu, cả về hình thức lẫn nội dung.
