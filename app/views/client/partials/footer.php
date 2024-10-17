@@ -1,6 +1,6 @@
 <footer
     class="flex items-center justify-between bg-white border-t font-medium text-gray-500 text-center p-4 w-full fixed bottom-0 block md:hidden rounded-t-xl shadow-lg text-xs">
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item" data-page="1">
+    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 1) ? 'text-custom-blue' : ''; ?>">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -9,7 +9,7 @@
         </svg>
         <div>Trang chủ</div>
     </div>
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item" data-page="2">
+    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 2) ? 'text-custom-blue' : ''; ?>">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -18,7 +18,7 @@
         </svg>
         <div>Danh mục</div>
     </div>
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item" data-page="3">
+    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 3) ? 'text-custom-blue' : ''; ?>">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="11" />
@@ -27,7 +27,7 @@
         </svg>
         <div>Tôi</div>
     </div>
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item" data-page="4">
+    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 4) ? 'text-custom-blue' : ''; ?>">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 6h15l-1.5 7.5H7.5L6 6z" />
@@ -38,7 +38,7 @@
         </svg>
         <div>Khuyến mãi</div>
     </div>
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item" data-page="5">
+    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 5) ? 'text-custom-blue' : ''; ?>">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -69,10 +69,10 @@
             </div>
             <div class="text-gray-800 pb-2">Kết nối với chúng tôi</div>
             <div class="flex items-center gap-3">
-                <img src="/public/image/facebook.png" alt="social logo" class="w-8 h-8" id="logo">
-                <img src="/public/image/instagram.png" alt="social logo" class="w-8 h-8" id="logo">
-                <img src="/public/image/youtube.png" alt="social logo" class="w-8 h-8" id="logo">
-                <img src="/public/image/telegram.png" alt="social logo" class="w-8 h-8" id="logo">
+                <img src="/public/image/facebook.png" alt="social logo" class="w-8 h-8" >
+                <img src="/public/image/instagram.png" alt="social logo" class="w-8 h-8">
+                <img src="/public/image/youtube.png" alt="social logo" class="w-8 h-8" >
+                <img src="/public/image/telegram.png" alt="social logo" class="w-8 h-8">
             </div>
         </div>
         <div>
@@ -111,11 +111,11 @@
                     Đối tác kết hợp
                 </div>
                 <div class="pt-2 flex flex-wrap gap-10">
-                    <img src="/public/image/vnpost1.png" alt="shipping logo" class="h-8" id="logo">
-                    <img src="/public/image/Logo_ninjavan.webp" alt="shipping logo" class="h-8" id="logo">
-                    <img src="/public/image/ahamove_logo3.webp" alt="shipping logo" class="h-8" id="logo">
-                    <img src="/public/image/icon_snappy1.webp" alt="shipping logo" class="h-8" id="logo">
-                    <img src="/public/image/payos.svg" alt="payment logo" class="h-8" id="logo">
+                    <img src="/public/image/vnpost1.png" alt="shipping logo" class="h-8">
+                    <img src="/public/image/Logo_ninjavan.webp" alt="shipping logo" class="h-8">
+                    <img src="/public/image/ahamove_logo3.webp" alt="shipping logo" class="h-8">
+                    <img src="/public/image/icon_snappy1.webp" alt="shipping logo" class="h-8">
+                    <img src="/public/image/payos.svg" alt="payment logo" class="h-8">
                 </div>
             </div>
         </div>

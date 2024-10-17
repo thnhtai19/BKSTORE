@@ -1,7 +1,7 @@
 <div class="fixed w-full bg-custom-background border-b text-black p-4 top-0 z-50">
     <div class="container max-w-screen-1200 mx-auto flex items-center justify-between">
         <div class="flex items-center justify-between gap-2 text-2xl font-bold text-white cursor-pointer" onclick="window.location.href='/'">
-            <img src="/public/image/logo.png" alt="logo web" class="w-8 h-8" id="logo">
+            <img src="/public/image/logo.png" alt="logo web" class="w-8 h-8">
             <div class="hidden md:block">BKSTORE</div>
         </div>
         <div class="flex items-center mx-4 ml-6 flex-1 justify-center">
@@ -10,7 +10,7 @@
                 placeholder="Tìm kiếm sản phẩm..." 
                 class="border rounded-l-md p-2 h-10 w-full lg:w-4/6 focus:outline-none" 
             >
-            <button class="bg-blue-800 text-white rounded-r-md p-2 hover:bg-blue-600 h-10">
+            <button class="bg-white text-white rounded-r-md p-2 hover:bg-gray-200 h-10">
                 <img src="/public/image/search.png" alt="Search" class="w-5 h-5">
             </button>
         </div>
