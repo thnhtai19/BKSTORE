@@ -1,8 +1,8 @@
 <?php
-require_once '.../config/db.php';
-require_once './support.php';
+require_once dirname(__DIR__, 2) . '/config/db.php';
+require_once dirname(__DIR__, 1) . '/models/support.php';
 
-class AuthService {
+class UserService {
     private $conn;
     private $support;
 
@@ -15,7 +15,7 @@ class AuthService {
         $sql = "SELECT * FROM users WHERE [uid] = '$id'";
         $result = mysqli_query($this->conn, $sql);
         $user = mysqli_fetch_assoc($result);
-        return {
+        return [
             'success' => true,
             'message' => 'Thông tin khách hàng',
             'info' => [
@@ -25,14 +25,14 @@ class AuthService {
                 'sex' => $user['sex'],
                 'address' => $user['address'],
             ]
-        }
+        ];
     }
 
     public function diary($id) {
         $sql = "SELECT * FROM nhat_ky WHERE [uid] = '$id'";
         $result = mysqli_query($this->conn, $sql);
         $diary = mysqli_fetch_assoc($result);
-        return {
+        return [
             'success' => true,
             'message' => 'Nhật ký',
             'info' => [
@@ -40,7 +40,7 @@ class AuthService {
                 'thoi_gian' => $diary['thoi_gian'],
                 'noi_dung' => $diary['noi_dung'],
             ]
-        }
+        ];
     }
 }
 ?>

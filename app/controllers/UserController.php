@@ -36,13 +36,13 @@ class UserController {
     public function info() {
         $id = $_SESSION["uid"];
         if (!isset($id)) return ['success' => false, 'message' => 'Người dùng chưa đăng nhập'];
-        return this->model->info($id);
+        return $this->model->info($id);
     }
 
     public function diary() {
         $id = $_SESSION["uid"];
         if (!isset($id)) return ['success' => false, 'message' => 'Người dùng chưa đăng nhập'];
-        return this->model->diary($id);
+        return $this->model->diary($id);
     }
 }
 ?>

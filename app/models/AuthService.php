@@ -1,6 +1,6 @@
 <?php
-require_once '.../config/db.php';
-require_once './support.php';
+require_once dirname(__DIR__, 2) . '/config/db.php';
+require_once dirname(__DIR__, 1) . '/models/support.php';
 
 class AuthService {
     private $conn;
@@ -25,7 +25,8 @@ class AuthService {
             return ['success' => false, 'message' => 'Người dùng đã bị cấm'];
         }      
         $ip = $this->getIPAddress();
-        $nhat_ky = "INSERT INTO nhat_ky ([uid], thoi_gian, noi_dung) VALUES ('$user['uid']', '$this->support->startTime', 'Đã đăng nhập tài khoản IP: $ip')";
+        $thoi_gian = $this->support->startTime();
+        $nhat_ky = "INSERT INTO nhat_ky ([uid], thoi_gian, noi_dung) VALUES ('$user[uid]', '$thoi_gian', 'Đã đăng nhập tài khoản IP: $ip')";
         mysqli_query($this->conn, $nhat_ky);
         $_SESSION["email"] = $email;
         $_SESSION["password"] = $password;
@@ -41,11 +42,18 @@ class AuthService {
     }
 
     public function signup($name, $email, $password) {
-        $start = $this->support->startTime;
+        $start = $this->support->startTime();
         $sql = "INSERT INTO users ([name], email, [password], [start], trang_thai, [role], phone, sex, [address]) 
                 VALUES ('$name', '$email', '$password', '$start', '1', 'khach_hang', '', '', '')";
         mysqli_query($this->conn, $sql);
-        return ["email" => $email, "password" => $password];
+        return [
+            'success' => true,
+            'message' => 'Signup successful',
+            'user' => [
+                'email' => $email,
+                'password' => $password
+            ]
+        ];
     }
 
     public function forgotPassword($email) {

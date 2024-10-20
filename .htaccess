@@ -13,12 +13,19 @@ RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 
 
 #CLIENT ROUTERS BACKEND
+RewriteRule ^auth/register$ /app/controllers/auth/signup.php [L]
+RewriteRule ^auth/login$ /app/controllers/auth/login.php [L]
+RewriteRule ^auth/forgot$ /app/controllers/auth/forgot.php [L]
+RewriteRule ^auth/change$ /app/controllers/auth/change.php [L]
+RewriteRule ^auth/logout$ /app/controllers/auth/logout.php [L]
 
 #USER ROUTERS BACKEND
 
 #ADMIN ROUTERS BACKEND
 
-
+#PRODUCT ROUTERS BACKEND
+RewriteRule ^product/info$ /app/controllers/product/info.php [L]
+RewriteRule ^product/list$ /app/controllers/product/list.php [L]
 
 #CUSTOM 404 ERROR PAGE
 ErrorDocument 404 /app/views/public/404.php

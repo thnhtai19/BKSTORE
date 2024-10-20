@@ -21,7 +21,7 @@ class AuthController {
                 echo json_encode($response);
             }
             if ($uri === '/singup') {
-                $response = $this->singup();
+                $response = $this->signup();
                 header('Content-Type: application/json');
                 echo json_encode($response);
             }
@@ -119,6 +119,7 @@ class AuthController {
         session_unset();
         session_destroy();
         header("Location: index.php");
+        return ['success' => true, 'message' => 'Logout successful'];
     }
 
     private function isLoggedIn() {
