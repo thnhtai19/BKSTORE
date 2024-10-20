@@ -12,25 +12,23 @@ class AuthService {
     }
 
     public function login($email, $password) {
-        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $sql = "SELECT * FROM `login` WHERE email = '$email'";
         $result = mysqli_query($this->conn, $sql);
         if (mysqli_num_rows($result) === 0) {
             return ['success' => false, 'message' => 'Tài khoản không tồn tại'];
         }
         $user = mysqli_fetch_assoc($result);
-        if (!password_verify($password, $user['password'])) {
+        if ($password != $user['Password']) {
             return ['success' => false, 'message' => 'Sai mật khẩu'];
         }
-        if ($user['trang_thai'] == 0) {
-            return ['success' => false, 'message' => 'Người dùng đã bị cấm'];
-        }      
         $ip = $this->getIPAddress();
         $thoi_gian = $this->support->startTime();
-        $nhat_ky = "INSERT INTO nhat_ky ([uid], thoi_gian, noi_dung) VALUES ('$user[uid]', '$thoi_gian', 'Đã đăng nhập tài khoản IP: $ip')";
+        $uid = $user['UID'];
+        $nhat_ky = "INSERT INTO lich_su_dang_nhap (`UID`, ThoiGian, NoiDung) VALUES ('$uid', '$thoi_gian', 'Đã đăng nhập tài khoản IP: $ip')";
         mysqli_query($this->conn, $nhat_ky);
         $_SESSION["email"] = $email;
         $_SESSION["password"] = $password;
-        $_SESSION["uid"] = $user['uid'];
+        $_SESSION["uid"] = $user['UID'];
         return [
             'success' => true,
             'message' => 'Đăng nhập thành công',
@@ -43,8 +41,8 @@ class AuthService {
 
     public function signup($name, $email, $password) {
         $start = $this->support->startTime();
-        $sql = "INSERT INTO users ([name], email, [password], [start], trang_thai, [role], phone, sex, [address]) 
-                VALUES ('$name', '$email', '$password', '$start', '1', 'khach_hang', '', '', '')";
+        $sql = "INSERT INTO `login` (ten, email, `password`, `role`) 
+                VALUES ('$name', '$email', '$password', 'Customer')";
         mysqli_query($this->conn, $sql);
         return [
             'success' => true,
@@ -57,29 +55,33 @@ class AuthService {
     }
 
     public function forgotPassword($email) {
-        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $sql = "SELECT * FROM `login` WHERE Email = '$email'";
         $result = mysqli_query($this->conn, $sql);
         $user = mysqli_fetch_assoc($result);
         if ($user) {
             $newPassword = $this->generateRandomPassword();
-            $this->sendPasswordResetEmail($email, $newPassword);
-            $this->updatePassword($email, $newPassword);
-            return ["password" => $newPassword];
+            $sent = $this->sendPasswordResetEmail($email, $newPassword);
+            // $this->updatePassword($email, $newPassword);
+            if ($sent['status']) {
+                return ['status' => true, 'password' => $newPassword];
+            } else {
+                return ['status' => false, 'error' => $sent['message']];
+            }
         } else {
             return false;
         }
     }
 
     public function changePassword($email, $current_password, $new_password) {
-        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $sql = "SELECT * FROM `login` WHERE email = '$email'";
         $result = mysqli_query($this->conn, $sql);
         if (mysqli_num_rows($result) == 1) {
             $user = mysqli_fetch_assoc($result);
-            if ($user['password'] === $current_password) {
+            if ($user['Password'] == $current_password) {
                 $this->updatePassword($email, $new_password);
-                return ["email" => $email, "password" => $new_password];
+                return ['status' => true, 'password' => $new_password];
             } else {
-                return ['success' => false, 'message' => 'Current password is incorrect'];
+                return ['status' => false, 'error' => 'Current password is incorrect'];
             }
         }
         return false;
@@ -95,25 +97,38 @@ class AuthService {
         return $password;
     }
 
-    private function sendPasswordResetEmail($email, $newPassword) {
+    function sendPasswordResetEmail($email, $newPassword) {
         $url = 'https://ttdev.id.vn/send.php';
         $data = [
-            'to' => $email,
-            'subject' => 'Password Reset',
-            'message' => "Your new password is: $newPassword"
+            'email' => $email,
+            'mess' => "Your new password is: $newPassword",
         ];
+    
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
         $response = curl_exec($ch);
         curl_close($ch);
-        return $response;
-    }
+        $responseData = json_decode($response, true);
+        if ($responseData['status'] === 'success') {
+            return [
+                'status' => true,
+                'email' => $email,
+                'password' => $newPassword
+            ];
+        } else {
+            return [
+                'status' => false,
+                'message' => $responseData
+            ];
+        }
+    }    
 
     private function updatePassword($email, $newPassword) {
-        $sql = "UPDATE users SET password = '$newPassword' WHERE email = '$email'";
+        $sql = "UPDATE `login` SET `Password` = '$newPassword' WHERE Email = '$email'";
         mysqli_query($this->conn, $sql);
     }
 

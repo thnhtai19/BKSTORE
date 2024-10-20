@@ -1,35 +1,31 @@
 <?php
-require_once '..../config/db.php';
-require_once '.../models/AuthService.php';
+require_once dirname(__DIR__, 3) . '/config/db.php';
+require_once dirname(__DIR__, 2) . '/models/AuthService.php';
 
-class AuthController {
-    private $model;
-    private $conn;
-
-    public function __construct($conn) {
-        $this->conn = $conn;
-        $this->model = new AuthService($conn);
+$db = new Database();
+$model = new AuthService($db->conn);
+header('Content-Type: application/json');
+$method = $_SERVER['REQUEST_METHOD'];
+if ($method === 'POST') {
+    if (isLoggedIn()) {
+        echo json_encode(['success' => false, 'message' => 'Người dùng đã đăng nhập']);
     }
-
-    public function login() {
-        $method = $_SERVER['REQUEST_METHOD'];
-        if ($method === 'POST') {
-            if ($this->isLoggedIn()) {
-                return ['success' => false, 'message' => 'Người dùng đã đăng nhập'];
-            }
-            $email = $_POST["email"];
-            $password = $_POST["password"];
-            return $this->model->login($email, $password);
-        }
-        else {
-            $response = ['error' => 'Invalid request method'];
-            header('Content-Type: application/json');
-            echo json_encode($response);
-        }
+    else {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        if (isset($data['email'])) $email = $data['email'];
+        else $email = '';
+        if (isset($data['password'])) $password = $data['password'];
+        else $password = '';
+        echo json_encode($model->login($email, $password));
     }
-
-    private function isLoggedIn() {
-        return isset($_SESSION["email"]);
-    }
+}
+else {
+    $response = ['error' => 'Invalid request method'];
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+function isLoggedIn() {
+    return isset($_SESSION["email"]);
 }
 ?>

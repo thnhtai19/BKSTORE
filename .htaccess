@@ -14,11 +14,13 @@ RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 
 
 #CLIENT ROUTERS BACKEND
+php_value auto_prepend_file "D:/web/BKSTORE/session_init.php"
 RewriteRule ^auth/register$ /app/controllers/auth/signup.php [L]
 RewriteRule ^auth/login$ /app/controllers/auth/login.php [L]
 RewriteRule ^auth/forgot$ /app/controllers/auth/forgot.php [L]
 RewriteRule ^auth/change$ /app/controllers/auth/change.php [L]
 RewriteRule ^auth/logout$ /app/controllers/auth/logout.php [L]
+RewriteRule ^test$ /app/models/test.php [L]
 
 #USER ROUTERS BACKEND
 
