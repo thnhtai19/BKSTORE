@@ -90,3 +90,15 @@ const swiper3 = new Swiper('.swiper-container-product-detail', {
     },
     slideClass: 'swiper-slide-product-detail',
 });
+
+function goBack() {
+    window.history.back();
+}
+
+function goPayment() {
+    window.location.href = "/checkout/payment"
+}
+
+function goPaymentInfo() {
+    window.location.href = "/checkout/preview"
+}
