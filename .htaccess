@@ -3,6 +3,7 @@ Options -Indexes
 
 #CLIENT ROUTERS FRONTEND
 RewriteRule ^$ /app/views/public/home.php [L]
+RewriteRule ^product$ /app/views/public/product.php [L]
 RewriteRule ^contact$ /app/views/public/contact.php [L]
 
 #USER ROUTERS FRONTEND
