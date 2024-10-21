@@ -46,11 +46,9 @@ CREATE TABLE SAN_PHAM (
     Gia INT NOT NULL,
     TyLeGiamGia FLOAT,
     SoLuongKho INT NOT NULL,
-    HinhAnh TEXT,
     NXB VARCHAR(255),
     KichThuoc VARCHAR(255),
     SoTrang INT,
-    ThongTinChiTiet TEXT,
     PhanLoai VARCHAR(255),
     TuKhoa VARCHAR(255),
     HinhThuc VARCHAR(255),
@@ -177,7 +175,6 @@ CREATE TABLE THONG_BAO (
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
 
---###################################################################--
 
 -- Bảng TIN_TUC
 CREATE TABLE TIN_TUC (

@@ -46,31 +46,5 @@ class SystemService {
         return $finalResults;
     }
     
-
-    public function getComment($id) {
-        $sql = "SELECT * FROM binh_luan WHERE id = '$id'";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) === 0) {
-            return ['success' => false, 'message' => 'Không có bình luận'];
-        }
-        $comments = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $comments[] = $row;
-        }
-        return $comments;
-    }
-
-    public function getReview($id) {
-        $sql = "SELECT * FROM danh_gia WHERE id = '$id'";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) === 0) {
-            return ['success' => false, 'message' => 'Không có đánh giá'];
-        }
-        $reviews = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $reviews[] = $row;
-        }
-        return $reviews;
-    }
 }
 ?>

@@ -16,6 +16,7 @@ RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 #CLIENT ROUTERS BACKEND
 RewriteRule ^test$ /app/models/test.php [L]
 RewriteRule ^system/inforList$ /app/controllers/system/inforList.php [L]
+RewriteRule ^product/productType$ /app/controllers/product/productType.php [L]
 
 #USER ROUTERS BACKEND
 
