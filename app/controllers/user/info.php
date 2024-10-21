@@ -1,20 +1,15 @@
 <?php
-require_once '.../config/db.php';
-require_once '../models/UserService.php';
+require_once dirname(__DIR__, 3) . '/config/db.php';
+require_once dirname(__DIR__, 2) . '/models/UserService.php';
 
-class UserController {
-    private $model;
-    private $conn;
+$db = new Database();
+$model = new UserService($db->conn);
+header('Content-Type: application/json');
 
-    public function __construct($conn) {
-        $this->conn = $conn;
-        $this->model = new UserService($conn);
-    }
-
-    public function info() {
-        $id = $_SESSION["uid"];
-        if (!isset($id)) return ['success' => false, 'message' => 'Người dùng chưa đăng nhập'];
-        return $this->model->info($id);
-    }
-}
+$id = $_SESSION["uid"];
+if (!isset($id)) echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
+echo json_encode([
+    'thong_tin' => $model->info($id),
+    'nhat_ky' => $model->diary($id)
+]);
 ?>

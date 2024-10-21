@@ -12,35 +12,31 @@ class UserService {
     }
 
     public function info($id) {
-        $sql = "SELECT * FROM users WHERE [uid] = '$id'";
-        $result = mysqli_query($this->conn, $sql);
-        $user = mysqli_fetch_assoc($result);
+        $sql1 = "SELECT * FROM khach_hang WHERE `UID` = '$id'";
+        $result1 = mysqli_query($this->conn, $sql1);
+        $user1 = mysqli_fetch_assoc($result1);
+        $sql2 = "SELECT * FROM `login` WHERE `UID` = '$id'";
+        $result2 = mysqli_query($this->conn, $sql2);
+        $user2 = mysqli_fetch_assoc($result2);
         return [
-            'success' => true,
-            'message' => 'Thông tin khách hàng',
-            'info' => [
-                'name' => $user['name'],
-                'role' => $user['role'],
-                'phone' => $user['phone'],
-                'sex' => $user['sex'],
-                'address' => $user['address'],
-            ]
+            'name' => $user2['Ten'],
+            'role' => $user2['Role'],
+            'phone' => $user1['SDT'],
+            'sex' => $user1['GioiTinh'],
+            'address' => $user1['DiaChi'],
         ];
     }
 
     public function diary($id) {
-        $sql = "SELECT * FROM nhat_ky WHERE [uid] = '$id'";
+        $sql = "SELECT * FROM lich_su_dang_nhap WHERE `UID` = '$id'";
         $result = mysqli_query($this->conn, $sql);
-        $diary = mysqli_fetch_assoc($result);
-        return [
-            'success' => true,
-            'message' => 'Nhật ký',
-            'info' => [
-                'id' => $diary['id'],
-                'thoi_gian' => $diary['thoi_gian'],
-                'noi_dung' => $diary['noi_dung'],
-            ]
-        ];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $diary[] = [
+                'ThoiGian' => $row['ThoiGian'],
+                'NoiDung' => $row['NoiDung']
+            ];
+        }
+        return $diary;
     }
 }
 ?>

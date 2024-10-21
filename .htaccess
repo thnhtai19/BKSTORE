@@ -23,6 +23,7 @@ RewriteRule ^auth/logout$ /app/controllers/auth/logout.php [L]
 RewriteRule ^test$ /app/models/test.php [L]
 
 #USER ROUTERS BACKEND
+RewriteRule ^user/info$ /app/controllers/user/info.php [L]
 
 #ADMIN ROUTERS BACKEND
 
