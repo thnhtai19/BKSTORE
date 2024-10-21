@@ -5,17 +5,11 @@ require_once dirname(__DIR__, 2) . '/models/UserService.php';
 $db = new Database();
 $model = new UserService($db->conn);
 header('Content-Type: application/json');
-
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
-    $id = $_SESSION["uid"];
-    if (!isset($id)) {
-        echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
-        return;
-    }
     echo json_encode([
-        'thong_tin' => $model->info($id),
-        'nhat_ky' => $model->diary($id)
+        'danh_sach_banner' => $model->getBanner(),
+        'danh_sach_san_pham' => $model->getProduct()
     ]);
 }
 else {

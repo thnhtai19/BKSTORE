@@ -41,40 +41,45 @@ class ProductService {
         ];
     }
 
-    public function getList($the_loai) {
-        $sql = "SELECT * FROM san_pham WHERE PhanLoai = '$the_loai'";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) === 0) {
+    public function getList() {
+        $sql = "SELECT * FROM san_pham";
+        $result_sql = mysqli_query($this->conn, $sql);
+        if (mysqli_num_rows($result_sql) === 0) {
             return ['success' => false, 'message' => 'Không có sản phẩm'];
         }
         $products = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $id = $row['ID_SP'];
+        while ($row = mysqli_fetch_assoc($result_sql)) {
+            $products[] = $row;
+        }
+        $latest = array_slice($products, -10);
+        $result = [];
+        foreach ($latest as $entry) {
+            $id = $entry['ID_SP'];
             $trang_thai = $this->thich($id);
             switch ($trang_thai) {
                 case -1:
-                    $products[] = [
+                    $result[] = [
                         'id' => $id,
-                        'ten' => $row['TenSP'],
-                        'gia' => $row['Gia'],
-                        'so_sao_trung_binh' => $this->average_star($id)
+                        'ten' => $entry['TenSP'],
+                        'gia' => $entry['Gia'],
+                        'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_bình']
                     ];
                     break;
                 case 0:
-                    $products[] = [
+                    $result[] = [
                         'id' => $id,
-                        'ten' => $row['TenSP'],
-                        'gia' => $row['Gia'],
-                        'so_sao_trung_binh' => $this->average_star($id),
+                        'ten' => $entry['TenSP'],
+                        'gia' => $entry['Gia'],
+                        'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_bình'],
                         'thich' => false
                     ];
                     break;
                 case 1:
-                    $products[] = [
+                    $result[] = [
                         'id' => $id,
-                        'ten' => $row['TenSP'],
-                        'gia' => $row['Gia'],
-                        'so_sao_trung_binh' => $this->average_star($id),
+                        'ten' => $entry['TenSP'],
+                        'gia' => $entry['Gia'],
+                        'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_bình'],
                         'thich' => true
                     ];
                     break;
@@ -82,7 +87,7 @@ class ProductService {
                     break;
             }
         }
-        return $products;
+        return $result;
     }
 
     private function getComment($id) {
@@ -155,6 +160,36 @@ class ProductService {
             return 1;
         }
         return -1;
+    }
+
+    public function productType($type) {
+        $sql = "SELECT 
+                SAN_PHAM.ID_SP, 
+                SAN_PHAM.TenSP, 
+                SAN_PHAM.Gia, 
+                ROUND(AVG(DANH_GIA.SoSao), 0) AS SoSao 
+            FROM 
+                SAN_PHAM 
+            LEFT JOIN 
+                DANH_GIA 
+            ON 
+                SAN_PHAM.ID_SP = DANH_GIA.ID_SP 
+            WHERE 
+                SAN_PHAM.PhanLoai = ?
+            GROUP BY 
+                SAN_PHAM.ID_SP, SAN_PHAM.TenSP, SAN_PHAM.Gia;";
+        $query = $this->conn->prepare($sql);
+        if (!$query) {
+            throw new Exception("Error preparing query: " . $this->conn->error);
+        }
+        $query->bind_param("s", $type);
+        $query->execute();
+        $result = $query->get_result();
+    
+        // Fetch all results as an associative array
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+    
+        return $data;
     }
 }
 ?>

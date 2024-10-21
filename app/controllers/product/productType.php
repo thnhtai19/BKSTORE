@@ -9,13 +9,20 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
-    if (isset($data['ID_SP'])) $ID_SP = $data['ID_SP'];
-    else $ID_SP = '';
-    echo json_encode($model->getInfo($ID_SP));
+    $type = $data['PhanLoai'];
+    $response = $model->productType($type);
+    if (!isLoggedIn()) {
+        echo json_encode(["DanhSachSanPham" => $response,'LoginStatus' => true]);
+    }
+    else echo json_encode($response);
 }
 else {
-    $response = ['error' => 'Sai phương thức yêu cầu'];
+    $response = ['error' => 'Invalid request method'];
     header('Content-Type: application/json');
     echo json_encode($response);
+}
+
+function isLoggedIn() {
+    return isset($_SESSION["email"]);
 }
 ?>

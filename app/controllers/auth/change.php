@@ -9,6 +9,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
     if (!isLoggedIn()) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
+        return;
     }
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
@@ -21,7 +22,7 @@ if ($method === 'POST') {
     if ($response['status']) {
         echo json_encode([
             'success' => true,
-            'message' => 'Password changed successfully',
+            'message' => 'Thay đổi mật khẩu thành công',
             'user' => [
                 'email' => $email,
                 'password' => $response['password']
@@ -32,7 +33,7 @@ if ($method === 'POST') {
     }
 }
 else {
-    $response = ['error' => 'Invalid request method'];
+    $response = ['error' => 'Sai phương thức yêu cầu'];
     header('Content-Type: application/json');
     echo json_encode($response);
 }

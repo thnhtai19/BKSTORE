@@ -46,11 +46,9 @@ CREATE TABLE SAN_PHAM (
     Gia INT NOT NULL,
     TyLeGiamGia FLOAT,
     SoLuongKho INT NOT NULL,
-    HinhAnh TEXT,
     NXB VARCHAR(255),
     KichThuoc VARCHAR(255),
     SoTrang INT,
-    ThongTinChiTiet TEXT,
     PhanLoai VARCHAR(255),
     TuKhoa VARCHAR(255),
     HinhThuc VARCHAR(255),
@@ -121,11 +119,11 @@ CREATE TABLE MA_GIAM_GIA (
 CREATE TABLE DON_HANG (
     ID_DonHang INT AUTO_INCREMENT PRIMARY KEY,
     UID INT,
-    NgayDat TEXT NOT NULL,
+    NgayDat TEXT,  -- Changed TEXT to DATE
     TongTien DECIMAL(10, 2) NOT NULL,
     MaGiamGia VARCHAR(50),
-    ThanhToan BOOL DEFAULT(FALSE),
-    PhuongThucThanhToan ENUM('COD', 'Bank'),
+    ThanhToan BOOLEAN DEFAULT FALSE,
+    PhuongThucThanhToan ENUM('COD', 'Bank'),  -- Consistent single quotes
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID),
     FOREIGN KEY (MaGiamGia) REFERENCES MA_GIAM_GIA(Ma)
 );
@@ -175,4 +173,57 @@ CREATE TABLE THONG_BAO (
     NoiDung TEXT,
     TrangThai ENUM('Unread', 'Read'),
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
+);
+
+
+-- Bảng TIN_TUC
+CREATE TABLE TIN_TUC (
+    MaTinTuc INT AUTO_INCREMENT PRIMARY KEY,
+    TieuDe VARCHAR(255),
+    ThoiGianTao TEXT,
+    NoiDung TEXT,
+    TuKhoa VARCHAR(255)
+);
+
+CREATE TABLE ANH_MINH_HOA (
+    MaAnh INT AUTO_INCREMENT PRIMARY KEY,
+    MoTa TEXT,
+    LinkAnh TEXT,
+    MaTinTuc INT,
+    FOREIGN KEY (MaTinTuc) REFERENCES TIN_TUC(MaTinTuc)
+);
+
+-- Bảng BANNER
+CREATE TABLE BANNER (
+    MaBanner INT AUTO_INCREMENT PRIMARY KEY,
+    Image VARCHAR(255),
+    IdSP INT,
+    FOREIGN KEY (IdSP) REFERENCES SAN_PHAM(ID_SP)
+);
+
+-- Bảng DOI_TAC
+CREATE TABLE DOI_TAC (
+    MaDoiTac INT AUTO_INCREMENT PRIMARY KEY,
+    Ten VARCHAR(255),
+    HinhAnh VARCHAR(255)
+);
+
+-- Bảng HE_THONG
+CREATE TABLE HE_THONG (
+    MaHeThong INT PRIMARY KEY,
+    TrangThaiBaoTri BOOLEAN
+);
+
+-- Bảng THONG_TIN_LIEN_HE
+CREATE TABLE THONG_TIN_LIEN_HE (
+    MaThongTin INT AUTO_INCREMENT PRIMARY KEY,
+    Loai VARCHAR(255),
+    ThongTin TEXT
+);
+
+-- Bảng MANG_XA_HOI
+CREATE TABLE MANG_XA_HOI (
+    MaMXH INT AUTO_INCREMENT PRIMARY KEY,
+    HinhAnh VARCHAR(255),
+    LienKet VARCHAR(255)
 );

@@ -40,13 +40,29 @@ class AuthService {
     }
 
     public function signup($name, $email, $password) {
-        $start = $this->support->startTime();
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ['success' => false, 'message' => 'Email không hợp lệ'];
+        }
+        $checkEmailQuery = "SELECT email FROM login WHERE email = '$email'";
+        $result = mysqli_query($this->conn, $checkEmailQuery);
+        if (mysqli_num_rows($result) > 0) {
+            return ['success' => false, 'message' => 'Tài khoản đã được đăng ký'];
+        }
+        if (empty($password)) {
+            return ['success' => false, 'message' => 'Vui lòng nhập mật khẩu'];
+        }
         $sql = "INSERT INTO `login` (ten, email, `password`, `role`) 
                 VALUES ('$name', '$email', '$password', 'Customer')";
         mysqli_query($this->conn, $sql);
+        $sql1 = "SELECT * FROM `login` WHERE email = '$email'";
+        $result = mysqli_query($this->conn, $sql1);
+        $user = mysqli_fetch_assoc($result);
+        $uid = $user['UID'];
+        $sql2 = "INSERT INTO `khach_hang` (`UID`) VALUES ('$uid')";
+        mysqli_query($this->conn, $sql2);
         return [
             'success' => true,
-            'message' => 'Signup successful',
+            'message' => 'Đăng ký thành công',
             'user' => [
                 'email' => $email,
                 'password' => $password
@@ -81,7 +97,7 @@ class AuthService {
                 $this->updatePassword($email, $new_password);
                 return ['status' => true, 'password' => $new_password];
             } else {
-                return ['status' => false, 'error' => 'Current password is incorrect'];
+                return ['status' => false, 'error' => 'Sai mật khẩu'];
             }
         }
         return false;

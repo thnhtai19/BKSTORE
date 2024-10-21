@@ -23,7 +23,7 @@ if ($method === 'POST') {
     }
 }
 else {
-    $response = ['error' => 'Invalid request method'];
+    $response = ['error' => 'Sai phương thức yêu cầu'];
     header('Content-Type: application/json');
     echo json_encode($response);
 }

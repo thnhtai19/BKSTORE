@@ -1,14 +1,17 @@
 <?php
 require_once dirname(__DIR__, 2) . '/config/db.php';
 require_once dirname(__DIR__, 1) . '/models/support.php';
+require_once dirname(__DIR__, 1) . '/models/ProductService.php';
 
 class UserService {
     private $conn;
     private $support;
+    private $product;
 
     public function __construct($conn) {
         $this->conn = $conn;
         $this->support = new support();
+        $this->product = new ProductService($conn);
     }
 
     public function info($id) {
@@ -37,6 +40,23 @@ class UserService {
             ];
         }
         return $diary;
+    }
+
+    public function getBanner() {
+        $sql = "SELECT * FROM banner";
+        $result = mysqli_query($this->conn, $sql);
+        if (mysqli_num_rows($result) === 0) {
+            return ['success' => false, 'message' => 'Không tìm thấy banner'];
+        }
+        $banner = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $banner[] = $row;
+        }
+        return $banner;
+    }
+
+    public function getProduct() {
+        return $this->product->getList();
     }
 }
 ?>

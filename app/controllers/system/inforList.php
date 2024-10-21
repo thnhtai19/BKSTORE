@@ -1,17 +1,21 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
-require_once dirname(__DIR__, 2) . '/models/ProductService.php';
+require_once dirname(__DIR__, 2) . '/models/SystemService.php';
 
 $db = new Database();
-$model = new ProductService($db->conn);
+$model = new SystemService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
-    if (isset($data['the_loai'])) $the_loai = $data['the_loai'];
-    else $the_loai = '';
-    echo json_encode($model->getList($the_loai));
+
+    $response = $model->getInfoList();
+    if ($response) {
+        echo json_encode($response);
+    } else {
+        echo json_encode(['status' => 'Error', 'message' => 'Có lỗi xảy ra!']);
+    }
 }
 else {
     $response = ['error' => 'Invalid request method'];
