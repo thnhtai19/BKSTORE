@@ -161,8 +161,17 @@
                         </div>
 
                         <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">14M</h3>
-                                <p class="text-sm text-center text-gray-600 mb-2">Tổng tiền mua hàng</p>
+                            <h1 class="text-3xl font-bold mb-4">Nhật ký hoạt động</h1>
+
+                            <table class="table-auto w-full mb-6">
+                                <thead>
+                                    <tr class="bg-gray-200 text-left">
+                                        <th class="px-4 py-2 border-r-2 border-black">ID</th>
+                                        <th class="px-4 py-2 border-r-2 border-black">Thời gian</th>
+                                        <th class="px-4 py-2">Nội dung</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>

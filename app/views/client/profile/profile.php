@@ -14,9 +14,9 @@
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
         </header>
         <div class="overflow-y-auto">
-            <main class="container max-w-screen-1200 mx-auto pt-16 pb-20 px-1 lg:px-0">
+            <main class="container max-w-screen-1200 min-h-screen mx-auto pt-16 pb-20 px-1 lg:px-0">
                 <div class="flex gap-4 pt-6">
-                    <div class="w-1/4 bg-white hidden lg:block flex flex-col text-gray-800 p-4 shadow-md">
+                    <div class="w-1/4 bg-white hidden lg:block flex flex-col text-gray-800 p-4 shadow-md rounded-lg min-h-screen">
                         <nav>
                             <ul>
                                 <li class="mb-4">
