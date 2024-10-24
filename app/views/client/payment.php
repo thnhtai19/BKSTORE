@@ -12,8 +12,8 @@
 
 <body class="bg-gray-100">
     <div id="loading" class="fixed inset-0 flex items-center justify-center bg-white z-50">
-        <div class="relative w-24 h-24">
-            <img src="/public/image/logo.png" alt="Loading" class="absolute inset-0 w-14 h-14 mx-auto my-auto">
+        <div class="relative w-14 h-14">
+            <img src="/public/image/logo.png" alt="Loading" class="absolute inset-0 w-8 h-8 mx-auto my-auto">
             <div class="loader border-8 rounded-full animate-spin"></div>
         </div>
     </div>
