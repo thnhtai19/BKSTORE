@@ -6,7 +6,7 @@
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/client.css">
-    <title>Tài khoản | BKSTORE</title>
+    <title>Lịch sử mua hàng | BKSTORE</title>
 </head>
 <body class="bg-gray-100">
     <div class="h-screen">
@@ -20,7 +20,7 @@
                         <nav>
                             <ul>
                                 <li class="mb-4">
-                                    <a href="#" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
+                                    <a href="/app/views/client/profile/profile.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
                                         Trang chủ
                                     </a>
                                 </li>
@@ -30,13 +30,13 @@
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="/app/views/client/profile/order-history.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                    <a href="#" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
                                         Lịch sử mua hàng
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="/app/views/client/profile/support.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
-                                        Hỗ trợ
+                                    <a href="#" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                        Hồ sơ
                                     </a>
                                 </li>
                                 <li>

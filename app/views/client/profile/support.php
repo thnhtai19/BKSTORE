@@ -6,7 +6,7 @@
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/client.css">
-    <title>Tài khoản | BKSTORE</title>
+    <title>Hỗ trợ | BKSTORE</title>
 </head>
 <body class="bg-gray-100">
     <div class="h-screen">
@@ -20,7 +20,7 @@
                         <nav>
                             <ul>
                                 <li class="mb-4">
-                                    <a href="#" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
+                                    <a href="/app/views/client/profile/profile.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
                                         Trang chủ
                                     </a>
                                 </li>
@@ -35,7 +35,7 @@
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="/app/views/client/profile/support.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                    <a href="#" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
                                         Hỗ trợ
                                     </a>
                                 </li>
@@ -49,35 +49,40 @@
                     </div>
 
                     <div class="w-full lg:w-3/4 rounded-lg space-y-6">
-                        <div class="flex items-center space-x-6">
-                            <img src="/public/image/facebook.png" alt="Avatar" class="w-16 h-16 rounded-full">
-                            
-                            <div>
-                                <h2 class="text-2xl font-bold text-blue-600">Khương Gia Túc</h2>
-                                <p class="text-gray-600">tuc.khuongbk@hcmut.edu.vn</p>
+                        <div class="flex flex-col md:flex-row gap-10">
+                            <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
+                                <div class="w-20 h-20 float-left mr-2">
+                                    <img src="/public/image/consultation.jpg" alt="consultation">
+                                </div>
+                                <h5 class="font-bold mt-3">Tư vấn mua hàng (8h00 - 22h20)</h5>
+                                <p class="text-lg text-yellow-500">1800.2097</p>
                             </div>
-                        </div>
-                        
-                        <div class="flex flex-col md:flex-row gap-2">
-                            <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">4</h3>
-                                <p class="text-sm text-center text-gray-600 mb-2">Đơn hàng</p>
-                            </div>
-                            <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">14M</h3>
-                                <p class="text-sm text-center text-gray-600 mb-2">Tổng tiền mua hàng</p>
-                            </div>
-                            <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">Thành viên</h3>
-                                <p class="text-sm text-center text-gray-600 mb-2">Cấp bậc</p>
+
+                            <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
+                                <div class="w-20 h-20 float-left mr-2">
+                                    <img src="/public/image/warranty.jfif" alt="warranty">
+                                </div>
+                                <h5 class="font-bold mt-3">Tư vấn đổi sách (8h00 - 21h00)</h5>
+                                <p class="text-lg text-yellow-500">1800.2088</p>
                             </div>
                         </div>
 
-                        <p class="bg-gray-200 text-blue-500 text-sm block px-2 py-2 rounder-lg">
-                            Cập nhật thông tin cá nhân và địa chỉ 
-                            để có trải nghiệm đặt hàng nhanh và thuận tiện hơn.
-                            <a href="#" class="underline text-blue-800">Cập nhập?</a>
-                        </p>
+                        <div class="flex flex-col md:flex-row gap-10">
+                            <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
+                                <div class="w-20 h-20 float-left mr-2">
+                                    <img src="/public/image/complaint.jfif" alt="complaint">
+                                </div>
+                                <h5 class="font-bold mt-3">Khiếu nại (8h00 - 21h30)</h5>
+                                <p class="text-lg text-yellow-500">1800.2088</p>
+                            </div>
+                            <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
+                                <div class="w-20 h-20 float-left mr-2">
+                                    <img src="/public/image/email.png" alt="email">
+                                </div>
+                                <h5 class="font-bold mt-3">Email</h5>
+                                <p class="text-lg text-yellow-500">htkh@bkstore.com.vn</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
