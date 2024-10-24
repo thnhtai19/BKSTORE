@@ -138,13 +138,13 @@
 
 /* CSS Loading */
 .loader {
-    width: 96px; 
-    height: 96px;
+    width: 56px; 
+    height: 56px;
     border-radius: 50%;
-    border: 8px solid transparent; 
+    border: 3px solid transparent; 
     border-top-color: #0688B4;
-    border-bottom-color: #0688B4; 
-    animation: spin 2s linear infinite;
+    border-left-color: #0688B4; 
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
