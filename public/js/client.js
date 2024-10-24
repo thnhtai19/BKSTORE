@@ -102,3 +102,11 @@ function goPayment() {
 function goPaymentInfo() {
     window.location.href = "/checkout/preview"
 }
+
+function goNotice() {
+    window.location.href = "/notice"
+}
+
+function goHome() {
+    window.location.href = "/"
+}

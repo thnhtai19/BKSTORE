@@ -22,7 +22,7 @@
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
         </header>
         <div class="overflow-y-auto">
-            <main class="container max-w-2xl mx-auto min-h-screen pt-16 pb-24 px-1 lg:px-0">
+            <main class="container max-w-2xl mx-auto min-h-screen pt-16 pb-24 px-2 lg:px-0">
                 <div class="pt-6">
                     <div class="relative flex justify-center items-center">
                         <button class="absolute left-0 material-icons" onclick="goBack()">

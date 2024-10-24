@@ -1,6 +1,6 @@
 <footer
     class="flex items-center justify-between bg-white border-t font-medium text-gray-500 text-center p-4 w-full fixed bottom-0 block md:hidden rounded-t-xl shadow-lg text-xs">
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 1) ? 'text-custom-blue' : ''; ?>">
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 1) ? 'text-custom-blue' : ''; ?>" onclick="goHome()">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -9,16 +9,14 @@
         </svg>
         <div>Trang chủ</div>
     </div>
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 2) ? 'text-custom-blue' : ''; ?>">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3 4h6v6H3zM3 14h6v6H3zM14 4h6v6h-6zM14 14h6v6h-6z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9h6v6H9z" />
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 2) ? 'text-custom-blue' : ''; ?>" onclick="goNotice()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2c0-1.38 1-2.5 2-2.5V11a7 7 0 1 1 14 0v4.5c1 0 2 1.12 2 2.5z"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
         </svg>
-        <div>Danh mục</div>
+        <div>Thông báo</div>
     </div>
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 3) ? 'text-custom-blue' : ''; ?>">
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 3) ? 'text-custom-blue' : ''; ?>">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="11" />
@@ -27,7 +25,7 @@
         </svg>
         <div>Tôi</div>
     </div>
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 4) ? 'text-custom-blue' : ''; ?>">
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 4) ? 'text-custom-blue' : ''; ?>">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 6h15l-1.5 7.5H7.5L6 6z" />
@@ -38,7 +36,7 @@
         </svg>
         <div>Khuyến mãi</div>
     </div>
-    <div class="flex flex-col items-center justify-center cursor-pointer footer-item <?php echo ($page == 5) ? 'text-custom-blue' : ''; ?>">
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 5) ? 'text-custom-blue' : ''; ?>">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />

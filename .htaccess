@@ -10,6 +10,7 @@ RewriteRule ^contact$ /app/views/public/contact.php [L]
 RewriteRule ^cart$ /app/views/client/cart.php [L]
 RewriteRule ^checkout/preview$ /app/views/client/payment_info.php [L]
 RewriteRule ^checkout/payment$ /app/views/client/payment.php [L]
+RewriteRule ^notice$ /app/views/client/notice.php [L]
 
 #ADMIN ROUTERS FRONTEND
 RewriteRule ^admin/home$ /app/views/admin/home.php [L]

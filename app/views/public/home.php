@@ -107,9 +107,9 @@
                         <div
                             class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
                             <div class="flex justify-between items-center">
-                                <img src="/public/image/protect.png" alt="protect" class="w-6 h-6 mr-2">
+                                <img src="/public/image/comment.png" alt="protect" class="w-6 h-6 mr-2">
                                 <div>
-                                    Tra cứu bảo hành
+                                    Góp ý bán sách
                                 </div>
                             </div>
                             <svg height="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">

@@ -78,8 +78,8 @@
                                 <div>Lịch sử mua hàng</div>
                             </li>
                             <li class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
-                                <img src="/public/image/warranty.png" alt="warranty" class="h-6">
-                                <div>Tra cứu bảo hành</div>
+                                <img src="/public/image/pw.png" alt="warranty" class="h-6">
+                                <div>Thay đổi mật khẩu</div>
                             </li>
                             <li class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
                                 <img src="/public/image/exit.png" alt="exit" class="h-6">
