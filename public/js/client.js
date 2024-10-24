@@ -29,15 +29,92 @@ const swiper = new Swiper('.swiper-container', {
     },
 });
 
-// allow heart
-const heartButton = document.getElementById('heart-button');
-const heartIcon = document.getElementById('heart-icon');
 
-heartButton.addEventListener('click', function () {
-    const isFilled = heartIcon.getAttribute('fill') === 'currentColor';
-    if (isFilled) {
-        heartIcon.setAttribute('fill', 'none');
-    } else {
-        heartIcon.setAttribute('fill', 'currentColor');
-    }
+// js cho swipper product
+const swiper2 = new Swiper('.swiper-container-product', {
+    loop: true,
+    slidesPerGroup: 1,
+    spaceBetween: 12,
+    autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+    },
+    on: {
+        slideChange: function () {
+            const slides = document.querySelectorAll('.swiper-slide-product');
+            slides.forEach((slide, index) => {
+                if (index >= this.activeIndex && index < this.activeIndex + this.params.slidesPerView) {
+                    slide.style.opacity = 1;
+                } else {
+                    slide.style.opacity = 0;
+                }
+            });
+        }
+    },
+    slideClass: 'swiper-slide-product',
+    breakpoints: {
+        1024: {
+            slidesPerView: 5,
+        },
+        768: {
+            slidesPerView: 3,
+        },
+        0: {
+            slidesPerView: 2,
+            spaceBetween: 5,
+        },
+    },
 });
+
+
+// js cho swipper trang product
+const swiper3 = new Swiper('.swiper-container-product-detail', {
+    loop: true,
+    slidesPerView: 1,
+    spaceBetween: 10,
+    navigation: {
+        nextEl: '.swiper-button-pr-next',
+        prevEl: '.swiper-button-pr-prev',
+    },
+    on: {
+        slideChange: function () {
+            const slides = document.querySelectorAll('.swiper-slide-product-detail');
+            slides.forEach((slide, index) => {
+                if (index === this.activeIndex) {
+                    slide.style.opacity = 1;
+                } else {
+                    slide.style.opacity = 0;
+                }
+            });
+        }
+    },
+    slideClass: 'swiper-slide-product-detail',
+});
+
+function goBack() {
+    window.history.back();
+}
+
+function goPayment() {
+    window.location.href = "/checkout/payment"
+}
+
+function goPaymentInfo() {
+    window.location.href = "/checkout/preview"
+}
+
+function goNotice() {
+    window.location.href = "/notice"
+}
+
+function goHome() {
+    window.location.href = "/"
+}
+
+var notyf = new Notyf({
+    duration: 3000,
+    position: {
+      x: 'right',
+      y: 'top',
+    },
+  });
