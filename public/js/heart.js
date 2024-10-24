@@ -17,6 +17,7 @@ heartButtons.forEach((button) => {
             heartIcon.setAttribute('fill', 'none');
         } else {
             heartIcon.setAttribute('fill', 'currentColor');
+            notyf.success('Thêm vào sản phẩm yêu thích thành công!');
         }
     });
 });

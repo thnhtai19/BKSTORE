@@ -8,6 +8,7 @@
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/public/css/client.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <title>Trang chủ | BKSTORE</title>
 </head>
 
@@ -240,6 +241,7 @@
         <?php $page = 1;
         include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
+    <script src="/public/js/notyf.min.js"></script>
     <script src="/public/js/heart.js"></script>
     <script src="/public/js/swiper-bundle.min.js"></script>
     <script src="/public/js/client.js"></script>

@@ -156,4 +156,14 @@
     }
 }
 
+@media (max-width: 600px) {
+    .notyf {
+        font-size: 14px;
+        margin-top: 30px;
+        margin-left: 80px;
+        max-width: 80%;
+        padding: 20px;
+    }
+}
+
 

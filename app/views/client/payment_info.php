@@ -89,11 +89,6 @@
                             </div>
                         </div>
                         <div class="text-gray-600 mb-2 mt-2">
-                            Email
-                        </div>
-                        <input type="text" class="border rounded-lg w-full p-2" value="tai.tranthanh@hcmut.edu.vn">
-                        <div class="text-sm text-gray-400 pt-1">(*) Hoá đơn điện tử sẽ được gửi qua email này</div>
-                        <div class="text-gray-600 mb-2 mt-2">
                             Địa chỉ nhận hàng
                         </div>
                         <input type="text" class="border rounded-lg w-full p-2" value="Trường đại học Bách Khoa TP HCM">

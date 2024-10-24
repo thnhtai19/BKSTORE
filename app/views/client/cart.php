@@ -43,15 +43,15 @@
                                             <img class="h-full" src="/public/image/book1.webp" alt="product">
                                         </div>
                                         <div class="flex-1">
-                                            <div class="flex flex-col justify-between h-full">
-                                                <div class="flex justify-between items-start gap-4">
+                                            <div class="flex flex-col justify-between h-full w-full">
+                                                <div class="flex items-start gap-1 justify-between">
                                                     <div>Dế Mèn Phiêu Lưu Ký - Tái Bản 2020</div>
                                                     <button class="remove-btn">
                                                         <img class="w-6 object-contain" src="/public/image/trash.png" alt="trash">
                                                     </button>
                                                 </div>
-                                                <div class="flex justify-between items-start gap-4">
-                                                    <div class="flex gap-2">
+                                                <div class="flex justify-between items-center">
+                                                    <div class="flex gap-2 text-sm">
                                                         <div class="text-custom-blue font-bold price">43.500đ</div>
                                                         <div class="text-gray-600 items-center">
                                                             <del>50.000đ</del>
@@ -61,7 +61,7 @@
                                                         <button class="bg-custom-background rounded-lg w-6 h-6 flex items-center justify-center text-white font-bold transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95 decrease-btn">
                                                             -
                                                         </button>
-                                                        <input type="number" value="1" min="1" class="quantity-input text-center w-14 border border-gray-300 rounded-lg" readonly>
+                                                        <input type="number" value="1" min="1" class="quantity-input text-center w-10 border border-gray-300 rounded-lg" readonly>
                                                         <button class="bg-custom-background rounded-lg w-6 h-6 flex items-center justify-center text-white font-bold transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95 increase-btn">
                                                             +
                                                         </button>
