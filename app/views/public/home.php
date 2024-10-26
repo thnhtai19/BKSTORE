@@ -8,6 +8,7 @@
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/public/css/client.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <title>Trang chủ | BKSTORE</title>
 </head>
 
@@ -107,9 +108,9 @@
                         <div
                             class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
                             <div class="flex justify-between items-center">
-                                <img src="/public/image/protect.png" alt="protect" class="w-6 h-6 mr-2">
+                                <img src="/public/image/comment.png" alt="protect" class="w-6 h-6 mr-2">
                                 <div>
-                                    Tra cứu bảo hành
+                                    Góp ý bán sách
                                 </div>
                             </div>
                             <svg height="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -240,6 +241,7 @@
         <?php $page = 1;
         include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
+    <script src="/public/js/notyf.min.js"></script>
     <script src="/public/js/heart.js"></script>
     <script src="/public/js/swiper-bundle.min.js"></script>
     <script src="/public/js/client.js"></script>

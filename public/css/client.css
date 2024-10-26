@@ -135,3 +135,35 @@
 .swiper-container-product-detail:hover .swiper-button-pr-next {
     opacity: 1; 
 }
+
+/* CSS Loading */
+.loader {
+    width: 56px; 
+    height: 56px;
+    border-radius: 50%;
+    border: 3px solid transparent; 
+    border-top-color: #0688B4;
+    border-left-color: #0688B4; 
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 600px) {
+    .notyf {
+        font-size: 14px;
+        margin-top: 30px;
+        margin-left: 80px;
+        max-width: 80%;
+        padding: 20px;
+    }
+}
+
+
