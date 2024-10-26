@@ -27,6 +27,7 @@ class UserService {
             'phone' => $user1['SDT'],
             'sex' => $user1['GioiTinh'],
             'address' => $user1['DiaChi'],
+            'avatar' => $user2['Avatar'],
         ];
     }
 
@@ -57,6 +58,17 @@ class UserService {
 
     public function getProduct() {
         return $this->product->getList();
+    }
+
+    public function setAvatar($id, $avatar) {
+        $sql = "SELECT * FROM `login` WHERE `UID` = '$id'";
+        $result = mysqli_query($this->conn, $sql);
+        if (mysqli_num_rows($result) === 0) {
+            return ['success' => false, 'message' => 'Tài khoản không tồn tại'];
+        }
+        $avatar_sql = "UPDATE `login` SET `Avatar` = '$avatar' WHERE `UID` = '$id'";
+        mysqli_query($this->conn, $avatar_sql);
+        return ['success' => true, 'message' => 'Thay đổi ảnh đại diện thành công'];
     }
 }
 ?>

@@ -11,10 +11,8 @@ RewriteRule ^contact$ /app/views/public/contact.php [L]
 #ADMIN ROUTERS FRONTEND
 RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 
-
-
 #CLIENT ROUTERS BACKEND
-php_value auto_prepend_file "D:/web/BKSTORE/session_init.php"
+php_value auto_prepend_file "/web/BKSTORE/session_init.php"
 RewriteRule ^auth/register$ /app/controllers/auth/signup.php [L]
 RewriteRule ^auth/login$ /app/controllers/auth/login.php [L]
 RewriteRule ^auth/forgot$ /app/controllers/auth/forgot.php [L]
@@ -27,6 +25,14 @@ RewriteRule ^product/productType$ /app/controllers/product/productType.php [L]
 #USER ROUTERS BACKEND
 RewriteRule ^user/info$ /app/controllers/user/info.php [L]
 RewriteRule ^user$ /app/controllers/user/home.php [L]
+RewriteRule ^user/avatar$ /app/controllers/user/avatar.php [L]
+#CART ROUTERS BACKEND
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^user/cart$ /app/controllers/cart/get.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^user/cart$ /app/controllers/cart/set.php [L]
+#ORDER ROUTERS BACKEND
+RewriteRule ^order/sale$ /app/controllers/order/sale.php [L]
 #ADMIN ROUTERS BACKEND
 
 #PRODUCT ROUTERS BACKEND

@@ -7,10 +7,8 @@ $model = new AuthService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-    if (isset($data['email'])) {
-        $email = $data['email'];
+    if (isset($_SESSION['email'])) {
+        $email = $_SESSION['email'];
         $response = $model->forgotPassword($email);
         if ($response['status']) {
             echo json_encode([
@@ -25,7 +23,7 @@ if ($method === 'POST') {
             echo json_encode( ['success' => false, 'message' => $response['error']] );
         }
     }
-    else echo json_encode( ['success' => false, 'message' => 'No user found with this email'] );
+    else echo json_encode( ['success' => false, 'message' => 'Người dùng chưa đăng nhập'] );
 }
 else {
     $response = ['error' => 'Invalid request method'];
