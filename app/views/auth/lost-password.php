@@ -37,13 +37,13 @@ if(isset($_SESSION["email"])){
                         </div>
 
                         <div>
-                            <button type="submit" class="w-full flex justify-center py-2 px-4 mt-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button id="reset-btn" type="submit" class="w-full flex justify-center py-2 px-4 mt-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Đặt lại mật khẩu
                             </button>
                         </div>
                     </form>
                     <div class="text-sm mt-3">
-                        <a href="/login" class="font-medium text-indigo-600 hover:text-indigo-500"> Về trang đăng nhập </a>
+                        <a href="/auth/login" class="font-medium text-indigo-600 hover:text-indigo-500"> Về trang đăng nhập </a>
                     </div>
                 </div>
             </main>
@@ -68,7 +68,11 @@ if(isset($_SESSION["email"])){
                 return;
             }
 
-            fetch('/auth/forgot', {
+            const button = document.getElementById('reset-btn')
+            button.textContent = 'Đang xử lý...';
+            button.disabled = true;
+
+            fetch(`${window.location.origin}/api/auth/forgot`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -85,8 +89,15 @@ if(isset($_SESSION["email"])){
                     notyf.error('Gửi yêu cầu thất bại!');
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                notyf.error('Gửi yêu cầu thất bại!');
+            })
+            .finally(() => {
+                button.textContent = 'Đặt lại mật khẩu';
+                button.disabled = false;
+            });
         });
     </script>
+
 </body>
 </html>

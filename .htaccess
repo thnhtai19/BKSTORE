@@ -6,9 +6,9 @@ RewriteRule ^$ /app/views/public/home.php [L]
 RewriteRule ^product$ /app/views/public/product.php [L]
 RewriteRule ^contact$ /app/views/public/contact.php [L]
 
-RewriteRule ^login$ /app/views/auth/login.php [L]
-RewriteRule ^register$ /app/views/auth/register.php [L]
-RewriteRule ^forgot_password$ /app/views/auth/lost-password.php [L]
+RewriteRule ^auth/login$ /app/views/auth/login.php [L]
+RewriteRule ^auth/register$ /app/views/auth/register.php [L]
+RewriteRule ^auth/forgot_password$ /app/views/auth/lost-password.php [L]
 
 #USER ROUTERS FRONTEND
 RewriteRule ^cart$ /app/views/client/cart.php [L]
@@ -18,6 +18,19 @@ RewriteRule ^notice$ /app/views/client/notice.php [L]
 
 #ADMIN ROUTERS FRONTEND
 RewriteRule ^admin/home$ /app/views/admin/home.php [L]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #CLIENT ROUTERS BACKEND
 RewriteRule ^api/auth/register$ /app/controllers/auth/signup.php [L]

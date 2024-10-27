@@ -112,7 +112,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                     </svg>
                 </a>
 
-                <a href="/login"
+                <a href="/auth/login"
                     class="text-white border border-white rounded-md px-2 py-1 hover:bg-white hover:text-black transition duration-300 font-bold hidden md:block"><span>ĐĂNG
                         NHẬP</span></a>
             </div>
@@ -149,7 +149,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
             }
         });
         document.getElementById("logout-btn").addEventListener("click", function () {
-            fetch('/auth/logout', {
+            fetch('api/auth/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

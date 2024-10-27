@@ -91,10 +91,10 @@ if(isset($_SESSION["email"])){
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-lg font-bold hover:bg-green-600 transition duration-300">Đăng ký</button>
+                        <button id="register-btn" type="submit" class="w-full bg-green-500 text-white py-2 rounded-lg font-bold hover:bg-green-600 transition duration-300">Đăng ký</button>
                     </form>
             
-                    <p class="text-center text-gray-600 mt-6">Bạn đã có tài khoản? <a href="./login" class="text-blue-500 font-bold">Đăng nhập</a></p>
+                    <p class="text-center text-gray-600 mt-6">Bạn đã có tài khoản? <a href="/auth/login" class="text-blue-500 font-bold">Đăng nhập</a></p>
                 </div>
             </main>
         </div>
@@ -131,8 +131,12 @@ if(isset($_SESSION["email"])){
                 notyf.error("Bạn phải đồng ý với các điều khoản.");
                 return;
             }
+            
+            const button = document.getElementById('register-btn')
+            button.textContent = 'Đang xử lý...';
+            button.disabled = true;
 
-            fetch('/auth/register', {
+            fetch(`${window.location.origin}/api/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -148,13 +152,17 @@ if(isset($_SESSION["email"])){
                 if (data.success) {
                     notyf.success("Đăng ký thành công!");
                     setTimeout(() => {
-                        window.location.href = "/login";
+                        window.location.href = "/auth/login";
                     }, 2000);
                 } else {
                     notyf.error(data.message);
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => notyf.error("Đã xảy ra lỗi khi đăng ký!"))
+            .finally(() => {
+                button.textContent = 'Đăng ký';
+                button.disabled = false;
+            });
         });
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');

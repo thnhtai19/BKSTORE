@@ -70,13 +70,13 @@ if(isset($_SESSION["email"])){
                                 Đăng nhập
                             </button>
 
-                            <a href="./register" 
+                            <a href="/auth/register" 
                                 class="my-2 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 Đăng ký
                             </a>
                           
                             <div class="text-sm">
-                                <a href="/forgot_password" class="font-medium text-indigo-600 hover:text-indigo-500"> Quên mặt khẩu? </a>
+                                <a href="/auth/forgot_password" class="font-medium text-indigo-600 hover:text-indigo-500"> Quên mặt khẩu? </a>
                             </div>
                         </div>
                         
@@ -106,7 +106,11 @@ if(isset($_SESSION["email"])){
                 return;
             }
 
-            fetch('/auth/login', {
+            const button =document.getElementById('submit')
+            button.textContent = 'Đang xử lý...';
+            button.disabled = true;
+
+            fetch(`${window.location.origin}/api/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -127,7 +131,11 @@ if(isset($_SESSION["email"])){
                     notyf.error(data.message);
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => notyf.error("Đã xảy ra lỗi đăng nhập!"))
+            .finally(() => {
+                button.textContent = 'Đăng nhập';
+                button.disabled = false;
+            });
         });
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');
