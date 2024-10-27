@@ -1,3 +1,11 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+if(!isset($_SESSION["email"])){
+    header("Location: /auth/login");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -27,8 +35,59 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="pt-2">
-                        
+                    <div class="h-full overflow-y-auto">
+                        <div class="pt-4 flex flex-col gap-2">
+                            <div class="bg-white h-24 w-full rounded-lg bg-blue-100 p-4 flex gap-4 cursor-pointer">
+                                <div
+                                    class="flex justify-center items-center rounded-full bg-custom-background h-14 w-14">
+                                    <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
+                                </div>
+                                <div class="text-sm text-gray-800 flex-1">
+                                    <div class="flex flex-col justify-between h-full">
+                                        <div>
+                                            Đơn hàng #BKS111 - đã được giao cho đơn vị vận chuyển VNPost
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            22:00:00 01-01-2024
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white h-24 w-full rounded-lg bg-blue-100 p-4 flex gap-4 cursor-pointer">
+                                <div
+                                    class="flex justify-center items-center rounded-full bg-custom-background h-14 w-14">
+                                    <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
+                                </div>
+                                <div class="text-sm text-gray-800 flex-1">
+                                    <div class="flex flex-col justify-between h-full">
+                                        <div>
+                                            Đơn hàng #BKS111 - đã được giao cho đơn vị vận chuyển VNPost
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            22:00:00 01-01-2024
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white h-24 w-full rounded-lg bg-blue-100 p-4 flex gap-4 cursor-pointer">
+                                <div
+                                    class="flex justify-center items-center rounded-full bg-custom-background h-14 w-14">
+                                    <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
+                                </div>
+                                <div class="text-sm text-gray-800 flex-1">
+                                    <div class="flex flex-col justify-between h-full">
+                                        <div>
+                                            Đơn hàng #BKS111 - đã được giao cho đơn vị vận chuyển VNPost
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            22:00:00 01-01-2024
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>

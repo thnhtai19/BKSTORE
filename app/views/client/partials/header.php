@@ -64,12 +64,12 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                         class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">3</span>
                 </div>
                 <div class="relative">
-                    <img src="https://ui-avatars.com/api/?background=random&name=<?php echo $_SESSION["Ten"]; ?>"
+                    <img src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION["Ten"]); ?>"
                         alt="User Avatar" class="w-8 h-8 rounded-full cursor-pointer ml-3" id="avatar">
                     <div id="dropdown" class="absolute right-0 top-10 bg-white border rounded-lg shadow-lg hidden">
                         <div class="pt-4 pb-4 pr-3 pl-3 w-72">
                             <div class="flex gap-2 w-full">
-                                <img src="https://ui-avatars.com/api/?background=random&name=<?php echo $_SESSION["Ten"]; ?>"
+                                <img src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION["Ten"]); ?>"
                                     alt="User Avatar" class="w-10 h-10 rounded-full cursor-pointer">
                                 <div class="flex-1">
                                     <div class="font-bold"><?php echo $_SESSION["Ten"]; ?></div>
@@ -103,7 +103,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
             </div>
         <?php } else { ?>
             <div id="avatar-container" class="flex items-center gap-1">
-                <a href="/login" class="block md:hidden text-white hover:text-black transition duration-300">
+                <a href="/auth/login" class="block md:hidden text-white hover:text-black transition duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="11" />
@@ -112,7 +112,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                     </svg>
                 </a>
 
-                <a href="/login"
+                <a href="/auth/login"
                     class="text-white border border-white rounded-md px-2 py-1 hover:bg-white hover:text-black transition duration-300 font-bold hidden md:block"><span>ĐĂNG
                         NHẬP</span></a>
             </div>
@@ -149,7 +149,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
             }
         });
         document.getElementById("logout-btn").addEventListener("click", function () {
-            fetch('/auth/logout', {
+            fetch('api/auth/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
