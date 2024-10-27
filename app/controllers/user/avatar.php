@@ -7,16 +7,17 @@ $model = new UserService($db->conn);
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'GET') {
+if ($method === 'POST') {
+    $id = $_SESSION["uid"];
     if (!isset($id)) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
-    $id = $_SESSION["uid"];
-    echo json_encode([
-        'thong_tin' => $model->info($id),
-        'nhat_ky' => $model->diary($id)
-    ]);
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    if (isset($data['avatar'])) $avatar = $data['avatar'];
+    else $avatar = '';
+    echo json_encode(['success'=> true, 'message' => $model->setAvatar($id, $avatar)]);
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

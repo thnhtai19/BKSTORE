@@ -9,23 +9,21 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
-    if (isset($data['email'])) {
-        $email = $data['email'];
-        $response = $model->forgotPassword($email);
-        if ($response['status']) {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Reset password email sent',
-                'user' => [
-                    'email' => $email,
-                    'password' => $response['password']
-                ]
-            ]);
-        } else {
-            echo json_encode( ['success' => false, 'message' => $response['error']] );
-        }
+    if (isset($data['email'])) $email = $data['email'];
+    else $email = '';
+    $response = $model->forgotPassword($email);
+    if ($response['status']) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Reset password email sent',
+            'user' => [
+                'email' => $email,
+                'password' => $response['password']
+            ]
+        ]);
+    } else {
+        echo json_encode( ['success' => false, 'message' => $response['message']] );
     }
-    else echo json_encode( ['success' => false, 'message' => 'No user found with this email'] );
 }
 else {
     $response = ['error' => 'Invalid request method'];
