@@ -6,6 +6,10 @@ RewriteRule ^$ /app/views/public/home.php [L]
 RewriteRule ^product$ /app/views/public/product.php [L]
 RewriteRule ^contact$ /app/views/public/contact.php [L]
 
+RewriteRule ^login$ /app/views/auth/login.php [L]
+RewriteRule ^register$ /app/views/auth/register.php [L]
+RewriteRule ^forgot_password$ /app/views/auth/lost-password.php [L]
+
 #USER ROUTERS FRONTEND
 RewriteRule ^cart$ /app/views/client/cart.php [L]
 RewriteRule ^checkout/preview$ /app/views/client/payment_info.php [L]
@@ -18,7 +22,6 @@ RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 
 
 #CLIENT ROUTERS BACKEND
-php_value auto_prepend_file "D:/web/BKSTORE/session_init.php"
 RewriteRule ^auth/register$ /app/controllers/auth/signup.php [L]
 RewriteRule ^auth/login$ /app/controllers/auth/login.php [L]
 RewriteRule ^auth/forgot$ /app/controllers/auth/forgot.php [L]
