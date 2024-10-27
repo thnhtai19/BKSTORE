@@ -73,18 +73,16 @@ class AuthService {
     public function forgotPassword($email) {
         $sql = "SELECT * FROM `login` WHERE Email = '$email'";
         $result = mysqli_query($this->conn, $sql);
-        $user = mysqli_fetch_assoc($result);
-        if ($user) {
-            $newPassword = $this->generateRandomPassword();
-            $sent = $this->sendPasswordResetEmail($email, $newPassword);
-            // $this->updatePassword($email, $newPassword);
-            if ($sent['status']) {
-                return ['status' => true, 'password' => $newPassword];
-            } else {
-                return ['status' => false, 'error' => $sent['message']];
-            }
+        if (mysqli_num_rows($result) === 0) {
+            return ['status' => false, 'message'=> 'Tài khoản không tồn tại'];
+        }
+        $newPassword = $this->generateRandomPassword();
+        $sent = $this->sendPasswordResetEmail($email, $newPassword);
+        $this->updatePassword($email, $newPassword);
+        if ($sent['status']) {
+            return ['status' => true, 'password' => $newPassword];
         } else {
-            return false;
+            return ['status' => false, 'error' => $sent['message']];
         }
     }
 
@@ -115,16 +113,20 @@ class AuthService {
 
     function sendPasswordResetEmail($email, $newPassword) {
         $url = 'https://ttdev.id.vn/send.php';
-        $data = [
+        $data = json_encode([
             'email' => $email,
-            'mess' => "Your new password is: $newPassword",
-        ];
+            'mess' => "Mật khẩu mới của bạn là: $newPassword",
+        ]);
     
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data)
+        ));
     
         $response = curl_exec($ch);
         curl_close($ch);
@@ -141,7 +143,8 @@ class AuthService {
                 'message' => $responseData
             ];
         }
-    }    
+    }
+    
 
     private function updatePassword($email, $newPassword) {
         $sql = "UPDATE `login` SET `Password` = '$newPassword' WHERE Email = '$email'";

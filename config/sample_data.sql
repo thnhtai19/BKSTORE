@@ -83,17 +83,18 @@ VALUES
 
 INSERT INTO MA_GIAM_GIA (Ma, TienGiam, DieuKien, TrangThai)
 VALUES
-('GIAM50', 50000.00, 'Áp dụng cho đơn hàng từ 200,000 trở lên', 'Active'),
-('GIAM10', 10000.00, 'Áp dụng cho tất cả các đơn hàng', 'Active'),
-('GIAMHETHANG', 30000.00, 'Áp dụng khi sản phẩm hết hàng', 'Expired'),
-('GIAMVIP', 100000.00, 'Áp dụng cho khách hàng VIP', 'Active'),
-('GIAMCOD', 25000.00, 'Áp dụng cho đơn hàng thanh toán COD', 'Expired');
+('GIAM10K', 10000.00, 'Female', 'Active'),
+('GIAM50K', 50000.00, '> 200000', 'Active'),
+('GIAM30%', 30.00, 'Chẵn', 'Expired'),
+('GIAM50%', 50.00, '< 500000', 'Active'),
+('GIAMCOD', 25000.00, 'COD', 'Expired'),
+('FREESHIP', 0.00, 'Tất cả', 'Active');
 
 INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, ThanhToan, PhuongThucThanhToan)
 VALUES
-(1, '20-10-2023', 300000.00, 'GIAM50', TRUE, 'Bank'),
+(1, '20-10-2023', 300000.00, 'GIAM50K', TRUE, 'Bank'),
 (2, '19-10-2023', 150000.00, NULL, FALSE, 'COD'),
-(3, '18-10-2023', 250000.00, 'GIAMVIP', TRUE, 'Bank'),
+(3, '18-10-2023', 250000.00, 'GIAM10K', TRUE, 'Bank'),
 (6, '17-10-2023', 100000.00, NULL, FALSE, 'COD'),
 (7, '16-10-2023', 200000.00, 'GIAMCOD', TRUE, 'Bank');
 
