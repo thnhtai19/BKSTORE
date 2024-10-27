@@ -29,6 +29,9 @@ class AuthService {
         $_SESSION["email"] = $email;
         $_SESSION["password"] = $password;
         $_SESSION["uid"] = $user['UID'];
+        $_SESSION["Ten"] = $user['Ten'];
+        $_SESSION["Role"] = $user['Role'];
+        $_SESSION["Avatar"] = $user['Avatar'];
         return [
             'success' => true,
             'message' => 'Đăng nhập thành công',
