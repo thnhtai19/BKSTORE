@@ -7,23 +7,23 @@ $model = new AuthService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
-    if (isset($_SESSION['email'])) {
-        $email = $_SESSION['email'];
-        $response = $model->forgotPassword($email);
-        if ($response['status']) {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Reset password email sent',
-                'user' => [
-                    'email' => $email,
-                    'password' => $response['password']
-                ]
-            ]);
-        } else {
-            echo json_encode( ['success' => false, 'message' => $response['error']] );
-        }
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    if (isset($data['email'])) $email = $data['email'];
+    else $email = '';
+    $response = $model->forgotPassword($email);
+    if ($response['status']) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Reset password email sent',
+            'user' => [
+                'email' => $email,
+                'password' => $response['password']
+            ]
+        ]);
+    } else {
+        echo json_encode( ['success' => false, 'message' => $response['message']] );
     }
-    else echo json_encode( ['success' => false, 'message' => 'Người dùng chưa đăng nhập'] );
 }
 else {
     $response = ['error' => 'Invalid request method'];

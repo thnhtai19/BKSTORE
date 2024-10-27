@@ -73,18 +73,16 @@ class AuthService {
     public function forgotPassword($email) {
         $sql = "SELECT * FROM `login` WHERE Email = '$email'";
         $result = mysqli_query($this->conn, $sql);
-        $user = mysqli_fetch_assoc($result);
-        if ($user) {
-            $newPassword = $this->generateRandomPassword();
-            $sent = $this->sendPasswordResetEmail($email, $newPassword);
-            $this->updatePassword($email, $newPassword);
-            if ($sent['status']) {
-                return ['status' => true, 'password' => $newPassword];
-            } else {
-                return ['status' => false, 'error' => $sent['message']];
-            }
+        if (mysqli_num_rows($result) === 0) {
+            return ['status' => false, 'message'=> 'Tài khoản không tồn tại'];
+        }
+        $newPassword = $this->generateRandomPassword();
+        $sent = $this->sendPasswordResetEmail($email, $newPassword);
+        $this->updatePassword($email, $newPassword);
+        if ($sent['status']) {
+            return ['status' => true, 'password' => $newPassword];
         } else {
-            return false;
+            return ['status' => false, 'error' => $sent['message']];
         }
     }
 
