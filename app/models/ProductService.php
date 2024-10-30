@@ -31,6 +31,7 @@ class ProductService {
                 'nam_xuat_ban' => $product['NamXB'],
                 'ngon_ngu' => $product['NgonNgu'],
                 'kich_thuoc' => $product['KichThuoc'],
+                'so_trang' => $product['SoTrang']
             ],
             'gia_san_pham' => $product['Gia'],
             'ty_le_giam_gia' => $product['TyLeGiamGia'],
@@ -91,7 +92,8 @@ class ProductService {
     }
 
     private function getComment($id) {
-        $sql = "SELECT * FROM binh_luan WHERE ID_SP = '$id'";
+        // $sql = "SELECT * FROM binh_luan WHERE ID_SP = '$id'";
+        $sql = "SELECT MaBinhLuan, NgayBinhLuan, NoiDung, Ten, Avatar FROM binh_luan LEFT JOIN login ON binh_luan.UID = login.UID WHERE ID_SP = '$id'";
         $result = mysqli_query($this->conn, $sql);
         if (mysqli_num_rows($result) === 0) {
             return ['success' => false, 'message' => 'Không có bình luận'];
@@ -101,7 +103,9 @@ class ProductService {
             $comments[] = [
                 'id' => $row['MaBinhLuan'],
                 'ngay_binh_luan' => $row['NgayBinhLuan'],
-                'noi_dung' => $row['NoiDung']
+                'noi_dung' => $row['NoiDung'],
+                'avatar' => $row['Avatar'],
+                'ten' => $row['Ten']
             ];
         }
         return $comments;
