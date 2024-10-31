@@ -31,9 +31,10 @@ class ProductService {
                 'nam_xuat_ban' => $product['NamXB'],
                 'ngon_ngu' => $product['NgonNgu'],
                 'kich_thuoc' => $product['KichThuoc'],
+                'so_trang' => $product['SoTrang']
             ],
             'gia_san_pham' => $product['Gia'],
-            'ty_le_giam_gia' => $product['TyLeGiamGia'],
+            'gia_sau_giam_gia' => $product['Gia'] * (1 - $product['TyLeGiamGia']),
             'so_luong_ton_kho' => $product['SoLuongKho'],
             'mo_ta' => $product['MoTa'],
             'danh_sach_danh_gia' => $review['danh_sach_danh_gia'],
@@ -61,7 +62,9 @@ class ProductService {
                     $result[] = [
                         'id' => $id,
                         'ten' => $entry['TenSP'],
-                        'gia' => $entry['Gia'],
+                        'hinh' => $this->getImage($id),
+                        'gia_goc' => $entry['Gia'],
+                        'gia_sau_giam_gia' => $entry['Gia'] * (1 - $entry['TyLeGiamGia']),
                         'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_bình']
                     ];
                     break;
@@ -69,7 +72,9 @@ class ProductService {
                     $result[] = [
                         'id' => $id,
                         'ten' => $entry['TenSP'],
-                        'gia' => $entry['Gia'],
+                        'hinh' => $this->getImage($id),
+                        'gia_goc' => $entry['Gia'],
+                        'gia_sau_giam_gia' => $entry['Gia'] * (1 - $entry['TyLeGiamGia']),
                         'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_bình'],
                         'thich' => false
                     ];
@@ -78,7 +83,9 @@ class ProductService {
                     $result[] = [
                         'id' => $id,
                         'ten' => $entry['TenSP'],
-                        'gia' => $entry['Gia'],
+                        'hinh' => $this->getImage($id),
+                        'gia_goc' => $entry['Gia'],
+                        'gia_sau_giam_gia' => $entry['Gia'] * (1 - $entry['TyLeGiamGia']),
                         'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_bình'],
                         'thich' => true
                     ];
@@ -90,25 +97,54 @@ class ProductService {
         return $result;
     }
 
-    private function getComment($id) {
-        $sql = "SELECT * FROM binh_luan WHERE ID_SP = '$id'";
+    private function getImage($id) {
+        $sql = "SELECT Anh FROM hinh_anh WHERE ID_SP = '$id'";
         $result = mysqli_query($this->conn, $sql);
+        if (mysqli_num_rows($result) === 0) {
+            return null;
+        }
+        $row = mysqli_fetch_assoc($result);
+        return $row['Anh'];
+    }
+
+    private function getComment($id) {
+        // Sử dụng JOIN để kết nối bảng binh_luan và login qua cột UID
+        $sql = "
+            SELECT binh_luan.MaBinhLuan, binh_luan.NgayBinhLuan, binh_luan.NoiDung, login.Ten, login.Avatar
+            FROM binh_luan
+            JOIN login ON binh_luan.UID = login.UID
+            WHERE binh_luan.ID_SP = '$id'
+        ";
+        
+        $result = mysqli_query($this->conn, $sql);
+    
+        // Nếu không có bình luận nào
         if (mysqli_num_rows($result) === 0) {
             return ['success' => false, 'message' => 'Không có bình luận'];
         }
+    
+        // Duyệt qua kết quả và thêm dữ liệu vào mảng comments
         $comments = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $comments[] = [
                 'id' => $row['MaBinhLuan'],
                 'ngay_binh_luan' => $row['NgayBinhLuan'],
-                'noi_dung' => $row['NoiDung']
+                'noi_dung' => $row['NoiDung'],
+                'avatar' => $row['Avatar'],
+                'ten' => $row['Ten']
             ];
         }
         return $comments;
     }
+    
 
     private function getReview($id) {
-        $sql = "SELECT * FROM danh_gia WHERE ID_SP = '$id'";
+        $sql = "
+            SELECT danh_gia.MaDanhGia, danh_gia.NgayDanhGia, danh_gia.SoSao, danh_gia.NoiDung, login.Ten, login.Avatar 
+            FROM danh_gia 
+            JOIN login ON danh_gia.UID = login.UID
+            WHERE ID_SP = '$id'
+        ";
         $result = mysqli_query($this->conn, $sql);
         if (mysqli_num_rows($result) === 0) {
             return ['success' => false, 'message' => 'Không có đánh giá'];
@@ -120,6 +156,8 @@ class ProductService {
                 'ngay_danh_gia' => $row['NgayDanhGia'],
                 'so_sao' => $row['SoSao'],
                 'noi_dung' => $row['NoiDung'],
+                'avatar' => $row['Avatar'],
+                'ten' => $row['Ten']
             ];
         }
         return $reviews;
