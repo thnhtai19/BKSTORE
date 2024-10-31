@@ -240,10 +240,11 @@ class ProductService {
         $sql1 = "SELECT 
                     SAN_PHAM.ID_SP, 
                     SAN_PHAM.TenSP, 
-                    SAN_PHAM.Gia, 
+                    SAN_PHAM.Gia,
+                    ROUND((SAN_PHAM.Gia*(1-SAN_PHAM.TyLeGiamGia))) AS GiaSauGiam,
                     ROUND(AVG(DANH_GIA.SoSao), 0) AS SoSao,
-                    SAN_PHAM.HinhThuc,
-                    false AS YeuThich
+                    false AS YeuThich,
+                    (SELECT Anh FROM HINH_ANH WHERE HINH_ANH.ID_SP = SAN_PHAM.ID_SP LIMIT 1) AS Hinh
                 FROM 
                     SAN_PHAM 
                 LEFT JOIN 
@@ -257,14 +258,15 @@ class ProductService {
         $sql2 = "SELECT 
                     SAN_PHAM.ID_SP, 
                     SAN_PHAM.TenSP, 
-                    SAN_PHAM.Gia, 
+                    SAN_PHAM.Gia,
+                    ROUND((SAN_PHAM.Gia*(1-SAN_PHAM.TyLeGiamGia))) AS GiaSauGiam,
                     ROUND(AVG(DANH_GIA.SoSao), 0) AS SoSao,
-                    SAN_PHAM.HinhThuc,
                     CASE 
                         WHEN SAN_PHAM.ID_SP IN (SELECT ID_SP FROM THICH WHERE UID = $uid) 
                         THEN 1 
                         ELSE 0 
-                    END AS YeuThich
+                    END AS YeuThich,
+                    (SELECT Anh FROM HINH_ANH WHERE HINH_ANH.ID_SP = SAN_PHAM.ID_SP LIMIT 1) AS Hinh
                 FROM 
                     SAN_PHAM 
                 LEFT JOIN 
