@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__DIR__, 2) . '/config/db.php';
 require_once dirname(__DIR__, 1) . '/models/support.php';
 require_once dirname(__DIR__, 1) . '/models/ProductService.php';
 
@@ -15,12 +14,24 @@ class UserService {
     }
 
     public function info($id) {
-        $sql1 = "SELECT * FROM khach_hang WHERE `UID` = '$id'";
-        $result1 = mysqli_query($this->conn, $sql1);
-        $user1 = mysqli_fetch_assoc($result1);
-        $sql2 = "SELECT * FROM `login` WHERE `UID` = '$id'";
-        $result2 = mysqli_query($this->conn, $sql2);
-        $user2 = mysqli_fetch_assoc($result2);
+        $sql1 = "SELECT * FROM khach_hang WHERE `UID` = ?";
+        $stmt1 = $this->conn->prepare($sql1);
+        $stmt1->bind_param("i", $id);
+        $stmt1->execute();
+        $result1 = $stmt1->get_result();
+        $user1 = $result1->fetch_assoc();
+        
+        $sql2 = "SELECT * FROM `login` WHERE `UID` = ?";
+        $stmt2 = $this->conn->prepare($sql2);
+        $stmt2->bind_param("i", $id);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result();
+        $user2 = $result2->fetch_assoc();
+
+        if (!$user1 || !$user2) {
+            return ['success' => false, 'message' => 'Không tìm thấy người dùng'];
+        }
+
         return [
             'name' => $user2['Ten'],
             'role' => $user2['Role'],
@@ -32,9 +43,14 @@ class UserService {
     }
 
     public function diary($id) {
-        $sql = "SELECT * FROM lich_su_dang_nhap WHERE `UID` = '$id'";
-        $result = mysqli_query($this->conn, $sql);
-        while ($row = mysqli_fetch_assoc($result)) {
+        $sql = "SELECT * FROM lich_su_dang_nhap WHERE `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $diary = [];
+        while ($row = $result->fetch_assoc()) {
             $diary[] = [
                 'ThoiGian' => $row['ThoiGian'],
                 'NoiDung' => $row['NoiDung']
@@ -45,29 +61,45 @@ class UserService {
 
     public function getBanner() {
         $sql = "SELECT * FROM banner";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) === 0) {
+        $result = $this->conn->query($sql);
+
+        if ($result->num_rows === 0) {
             return ['success' => false, 'message' => 'Không tìm thấy banner'];
         }
+        
         $banner = [];
-        while ($row = mysqli_fetch_assoc($result)) {
+        while ($row = $result->fetch_assoc()) {
             $banner[] = $row;
         }
         return $banner;
     }
 
     public function getProduct() {
-        return $this->product->getList();
+        $allProducts = $this->product->get();
+        return $this->product->getList(array_slice($allProducts, -10));
+    }
+
+    public function getProductList() {
+        $types = $this->product->getType();
+        return $this->product->getProductList($types);
     }
 
     public function setAvatar($id, $avatar) {
-        $sql = "SELECT * FROM `login` WHERE `UID` = '$id'";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) === 0) {
+        $sql = "SELECT * FROM `login` WHERE `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
             return ['success' => false, 'message' => 'Tài khoản không tồn tại'];
         }
-        $avatar_sql = "UPDATE `login` SET `Avatar` = '$avatar' WHERE `UID` = '$id'";
-        mysqli_query($this->conn, $avatar_sql);
+
+        $avatar_sql = "UPDATE `login` SET `Avatar` = ? WHERE `UID` = ?";
+        $stmt_avatar = $this->conn->prepare($avatar_sql);
+        $stmt_avatar->bind_param("si", $avatar, $id);
+        $stmt_avatar->execute();
+
         return ['success' => true, 'message' => 'Thay đổi ảnh đại diện thành công'];
     }
 }

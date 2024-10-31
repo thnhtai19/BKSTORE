@@ -1,23 +1,23 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
-require_once dirname(__DIR__, 2) . '/models/UserService.php';
+require_once dirname(__DIR__, 2) . '/models/OrderService.php';
 
 $db = new Database();
-$model = new UserService($db->conn);
+$model = new OrderService($db->conn);
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'POST') {
+if ($method === 'GET') {
     $id = $_SESSION["uid"];
     if (!isset($id)) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-    if (isset($data['avatar'])) $avatar = $data['avatar'];
-    else $avatar = '';
-    echo json_encode($model->setAvatar($id, $avatar));
+    $paid = $model->getPaid($id);
+    if ($paid['success'] === true) {
+        echo json_encode(['success' => true, 'message' => $paid['message']]);
+    }
+    else echo json_encode(['success' => false, 'message' => $paid['message']]);
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

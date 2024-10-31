@@ -34,7 +34,7 @@ class support {
                 else return ['success'=> false,'message'=> 'Mã giảm giá không hợp lệ'];
                 break;
         }
-        return ['success' => true, 'so_tien_da_giam' => $TienGiam, 'tong_tien_cuoi_cung' => $this->charge_total($tienHang, $phiVanChuyen)];
+        return ['success' => true, 'so_tien_da_giam' => $TienGiam, 'tong_tien_phai_tra' => $this->charge_total($tienHang, $phiVanChuyen)];
     }
 
     private function checkCondition($DieuKien, $sex, $PhuongThucThanhToan, $tienHang) {

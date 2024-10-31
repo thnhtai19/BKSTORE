@@ -8,14 +8,13 @@ header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
-    if (!isset($id)) {
+    if (!isset($_SESSION["uid"])) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
-    $id = $_SESSION["uid"];
     echo json_encode([
-        'thong_tin' => $model->info($id),
-        'nhat_ky' => $model->diary($id)
+        'thong_tin' => $model->info($_SESSION["uid"]),
+        'nhat_ky' => $model->diary($_SESSION["uid"])
     ]);
 }
 else {
