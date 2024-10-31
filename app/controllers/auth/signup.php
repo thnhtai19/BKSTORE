@@ -16,11 +16,7 @@ if ($method === 'POST') {
     if (isset($data['password'])) $password = $data['password'];
     else $password = '';
     $response = $model->signup($name, $email, $password);
-    if ($response) {
-        echo json_encode($response);
-    } else {
-        return ['success' => false, 'message' => 'Error: ' . mysqli_error($db->conn)];
-    }
+    echo json_encode($response);
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

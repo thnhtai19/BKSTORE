@@ -46,5 +46,23 @@ class SystemService {
         return $finalResults;
     }
     
+    public function getContactInfo() {
+        $sql = "SELECT MaThongTin, Loai, ThongTin FROM thong_tin_lien_he";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) {
+            return ['success' => false, 'message' => 'Không có thông tin liên hệ'];
+        }
+        $contact = [];
+        while ($row = $result->fetch_assoc()) {
+            $contact[] = [
+                'ma_thong_tin' => $row['MaThongTin'],
+                'loai' => $row['Loai'],
+                'thong_tin' => $row['ThongTin'],
+            ];
+        }
+        return ['success' => true, 'info' => $contact];
+    }
 }
 ?>
