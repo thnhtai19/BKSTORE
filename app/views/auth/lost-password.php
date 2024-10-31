@@ -85,6 +85,9 @@ if(isset($_SESSION["email"])){
             .then(data => {
                 if (data.success) {
                     notyf.success('Gửi yêu cầu thành công!');
+                    setTimeout(() => {
+                        window.location.href = "/auth/login";
+                    }, 2000);
                 } else {
                     notyf.error('Gửi yêu cầu thất bại!');
                 }
