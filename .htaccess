@@ -10,6 +10,9 @@ RewriteRule ^auth/login$ /app/views/auth/login.php [L]
 RewriteRule ^auth/register$ /app/views/auth/register.php [L]
 RewriteRule ^auth/forgot_password$ /app/views/auth/lost-password.php [L]
 
+RewriteRule ^my/profile$ /app/views/client/profile/profile.php [L]
+RewriteRule ^my/account$ /app/views/client/profile/my-account.php [L]
+
 #USER ROUTERS FRONTEND
 RewriteRule ^cart$ /app/views/client/cart.php [L]
 RewriteRule ^checkout/preview$ /app/views/client/payment_info.php [L]
