@@ -6,17 +6,35 @@ RewriteRule ^$ /app/views/public/home.php [L]
 RewriteRule ^product$ /app/views/public/product.php [L]
 RewriteRule ^contact$ /app/views/public/contact.php [L]
 
+RewriteRule ^auth/login$ /app/views/auth/login.php [L]
+RewriteRule ^auth/register$ /app/views/auth/register.php [L]
+RewriteRule ^auth/forgot_password$ /app/views/auth/lost-password.php [L]
+
 #USER ROUTERS FRONTEND
 RewriteRule ^cart$ /app/views/client/cart.php [L]
 RewriteRule ^checkout/preview$ /app/views/client/payment_info.php [L]
 RewriteRule ^checkout/payment$ /app/views/client/payment.php [L]
 RewriteRule ^notice$ /app/views/client/notice.php [L]
+RewriteRule ^order/success$ /app/views/client/success_order.php [L]
+RewriteRule ^order/failure$ /app/views/client/failure_order.php [L]
 
 #ADMIN ROUTERS FRONTEND
 RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 #CLIENT ROUTERS BACKEND
-php_value auto_prepend_file "/web/BKSTORE/session_init.php"
 RewriteRule ^api/auth/register$ /app/controllers/auth/signup.php [L]
 RewriteRule ^api/auth/login$ /app/controllers/auth/login.php [L]
 RewriteRule ^api/auth/forgot$ /app/controllers/auth/forgot.php [L]
@@ -49,6 +67,10 @@ RewriteRule ^api/system/contact$ /app/controllers/system/contactInfo.php [L]
 
 #PRODUCT ROUTERS BACKEND
 RewriteRule ^api/product/info$ /app/controllers/product/info.php [L]
+
+#PAYOS
+RewriteRule ^api/payment/create$ /app/controllers/payment/create.php [L]
+RewriteRule ^api/payment/check$ /app/controllers/payment/check.php [L]
 
 #CUSTOM 404 ERROR PAGE
 ErrorDocument 404 /app/views/public/404.php
