@@ -10,11 +10,15 @@ if ($method === 'GET') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
     $type = $data['PhanLoai'];
-    $response = $model->productType($type);
     if (!isLoggedIn()) {
-        echo json_encode(["DanhSachSanPham" => $response,'LoginStatus' => true]);
+        $response = $model->productType($type, false, null);
+        echo json_encode(["DanhSachSanPham" => $response,'LoginStatus' => False]);
     }
-    else echo json_encode($response);
+    else {
+        $id = $_SESSION["uid"];
+        $response = $model->productType($type, true, $id);
+        echo json_encode(["DanhSachSanPham" => $response]);
+    }
 }
 else {
     $response = ['error' => 'Invalid request method'];
