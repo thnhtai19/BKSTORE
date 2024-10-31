@@ -18,6 +18,7 @@ RewriteRule ^notice$ /app/views/client/notice.php [L]
 RewriteRule ^order/success$ /app/views/client/success_order.php [L]
 RewriteRule ^order/failure$ /app/views/client/failure_order.php [L]
 
+
 #ADMIN ROUTERS FRONTEND
 RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 
@@ -32,6 +33,13 @@ RewriteRule ^order-history.php$ /app/views/client/profile/order-history.php [L]
 RewriteRule ^order.php$ /app/views/client/profile/order.php [L]
 RewriteRule ^profile.php$ /app/views/client/profile/profile.php [L]
 RewriteRule ^support.php$ /app/views/client/profile/support.php [L]
+
+#PUBLIC ROUTERS FRONTEND
+RewriteRule ^introduction.php$ /app/views/public/introduction.php [L]
+RewriteRule ^news.php$ /app/views/public/news.php [L]
+RewriteRule ^promotion.php$ /app/views/public/promotion.php [L]
+RewriteRule ^comment.php$ /app/views/public/comment.php [L]
+
 
 
 
