@@ -30,13 +30,21 @@ RewriteRule ^api/product/productType$ /app/controllers/product/productType.php [
 RewriteRule ^api/user/info$ /app/controllers/user/info.php [L]
 RewriteRule ^api/user$ /app/controllers/user/home.php [L]
 RewriteRule ^api/user/avatar$ /app/controllers/user/avatar.php [L]
+
 #CART ROUTERS BACKEND
 RewriteCond %{REQUEST_METHOD} GET
 RewriteRule ^api/user/cart$ /app/controllers/cart/get.php [L]
 RewriteCond %{REQUEST_METHOD} POST
 RewriteRule ^api/user/cart$ /app/controllers/cart/set.php [L]
+
 #ORDER ROUTERS BACKEND
 RewriteRule ^api/order/sale$ /app/controllers/order/sale.php [L]
+RewriteRule ^api/order/paid$ /app/controllers/order/getpaid.php [L]
+RewriteRule ^api/order/info$ /app/controllers/order/info.php [L]
+
+#SYSTEM ROUTERS BACKEND
+RewriteRule ^api/system/contact$ /app/controllers/system/contactInfo.php [L]
+
 #ADMIN ROUTERS BACKEND
 
 #PRODUCT ROUTERS BACKEND

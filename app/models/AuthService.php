@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__DIR__, 2) . '/config/db.php';
 require_once dirname(__DIR__, 1) . '/models/support.php';
 
 class AuthService {
@@ -12,20 +11,25 @@ class AuthService {
     }
 
     public function login($email, $password) {
-        $sql = "SELECT * FROM `login` WHERE email = '$email'";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) === 0) {
+        $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE Email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
             return ['success' => false, 'message' => 'Tài khoản không tồn tại'];
         }
-        $user = mysqli_fetch_assoc($result);
+        $user = $result->fetch_assoc();
         if ($password != $user['Password']) {
             return ['success' => false, 'message' => 'Sai mật khẩu'];
         }
         $ip = $this->getIPAddress();
         $thoi_gian = $this->support->startTime();
         $uid = $user['UID'];
-        $nhat_ky = "INSERT INTO lich_su_dang_nhap (`UID`, ThoiGian, NoiDung) VALUES ('$uid', '$thoi_gian', 'Đã đăng nhập tài khoản IP: $ip')";
-        mysqli_query($this->conn, $nhat_ky);
+        $nhat_ky = "INSERT INTO lich_su_dang_nhap (`UID`, ThoiGian, NoiDung) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($nhat_ky);
+        $noi_dung = "Đã đăng nhập tài khoản IP: $ip";
+        $stmt->bind_param("iss", $uid, $thoi_gian, $noi_dung);
+        $stmt->execute();
         $_SESSION["email"] = $email;
         $_SESSION["password"] = $password;
         $_SESSION["uid"] = $user['UID'];
@@ -43,23 +47,30 @@ class AuthService {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return ['success' => false, 'message' => 'Email không hợp lệ'];
         }
-        $checkEmailQuery = "SELECT email FROM login WHERE email = '$email'";
-        $result = mysqli_query($this->conn, $checkEmailQuery);
-        if (mysqli_num_rows($result) > 0) {
+        $checkEmailQuery = $this->conn->prepare("SELECT * FROM `login` WHERE email = ?");
+        $checkEmailQuery->bind_param("s", $email);
+        $checkEmailQuery->execute();
+        $result = $checkEmailQuery->get_result();
+        if ($result->num_rows > 0) {
             return ['success' => false, 'message' => 'Tài khoản đã được đăng ký'];
         }
         if (empty($password)) {
             return ['success' => false, 'message' => 'Vui lòng nhập mật khẩu'];
         }
-        $sql = "INSERT INTO `login` (ten, email, `password`, `role`) 
-                VALUES ('$name', '$email', '$password', 'Customer')";
-        mysqli_query($this->conn, $sql);
-        $sql1 = "SELECT * FROM `login` WHERE email = '$email'";
-        $result = mysqli_query($this->conn, $sql1);
-        $user = mysqli_fetch_assoc($result);
+        $sql = "INSERT INTO `login` (ten, email, `password`, `role`) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $role = "Customer";
+        $stmt->bind_param("ssss", $name, $email, $password, $role);
+        $stmt->execute();
+        $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
         $uid = $user['UID'];
-        $sql2 = "INSERT INTO `khach_hang` (`UID`) VALUES ('$uid')";
-        mysqli_query($this->conn, $sql2);
+        $stmt = $this->conn->prepare("INSERT INTO `khach_hang` (`UID`) VALUES (?)");
+        $stmt->bind_param("s", $uid);
+        $stmt->execute();        
         return [
             'success' => true,
             'message' => 'Đăng ký thành công',
@@ -71,9 +82,11 @@ class AuthService {
     }
 
     public function forgotPassword($email) {
-        $sql = "SELECT * FROM `login` WHERE Email = '$email'";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) === 0) {
+        $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE Email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
             return ['status' => false, 'message'=> 'Tài khoản không tồn tại'];
         }
         $newPassword = $this->generateRandomPassword();
@@ -82,15 +95,17 @@ class AuthService {
         if ($sent['status']) {
             return ['status' => true, 'password' => $newPassword];
         } else {
-            return ['status' => false, 'error' => $sent['message']];
+            return ['status' => false, 'message' => $sent['message']];
         }
     }
 
     public function changePassword($email, $current_password, $new_password) {
-        $sql = "SELECT * FROM `login` WHERE email = '$email'";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) == 1) {
-            $user = mysqli_fetch_assoc($result);
+        $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE Email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 1) {
+            $user = $result->fetch_assoc();
             if ($user['Password'] == $current_password) {
                 $this->updatePassword($email, $new_password);
                 return ['status' => true, 'password' => $new_password];
@@ -98,7 +113,7 @@ class AuthService {
                 return ['status' => false, 'error' => 'Sai mật khẩu'];
             }
         }
-        return false;
+        return ['status' => false, 'error' => 'Người dùng chưa có tài khoản'];
     }
 
     private function generateRandomPassword() {
@@ -145,10 +160,11 @@ class AuthService {
         }
     }
     
-
     private function updatePassword($email, $newPassword) {
-        $sql = "UPDATE `login` SET `Password` = '$newPassword' WHERE Email = '$email'";
-        mysqli_query($this->conn, $sql);
+        $sql = "UPDATE `login` SET `Password` = ? WHERE Email = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $newPassword, $email);
+        $stmt->execute();
     }
 
     private function getIPAddress() {

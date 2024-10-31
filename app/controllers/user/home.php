@@ -9,7 +9,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
     echo json_encode([
         'danh_sach_banner' => $model->getBanner(),
-        'danh_sach_san_pham' => $model->getProduct()
+        'danh_sach_san_pham' => $model->getProduct(),
+        'danh_sach_phan_loai' => $model->getProductList()
     ]);
 }
 else {
