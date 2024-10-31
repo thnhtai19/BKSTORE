@@ -140,9 +140,18 @@ class ProductService {
     }
 
     private function getComment($id) {
-        $sql = "SELECT * FROM binh_luan WHERE ID_SP = '$id'";
-        $result = mysqli_query($this->conn, $sql);
-        if (mysqli_num_rows($result) === 0) {
+        $sql = "
+            SELECT binh_luan.MaBinhLuan, binh_luan.NgayBinhLuan, binh_luan.NoiDung, login.Ten, login.Avatar
+            FROM binh_luan
+            JOIN login ON binh_luan.UID = login.UID
+            WHERE binh_luan.ID_SP = ?";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 0) {
             return ['success' => false, 'message' => 'Không có bình luận'];
         }
         
