@@ -21,7 +21,17 @@ RewriteRule ^order/failure$ /app/views/client/failure_order.php [L]
 #ADMIN ROUTERS FRONTEND
 RewriteRule ^admin/home$ /app/views/admin/home.php [L]
 
+#AUTH ROUTERS FRONTEND
+RewriteRule ^login$ /app/views/auth/login.php [L]
+RewriteRule ^lost-password$ /app/views/auth/lost-password.php [L]
+RewriteRule ^register$ /app/views/auth/register.php [L]
 
+#PROFILE ROUTERS FRONTEND
+RewriteRule ^my-account.php$ /app/views/client/profile/my-account.php [L]
+RewriteRule ^order-history.php$ /app/views/client/profile/order-history.php [L]
+RewriteRule ^order.php$ /app/views/client/profile/order.php [L]
+RewriteRule ^profile.php$ /app/views/client/profile/profile.php [L]
+RewriteRule ^support.php$ /app/views/client/profile/support.php [L]
 
 
 

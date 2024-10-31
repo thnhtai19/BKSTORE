@@ -78,6 +78,35 @@
                             để có trải nghiệm đặt hàng nhanh và thuận tiện hơn.
                             <a href="#" class="underline text-blue-800">Cập nhập?</a>
                         </p>
+                        
+                        <?php for ($i = 0; $i < 5; $i++) { ?>
+                            <div class="flex bg-white border rounded-lg h-36 p-4">
+                                <div class="flex-1">
+                                    <div class="flex">
+                                        <div class="w-28">
+                                            <img class="h-full" src="/public/image/book1.webp" alt="product">
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="h-full w-full">
+                                                <div class="flex justify-between mb-4 h-full">
+                                                    <div class="flex">
+                                                        <div>
+                                                            <p class="text-gray-700 font-medium">Dế Mèn Phiêu Lưu Ký - Tái Bản 2020</p>
+                                                            <p class="text-gray-600">Ngày đặt: <span class="font-medium text-gray-700">10/10/2024</span></p>
+                                                            <p class="text-gray-700 font-semibold justify-end">200,000₫</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex flex-col justify-between">
+                                                        <p class="text-sm px-3 py-1 bg-green-100 text-green-700 font-medium rounded-full">Đã giao hàng</p>
+                                                        <a href="#" class="text-blue-500 hover:underline font-medium">Xem chi tiết>></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </main>
