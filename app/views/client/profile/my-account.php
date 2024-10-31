@@ -1,34 +1,3 @@
-<?php
-// Dữ liệu giả để test
-function getLogs() {
-    return [
-        ['id' => '001', 'time' => '2024-10-10 19:00:00', 'content' => 'Đăng nhập tài khoản IP 15.20.30.25'],
-        ['id' => '002', 'time' => '2024-10-11 09:15:00', 'content' => 'Đăng xuất tài khoản IP 15.20.30.25'],
-        ['id' => '003', 'time' => '2024-10-12 14:30:00', 'content' => 'Đổi mật khẩu tài khoản IP 15.20.30.25'],
-        ['id' => '004', 'time' => '2024-10-12 15:45:00', 'content' => 'Đăng nhập tài khoản IP 10.15.20.30'],
-        ['id' => '005', 'time' => '2024-10-13 08:00:00', 'content' => 'Thay đổi thông tin tài khoản IP 12.25.35.45'],
-        ['id' => '006', 'time' => '2024-10-13 11:10:00', 'content' => 'Đăng nhập tài khoản IP 14.30.40.50'],
-        ['id' => '007', 'time' => '2024-10-14 16:20:00', 'content' => 'Đăng xuất tài khoản IP 14.30.40.50'],
-        ['id' => '008', 'time' => '2024-10-15 13:55:00', 'content' => 'Đăng nhập tài khoản IP 17.40.50.60'],
-        ['id' => '009', 'time' => '2024-10-15 18:05:00', 'content' => 'Đổi mật khẩu tài khoản IP 17.40.50.60'],
-        ['id' => '010', 'time' => '2024-10-16 09:30:00', 'content' => 'Đăng nhập tài khoản IP 19.50.60.70'],
-        ['id' => '011', 'time' => '2024-10-16 19:00:00', 'content' => 'Đăng xuất tài khoản IP 19.50.60.70'],
-        ['id' => '012', 'time' => '2024-10-17 10:45:00', 'content' => 'Thay đổi thông tin tài khoản IP 20.60.70.80'],
-    ];
-}
-?>
-
-<?php
-
-$logs_per_page = 5;
-
-$total_logs = count(getLogs());
-
-$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$start_from = ($current_page - 1) * $logs_per_page;
-
-$logs = array_slice(getLogs(), $start_from, $logs_per_page);
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -187,33 +156,7 @@ $logs = array_slice(getLogs(), $start_from, $logs_per_page);
                             </div>
                         </div>
 
-                        <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                            <h1 class="text-3xl font-bold mb-4">Nhật ký hoạt động</h1>
-
-                            <table class="table-auto w-full mb-6">
-                                <thead>
-                                    <tr class="bg-gray-200 text-left">
-                                        <th class="px-4 py-2">ID</th>
-                                        <th class="px-4 py-2">Thời gian</th>
-                                        <th class="px-4 py-2">Nội dung</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($logs as $log) { ?>
-                                        <tr class="border-b">
-                                            <td class="px-4 py-2"><?php echo htmlspecialchars($log['id']); ?></td>
-                                            <td class="px-4 py-2"><?php echo htmlspecialchars($log['time']); ?></td>
-                                            <td class="px-4 py-2"><?php echo htmlspecialchars($log['content']); ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
-                            
-                            <?php 
-                                include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/pagination.php'; 
-                                echo paginate($total_logs, $logs_per_page, $current_page);
-                            ?>
-                        </div>
+                        <?php include $_SERVER['DOCUMENT_ROOT'] . 'table.php'; ?>
                     </div>
                 </div>
             </main>
