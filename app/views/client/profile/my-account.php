@@ -1,3 +1,8 @@
+<?php 
+
+$avatar = getAvatar();
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +58,15 @@
                         <div class="flex flex-col md:flex-row gap-2">
                             <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
                                 <h2 class="text-3xl font-bold mb-6">Thông tin tài khoản</h2>
-                                
+                                <div class="flex items-center space-x-6">
+                                    <?php 
+                                        echo '<img src="'.$avatar.'" alt="Avatar" class="w-16 h-16 rounded-full mb-2">';
+                                    ?>
+                                    <form id="uploadForm" action="upload_avatar.php" method="POST" enctype="multipart/form-data">
+                                        <input type="file" name="avatar" id="avatarInput" accept="image/*" class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    </form> 
+                                </div>
+                               
                                 <div class="flex flex-col md:flex-row md:space-x-4 mb-4">
                                     <div class="flex-1">
                                         <label for="full-name" class="block text-gray-700 font-semibold mb-2">Họ và Tên</label>

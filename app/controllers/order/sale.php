@@ -23,7 +23,8 @@ if ($method === 'GET') {
     else $phiVanChuyen = 0;
     if (isset($data['PhuongThucThanhToan'])) $PhuongThucThanhToan = $data['PhuongThucThanhToan'];
     else $PhuongThucThanhToan = 0;
-    echo json_encode(['success'=> true, 'message' => $model->sale($tienHang, $MaGiamGia, $phiVanChuyen, $PhuongThucThanhToan)]);
+    $money = $model->sale($tienHang, $MaGiamGia, $phiVanChuyen, $PhuongThucThanhToan);
+    echo json_encode($money);
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];
