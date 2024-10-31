@@ -236,23 +236,49 @@ class ProductService {
         return -1;
     }
 
-    public function productType($type) {
-        $sql = "SELECT 
-                SAN_PHAM.ID_SP, 
-                SAN_PHAM.TenSP, 
-                SAN_PHAM.Gia, 
-                ROUND(AVG(DANH_GIA.SoSao), 0) AS SoSao 
-            FROM 
-                SAN_PHAM 
-            LEFT JOIN 
-                DANH_GIA 
-            ON 
-                SAN_PHAM.ID_SP = DANH_GIA.ID_SP 
-            WHERE 
-                SAN_PHAM.PhanLoai = ?
-            GROUP BY 
-                SAN_PHAM.ID_SP, SAN_PHAM.TenSP, SAN_PHAM.Gia;";
-        $query = $this->conn->prepare($sql);
+    public function productType($type, $login, $uid) {
+        $sql1 = "SELECT 
+                    SAN_PHAM.ID_SP, 
+                    SAN_PHAM.TenSP, 
+                    SAN_PHAM.Gia,
+                    ROUND((SAN_PHAM.Gia*(1-SAN_PHAM.TyLeGiamGia))) AS GiaSauGiam,
+                    ROUND(AVG(DANH_GIA.SoSao), 0) AS SoSao,
+                    false AS YeuThich,
+                    (SELECT Anh FROM HINH_ANH WHERE HINH_ANH.ID_SP = SAN_PHAM.ID_SP LIMIT 1) AS Hinh
+                FROM 
+                    SAN_PHAM 
+                LEFT JOIN 
+                    DANH_GIA 
+                ON 
+                    SAN_PHAM.ID_SP = DANH_GIA.ID_SP 
+                WHERE 
+                    SAN_PHAM.PhanLoai = ?
+                GROUP BY 
+                    SAN_PHAM.ID_SP, SAN_PHAM.TenSP, SAN_PHAM.Gia;";
+        $sql2 = "SELECT 
+                    SAN_PHAM.ID_SP, 
+                    SAN_PHAM.TenSP, 
+                    SAN_PHAM.Gia,
+                    ROUND((SAN_PHAM.Gia*(1-SAN_PHAM.TyLeGiamGia))) AS GiaSauGiam,
+                    ROUND(AVG(DANH_GIA.SoSao), 0) AS SoSao,
+                    CASE 
+                        WHEN SAN_PHAM.ID_SP IN (SELECT ID_SP FROM THICH WHERE UID = $uid) 
+                        THEN 1 
+                        ELSE 0 
+                    END AS YeuThich,
+                    (SELECT Anh FROM HINH_ANH WHERE HINH_ANH.ID_SP = SAN_PHAM.ID_SP LIMIT 1) AS Hinh
+                FROM 
+                    SAN_PHAM 
+                LEFT JOIN 
+                    DANH_GIA 
+                ON 
+                    SAN_PHAM.ID_SP = DANH_GIA.ID_SP 
+                WHERE 
+                    SAN_PHAM.PhanLoai = ?
+                GROUP BY 
+                    SAN_PHAM.ID_SP, SAN_PHAM.TenSP, SAN_PHAM.Gia, SAN_PHAM.HinhThuc;";
+        if($login) $query = $this->conn->prepare($sql2);
+        else $query = $this->conn->prepare($sql1);
         if (!$query) {
             throw new Exception("Error preparing query: " . $this->conn->error);
         }
