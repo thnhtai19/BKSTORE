@@ -61,14 +61,14 @@
                 class="rounded-lg <?php echo ($page == 8) ? 'bg-black' : ''; ?> w-full px-4 py-2 flex items-center transition-transform duration-300 ease-in-out">
                 <div class="flex gap-2 m-1 transform transition-transform duration-300 ease-in-out hover:translate-x-2">
                     <img src="/public/image/icons8-discount-100.png" alt="home" class="w-6 h-6">
-                    <div class="text-sm">Quản lý khuyến mãi</div>
+                    <div>Quản lý khuyến mãi</div>
                 </div>
             </a>
             <a href="/admin/news"
                 class="rounded-lg w-full <?php echo ($page == 9) ? 'bg-black' : ''; ?> px-4 py-2 flex items-center transition-transform duration-300 ease-in-out">
                 <div class="flex gap-2 m-1 transform transition-transform duration-300 ease-in-out hover:translate-x-2">
                     <img src="/public/image/icons8-news-64.png" alt="home" class="w-6 h-6">
-                    <div class="text-sm">Quản lý tin tức</div>
+                    <div>Quản lý tin tức</div>
                 </div>
             </a>
             <div>
