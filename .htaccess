@@ -6,13 +6,6 @@ RewriteRule ^$ /app/views/public/home.php [L]
 RewriteRule ^product$ /app/views/public/product.php [L]
 RewriteRule ^contact$ /app/views/public/contact.php [L]
 
-RewriteRule ^auth/login$ /app/views/auth/login.php [L]
-RewriteRule ^auth/register$ /app/views/auth/register.php [L]
-RewriteRule ^auth/forgot_password$ /app/views/auth/lost-password.php [L]
-
-RewriteRule ^my/profile$ /app/views/client/profile/profile.php [L]
-RewriteRule ^my/account$ /app/views/client/profile/my-account.php [L]
-
 #USER ROUTERS FRONTEND
 RewriteRule ^cart$ /app/views/client/cart.php [L]
 RewriteRule ^checkout/preview$ /app/views/client/payment_info.php [L]
@@ -23,25 +16,38 @@ RewriteRule ^order/failure$ /app/views/client/failure_order.php [L]
 
 
 #ADMIN ROUTERS FRONTEND
-RewriteRule ^admin/home$ /app/views/admin/home.php [L]
+RewriteRule ^admin$ /app/views/admin/home.php [L]
+RewriteRule ^admin/user$ /app/views/admin/user.php [L]
+RewriteRule ^admin/product$ /app/views/admin/product.php [L]
+RewriteRule ^admin/order$ /app/views/admin/order.php [L]
+RewriteRule ^admin/request$ /app/views/admin/request.php [L]
+RewriteRule ^admin/promotion$ /app/views/admin/promotion.php [L]
+RewriteRule ^admin/review$ /app/views/admin/review.php [L]
+RewriteRule ^admin/comment$ /app/views/admin/comment.php [L]
+RewriteRule ^admin/banner$ /app/views/admin/banner.php [L]
+RewriteRule ^admin/news$ /app/views/admin/news.php [L]
+RewriteRule ^admin/contact$ /app/views/admin/contact.php [L]
+RewriteRule ^admin/setting$ /app/views/admin/setting.php [L]
+RewriteRule ^admin/social$ /app/views/admin/social.php [L]
+RewriteRule ^admin/partner$ /app/views/admin/partner.php [L]
 
 #AUTH ROUTERS FRONTEND
-RewriteRule ^login$ /app/views/auth/login.php [L]
-RewriteRule ^lost-password$ /app/views/auth/lost-password.php [L]
-RewriteRule ^register$ /app/views/auth/register.php [L]
+RewriteRule ^auth/login$ /app/views/auth/login.php [L]
+RewriteRule ^auth/register$ /app/views/auth/register.php [L]
+RewriteRule ^auth/forgot_password$ /app/views/auth/lost-password.php [L]
 
 #PROFILE ROUTERS FRONTEND
-RewriteRule ^my-account.php$ /app/views/client/profile/my-account.php [L]
-RewriteRule ^order-history.php$ /app/views/client/profile/order-history.php [L]
-RewriteRule ^order.php$ /app/views/client/profile/order.php [L]
-RewriteRule ^profile.php$ /app/views/client/profile/profile.php [L]
-RewriteRule ^support.php$ /app/views/client/profile/support.php [L]
+RewriteRule ^my/account$ /app/views/client/profile/my-account.php [L]
+RewriteRule ^my/order$ /app/views/client/profile/order-history.php [L]
+RewriteRule ^my/order/detail$ /app/views/client/profile/order.php [L]
+RewriteRule ^my/profile$ /app/views/client/profile/profile.php [L]
+RewriteRule ^my/support$ /app/views/client/profile/support.php [L]
 
 #PUBLIC ROUTERS FRONTEND
-RewriteRule ^introduction.php$ /app/views/public/introduction.php [L]
-RewriteRule ^news.php$ /app/views/public/news.php [L]
-RewriteRule ^promotion.php$ /app/views/public/promotion.php [L]
-RewriteRule ^comment.php$ /app/views/public/comment.php [L]
+RewriteRule ^introduction$ /app/views/public/introduction.php [L]
+RewriteRule ^news$ /app/views/public/news.php [L]
+RewriteRule ^promotion$ /app/views/public/promotion.php [L]
+RewriteRule ^comment$ /app/views/public/comment.php [L]
 
 
 
