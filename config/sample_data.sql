@@ -30,15 +30,15 @@ VALUES
 (9, '10:40:00 21-10-2023', 'Đăng nhập thất bại từ IP 192.168.1.9'),
 (10, '10:45:00 21-10-2023', 'Đăng nhập thành công từ IP 192.168.1.10');
 
-INSERT INTO KHACH_HANG (UID, GioiTinh, SDT, DiaChi)
+INSERT INTO KHACH_HANG (UID, GioiTinh, SDT, DiaChi, TrangThai)
 VALUES
-(1, 'Male', '0123456789', '123 Main St'),
-(2, 'Female', '0987654321', '456 Oak Ave'),
-(3, 'Male', '0123456789', '789 Pine Rd'),
-(6, 'Female', '0987654321', '101 Birch Ln'),
-(7, 'Male', '0123456789', '202 Cedar St'),
-(9, 'Female', '0987654321', '303 Maple Ave'),
-(10, 'Male', '0123456789', '404 Elm St');
+(1, 'Male', '0123456789', '123 Main St', 1),
+(2, 'Female', '0987654321', '456 Oak Ave', 1),
+(3, 'Male', '0123456789', '789 Pine Rd', 1),
+(6, 'Female', '0987654321', '101 Birch Ln', 1),
+(7, 'Male', '0123456789', '202 Cedar St', 1),
+(9, 'Female', '0987654321', '303 Maple Ave', 1),
+(10, 'Male', '0123456789', '404 Elm St', 1);
 
 INSERT INTO SAN_PHAM (TenSP, MoTa, Gia, TyLeGiamGia, SoLuongKho, NXB, KichThuoc, SoTrang, PhanLoai, TuKhoa, HinhThuc, TacGia, NgonNgu, NamXB)
 VALUES
@@ -90,13 +90,13 @@ VALUES
 ('GIAMCOD', 25000.00, 'COD', 'Expired'),
 ('FREESHIP', 0.00, 'Tất cả', 'Active');
 
-INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, ThanhToan, PhuongThucThanhToan)
+INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, ThanhToan, PhuongThucThanhToan, TrangThai, SDT, DiaChi)
 VALUES
-(1, '20-10-2023', 300000.00, 'GIAM50K', TRUE, 'Bank'),
-(2, '19-10-2023', 150000.00, NULL, FALSE, 'COD'),
-(3, '18-10-2023', 250000.00, 'GIAM10K', TRUE, 'Bank'),
-(6, '17-10-2023', 100000.00, NULL, FALSE, 'COD'),
-(7, '16-10-2023', 200000.00, 'GIAMCOD', TRUE, 'Bank');
+(1, '20-10-2023', 300000.00, 'GIAM50K', TRUE, 'Bank', 1, 0123456789, 'TP.HCM'),
+(2, '19-10-2023', 150000.00, NULL, FALSE, 'COD', 1, 0123456789, 'TP.HCM'),
+(3, '18-10-2023', 250000.00, 'GIAM10K', TRUE, 'Bank', 1, 0123456789, 'TP.HCM'),
+(6, '17-10-2023', 100000.00, NULL, FALSE, 'COD', 1, 0123456789, 'TP.HCM'),
+(7, '16-10-2023', 200000.00, 'GIAMCOD', TRUE, 'Bank', 1, 0123456789, 'TP.HCM');
 
 INSERT INTO GOM (ID_DonHang, ID_SP, SoLuong)
 VALUES

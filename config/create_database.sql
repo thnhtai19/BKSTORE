@@ -35,6 +35,7 @@ CREATE TABLE KHACH_HANG (
     GioiTinh ENUM('Male', 'Female'),
     SDT TEXT,
     DiaChi TEXT,
+    TrangThai INT,
     FOREIGN KEY (UID) REFERENCES LOGIN(UID)
 );
 
@@ -122,6 +123,9 @@ CREATE TABLE DON_HANG (
     NgayDat TEXT,  -- Changed TEXT to DATE
     TongTien DECIMAL(10, 2) NOT NULL,
     MaGiamGia VARCHAR(50),
+    TrangThai INT,
+    SDT TEXT,
+    DiaChi TEXT,
     ThanhToan BOOLEAN DEFAULT FALSE,
     PhuongThucThanhToan ENUM('COD', 'Bank'),  -- Consistent single quotes
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID),
