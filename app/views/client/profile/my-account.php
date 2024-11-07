@@ -1,6 +1,7 @@
+/*
 <?php 
 
-$avatar = getAvatar();
+$avatar = '';
 
 ?>
 
@@ -20,7 +21,7 @@ $avatar = getAvatar();
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
         </header>
         <div class="overflow-y-auto">
-            <main class="container max-w-screen-1200 mx-auto pt-16 pb-20 px-1 lg:px-0">
+            <main class="container max-w-screen-1200 mx-auto pt-16 pb-20 px-2 lg:px-0">
                 <div class="flex gap-4 pt-6">
                     <div class="w-1/4 bg-white hidden lg:block flex flex-col text-gray-800 p-4 shadow-md rounded-lg">
                         <nav>
@@ -168,8 +169,38 @@ $avatar = getAvatar();
                                 </div>
                             </div>
                         </div>
+                        <script>
+                            const columnTitles = {
+                                id: 'ID',
+                                time: 'Thời gian',
+                                content: 'Nội dung'
+                            };
 
-                        <?php include $_SERVER['DOCUMENT_ROOT'] . 'table.php'; ?>
+                            const data = [
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f tai' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f Tai' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' },
+                                { id: "29285114", time: '2024-09-12 23:43:55', content: 'Đã nhập tài khoản IP: 2402:800:639c:e511:21d8:d6bd:f9a0:bf4f' }
+                            ];
+
+                        </script>
+                        <?php 
+                            $title = "Nhật ký hoạt động";
+                            include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/table.php'; 
+                        ?>
                     </div>
                 </div>
             </main>

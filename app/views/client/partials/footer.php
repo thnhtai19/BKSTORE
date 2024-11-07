@@ -9,30 +9,18 @@
         </svg>
         <div>Trang chủ</div>
     </div>
-    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 2) ? 'text-custom-blue' : ''; ?>" onclick="goNotice()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2c0-1.38 1-2.5 2-2.5V11a7 7 0 1 1 14 0v4.5c1 0 2 1.12 2 2.5z"/>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-        </svg>
-        <div>Thông báo</div>
-    </div>
-    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 3) ? 'text-custom-blue' : ''; ?>">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="11" />
-            <circle cx="12" cy="7" r="4" />
-            <path d="M5 20c0-7 15-7 15 0" />
-        </svg>
-        <div>Tôi</div>
-    </div>
     <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 4) ? 'text-custom-blue' : ''; ?>">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 6h15l-1.5 7.5H7.5L6 6z" />
-            <path d="M6 6l-1 4H3m0 0h3m1 0h11" />
-            <path d="M16 16a2 2 0 1 0 2 2 2 2 0 0 0-2-2zM6 16a2 2 0 1 0 2 2 2 2 0 0 0-2-2z" />
-            <path d="M17 3v2l-2 2h-4l-1 1H6" />
-            <path d="M14 3h-1v1h1V3z" />
+        <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.1367 10H4.13672V18C4.13672 21 5.13672 22 8.13672 22H16.1367C19.1367 22 20.1367 21 20.1367 18V10Z" 
+                stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M21.668 7V8C21.668 9.1 21.138 10 19.668 10H4.66797C3.13797 10 2.66797 9.1 2.66797 8V7C2.66797 5.9 3.13797 5 4.66797 5H19.668C21.138 5 21.668 5.9 21.668 7Z" 
+                stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M11.8068 4.99945H6.28678C5.94678 4.62945 5.95678 4.05945 6.31678 3.69945L7.73678 2.27945C8.10678 1.90945 8.71678 1.90945 9.08678 2.27945L11.8068 4.99945Z" 
+                stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M18.0395 4.99945H12.5195L15.2395 2.27945C15.6095 1.90945 16.2195 1.90945 16.5895 2.27945L18.0095 3.69945C18.3695 4.05945 18.3795 4.62945 18.0395 4.99945Z" 
+                stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M9.10938 10V15.14C9.10938 15.94 9.98938 16.41 10.6594 15.98L11.5994 15.36C11.9394 15.14 12.3694 15.14 12.6994 15.36L13.5894 15.96C14.2494 16.4 15.1394 15.93 15.1394 15.13V10H9.10938Z" 
+                stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
         <div>Khuyến mãi</div>
     </div>
@@ -46,6 +34,22 @@
             <line x1="3" y1="17" x2="7" y2="17" />
         </svg>
         <div>Tin tức</div>
+    </div>
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 2) ? 'text-custom-blue' : ''; ?>" onclick="goNotice()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2c0-1.38 1-2.5 2-2.5V11a7 7 0 1 1 14 0v4.5c1 0 2 1.12 2 2.5z"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div>Thông báo</div>
+    </div>
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 3) ? 'text-custom-blue' : ''; ?>">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" 
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M20.5901 22C20.5901 18.13 16.7402 15 12.0002 15C7.26015 15 3.41016 18.13 3.41016 22" 
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <div>Tài khoản</div>
     </div>
 </footer>
 <footer class="bg-white border-t text-white p-12 hidden md:block">
