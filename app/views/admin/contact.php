@@ -75,11 +75,11 @@
             <div class="flex gap-2">
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Loại:</label>
-                    <input type="text" id="themloai" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <input type="text" id="themloai" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập loại">
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Thông tin liên hệ:</label>
-                    <input id="themthongtin" class="mt-2 mb-4 w-full p-2 border rounded h-10">
+                    <input id="themthongtin" class="mt-2 mb-4 w-full p-2 border rounded h-10" placeholder="Nhập thông tin liên hệ">
                 </div>
             </div>
             

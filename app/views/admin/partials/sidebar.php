@@ -108,8 +108,8 @@
                     <a href="/admin/social"
                         class="rounded-lg w-full px-4 py-2 flex items-center transition-transform duration-300 ease-in-out">
                         <div
-                            class="flex gap-2 m-1 transform transition-transform duration-300 ease-in-out hover:translate-x-2">
-                            <img src="/public/image/icons8-users-100.png" alt="home" class="w-6 h-6">
+                            class="flex gap-2 m-1 transform transition-transform duration-300 ease-in-out hover:translate-x-2 items-center">
+                            <img src="/public/image/icons8-group-skin-type-7-96.png" alt="home" class="w-6 h-6">
                             <div class="text-sm">Quản lý MXH</div>
                         </div>
                     </a>

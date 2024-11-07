@@ -74,11 +74,11 @@
             <div class="flex gap-2">
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Mã sản phẩm:</label>
-                    <input type="text" id="masanpham" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <input type="text" id="masanpham" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập mã sản phẩm">
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Mô tả:</label>
-                    <input id="mota" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <input id="mota" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập mô tả">
                 </div>
             </div>
             

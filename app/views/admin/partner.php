@@ -75,11 +75,11 @@
             <div class="flex gap-2">
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Tên đối tác:</label>
-                    <input type="text" id="themnamePartner" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <input type="text" id="themnamePartner" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập tên đối tác">
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Liên kết:</label>
-                    <input id="themlienket" class="mt-2 mb-4 w-full p-2 border rounded h-10">
+                    <input id="themlienket" class="mt-2 mb-4 w-full p-2 border rounded h-10" placeholder="Nhập liên kết">
                 </div>
             </div>
             

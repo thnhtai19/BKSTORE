@@ -85,11 +85,11 @@
             <div class="flex gap-2">
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Tiêu đề:</label>
-                    <input type="text" id="tieude" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <input type="text" id="tieude" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập tiêu đề">
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Từ khoá:</label>
-                    <input id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <input id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập từ khoá">
                 </div>
             </div>
             

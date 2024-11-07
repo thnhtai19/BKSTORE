@@ -71,7 +71,7 @@
             <div class="flex gap-2">
                 <div class="w-full">
                     <label class="block text-sm font-medium text-gray-700">Liên kết:</label>
-                    <input id="themlienket" class="mt-2 mb-4 w-full p-2 border rounded h-10">
+                    <input id="themlienket" class="mt-2 mb-4 w-full p-2 border rounded h-10" placeholder="Nhập liên kết">
                 </div>
             </div>
             
@@ -160,7 +160,7 @@
 
                         </script>
                         <?php
-                            $title = "Quản lý liên hệ";
+                            $title = "Quản lý mạng xã hội";
                             include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/table.php';
                         ?>
                     </main>
