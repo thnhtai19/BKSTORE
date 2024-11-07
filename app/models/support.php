@@ -5,6 +5,11 @@ class support {
         return date("H:i:s d-m-Y");
     }
 
+    public function getDateNow() {
+        date_default_timezone_set("Asia/Ho_Chi_Minh");
+        return date("d-m-Y");
+    }
+
     public function sort($res) {
         usort($res, function($a, $b) {
             return intval($b['id']) <=> intval($a['id']);

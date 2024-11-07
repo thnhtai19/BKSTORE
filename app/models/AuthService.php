@@ -19,7 +19,7 @@ class AuthService {
             return ['success' => false, 'message' => 'Tài khoản không tồn tại'];
         }
         $user = $result->fetch_assoc();
-        if ($password != $user['Password']) {
+        if (!password_verify($password, $user['Password'])) {
             return ['success' => false, 'message' => 'Sai mật khẩu'];
         }
         $ip = $this->getIPAddress();
@@ -60,10 +60,11 @@ class AuthService {
         if (empty($password)) {
             return ['success' => false, 'message' => 'Vui lòng nhập mật khẩu'];
         }
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $sql = "INSERT INTO `login` (ten, email, `password`, `role`) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $role = "Customer";
-        $stmt->bind_param("ssss", $name, $email, $password, $role);
+        $stmt->bind_param("ssss", $name, $email, $hashedPassword, $role);
         $stmt->execute();
         $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE email = ?");
         $stmt->bind_param("s", $email);
@@ -109,7 +110,7 @@ class AuthService {
         $result = $stmt->get_result();
         if ($result->num_rows == 1) {
             $user = $result->fetch_assoc();
-            if ($user['Password'] == $current_password) {
+            if (password_verify($current_password, $user['Password'])) {
                 $this->updatePassword($email, $new_password);
                 return ['status' => true, 'password' => $new_password];
             } else {
@@ -166,7 +167,7 @@ class AuthService {
     private function updatePassword($email, $newPassword) {
         $sql = "UPDATE `login` SET `Password` = ? WHERE Email = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $newPassword, $email);
+        $stmt->bind_param("ss", password_hash($newPassword, PASSWORD_DEFAULT), $email);
         $stmt->execute();
     }
 

@@ -53,11 +53,54 @@ class CartService {
         if ($row['SoLuongKho'] < $quantity) {
             return ['success'=> false, 'message' => 'Trong kho không đủ sản phẩm'];
         }
-        $cart = "INSERT INTO trong_gio_hang (`UID`, ID_SP, SoLuong) VALUES (?, ?, ?)";
-        $stmt = $this->conn->prepare($cart);
-        $stmt->bind_param("iii", $id, $product_id, $quantity);
+        $check = "SELECT SoLuong FROM trong_gio_hang WHERE ID_SP = ? AND `UID` = ?";
+        $stmt = $this->conn->prepare($check);
+        $stmt->bind_param("ii", $product_id, $id);
         $stmt->execute();
+        $result = $stmt->get_result();     
+        if ($result->num_rows === 0) {
+            $cart = "INSERT INTO trong_gio_hang (`UID`, ID_SP, SoLuong) VALUES (?, ?, ?)";
+            $stmt = $this->conn->prepare($cart);
+            $stmt->bind_param("iii", $id, $product_id, $quantity);
+            $stmt->execute();
+        }
+        else $this->update($id, $product_id, $result->fetch_assoc()['SoLuong'] + $quantity);
         return ['success' => true, 'message' => 'Thêm sản phẩm vào giỏ hàng thành công'];
+    }
+
+    public function remove($uid, $product_id) {
+        $sql_check = "SELECT * FROM trong_gio_hang WHERE ID_SP = ? AND `UID` = ?";
+        $stmt_check = $this->conn->prepare($sql_check);
+        $stmt_check->bind_param("ii", $product_id, $uid);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
+        if ($result_check->num_rows === 0) {
+            return ['success' => false, 'message' => 'Chưa thêm sản phẩm vào giỏ hàng'];
+        }
+        $check = "DELETE FROM trong_gio_hang WHERE ID_SP = ? AND `UID` = ?";
+        $stmt = $this->conn->prepare($check);
+        $stmt->bind_param("ii", $product_id, $uid);
+        $stmt->execute();
+        return ['success' => true, 'message' => 'Xóa sản phẩm khỏi giỏ hàng thành công'];
+    }
+
+    public function update($uid, $product_id, $quantity) {
+        $sql_check = "SELECT SoLuong FROM trong_gio_hang WHERE ID_SP = ? AND `UID` = ?";
+        $stmt_check = $this->conn->prepare($sql_check);
+        $stmt_check->bind_param("ii", $product_id, $uid);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
+        if ($result_check->num_rows === 0) {
+            return ['success' => false, 'message' => 'Chưa thêm sản phẩm vào giỏ hàng'];
+        }
+        if ($quantity > 0) {
+            $sql_update = "UPDATE trong_gio_hang SET SoLuong = ? WHERE `ID_SP` = ? AND `UID` = ?";
+            $stmt = $this->conn->prepare($sql_update);
+            $stmt->bind_param("iii", $quantity, $product_id, $uid);
+            $stmt->execute();
+        }
+        else $this->remove($uid, $product_id);
+        return ['success' => true, 'message' => 'Cập nhật đơn hàng thành công'];
     }
 
     private function getInfo($id) {

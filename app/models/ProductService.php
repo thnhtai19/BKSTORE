@@ -11,15 +11,24 @@ class ProductService {
     }
 
     public function getInfo($id) {
+        $result = $this->getProductInfo($id);
+        $review = $this->average_star($id);
+        $result['danh_sach_danh_gia'] = $review['danh_sach_danh_gia'];
+        $result['danh_sach_binh_luan'] = $this->getComment($id);
+        return $result;
+    }
+
+    public function getProductInfo($id) {
         $product = $this->getProductById($id);
         if (!$product) {
             return ['success' => false, 'message' => 'Không tìm thấy sản phẩm'];
         }
-        $review = $this->average_star($id);
+        $review = $this->average_star($id)['so_sao_trung_binh'];
         return [
+            'id' => $id,
             'ten' => $product['TenSP'],
             'hinh' => $this->getImage($id),
-            'so_sao_trung_binh' => $review['so_sao_trung_bình'],
+            'so_sao_trung_binh' => $review,
             'so_luong_da_ban' => $this->countProduct($id),
             'thong_tin_chi_tiet' => [
                 'the_loai' => $product['PhanLoai'],
@@ -35,8 +44,6 @@ class ProductService {
             'gia_sau_giam_gia' => $product['Gia'] * (1 - $product['TyLeGiamGia']),
             'so_luong_ton_kho' => $product['SoLuongKho'],
             'mo_ta' => $product['MoTa'],
-            'danh_sach_danh_gia' => $review['danh_sach_danh_gia'],
-            'danh_sach_binh_luan' => $this->getComment($id)
         ];
     }
 
@@ -51,7 +58,7 @@ class ProductService {
                 'hinh' => $this->getImage($id),
                 'gia_goc' => $entry['Gia'],
                 'gia_sau_giam_gia' => $entry['Gia'] * (1 - $entry['TyLeGiamGia']),
-                'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_bình']
+                'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_binh']
             ];
             switch ($trang_thai) {
                 case -1:
@@ -67,7 +74,7 @@ class ProductService {
                     break;
             }
         }
-        return $result;
+        return $this->support->sort($result);
     }
 
     public function getProductList($typeList) {
@@ -124,9 +131,60 @@ class ProductService {
         
         $images = [];
         while ($row = $result->fetch_assoc()) {
-            $images[] = 'http://localhost/assets/image/' . $row['Anh'];
+            $images[] = $row['Anh'];
         }
         return $images;
+    }
+
+    public function checkProduct($id) {
+        $sql = "SELECT * FROM san_pham WHERE ID_SP = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function proposeProduct($TenSP, $NoiDung, $uid) {
+        $sql = "SELECT * FROM san_pham_de_xuat WHERE TenSP = ? AND `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("si", $TenSP, $uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            return ['success' => false, 'message' => 'Người dùng đã đề xuất'];
+        }
+        
+        $sql = "INSERT INTO san_pham_de_xuat (TenSP, NoiDung, `UID`, TrangThai, GhiChu) VALUES (?, ?, ?, 'Pending', 'Đang chờ duyệt')";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssi", $TenSP, $NoiDung, $uid);
+        $stmt->execute();
+        return ['success' => true, 'message' => 'Đề xuất thành công'];
+    }
+
+    public function like($uid) {
+        $sql = "SELECT ID_SP FROM thich WHERE `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
+            return ["success"=> false,"message"=> "Chưa thích sản phẩm nào"];
+        }
+        $productId = [];
+        while ($row = $result->fetch_assoc()) {
+            $productId[] = $row['ID_SP'];
+        }
+        $product = [];
+        foreach ($productId as $id) {
+            $product[] = $this->getProductById($id);
+        }
+        return ['success' => true, 'product_list' => $this->getList($product)];
     }
 
     private function getProductById($id) {
@@ -135,7 +193,9 @@ class ProductService {
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+        if ($result->num_rows === 0) {
+            return null;
+        }
         return $result->fetch_assoc();
     }
 
@@ -194,23 +254,32 @@ class ProductService {
                 'ten' => $row['Ten']
             ];
         }
-        return $reviews;
+        return $this->support->sort($reviews);
     }
 
     private function average_star($id) {
         $review = $this->getReview($id);
         if (isset($review['success']) && !$review['success']) {
-            return $review;
+            return [
+                'so_sao_trung_binh' => 0,
+                'danh_sach_danh_gia' => []
+            ];
         }
-
-        $sum_star = array_sum(array_column($review, 'so_sao'));
-        $count_star = count($review);
+    
+        $sum_star = 0;
+        $count_star = 0;
+    
+        foreach ($review as $entry) {
+            $sum_star += $entry['so_sao'];
+            $count_star++;
+        }
+    
         return [
-            'so_sao_trung_bình' => $count_star ? round($sum_star / $count_star, 1) : 0,
+            'so_sao_trung_binh' => $count_star > 0 ? round($sum_star / $count_star, 1) : 0,
             'danh_sach_danh_gia' => $review
         ];
     }
-
+    
     private function countProduct($id) {
         $sql = "SELECT SUM(SoLuong) as total FROM gom WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
