@@ -60,7 +60,7 @@ class OrderService {
         $result = [];
         foreach ($order as $row) {
             $idOrder = $row['ID_DonHang'];
-            $sql2 = "SELECT ID_SP FROM gom WHERE ID_DonHang = ?";
+            $sql2 = "SELECT ID_SP, SUM(SoLuong) AS COUNT FROM gom WHERE ID_DonHang = ? GROUP BY ID_SP";
             $stmt2 = $this->conn->prepare($sql2);
             $stmt2->bind_param("i", $idOrder);
             $stmt2->execute();
@@ -89,7 +89,8 @@ class OrderService {
                     'ten_sp' => $productDetails['TenSP'],
                     'gia' => $productDetails['Gia'],
                     'trang_thai' => '',
-                    'ngay_dat' => $row['NgayDat']
+                    'ngay_dat' => $row['NgayDat'],
+                    'so_luong_san_pham' => $product['COUNT']
                 ];
             }
         }
@@ -165,7 +166,7 @@ class OrderService {
     
         return [
             "success" => true,
-            "san_pham" => $resultList
+            "san_pham" => $this->support->sort($resultList)
         ];
     }
 

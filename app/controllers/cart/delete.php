@@ -13,11 +13,9 @@ if ($method === 'POST') {
     else {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
-        if (isset($data['id'])) $id = $data['id'];
-        else $id = '';
-        if (isset($data['quantity'])) $quantity = $data['quantity'];
-        else $quantity = 0;
-        echo json_encode($model->set($_SESSION["uid"], $id, $quantity));
+        if (isset($data['ID_SP'])) $ID_SP = $data['ID_SP'];
+        else $ID_SP = '';
+        echo json_encode($model->remove($_SESSION["uid"], $ID_SP));
     }
 }
 else {

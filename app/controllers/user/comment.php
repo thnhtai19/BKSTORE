@@ -6,15 +6,18 @@ $db = new Database();
 $model = new UserService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'GET') {
+if ($method === 'POST') {
     if (!isset($_SESSION["uid"])) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
-    echo json_encode([
-        'thong_tin' => $model->info($_SESSION["uid"]),
-        'nhat_ky' => $model->diary($_SESSION["uid"])
-    ]);
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    if (isset($data['ID_SP'])) $ID_SP = $data['ID_SP'];
+    else $ID_SP = '';
+    if (isset($data['NoiDung'])) $NoiDung = $data['NoiDung'];
+    else $NoiDung = '';
+    echo json_encode($model->setComment($_SESSION["uid"], $ID_SP, $NoiDung));
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];
