@@ -61,11 +61,11 @@ VALUES
 
 INSERT INTO SAN_PHAM_DE_XUAT (TenSP, NoiDung, TrangThai, GhiChu, UID)
 VALUES
-('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', 'Pending', 'Đang chờ duyệt', 1),
-('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', 'Approved', 'Đã được duyệt', 2),
-('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', 'Rejected', 'Không được duyệt', 3),
-('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', 'Pending', 'Đang chờ duyệt', 6),
-('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', 'Approved', 'Đã được duyệt', 7);
+('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', "Đang chờ duyệt", 'Đang chờ duyệt', 1),
+('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', "Đã duyệt", 'Đã được duyệt', 2),
+('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', "Đã từ chối", 'Không được duyệt', 3),
+('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', "Đang chờ duyệt", 'Đang chờ duyệt', 6),
+('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', "Đã duyệt", 'Đã được duyệt', 7);
 
 INSERT INTO DANH_GIA (ID_SP, UID, NgayDanhGia, SoSao, NoiDung, TrangThai, PhanHoi)
 VALUES

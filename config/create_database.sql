@@ -70,7 +70,7 @@ CREATE TABLE SAN_PHAM_DE_XUAT (
     MaDeXuat INT AUTO_INCREMENT PRIMARY KEY,
     TenSP VARCHAR(255) NOT NULL,
     NoiDung TEXT,
-	TrangThai ENUM('Pending', 'Approved', 'Rejected'),
+	TrangThai ENUM("Đang chờ duyệt", "Đã duyệt", "Đã từ chối") DEFAULT "Đang chờ duyệt",
     GhiChu TEXT,
     UID INT,
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
