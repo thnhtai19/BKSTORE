@@ -7,23 +7,22 @@ $model = new OrderService($db->conn);
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'GET') {
+if ($method === 'POST') {
     if (!isset($_SESSION["uid"])) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
+    if (isset($data['PhuongThucThanhToan'])) $PhuongThucThanhToan = $data['PhuongThucThanhToan'];
+    else $PhuongThucThanhToan = '';
     if (isset($data['MaGiamGia'])) $MaGiamGia = $data['MaGiamGia'];
     else $MaGiamGia = '';
-    if (isset($data['tienHang'])) $tienHang = $data['tienHang'];
-    else $tienHang = 0;
-    if (isset($data['phiVanChuyen'])) $phiVanChuyen = $data['phiVanChuyen'];
-    else $phiVanChuyen = 0;
-    if (isset($data['PhuongThucThanhToan'])) $PhuongThucThanhToan = $data['PhuongThucThanhToan'];
-    else $PhuongThucThanhToan = 0;
-    $money = $model->sale($tienHang, $MaGiamGia, $phiVanChuyen, $PhuongThucThanhToan);
-    echo json_encode($money);
+    if (isset($data['SDT'])) $SDT = $data['SDT'];
+    else $SDT = '';
+    if (isset($data['DiaChi'])) $DiaChi = $data['DiaChi'];
+    else $DiaChi = '';
+    echo json_encode($model->order($_SESSION["uid"], $PhuongThucThanhToan, $MaGiamGia, $SDT, $DiaChi));
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

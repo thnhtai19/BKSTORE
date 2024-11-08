@@ -123,7 +123,7 @@ CREATE TABLE DON_HANG (
     NgayDat TEXT,  -- Changed TEXT to DATE
     TongTien DECIMAL(10, 2) NOT NULL,
     MaGiamGia VARCHAR(50),
-    TrangThai INT,
+    TrangThai ENUM("Chờ xác nhận", "Đã giao hàng", "Chờ lấy hàng", "Đang vận chuyển", "Đã hủy") DEFAULT "Chờ xác nhận",
     SDT TEXT,
     DiaChi TEXT,
     ThanhToan BOOLEAN DEFAULT FALSE,

@@ -93,6 +93,7 @@ RewriteRule ^api/cart/update$ /app/controllers/cart/update.php [L]
 RewriteRule ^api/order/sale$ /app/controllers/order/sale.php [L]
 RewriteRule ^api/order/paid$ /app/controllers/order/getpaid.php [L]
 RewriteRule ^api/order/info$ /app/controllers/order/info.php [L]
+RewriteRule ^api/order/order$ /app/controllers/order/order.php [L]
 
 #SYSTEM ROUTERS BACKEND
 RewriteRule ^api/system/contact$ /app/controllers/system/contactInfo.php [L]

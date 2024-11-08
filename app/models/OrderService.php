@@ -25,7 +25,7 @@ class OrderService {
         }
 
         $row = $result1->fetch_assoc();
-        if ($row['TrangThai'] == 'Expired') {
+        if ($row['TrangThai'] == 'Hết hạn') {
             return ['success'=> false, 'message'=> 'Mã giảm giá đã hết hạn'];
         }
 
@@ -129,6 +129,57 @@ class OrderService {
                 'thong_tin_nguoi_mua' => $user['nguoi_dung']
             ]
         ];
+    }
+
+    public function order($uid, $PhuongThucThanhToan, $MaGiamGia, $SDT, $DiaChi) {
+        $sql = "SELECT * FROM `ma_giam_gia` WHERE `Ma` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $MaGiamGia);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) {
+            return ['success' => false, 'message' => 'Mã giảm giá không tồn tại'];
+        }
+        $bill = $this->bill($uid);
+        $bill = $bill['SoLuong'] * $this->getCostProduct($bill['ID_SP']);
+        $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $NgayDat = $this->support->getDateNow();
+        $stmt->bind_param("isissss", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan);
+        $stmt->execute();
+        $ID_DonHang = mysqli_insert_id($this->conn);
+        $sql = "INSERT INTO gom (ID_DonHang, ID_SP, SoLuong) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $rac = $this->bill($uid);
+        $stmt->bind_param("iii", $ID_DonHang, $rac['ID_SP'], $rac['SoLuong']);
+        $stmt->execute();
+        return "thanhf coong";
+    }
+
+    public function setOrderStatus($ID_DonHang, $ThanhToan) {
+        $sql = "UPDATE don_hang SET ThanhToan = ? WHERE ID_DonHang =?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("si", $ThanhToan, $ID_DonHang);
+        $stmt->execute();
+    }
+
+    private function bill($uid) {
+        $sql = "SELECT ID_SP, SoLuong FROM trong_gio_hang WHERE `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    private function getCostProduct($ID_SP) {
+        $sql = "SELECT Gia, TyLeGiamGia FROM san_pham WHERE ID_SP = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $ID_SP);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $result = $result->fetch_assoc();
+        return $result['Gia'] - $result['Gia'] * $result['TyLeGiamGia'];
     }
 
     private function getProduct($orderId) {
