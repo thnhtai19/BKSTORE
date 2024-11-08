@@ -192,7 +192,7 @@ CREATE TABLE BANNER (
     Image VARCHAR(255),
     IdSP INT,
     MoTa TEXT,
-    TrangThai ENUM("Đang hiện", "Đang ẩn")
+    TrangThai ENUM("Đang hiện", "Đang ẩn"),
     FOREIGN KEY (IdSP) REFERENCES SAN_PHAM(ID_SP)
 );
 
