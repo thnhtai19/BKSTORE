@@ -70,7 +70,7 @@ CREATE TABLE SAN_PHAM_DE_XUAT (
     MaDeXuat INT AUTO_INCREMENT PRIMARY KEY,
     TenSP VARCHAR(255) NOT NULL,
     NoiDung TEXT,
-	TrangThai ENUM('Pending', 'Approved', 'Rejected'),
+	TrangThai ENUM("Đang chờ duyệt", "Đã duyệt", "Đã từ chối") DEFAULT "Đang chờ duyệt",
     GhiChu TEXT,
     UID INT,
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
@@ -119,7 +119,7 @@ CREATE TABLE DON_HANG (
     NgayDat TEXT,  -- Changed TEXT to DATE
     TongTien DECIMAL(10, 2) NOT NULL,
     MaGiamGia VARCHAR(50),
-    TrangThai ENUM("Chờ xác nhận", "Đã xác nhận", "Đang vận chuyển", "Đã giao hàng", "Đã hủy") DEFAULT 'Chờ xác nhận',
+    TrangThai ENUM("Chờ xác nhận", "Đã xác nhận", "Đang vận chuyển", "Đã giao hàng", "Đã hủy") DEFAULT "Chờ xác nhận",
     SDT TEXT,
     DiaChi TEXT,
     ThanhToan ENUM("Chưa thanh toán", "Đã thanh toán", "Huỷ thanh toán"), -- Trang thai thanh toan
