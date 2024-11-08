@@ -76,15 +76,6 @@ CREATE TABLE SAN_PHAM_DE_XUAT (
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
 
--- Table for ĐỀ_XUẤT
--- CREATE TABLE DE_XUAT (
---     MaDeXuat INT,
---     UID INT,
---     PRIMARY KEY (MaDeXuat, UID),
---     FOREIGN KEY (MaDeXuat) REFERENCES SAN_PHAM_DE_XUAT(MaDeXuat),
---     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
--- );
-
 -- Table for ĐÁNH_GIÁ
 CREATE TABLE DANH_GIA (
     MaDanhGia INT AUTO_INCREMENT PRIMARY KEY,
@@ -93,6 +84,8 @@ CREATE TABLE DANH_GIA (
     NgayDanhGia TEXT NOT NULL,
     SoSao INT CHECK (SoSao BETWEEN 1 AND 5),
     NoiDung TEXT,
+    TrangThai ENUM("Đang hiện", "Đang ẩn"),
+    PhanHoi TEXT,
     FOREIGN KEY (ID_SP) REFERENCES SAN_PHAM(ID_SP),
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
@@ -104,6 +97,8 @@ CREATE TABLE BINH_LUAN (
     UID INT,
     NgayBinhLuan TEXT NOT NULL,
     NoiDung TEXT,
+    PhanHoi TEXT DEFAULT "",
+    TrangThai ENUM("Đang hiện", "Đang ẩn"),
     FOREIGN KEY (ID_SP) REFERENCES SAN_PHAM(ID_SP),
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
@@ -113,7 +108,8 @@ CREATE TABLE MA_GIAM_GIA (
     Ma VARCHAR(50) PRIMARY KEY,
     TienGiam DECIMAL(10, 2) NOT NULL,
     DieuKien TEXT,
-    TrangThai ENUM('Active', 'Expired') NOT NULL
+    SoLuong INT,
+    TrangThai ENUM("Kích hoạt", "Hết hạn") NOT NULL
 );
 
 -- Table for ĐƠN_HÀNG
@@ -123,10 +119,11 @@ CREATE TABLE DON_HANG (
     NgayDat TEXT,  -- Changed TEXT to DATE
     TongTien DECIMAL(10, 2) NOT NULL,
     MaGiamGia VARCHAR(50),
-    TrangThai INT,
+    TrangThai ENUM("Chờ xác nhận", "Đã xác nhận", "Đang vận chuyển", "Đã giao hàng", "Đã hủy"),
     SDT TEXT,
     DiaChi TEXT,
-    ThanhToan BOOLEAN DEFAULT FALSE,
+    ThanhToan ENUM("Chưa thanh toán", "Đã thanh toán", "Huỷ thanh toán"), -- Trang thai thanh toan
+    TenNguoiNhan TEXT,
     PhuongThucThanhToan ENUM('COD', 'Bank'),  -- Consistent single quotes
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID),
     FOREIGN KEY (MaGiamGia) REFERENCES MA_GIAM_GIA(Ma)
@@ -161,15 +158,6 @@ CREATE TABLE THICH (
     FOREIGN KEY (ID_SP) REFERENCES SAN_PHAM(ID_SP)
 );
 
--- Table for SỞ_HỮU
--- CREATE TABLE SO_HUU (
---     UID INT,
---     ID_DonHang INT,
---     PRIMARY KEY (UID, ID_DonHang),
---     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID),
---     FOREIGN KEY (ID_DonHang) REFERENCES DON_HANG(ID_DonHang)
--- );
-
 -- Table for THÔNG_BÁO
 CREATE TABLE THONG_BAO (
     MaThongBao INT AUTO_INCREMENT PRIMARY KEY,
@@ -179,14 +167,15 @@ CREATE TABLE THONG_BAO (
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
 
-
 -- Bảng TIN_TUC
 CREATE TABLE TIN_TUC (
     MaTinTuc INT AUTO_INCREMENT PRIMARY KEY,
     TieuDe VARCHAR(255),
     ThoiGianTao TEXT,
     NoiDung TEXT,
-    TuKhoa VARCHAR(255)
+    TuKhoa VARCHAR(255),
+    TrangThai ENUM("Đang hiện", "Đang ẩn"),
+    MoTa TEXT
 );
 
 CREATE TABLE ANH_MINH_HOA (
@@ -202,6 +191,8 @@ CREATE TABLE BANNER (
     MaBanner INT AUTO_INCREMENT PRIMARY KEY,
     Image VARCHAR(255),
     IdSP INT,
+    MoTa TEXT,
+    TrangThai ENUM("Đang hiện", "Đang ẩn")
     FOREIGN KEY (IdSP) REFERENCES SAN_PHAM(ID_SP)
 );
 
@@ -209,25 +200,33 @@ CREATE TABLE BANNER (
 CREATE TABLE DOI_TAC (
     MaDoiTac INT AUTO_INCREMENT PRIMARY KEY,
     Ten VARCHAR(255),
-    HinhAnh VARCHAR(255)
+    HinhAnh TEXT,
+    LienKet VARCHAR(255)
 );
 
 -- Bảng HE_THONG
 CREATE TABLE HE_THONG (
     MaHeThong INT PRIMARY KEY,
-    TrangThaiBaoTri BOOLEAN
+    TrangThaiBaoTri BOOLEAN,
+    TuKhoa TEXT,
+    ClientID TEXT,
+    APIKey TEXT,
+    Checksum TEXT
 );
 
 -- Bảng THONG_TIN_LIEN_HE
 CREATE TABLE THONG_TIN_LIEN_HE (
     MaThongTin INT AUTO_INCREMENT PRIMARY KEY,
     Loai VARCHAR(255),
-    ThongTin TEXT
+    ThongTin TEXT,
+    HinhAnh VARCHAR(255),
+    TrangThai ENUM("Đang hiện", "Đang ẩn")
 );
 
 -- Bảng MANG_XA_HOI
 CREATE TABLE MANG_XA_HOI (
     MaMXH INT AUTO_INCREMENT PRIMARY KEY,
     HinhAnh VARCHAR(255),
-    LienKet VARCHAR(255)
+    LienKet VARCHAR(255),
+    TrangThai ENUM("Đang hiện", "Đang ẩn")
 );
