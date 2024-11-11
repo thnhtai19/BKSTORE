@@ -35,7 +35,10 @@ class AuthService {
         $_SESSION["uid"] = $user['UID'];
         $_SESSION["Ten"] = $user['Ten'];
         $_SESSION["Role"] = $user['Role'];
-        $_SESSION["Avatar"] = $user['Avatar'];
+        $avatar = $user['Avatar'];
+        if ($avatar == null) {
+            $_SESSION["Avatar"] = "https://ui-avatars.com/api/?background=random&name=" . urlencode($user['Ten']);
+        }
         return [
             'success' => true,
             'message' => 'Đăng nhập thành công',

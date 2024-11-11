@@ -137,25 +137,12 @@ class UserService {
     public function setComment($uid, $ID_SP, $NoiDung) {
         if ($this->product->checkProduct($ID_SP) == false) return ['success'=> false,'message'=> 'Không tìm thấy sản phẩm'];
         $date = $this->support->getDateNow();
-        $sql_check = "SELECT * FROM binh_luan WHERE `UID` = ? AND ID_SP = ?";
-        $stmt_check = $this->conn->prepare($sql_check);
-        $stmt_check->bind_param("ii", $uid, $ID_SP);
-        $stmt_check->execute();
-        $result_check = $stmt_check->get_result();
 
-        if ($result_check->num_rows > 0) {
-            $sql_update = "UPDATE binh_luan SET NoiDung = ?, NgayBinhLuan = ? WHERE `UID` = ? AND ID_SP = ?";
-            $stmt_update = $this->conn->prepare($sql_update);
-            $stmt_update->bind_param("ssii", $NoiDung, $date, $uid, $ID_SP);
-            $stmt_update->execute();
-            return ['success'=> true, 'message'=> 'Bình luận thành công'];
-        } else {
-            $sql_insert = "INSERT INTO binh_luan (`UID`, ID_SP, NoiDung, NgayBinhLuan) VALUES (?, ?, ?, ?)";
-            $stmt_insert = $this->conn->prepare($sql_insert);
-            $stmt_insert->bind_param("iiss", $uid, $ID_SP, $NoiDung, $date);
-            $stmt_insert->execute();
-            return ['success'=> true, 'message'=> 'Bình luận thành công'];
-        }
+        $sql_insert = "INSERT INTO binh_luan (`UID`, ID_SP, NoiDung, NgayBinhLuan) VALUES (?, ?, ?, ?)";
+        $stmt_insert = $this->conn->prepare($sql_insert);
+        $stmt_insert->bind_param("iiss", $uid, $ID_SP, $NoiDung, $date);
+        $stmt_insert->execute();
+        return ['success'=> true, 'message'=> 'Bình luận thành công'];
     }
 
     private function setUser($uid, $sex, $phone, $addr) {

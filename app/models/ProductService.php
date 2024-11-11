@@ -204,7 +204,8 @@ class ProductService {
             SELECT binh_luan.MaBinhLuan, binh_luan.NgayBinhLuan, binh_luan.NoiDung, login.Ten, login.Avatar
             FROM binh_luan
             JOIN login ON binh_luan.UID = login.UID
-            WHERE binh_luan.ID_SP = ?";
+            WHERE binh_luan.ID_SP = ?
+            ORDER BY binh_luan.MaBinhLuan DESC";
         
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
@@ -212,7 +213,7 @@ class ProductService {
         $result = $stmt->get_result();
         
         if ($result->num_rows === 0) {
-            return ['success' => false, 'message' => 'Không có bình luận'];
+            return [];
         }
         
         $comments = [];
@@ -233,7 +234,8 @@ class ProductService {
             SELECT danh_gia.MaDanhGia, danh_gia.NgayDanhGia, danh_gia.SoSao, danh_gia.NoiDung, login.Ten, login.Avatar 
             FROM danh_gia 
             JOIN login ON danh_gia.UID = login.UID
-            WHERE ID_SP = ?";
+            WHERE ID_SP = ?
+            ORDER BY danh_gia.MaDanhGia";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
