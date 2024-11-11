@@ -258,7 +258,10 @@ function format_currency($number) {
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 pb-6">
                         <?php
+                            $dem  = 0;
                             foreach ($san_pham as $book) {
+                                $dem++;
+                                if($dem == 11) break;
                                 $id = $book['id'];
                                 $ten = $book['ten'];
                                 $hinh = $book['hinh'][0];
@@ -297,8 +300,8 @@ function format_currency($number) {
                             </div>
                         <?php } ?>
                     </div>
-                    <a class="flex justify-center pb-6 <?php if(count($san_pham) < 10) echo "hidden";?>" href="">
-                        <button class="bg-white py-1 px-16 rounded-md font-bold text-custom-blue border-custom-blue">Xem thêm</button>
+                    <a class="flex justify-center pb-6 cursor-pointer <?php if(count(value: $san_pham) < 11) echo "hidden";?>" href="/category?keyword=<?=urlencode($the_loai)?>">
+                        <div class="bg-white py-1 px-16 rounded-md font-bold text-custom-blue border-custom-blue">Xem thêm</div>
                     </a>
                     <?php } ?>
                 </div>

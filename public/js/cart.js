@@ -44,8 +44,8 @@ function displayCartItems(products) {
                     </div>
                     <div class="flex-1">
                         <div class="flex">
-                            <div class="w-28 cursor-pointer" onclick="redirectToPage(${product.id})">
-                                <img class="h-full" src="${product.hinh_anh}" alt="product">
+                            <div class="w-28 h-28 cursor-pointer flex justify-center" onclick="redirectToPage(${product.id})">
+                                <img class="h-full object-cover" src="${product.hinh_anh}" alt="product">
                             </div>
                             <div class="flex-1">
                                 <div class="flex flex-col justify-between h-full w-full">

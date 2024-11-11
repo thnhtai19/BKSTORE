@@ -6,7 +6,7 @@ $db = new Database();
 $model = new ProductService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'GET') {
+if ($method === 'POST') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
     $type = $data['PhanLoai'];

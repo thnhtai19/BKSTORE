@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(!isset($_SESSION["email"])){
+    header("Location: /auth/login");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

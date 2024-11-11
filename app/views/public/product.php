@@ -445,7 +445,7 @@ function format_currency($number) {
                                         <?php 
                                         if ($i < max($totalReviews - 1, $initialVisibleReviews - 1)): 
                                         ?>
-                                            <hr>
+                                            <div class="pt-4"><hr></div> 
                                         <?php endif; ?>
                                     </div>
                                 <?php $i++;} ?>
@@ -553,8 +553,11 @@ function format_currency($number) {
             `;
 
             if (comments > 0) {
+                const div = document.createElement('div');
+                div.classList.add('pt-4');
                 const hr = document.createElement('hr');
-                newComment.appendChild(hr);
+                div.appendChild(hr);
+                newComment.appendChild(div);
             }
 
             reviewsContainer.insertAdjacentElement('afterbegin', newComment);
