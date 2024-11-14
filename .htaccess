@@ -85,6 +85,8 @@ RewriteRule ^api/user$ /app/controllers/user/home.php [L]
 RewriteRule ^api/user/avatar$ /app/controllers/user/avatar.php [L]
 RewriteRule ^api/user/review$ /app/controllers/user/review.php [L]
 RewriteRule ^api/user/comment$ /app/controllers/user/comment.php [L]
+RewriteRule ^api/user/like$ /app/controllers/user/like.php [L]
+RewriteRule ^api/user/unlike$ /app/controllers/user/unlike.php [L]
 
 #CART ROUTERS BACKEND
 RewriteCond %{REQUEST_METHOD} GET
@@ -98,9 +100,13 @@ RewriteRule ^api/cart/update$ /app/controllers/cart/update.php [L]
 RewriteRule ^api/order/sale$ /app/controllers/order/sale.php [L]
 RewriteRule ^api/order/paid$ /app/controllers/order/getpaid.php [L]
 RewriteRule ^api/order/info$ /app/controllers/order/info.php [L]
+RewriteRule ^api/order/order$ /app/controllers/order/order.php [L]
+RewriteRule ^api/order/update$ /app/controllers/order/update.php [L]
+RewriteRule ^api/order/list$ /app/controllers/order/list.php [L]
 
 #SYSTEM ROUTERS BACKEND
 RewriteRule ^api/system/contact$ /app/controllers/system/contactInfo.php [L]
+RewriteRule ^api/system/new$ /app/controllers/system/new.php [L]
 
 #ADMIN ROUTERS BACKEND
 RewriteRule ^api/admin/user$ /app/controllers/admin/userInfo.php [L]
@@ -109,6 +115,16 @@ RewriteCond %{REQUEST_METHOD} GET
 RewriteRule ^api/admin/product$ /app/controllers/admin/product.php [L]
 RewriteCond %{REQUEST_METHOD} POST
 RewriteRule ^api/admin/product$ /app/controllers/admin/addProduct.php [L]
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^api/admin/propose$ /app/controllers/admin/propose.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/admin/propose$ /app/controllers/admin/updatePropose.php [L]
+RewriteRule ^api/admin/comment/delete$ /app/controllers/admin/deleteComment.php [L]
+RewriteRule ^api/admin/comment/hide$ /app/controllers/admin/hideComment.php [L]
+RewriteRule ^api/admin/comment/rep$ /app/controllers/admin/repComment.php [L]
+RewriteRule ^api/admin/review/delete$ /app/controllers/admin/deleteReview.php [L]
+RewriteRule ^api/admin/review/hide$ /app/controllers/admin/hideReview.php [L]
+RewriteRule ^api/admin/review/rep$ /app/controllers/admin/repReview.php [L]
 
 #PRODUCT ROUTERS BACKEND
 RewriteRule ^api/product/info$ /app/controllers/product/info.php [L]
