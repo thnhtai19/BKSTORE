@@ -14,11 +14,16 @@ if ($method === 'POST') {
         if ($_SESSION["Role"] == 'Admin') {
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
-            if (isset($data['UID'])) $UID = $data['UID'];
-            else $UID = '';
-            echo json_encode($model->banUser($UID));
+            if (isset($data['MaDanhGia'])) $MaDanhGia = $data['MaDanhGia'];
+            else {
+                echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
+                return;
+            }
+            if (isset($data['PhanHoi'])) $PhanHoi = $data['PhanHoi'];
+            else $PhanHoi = '';
+            echo json_encode($model->repReview($MaDanhGia, $PhanHoi));
         }
-        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
     }
 }
 else {

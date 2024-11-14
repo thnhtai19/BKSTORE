@@ -47,7 +47,7 @@ class SystemService {
     }
     
     public function getContactInfo() {
-        $sql = "SELECT MaThongTin, Loai, ThongTin FROM thong_tin_lien_he";
+        $sql = "SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM thong_tin_lien_he";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -60,9 +60,23 @@ class SystemService {
                 'ma_thong_tin' => $row['MaThongTin'],
                 'loai' => $row['Loai'],
                 'thong_tin' => $row['ThongTin'],
+                'hinh_anh' => $row['HinhAnh']
             ];
         }
         return ['success' => true, 'info' => $contact];
+    }
+
+    public function getNew($MaTinTuc) {
+        $sql = 'SELECT * FROM tin_tuc WHERE MaTinTuc = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaTinTuc);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row;
+        }
+        return $result;
     }
 }
 ?>

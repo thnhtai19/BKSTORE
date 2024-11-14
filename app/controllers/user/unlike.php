@@ -1,24 +1,21 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
-require_once dirname(__DIR__, 2) . '/models/OrderService.php';
+require_once dirname(__DIR__, 2) . '/models/UserService.php';
 
 $db = new Database();
-$model = new OrderService($db->conn);
+$model = new UserService($db->conn);
 header('Content-Type: application/json');
-
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'GET') {
+if ($method === 'POST') {
     if (!isset($_SESSION["uid"])) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
-    if (isset($data['ID_DonHang'])) $ID_DonHang = $data['ID_DonHang'];
-    else $ID_DonHang = '';
-    $info = $model->getInfo($_SESSION["uid"], $ID_DonHang);
-    if ($info['success'] == false) echo json_encode(['success' => false, 'message' => $info['message']]);
-    else echo json_encode(['success' => true, 'info' => $info['info']]);
+    if (isset($data['ID_SP'])) $ID_SP = $data['ID_SP'];
+    else $ID_SP = '';
+    echo json_encode($model->unlike($_SESSION["uid"], $ID_SP));
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];
