@@ -2,16 +2,16 @@ USE bkstore;
 
 INSERT INTO LOGIN (Email, Password, Role, Ten, Avatar)
 VALUES
-('user1@example.com', 'password1', 'Customer', 'User One', NULL),
-('user2@example.com', 'password2', 'Customer', 'User Two', NULL),
-('user3@example.com', 'password3', 'Customer', 'User Three', NULL),
-('admin1@example.com', 'adminpass1', 'Admin', 'Admin One', NULL),
-('admin2@example.com', 'adminpass2', 'Admin', 'Admin Two', NULL),
-('user4@example.com', 'password4', 'Customer', 'User Four', NULL),
-('user5@example.com', 'password5', 'Customer', 'User Five', NULL),
-('admin3@example.com', 'adminpass3', 'Admin', 'Admin Three', NULL),
-('user6@example.com', 'password6', 'Customer', 'User Six', NULL),
-('user7@example.com', 'password7', 'Customer', 'User Seven', NULL);
+('user1@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User One', NULL),
+('user2@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Two', NULL),
+('user3@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Three', NULL),
+('admin1@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Admin', 'Admin One', NULL),
+('admin2@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Admin', 'Admin Two', NULL),
+('user4@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Four', NULL),
+('user5@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Five', NULL),
+('admin3@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Admin', 'Admin Three', NULL),
+('user6@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Six', NULL),
+('user7@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Seven', NULL);
 
 INSERT INTO ADMIN (UID)
 VALUES
@@ -34,13 +34,13 @@ VALUES
 
 INSERT INTO KHACH_HANG (UID, GioiTinh, SDT, DiaChi, TrangThai)
 VALUES
-(1, 'Male', '0123456789', '123 Main St', 1),
-(2, 'Female', '0987654321', '456 Oak Ave', 1),
-(3, 'Male', '0123456789', '789 Pine Rd', 1),
-(6, 'Female', '0987654321', '101 Birch Ln', 1),
-(7, 'Male', '0123456789', '202 Cedar St', 1),
-(9, 'Female', '0987654321', '303 Maple Ave', 1),
-(10, 'Male', '0123456789', '404 Elm St', 1);
+(1, 'Male', '0123456789', '123 Main St', 'Đang hoạt động'),
+(2, 'Female', '0987654321', '456 Oak Ave', 'Đang hoạt động'),
+(3, 'Male', '0123456789', '789 Pine Rd', 'Đang hoạt động'),
+(6, 'Female', '0987654321', '101 Birch Ln', 'Đang hoạt động'),
+(7, 'Male', '0123456789', '202 Cedar St', 'Đang hoạt động'),
+(9, 'Female', '0987654321', '303 Maple Ave', 'Đang hoạt động'),
+(10, 'Male', '0123456789', '404 Elm St', 'Đang hoạt động');
 
 INSERT INTO `SAN_PHAM` (`ID_SP`, `TenSP`, `MoTa`, `Gia`, `TyLeGiamGia`, `SoLuongKho`, `NXB`, `KichThuoc`, `SoTrang`, `PhanLoai`, `TuKhoa`, `HinhThuc`, `TacGia`, `NgonNgu`, `NamXB`) VALUES
 (1, 'Văn Học Tuổi Hoa - Nhà', '\"Nhà\" là sự chắp nối những mảnh kí ức bé nhỏ, rời rạc của cô bé tên Liên đi tìm chính mình trong thời niên thiếu. Sống ở một thị trấn nhỏ, giữa bao biến chuyển, giao thoa cũ – mới ồ ạt những năm 90, Liên tò mò, choáng ngợp, hoài nghi về khát khao và vai trò của một người phụ nữ, để rồi tách mình khỏi những thứ cô bé cho là không đặc biệt. Cũng từ đây, Liên định nghĩa lại ước mong của mình và thử đón nhận tình yêu thương tưởng chừng luôn thiếu vắng.\n\n“Trong cơn mơ ngủ, có lẽ tôi đã đơn giản thiếp đi giữa lòng mẹ. Có lẽ tất cả cuộc đối thoại này chỉ là ảo giác sinh ra từ tâm trí mệt mỏi của tôi. Một hình bóng trong mơ, một sự tồn tại trong tiềm thức của tôi đã nhẹ nhàng đến thế chỗ bà… Như thể, điều tôi tìm kiếm mãi mãi, từ lúc ra đời, chỉ đơn giản là quay trở lại trạng thái này. Rằng bao lâu, tôi đã khao khát, chờ đợi, tìm kiếm chính điều này đây.”\n\n', 65000, 0.13, 50, 'NXB Kim Đồng', '19 x 13 x 1.4 cm', 280, 'Sách Văn Học', 'Thiếu nhi, giáo dục', 'Bìa mềm', '	\nNguyễn Dương Quỳnh', 'Tiếng Việt', 2024),
@@ -95,13 +95,13 @@ INSERT INTO `HINH_ANH` (`ID_HinhAnh`, `Anh`, `ID_SP`) VALUES
 (37, 'public/image/12/image_178919.webp', 12),
 (38, 'public/image/12/tu_nhien_say___van_hoc_tuoi_20_2_2018_10_22_10_28_52.webp', 12);
 
-INSERT INTO SAN_PHAM_DE_XUAT (TenSP, NoiDung, TrangThai, GhiChu, UID)
+INSERT INTO SAN_PHAM_DE_XUAT (TenSP, NoiDung, TrangThai, GhiChu, UID, NgayYeuCau)
 VALUES
-('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', "Đang chờ duyệt", 'Đang chờ duyệt', 1),
-('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', "Đã duyệt", 'Đã được duyệt', 2),
-('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', "Đã từ chối", 'Không được duyệt', 3),
-('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', "Đang chờ duyệt", 'Đang chờ duyệt', 6),
-('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', "Đã duyệt", 'Đã được duyệt', 7);
+('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', "Đang chờ duyệt", 'Đang chờ duyệt', 1, '12/11/2024'),
+('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', "Đã duyệt", 'Đã được duyệt', 2, '12/11/2024'),
+('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', "Đã từ chối", 'Không được duyệt', 3, '12/11/2024'),
+('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', "Đang chờ duyệt", 'Đang chờ duyệt', 6, '12/11/2024'),
+('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', "Đã duyệt", 'Đã được duyệt', 7, '12/11/2024');
 
 INSERT INTO DANH_GIA (ID_SP, UID, NgayDanhGia, SoSao, NoiDung, TrangThai, PhanHoi)
 VALUES

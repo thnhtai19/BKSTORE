@@ -126,6 +126,9 @@ RewriteRule ^api/admin/comment/rep$ /app/controllers/admin/repComment.php [L]
 RewriteRule ^api/admin/review/delete$ /app/controllers/admin/deleteReview.php [L]
 RewriteRule ^api/admin/review/hide$ /app/controllers/admin/hideReview.php [L]
 RewriteRule ^api/admin/review/rep$ /app/controllers/admin/repReview.php [L]
+RewriteRule ^api/admin/updateProduct$ /app/controllers/admin/updateProduct.php [L]
+RewriteRule ^api/admin/updateUser$ /app/controllers/admin/updateUser.php [L]
+RewriteRule ^api/admin/deleteProduct$ /app/controllers/admin/deleteProduct.php [L]
 
 #PRODUCT ROUTERS BACKEND
 RewriteRule ^api/product/info$ /app/controllers/product/info.php [L]
