@@ -110,7 +110,7 @@ CREATE TABLE MA_GIAM_GIA (
     TienGiam DECIMAL(10, 2) NOT NULL,
     DieuKien TEXT,
     SoLuong INT,
-    TrangThai ENUM("Kích hoạt", "Hết hạn") NOT NULL
+    TrangThai ENUM("Kích hoạt", "Hết hạn") DEFAULT "Kích hoạt"
 );
 
 -- Table for ĐƠN_HÀNG
@@ -125,7 +125,7 @@ CREATE TABLE DON_HANG (
     DiaChi TEXT,
     ThanhToan ENUM("Chưa thanh toán", "Đã thanh toán", "Huỷ thanh toán") DEFAULT "Chưa thanh toán", -- Trang thai thanh toan
     TenNguoiNhan TEXT,
-    PhuongThucThanhToan ENUM('COD', 'Bank'),  -- Consistent single quotes
+    PhuongThucThanhToan ENUM('COD', 'Bank') DEFAULT 'COD',  -- Consistent single quotes
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID),
     FOREIGN KEY (MaGiamGia) REFERENCES MA_GIAM_GIA(Ma)
 );
