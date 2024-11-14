@@ -83,6 +83,7 @@
                             <div class="text-gray-500">Quản lý người dùng</div>
                         </nav>
                         <script>
+
                             const columnTitles = {
                                 id: 'ID',
                                 name: 'Họ và tên',
@@ -92,44 +93,46 @@
                                 action: "Hành động"
                             };
 
-                            const data = [
-                                {
-                                    id: "2210",
-                                    name: 'Trần Thành Tài',
-                                    email: 'tai.tranthanh@hcmut.edu.vn',
-                                    phone: '08000008',
-                                    address: 'Trường đại học Bách Khoa',
-                                    status: "Đang hoạt động",
-                                    sex: 'Nam',
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
-                                    ]
-                                },
-                                {
-                                    id: "2211",
-                                    name: 'Nguyễn Hữu Nhân',
-                                    email: 'nhan.nguyenhuucse@hcmut.edu.vn',
-                                    phone: '08000009',
-                                    address: 'Trường đại học Bách Khoa',
-                                    status: "Đang hoạt động",
-                                    sex: 'Nam',
-                                    action: [   
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
-                                    ]
-                                },
-                                {
-                                    id: "2212",
-                                    name: 'Nguyễn Trường Thịnh',
-                                    email: 'thinh.nguyentruong@hcmut.edu.vn',
-                                    phone: '08000009',
-                                    address: 'Trường đại học Bách Khoa',
-                                    status: "Đang hoạt động",
-                                    sex: 'Nam',
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
-                                    ]
-                                },
-                            ];
+                            // let data = [
+                            //     {
+                            //         id: "2210",
+                            //         name: 'Trần Thành Tài',
+                            //         email: 'tai.tranthanh@hcmut.edu.vn',
+                            //         phone: '08000008',
+                            //         address: 'Trường đại học Bách Khoa',
+                            //         status: "Đang hoạt động",
+                            //         sex: 'Nam',
+                            //         action: [
+                            //             { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
+                            //         ]
+                            //     },
+                            //     {
+                            //         id: "2211",
+                            //         name: 'Nguyễn Hữu Nhân',
+                            //         email: 'nhan.nguyenhuucse@hcmut.edu.vn',
+                            //         phone: '08000009',
+                            //         address: 'Trường đại học Bách Khoa',
+                            //         status: "Đang hoạt động",
+                            //         sex: 'Nam',
+                            //         action: [   
+                            //             { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
+                            //         ]
+                            //     },
+                            //     {
+                            //         id: "2212",
+                            //         name: 'Nguyễn Trường Thịnh',
+                            //         email: 'thinh.nguyentruong@hcmut.edu.vn',
+                            //         phone: '08000009',
+                            //         address: 'Trường đại học Bách Khoa',
+                            //         status: "Đang hoạt động",
+                            //         sex: 'Nam',
+                            //         action: [
+                            //             { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
+                            //         ]
+                            //     },
+                            // ];
+
+                            let data = [];
                             function editUser(item) {
                                 document.getElementById("editUserModal").classList.remove("hidden");
                                 const parseItem = JSON.parse(decodeURIComponent(item));
@@ -152,6 +155,45 @@
                             function closeModal() {
                                 document.getElementById("editUserModal").classList.add("hidden");
                             }
+
+                            async function getUsers() {
+                                const response = await fetch(`${window.location.origin}/api/admin/user`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+                                if (response.ok) {
+                                    const dataUser = await response.json();
+                                    console.log(dataUser); 
+                                    dataUser['user-list'].forEach(user => {
+                                        data.push({
+                                            id: user.uid,
+                                            name: user.name,
+                                            email: user.email,
+                                            phone: user.phone,
+                                            address: user.address,
+                                            status: "Đang hoạt động", //chưa có trong dữ liệu lấy đc    
+                                            sex: user.sex,
+                                            action: [
+                                                { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
+                                            ]
+                                        });
+                                    });
+                                    console.log(data); 
+
+                                    const event = new CustomEvent('dataReady', { detail: dataUser });
+                                    window.dispatchEvent(event);
+                                } else {
+                                    console.error("Lỗi khi lấy dữ liệu từ API:", response.status);
+                                }
+                            }
+
+                            window.onload = async function() {
+                                await getUsers(); 
+                            };
+
                         </script>
                         <?php
                             $title = "Quản lý người dùng";

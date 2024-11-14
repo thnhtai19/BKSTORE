@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/public/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/public/css/client.css">
     <link rel="stylesheet" href="/public/css/notyf.min.css">
-    <title>Góp Ý | BKSTORE</title>
+    <title>Trang chủ | BKSTORE</title>
 </head>
 
 <body class="bg-gray-100">
@@ -120,39 +120,57 @@
                             </svg>
                         </div>
                     </div>
-                    <div class="w-full lg:w-4/5 rounded-lg">
-                        <div class="swiper-container rounded-lg space-y-4">
-                            <div class="relative flex justify-center items-center">
-                                <button class="absolute left-0 material-icons" onclick="goBack()">
-                                    <img src="/public/image/arrow.png" alt="arrow" class="w-8 h-8">
-                                </button>
-                                <div class="font-bold text-lg pb-2">
-                                    Góp ý bán sách
+                    <div class="w-full lg:w-3/5 rounded-lg">
+                        <div class="swiper-container rounded-lg">
+                            <div class="swiper-wrapper">
+                                <div
+                                    class="swiper-slide bg-white flex items-center justify-center text-white rounded-lg overflow-hidden">
+                                    <img src="/public/image/1.webp" alt="1">
+                                </div>
+                                <div
+                                    class="swiper-slide bg-white flex items-center justify-center text-white rounded-lg overflow-hidden">
+                                    <img src="/public/image/2.webp" alt="2">
+                                </div>
+                                <div
+                                    class="swiper-slide bg-white flex items-center justify-center text-white rounded-lg overflow-hidden">
+                                    <img src="/public/image/3.webp" alt="3">
                                 </div>
                             </div>
-                            <hr>
-                            <div class="content space-y-4">
-                                <div class="flex flex-col justify-center items-center text-center">
-                                    <h3 class="text-xl font-semibold text-blue-600">BKSTORE - Luôn Lắng Nghe Bạn</h3>
-                                    <p class="text-sm text-gray-500">
-                                        Nếu bạn có bất kỳ góp ý hoặc ý kiến nào, vui lòng chia sẻ với chúng tôi.<br> Mỗi ý kiến của bạn đều rất quý giá và giúp chúng tôi cải thiện dịch vụ.
-                                    </p>
-                                </div>
-                            </div>
-                            <form class="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto mt-5" id="comment">
-                                
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-medium mb-2" for="name">Tên sản phẩm</label>
-                                    <input type="text" id="name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập tên sản phẩm bạn muốn góp ý">
-                                </div>
-
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-medium mb-2" for="feedback">Nội Dung Góp Ý</label>
-                                    <textarea id="feedback" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập góp ý của bạn tại đây"></textarea>
-                                </div>
-                                
-                                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition duration-300">Gửi góp ý</button>
-                            </form>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <div class="w-1/5 hidden lg:block ">
+                        <div class="rounded-lg overflow-hidden mb-4">
+                            <img src="/public/image/1.webp" alt="sale1">
+                        </div>
+                        <div class="rounded-lg overflow-hidden">
+                            <img src="/public/image/2.webp" alt="sale2">
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full bg-blue-300 mt-4 rounded-lg p-4">
+                    <?php
+                    function renderStars($sao)
+                    {
+                        $maxStars = 5;
+                        $output = '';
+                        for ($i = 1; $i <= $maxStars; $i++) {
+                            if ($i <= $sao) {
+                                $output .= '<span class="text-yellow-500 text-xl">★</span>';
+                            } else {
+                                $output .= '<span class="text-gray-300 text-xl">☆</span>';
+                            }
+                        }
+                        return $output;
+                    }
+                    ?>
+                    <div class="text-xl font-bold text-gray-700 mb-4">
+                        SẢN PHẨM YÊU THÍCH
+                    </div>
+                    <div class="swiper-container-product overflow-hidden">
+                        <div class="swiper-wrapper" id="products-container">
                         </div>
                     </div>
                 </div>
@@ -161,48 +179,68 @@
         <?php $page = 1;
         include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            fetch(`${window.location.origin}/api/product/like`, {  
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include' 
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.success) {
+                    const list = data.product_list;
+
+                        const productsContainer = document.getElementById('products-container');
+                        productsContainer.innerHTML = '';
+                        list.forEach(product => {
+                            const productHTML = `
+                                <div class="swiper-slide-product overflow-hidden">
+                                    <div class="bg-white p-2 rounded-lg shadow-lg w-full">
+                                        <div class="h-44 flex justify-center">
+                                            <img src="${product.hinh[0]}" alt="Product Image"
+                                                class="object-cover h-full rounded-md">
+                                        </div>
+                                        <div class="pt-4 pb-4 text-sm">
+                                            <div class="font-semibold mt-2 h-16 text-black-700">${product.ten}</div>
+                                            <p class="text-custom-blue font-bold text-base">${product.gia_sau_giam_gia.toLocaleString('vi-VN')} đ</p>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <div class="flex items-center">
+                                                <?php echo renderStars(sao: 4); ?>
+                                            </div>
+                                            <button class="heart-button focus:outline-none">
+                                                <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            productsContainer.insertAdjacentHTML('beforeend', productHTML);
+                        });
+                } else {
+                    document.getElementById('products-container').innerText = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('products-container').innerText = 'Có lỗi xảy ra khi thực hiện yêu cầu';
+            });
+        });
+    </script>
     <script src="/public/js/notyf.min.js"></script>
     <script src="/public/js/heart.js"></script>
     <script src="/public/js/swiper-bundle.min.js"></script>
     <script src="/public/js/client.js"></script>
-
-    <script>
-        var notyf = new Notyf({
-            duration: 3000,
-            position: {
-            x: 'right',
-            y: 'top',
-            },
-        });
-        document.getElementById('comment').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const TenSP = document.getElementById('name').value;
-            const NoiDung = document.getElementById('feedback').value;
-
-            try {
-                const response = await fetch(`${window.location.origin}/api/product/propose`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ TenSP, NoiDung })
-                });
-                
-                const result = await response.json();
-                console.log(result)
-                if (result.success) {
-                    notyf.success(result.message);
-                } else {
-                    notyf.error(result.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                notyf.error(error);
-
-            }
-        });
-    </script>
 </body>
 
 </html>

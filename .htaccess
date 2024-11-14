@@ -1,6 +1,8 @@
 RewriteEngine On
 Options -Indexes
 
+RewriteRule ^test$ /app/views/client/test.php [L]
+
 #CLIENT ROUTERS FRONTEND
 RewriteRule ^$ /app/views/public/home.php [L]
 RewriteRule ^product$ /app/views/public/product.php [L]
@@ -46,8 +48,11 @@ RewriteRule ^my/support$ /app/views/client/profile/support.php [L]
 #PUBLIC ROUTERS FRONTEND
 RewriteRule ^introduction$ /app/views/public/introduction.php [L]
 RewriteRule ^news$ /app/views/public/news.php [L]
+RewriteRule ^news/detail$ /app/views/public/news_detail.php [L]
 RewriteRule ^promotion$ /app/views/public/promotion.php [L]
 RewriteRule ^comment$ /app/views/public/comment.php [L]
+RewriteRule ^like$ /app/views/public/product_like.php [L]
+
 
 
 
