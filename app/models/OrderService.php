@@ -88,7 +88,7 @@ class OrderService {
                     'hinh' => $image,
                     'ten_sp' => $productDetails['TenSP'],
                     'gia' => $productDetails['Gia'],
-                    'trang_thai' => '',
+                    'trang_thai' => 'Đã giao hàng',
                     'ngay_dat' => $row['NgayDat'],
                     'so_luong_san_pham' => $product['COUNT']
                 ];

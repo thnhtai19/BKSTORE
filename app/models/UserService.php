@@ -91,7 +91,7 @@ class UserService {
         }
 
         // Đường dẫn đầy đủ đến tệp ảnh
-        $relativeAvatarPath = "public/image/$id/" . basename($avatarFileName);
+        $relativeAvatarPath = "public/image/user/$id/" . basename($avatarFileName);
     
         // Lưu đường dẫn và tệp ảnh vào cơ sở dữ liệu
         $avatar_sql = "UPDATE `login` SET `Avatar` = ? WHERE `UID` = ?";

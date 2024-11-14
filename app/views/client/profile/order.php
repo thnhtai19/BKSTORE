@@ -1,3 +1,12 @@
+<?php
+require_once dirname(__DIR__, 4) . '/config/db.php';
+require_once dirname(__DIR__, 3) . '/models/UserService.php';
+if(!isset($_SESSION["email"])){
+    header("Location: /auth/login");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,22 +29,22 @@
                         <nav>
                             <ul>
                                 <li class="mb-4">
-                                    <a href="/app/views/client/profile/profile.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                    <a href="/my/profile" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
                                         Trang chủ
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="/app/views/client/profile/my-account.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                    <a href="/my/account" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
                                         Tài khoản của bạn
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="#" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
+                                    <a href="/my/order" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
                                         Lịch sử mua hàng
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="#" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                    <a href="/my/support" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
                                         Hồ sơ
                                     </a>
                                 </li>
@@ -59,28 +68,109 @@
                         </div>
                         <hr>
                         <div>
-                            <p class="text-gray-500 mt-1">Mã đơn hàng: <span class="font-medium text-gray-700">#123456</span></p>
-                            <p class="text-gray-500 mt-1">Ngày đặt: <span class="font-medium text-gray-700">10/18/2024</span></p>
+                            <p class="text-gray-500 mt-1">Mã đơn hàng: <span class="font-medium text-gray-700" id="order-id"></span></p>
+                            <p class="text-gray-500 mt-1">Ngày đặt: <span class="font-medium text-gray-700" id="order-date"></span></p>
                         </div>
+                        
                         <div>
-                            <div class="flex bg-white border rounded-lg h-36 p-4">
+                            <div id="products-container" class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">></div>
+
+                            <div class="pb-2 pt-6 font-bold text-custom-blue">THÔNG TIN THANH TOÁN</div>
+                            <div class="bg-white rounded-lg border w-full p-4 pl-6 pr-6">
+                                <div class="flex justify-between text-gray-500 pt-6">
+                                    <div>Phương thức thanh toán:</div>
+                                    <div class="text-black" id="payment"></div>
+                                </div>
+                                <div class="flex justify-between text-gray-500 pt-4">
+                                    <div>Tiền hàng (Tạm tính)</div>
+                                    <div class="text-black" id="subtotal">100.000đ</div>
+                                </div>
+                                <div class="flex justify-between text-gray-500 pt-4">
+                                    <div>Giảm giá</div>
+                                    <div class="text-black" id="discount">0đ</div>
+                                </div>
+                                <div class="flex justify-between text-gray-500 pt-4 pb-4">
+                                    <div>Phí vận chuyển</div>
+                                    <div class="text-black">Miễn phí</div>
+                                </div>
+                                <hr>
+                                <div class="flex justify-between pt-4">
+                                    <div class="font-bold">Tổng tiền</div>
+                                    <div class="text-black" id="total-amount">100.000đ</div>
+                                </div>
+                            </div>
+                            <div class="pb-2 pt-6 font-bold text-custom-blue">THÔNG TIN KHÁCH HÀNG</div>
+                            <div class="bg-white rounded-lg border h-18 w-full p-4 pl-6 pr-6">
+                                <div class="flex gap-4">
+                                    <div class="w-1/2">
+                                        <div class="text-gray-600 mb-2">
+                                            Tên khách hàng
+                                        </div>
+                                        <input type="text" class="border rounded-lg w-full p-2 cursor-not-allowed" id="customer-name" readonly>
+                                    </div>
+                                    <div class="w-1/2">
+                                        <div class="text-gray-600 mb-2">
+                                            Số điện thoại
+                                        </div>
+                                        <input type="text" class="border rounded-lg w-full p-2 cursor-not-allowed" id="customer-phone" readonly>
+                                    </div>
+                                </div>
+                                <div class="text-gray-600 mb-2 mt-2">
+                                    Địa chỉ nhận hàng
+                                </div>
+                                <input type="text" class="border rounded-lg w-full p-2 cursor-not-allowed" id="customer-address" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
+    </div>
+    <script src="/public/js/client.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ID_DonHang = urlParams.get('id');
+
+            if (ID_DonHang) {
+                fetch(`${window.location.origin}/api/order/info`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ID_DonHang: ID_DonHang })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.success) {
+                        const info = data.info;
+
+                        document.getElementById('order-id').textContent = info.id;
+                        document.getElementById('order-date').textContent = info.ngay_dat;
+
+                        const productsContainer = document.getElementById('products-container');
+                        productsContainer.innerHTML = ''; // Xóa nội dung cũ
+                        info.danh_sach_san_pham.forEach(product => {
+                            const productHTML = `
                                 <div class="flex-1 pb-2">
-                                    <div class="flex">
-                                        <div class="w-28">
-                                            <img class="h-full" src="/public/image/book1.webp" alt="product">
+                                    <div class="flex flex-col md:flex-row">
+                                        <div class="w-full md:w-40">
+                                            <img id="" src="${product.anh[0]}" alt="product">
                                         </div>
                                         <div class="flex-1">
                                             <div class="h-full w-full">
-                                                <div class="flex justify-between mb-4 h-full">
-                                                    <div class="flex">
-                                                        <div>
-                                                            <p class="text-gray-700 font-medium">Dế Mèn Phiêu Lưu Ký - Tái Bản 2020</p>
-                                                            <p class="text-gray-500">Số lượng: 1</p>
-                                                            <p class="text-gray-700 font-semibold justify-end">200,000₫</p>
-                                                        </div>
+                                                <div class="flex flex-col justify-between md:flex-1 md:px-4 mx-10">
+                                                    <div class="flex flex-col space-y-2 md:space-y-1 items-start">
+                                                        <p class="text-gray-700 font-medium">Tên sản phẩm: ${product.ten}</p>
+                                                        <p class="text-gray-700 font-semibold">Số lượng: ${product.so_luong}</p>
+                                                        <p class="text-gray-700 font-semibold">Giá: ${product.gia_sau_giam_gia.toLocaleString('vi-VN')} đ</p>
+                                                        <p class="text-sm px-3 py-1 bg-green-100 text-green-700 font-medium rounded-full inline-block">
+                                                            Đã giao hàng
+                                                        </p>
                                                     </div>
-                                                    <div class="flex flex-col justify-between">
-                                                        <p class="text-sm px-3 py-1 bg-green-100 text-green-700 font-medium rounded-full">Đã giao hàng</p>
+                                                    <div class="flex flex-col md:justify-between items-start md:items-end mt-2 md:mt-0">
                                                         <div class="flex justify-end items-center">
                                                             <div class="flex items-center space-x-2">
                                                                 <button
@@ -100,59 +190,32 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="pb-2 pt-6 font-bold text-custom-blue">THÔNG TIN THANH TOÁN</div>
-                            <div class="bg-white rounded-lg border w-full p-4 pl-6 pr-6">
-                                <div class="flex justify-between text-gray-500 pt-6">
-                                    <div>Số lượng sản phẩm</div>
-                                    <div class="text-black">1</div>
-                                </div>
-                                <div class="flex justify-between text-gray-500 pt-4">
-                                    <div>Tiền hàng (Tạm tính)</div>
-                                    <div class="text-black">100.000đ</div>
-                                </div>
-                                <div class="flex justify-between text-gray-500 pt-4">
-                                    <div>Giảm giá</div>
-                                    <div class="text-black">0đ</div>
-                                </div>
-                                <div class="flex justify-between text-gray-500 pt-4 pb-4">
-                                    <div>Phí vận chuyển</div>
-                                    <div class="text-black">Miễn phí</div>
-                                </div>
-                                <hr>
-                                <div class="flex justify-between pt-4">
-                                    <div class="font-bold">Tổng tiền</div>
-                                    <div class="text-black">100.000đ</div>
-                                </div>
-                            </div>
-                            <div class="pb-2 pt-6 font-bold text-custom-blue">THÔNG TIN KHÁCH HÀNG</div>
-                            <div class="bg-white rounded-lg border h-18 w-full p-4 pl-6 pr-6">
-                                <div class="flex gap-4">
-                                    <div class="w-1/2">
-                                        <div class="text-gray-600 mb-2">
-                                            Tên khách hàng
-                                        </div>
-                                        <input type="text" class="border rounded-lg w-full p-2" value="Trần Thành Tài">
-                                    </div>
-                                    <div class="w-1/2">
-                                        <div class="text-gray-600 mb-2">
-                                            Số điện thoại
-                                        </div>
-                                        <input type="text" class="border rounded-lg w-full p-2" value="0800000000">
-                                    </div>
-                                </div>
-                                <div class="text-gray-600 mb-2 mt-2">
-                                    Địa chỉ nhận hàng
-                                </div>
-                                <input type="text" class="border rounded-lg w-full p-2" value="Trường đại học Bách Khoa TP HCM">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-        <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
-    </div>
-    <script src="/public/js/client.js"></script>
+                            `;
+                            productsContainer.insertAdjacentHTML('beforeend', productHTML);
+                        });
+
+                        document.getElementById('payment').innerText = info.thong_tin_thanh_toan.phuong_thuc;
+
+                        document.getElementById('subtotal').innerText = `${info.thong_tin_thanh_toan.tong_tien.toLocaleString('vi-VN')} ₫`;
+                        document.getElementById('discount').innerText = `${info.thong_tin_thanh_toan.so_tien_da_giam.toLocaleString('vi-VN')} ₫`;
+                        document.getElementById('total-amount').innerText = `${info.thong_tin_thanh_toan.tong_tien_phai_tra.toLocaleString('vi-VN')}₫`;
+
+                        document.getElementById('customer-name').value = info.thong_tin_nguoi_mua.ten;
+                        document.getElementById('customer-phone').value = info.thong_tin_nguoi_mua.SĐT;
+                        document.getElementById('customer-address').value = info.thong_tin_nguoi_mua.dia_chi;
+                    } else {
+                        console.error(data.message);
+                        alert(data.message); 
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi khi gọi API:", error);
+                });
+            } else {
+                console.error("Không tìm thấy ID_DonHang trong URL");
+            }
+        });
+
+    </script>
 </body>
 </html>

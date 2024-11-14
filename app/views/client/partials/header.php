@@ -82,14 +82,14 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                                     <img src="/public/image/user.png" alt="user" class="h-6">
                                     <div>Thông tin tài khoản</div>
                                 </a>
-                                <li class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
+                                <a href="/my/order" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
                                     <img src="/public/image/his.png" alt="his" class="h-6">
                                     <div>Lịch sử mua hàng</div>
-                                </li>
-                                <li class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
+                                </a>
+                                <a href="/my/account" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
                                     <img src="/public/image/pw.png" alt="warranty" class="h-6">
                                     <div>Thay đổi mật khẩu</div>
-                                </li>
+                                </a>
                                 <li class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center"
                                     id="logout-btn">
                                     <img src="/public/image/exit.png" alt="exit" class="h-6">
