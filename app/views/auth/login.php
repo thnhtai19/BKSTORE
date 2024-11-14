@@ -125,7 +125,7 @@ if(isset($_SESSION["email"])){
                 if (data.success) {
                     notyf.success('Đăng nhập thành công!');
                     setTimeout(() => {
-                        window.location.href = "/";
+                        window.history.back();
                     }, 2000);
                 } else {
                     notyf.error(data.message);

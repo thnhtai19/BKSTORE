@@ -42,22 +42,58 @@ VALUES
 (9, 'Female', '0987654321', '303 Maple Ave', 'Đang hoạt động'),
 (10, 'Male', '0123456789', '404 Elm St', 'Đang hoạt động');
 
-INSERT INTO SAN_PHAM (TenSP, MoTa, Gia, TyLeGiamGia, SoLuongKho, NXB, KichThuoc, SoTrang, PhanLoai, TuKhoa, HinhThuc, TacGia, NgonNgu, NamXB)
-VALUES
-('Sản phẩm 1', 'Mô tả sản phẩm 1', 100000, 0.1, 50, 'NXB Kim Đồng', '13x19 cm', 200, 'Sách Thiếu Nhi', 'Thiếu nhi, giáo dục', 'Bìa mềm', 'Tác giả A', 'Tiếng Việt', 2022),
-('Sản phẩm 2', 'Mô tả sản phẩm 2', 200000, 0.15, 30, 'NXB Trẻ', '15x21 cm', 300, 'Sách Văn Học', 'Văn học, lãng mạn', 'Bìa cứng', 'Tác giả B', 'Tiếng Anh', 2021),
-('Sản phẩm 3', 'Mô tả sản phẩm 3', 150000, 0.05, 25, 'NXB Giáo Dục', '16x24 cm', 150, 'Sách Giáo Khoa', 'Giáo dục, khoa học', 'Bìa mềm', 'Tác giả C', 'Tiếng Pháp', 2020),
-('Sản phẩm 4', 'Mô tả sản phẩm 4', 250000, 0.2, 40, 'NXB Văn Hóa', '18x25 cm', 400, 'Sách Lịch Sử', 'Lịch sử, văn hóa', 'Bìa cứng', 'Tác giả D', 'Tiếng Nhật', 2019),
-('Sản phẩm 5', 'Mô tả sản phẩm 5', 300000, 0.25, 20, 'NXB Thanh Niên', '19x26 cm', 500, 'Sách Khoa Học', 'Khoa học, vũ trụ', 'Bìa mềm', 'Tác giả E', 'Tiếng Đức', 2018);
+INSERT INTO `SAN_PHAM` (`ID_SP`, `TenSP`, `MoTa`, `Gia`, `TyLeGiamGia`, `SoLuongKho`, `NXB`, `KichThuoc`, `SoTrang`, `PhanLoai`, `TuKhoa`, `HinhThuc`, `TacGia`, `NgonNgu`, `NamXB`) VALUES
+(1, 'Văn Học Tuổi Hoa - Nhà', '\"Nhà\" là sự chắp nối những mảnh kí ức bé nhỏ, rời rạc của cô bé tên Liên đi tìm chính mình trong thời niên thiếu. Sống ở một thị trấn nhỏ, giữa bao biến chuyển, giao thoa cũ – mới ồ ạt những năm 90, Liên tò mò, choáng ngợp, hoài nghi về khát khao và vai trò của một người phụ nữ, để rồi tách mình khỏi những thứ cô bé cho là không đặc biệt. Cũng từ đây, Liên định nghĩa lại ước mong của mình và thử đón nhận tình yêu thương tưởng chừng luôn thiếu vắng.\n\n“Trong cơn mơ ngủ, có lẽ tôi đã đơn giản thiếp đi giữa lòng mẹ. Có lẽ tất cả cuộc đối thoại này chỉ là ảo giác sinh ra từ tâm trí mệt mỏi của tôi. Một hình bóng trong mơ, một sự tồn tại trong tiềm thức của tôi đã nhẹ nhàng đến thế chỗ bà… Như thể, điều tôi tìm kiếm mãi mãi, từ lúc ra đời, chỉ đơn giản là quay trở lại trạng thái này. Rằng bao lâu, tôi đã khao khát, chờ đợi, tìm kiếm chính điều này đây.”\n\n', 65000, 0.13, 50, 'NXB Kim Đồng', '19 x 13 x 1.4 cm', 280, 'Sách Văn Học', 'Thiếu nhi, giáo dục', 'Bìa mềm', '	\nNguyễn Dương Quỳnh', 'Tiếng Việt', 2024),
+(2, 'Văn Học Tuổi Hoa - Nhặt', 'Cậu bé Tính có vẻ như “chẳng ra ngô khoai, hồn vía gì”, nhưng tình cảm lại vô vùng sâu sắc.\n\nCậu NHẶT khoảnh khắc vụng về bố cắt mái tóc “bum bê” tròn ủng cho bà với những câu nói đùa đầy yêu thương, NHẶT chuyện vụn vặt nấu bát canh hoa thiên lí, om nồi ốc chuối đậu… ăm ắp không khí gia đình đầm ấm, NHẶT sự vụng về “cười đến đau cả mép” của chị Thương “ư ơ ngờ ương”… NHẶT mọi thứ, để làm hành trang.\n\nMỗi thứ cậu NHẶT, dù thích hay ghét cũng đong đầy những yêu thương và kỉ niệm, những lo toan và chăm chút khiến ta thấy trân trọng hơn cuộc sống và tình cảm của người thân.', 35000, 0.25, 30, 'NXB Kim Đồng', '19 x 13 x 0.6 cm', 132, 'Sách Văn Học', 'Văn học, lãng mạn', 'Bìa Mềm', 'Nguyễn Mỹ Nữ', 'Tiếng Việt', 2023),
+(3, 'Văn Học Thiếu Nhi - Kho Báu Trong Thành Phố', 'Sau JONI MẶT TỊT VÀ ĐỒNG BỌN TINH NGHỊCH kể về chú mèo bông xù rất được lòng bạn đọc trẻ, KHO BÁU TRONG THÀNH PHỐ tiếp tục là một truyện dài đầy yêu thương và gợi nhớ của tác giả Nguyễn Khắc Cường, diễn ra trong lòng Sài Gòn - Thành phố Hồ Chí Minh. Theo chân cuộc đua đi tìm kho báu của cha con bé Kiến, những hồi ức về Thành phố ở thập niên 80 hiện ra sống động, với những khung cảnh vừa quen vừa lạ. Truyện còn là một \"bộ sưu tầm\" những trò chơi dân gian đã từng làm mê mệt trẻ em cách đây mấy mươi năm: chọi dế, thả thuyền, bắn bi, búng thun… được tác giả mô tả hài hước, chân thực.\n\nVì lẽ đó, tác phẩm này không chỉ dành cho trẻ em, mà người lớn cũng có thể đọc say mê và mỉm cười với một bầu trời tuổi thơ cũ đang trở lại.\n\n--\n\n\"Hình như lúc còn nhỏ ai cũng mong mình lớn nhanh để khỏi bị bắt ngủ trưa, để được đi chơi tự do, muốn ăn bao nhiêu bánh kẹo tùy thích... Chừng lớn lên, nhiều người lại mơ được nhỏ lại, được tung tăng chạy nhảy vô tư.\n\nDĩ nhiên ước mơ nhỏ lại đâu thể nào thành hiện thực, nên tôi viết cuốn truyện này để được quay về tuổi thơ, sa đà vô các trò chơi búng thun, tạt lon, bắn bi, chọi cầu, đá cá, bắt dế, tắm mưa, lò cò, chơi u, chơi keng, đánh trỏng, banh lỗ... Những trò chơi khiến trẻ con 40 năm trước mê mệt, quên ăn quên ngủ, giờ không thấy ai chơi nữa, buồn quá chừng!\n\nKhông mơ nhỏ lại được thì tôi ước những trò chơi bị ngủ quên đó mau thức dậy, làm bạn với trẻ em bây giờ. Khi cùng nhau chạy nhảy, la hét, rượt đuổi... các em sẽ trở nên lanh tay lẹ mắt, hoạt bát, nhanh nhẹn, ít nguy cơ bị cận thị, béo phì hơn là suốt ngày ngồi một chỗ dán mắt vô màn hình máy tính, điện thoại.\"', 105000, 0.16, 25, 'NXB Trẻ', '20 x 13 x 1.2 cm', 252, 'Sách Văn Học', 'Giáo dục, khoa học', 'Bìa mềm', '	\nNguyễn Khắc Cường', 'Tiếng Việt', 2023),
+(4, 'Danh Tác Văn Học Việt Nam - Ngày Mới', '*Trích đoạn:\n\n\"Trường khẽ thở dài. Trong cái vui của lòng chàng, Trường muốn cho anh chị cũng được sung sướng. Chàng hiểu những nỗi đau đớn mà Dung đã phải chịu vì thái độ lãnh đạm của Xuân. Tuy vậy, giờ nghĩ đến anh, Trường không thấy bực tức như trước nữa. Sự thay đổi của Xuân gần đây, chàng đã đoán biết những duyên cớ. Có lẽ Xuân cũng đã có những hành vi và ý nghĩ của mình. Xuân, không có can đảm trở về với cuộc đời chàng có, với những vui và những buồn của sự sống hằng ngày.\"', 85000, 0.23, 40, 'NXB Văn Học', '20.5 x 15 x 1.2 cm', 400, 'Sách Văn Học', 'Lịch sử, văn hóa', 'Bìa mềm', 'Thạch Lam', 'Tiếng Việt', 2023),
+(5, 'Con Đường Văn Sĩ', 'Cùng với những độc giả yêu văn chương, muốn tìm hiểu thêm về nhà văn Nguyễn Huy Tưởng, cuốn sách đặc biệt nhắm đến các bạn đọc trẻ tuổi: Những người đang háo hức và băn khoăn, quả quyết và khắc khoải bước vào đời với khát khao lập thân lập nghiệp giống như bậc tiền nhân của mình…\n\n---\n\nNhà văn NGUYỄN HUY TƯỞNG sinh ngày 6.5.1912 trong một gia đình Nho giáo ở làng Dục Tú, Từ Sơn, Bắc Ninh (nay thuộc xã Dục Tú, huyện Đông Anh, Hà Nội). Những năm tháng tuổi trẻ, ông tham gia các phong trào yêu nước của thanh niên, học sinh ở Hải Phòng; hoạt động Truyền bá quốc ngữ, Hướng đạo sinh. Năm 1943 ông gia nhập nhóm Văn hóa cứu quốc bí mật. Tháng 8.1945, Nguyễn Huy Tưởng được cử tham dự Đại hội quốc dân ở Tân Trào. Cách mạng tháng Tám thành công, ông trở thành người lãnh đạo chủ chốt của hội Văn hóa cứu quốc và là đại biểu Quốc hội khóa 1 năm 1946. Sau 1954, ông là thành viên sáng lập Hội Nhà văn Việt Nam, Uỷ viên Ban chấp hành. Nguyễn Huy Tưởng là một trong những người sáng lập và là giám đốc đầu tiên của Nhà xuất bản Kim Đồng. Do mắc bệnh hiểm nghèo, ông mất ngày 25.7.1960 tại Hà Nội.\n\nTrong cuộc đời sáng tác văn chương, nhà văn Nguyễn Huy Tưởng đã đoạt nhiều giải thưởng, trong đó có Giải thưởng Hồ Chí Minh về Văn học Nghệ thuật, đợt I, năm 1996.', 180000, 0.13, 20, 'NXB Kim Đồng', '22.5 x 14 x 0.5 cm', 584, 'Sách Văn Học', 'Lịch sử, văn hóa', 'Bìa mềm', 'Nguyễn Huy Tưởng', 'Tiếng Việt', 2024),
+(6, 'Học Cách Chiến Thắng Sự Tự Ti', 'Mỗi lần trẻ có tâm trạng lo lắng, rụt rè khi tham gia một hoạt động nào đó, chắc hẳn rất nhiều bố mẹ thường cổ vũ, động viên: “Hãy tự tin, mạnh mẽ lên con nhé!”\r\n\r\nNhưng làm thế nào để trẻ trở nên tự tin, mạnh mẽ? Làm thế nào để trẻ không nhút nhát, rụt rè, biết yêu thương bản thân và mọi người xung quanh? Làm thế nào để trẻ dũng cảm đối diện với những việc không như ý muốn bằng thái độ bình tĩnh, không cáu gắt? Làm thế nào để trẻ tích cực phát huy ưu điểm, ngày càng hoàn thiện bản thân?\r\n\r\nCác bố mẹ hãy cùng con đọc bộ sách Bồi dưỡng tính cách tự tin và mạnh mẽ cho trẻ để đi tìm lời giải cho những băn khoăn kể trên nhé. Thông qua tám câu chuyện nhỏ thú vị cùng hình minh họa ngộ nghĩnh về các bạn động vật đáng yêu, tin rằng các bé sẽ học được nhiều điều bổ ích lắm đấy', 32000, 0.18, 20, 'NXB Thanh Niên', '20.5 x 19.6 x 0.2 cm', 20, 'Sách Thiếu Nhi', 'Thiếu nhi', 'Bìa mềm', 'Sách Thiếu Nhi Tiểu Kỳ Lân', 'Tiếng Việt', 2023),
+(7, 'Đời Thừa - Danh Tác Văn Học Việt Nam', 'Trong mảng sáng tác về đề tài tiểu tư sản của Nam Cao, truyện ngắn \"Đời Thừa\" có một vị trí đặc biệt. \"Đời Thừa\" đã ghi lại chân thật hình ảnh buồn thảm của người tri thức tiểu tư sản nghèo, nhà văn Nam Cao đã phác hoạ rõ nét hình ảnh vừa bi vừa hài của lớp người này trở nên đầy ám ảnh. Giá trị của \"Đời Thừa\" không phải chỉ ở chỗ đã miêu tả chân thật cuộc sống nghèo khổ, bế tắc của người trí thức tiểu tư sản nghèo, đã viết về người tiểu tư sản không phải với ngòi bút vuốt ve, thi vị hoá, mà còn vạch ra cả những thói xấu của họ v.v....', 70000, 0.23, 0, 'NXB Văn Học', '20.5 x 14.5 x 1.1 cm', 222, 'Sách Văn Học', 'Văn Học', 'Bìa mềm', 'Nam Cao', 'Tiếng Việt', 2022),
+(8, 'Linh Điểu', 'Một tác phẩm của nhà văn Nguyễn Văn Học với sự rung cảm về thân phận mải miết bay trong nỗi cô đơn, lạc đàn tìm nơi dựng tổ\r\n\r\nMột tác phẩm phản ánh một hiện thực xã hội chất chứa đầy những ưu tư, trăn trở, những mối lo, nguy cơ về những sự tha hóa, đổ vỡ, bất công…\r\n\r\nTiểu thuyết kể về cô gái Diệp Vân với tấm lòng hướng thiện, yêu cuộc sống, yêu các loài chim chóc và bầu trời. Để thực hiện sứ mệnh của mình, cô đã ra sức bảo vệ vườn cò của bà ngoại, tích cực trồng cây xanh trên các quả đồi, trên những con đường quê và cảm hóa Hùng - một thanh niên bất cần đời. Song, những việc làm ấy không được xã hội công nhận, làm theo mà cũng như nhiều người khác, cuối cùng Diệp Vân lại phải chết vì sự tàn bạo của đám đông, bởi sự chỉ trích, miệt thị những người bị dị tật như cô.\r\n\r\nTrích đoạn:\r\n\r\n\"Những chùm chim trắng được sinh ra từ những chòm mây tinh tuyền. Mây quyện vào cánh chim tạo mối giao hòa huyền ảo. Cánh chim dìu bầu trời vào nhan sắc, như thể cả bầu trời chuẩn bị bước vào một trận ái ân\"', 98000, 0.23, 100, 'NXB Dân Trí', '13 x 20.5 x 1.5 cm', 303, 'Sách Văn Học', 'Văn Học', 'Bìa mềm', 'Nguyễn Văn Học', 'Tiếng Việt', 2020),
+(9, 'Bạn Văn Bạn Mình - Chân Dung Văn Học', 'Với Chân dung văn học, nhà văn Nguyễn Tuân vẫn luôn là cây bút hết mực tài hoa, trân trọng chữ nghĩa. Ông thường vận dụng con mắt tinh tường về cả điện ảnh, hội họa, sân khấu, âm nhạc... để quan sát, cảm thụ văn chương và đưa ra những nhận xét độc đáo, tế nhị về tác phẩm, tác giả. Cách thưởng văn của ông như nhâm nhi thưởng “Chén trà sương” và tinh tế phát hiện ra một phần tư vỏ trấu bị lẫn trong ấm trà ngon.\r\n\r\nTrong cuốn sách này, bạn sẽ được gặp các “Bạn Văn” của Nguyễn Tuân qua các bài: “Chén rượu vĩnh biệt”, “Một đêm họp đưa ma Phụng”, “Đốtxtôi”, “Đọc Sê-khốp”, “Thạch Lam”, “Truyện ngắn Lỗ Tấn”, “Thời và thơ Tú Xương”, “Gọi là gới thiệu thêm về Nguyên Hồng”, “Ký Hoàng Phủ Ngọc Tường có rất nhiều ảnh lửa”, “Phố Phái”…\r\n\r\nNhà văn Nguyễn Tuân (1910 -1987) quê ở thôn Thượng Đình, xã Nhân Mục (tên nôm là làng Mọc), nay thuộc phường Nhân Chính, quận Thanh Xuân, Hà Nội.\r\nNguyễn Tuân sinh ra và lớn lên trong một gia đình nhà Nho. Ông nổi tiếng từ những năm 1938, 1939 với tập du ký Một chuyến đi, tập truyện ngắn Vang bóng một thời...\r\nTác phẩm của ông luôn thể hiện phong cách độc đáo, tài hoa, sự hiểu biết phong phú nhiều mặt và vốn ngôn ngữ giàu có, điêu luyện.\r\nSau Cách mạng, Nguyễn Tuân trở thành một cây bút đặc sắc và tiêu biểu của nền văn học mới với nhiều tác phẩm ký, tùy bút và truyện ngắn. Ông từng giữ chức Tổng thư ký Hội Văn nghệ Việt Nam.\r\nNăm 1996 ông được truy tặng Giải thưởng Hồ Chí Minh về văn học nghệ thuật (đợt I).', 65000, 0.13, 100, 'NXB Kim Đồng', '22.5 x 14 x 1 cm', 192, 'Sách Văn Học', 'Văn Học', 'Bìa mềm', 'Nguyễn Tuân', 'Tiếng Việt', 2021),
+(10, 'Văn Học Trong Nhà Trường - Kịch Và Văn', '“Không bao giờ nhiều lời huênh hoang, anh [Nguyễn Huy Tưởng] đã hiểu sâu sắc cái sứ mệnh của người cầm bút, nó là cái nghề xây dựng tâm hồn nhưng cũng có thể phá phách tâm hồn.” - Nhà văn NGUYỄN ĐÌNH THI\r\n\r\n“Với Vũ Như Tô, Nguyễn Huy Tưởng là một nghệ sĩ tài năng, ông còn là một trí thức lớn, nghĩa là người mang tài năng, trí óc và tâm hồn mình cống hiến cho dân tộc và cho nhân loại.” - GS ĐỖ ĐỨC HIỂU\r\n\r\n“Các tác phẩm của Nguyễn Huy Tưởng, dù là tiểu thuyết, hay kịch, hay ký sự nữa, cũng đều gần chất sử thi.” - Nhà văn NHƯ PHONG\r\n\r\n“Sống mãi với thủ đôcó cái đường bệ, chín chắn của một tác phẩm vào cỡ lớn. Được dựng lên bằng một cây bút có nghề, có mực thước, có sự thận trọng, công phu tìm tòi suy nghĩ, có tấm lòng yêu dấu và chân thành của người viết.” - Nhà văn KIM LÂN\r\n\r\nNhằm giúp các bạn học sinh có một nền tảng kiến thức văn học phong phú, vững vàng, Nhà xuất bản Kim Đồng tổ chức biên soạn bộ sách Văn học trong nhà trường.\r\n\r\nBộ sách sẽ lần lượt giới thiệu tác phẩm của các tác giả thuộc nhiều trào lưu, thể loại, thời kì...\r\n\r\nNgoài giá trị tư liệu học tập, hi vọng bộ sách còn giúp bồi dưỡng thêm tình yêu văn học, khích lệ tư duy sáng tạo giúp người đọc có được cho mình những nhận định khách quan và hợp lí.', 50000, 0.18, 100, 'NXB Kim Đồng', '19 x 13 cm', 268, 'Sách Văn Học', 'Văn Học', 'Bìa mềm', 'Nguyễn Huy Tưởng', 'Tiếng Việt', 2020),
+(11, 'Văn Học Tuổi Hoa - Kẻ Trộm Bất Đắc Dĩ', 'Giả Hành Tôn, chú khỉ của Sơn, đột nhiên biến mất. Sơn cùng Tú và Trân lùng sục khắp nơi mà chú khỉ vẫn bặt vô âm tín. Trong thành phố lại xuất hiện những “ngôi nhà có ma” và những vụ mất trộm vô cùng kì lạ. Chuyện gì đã xảy ra vậy nhỉ?\r\n\r\nTác giả CHU QUANG MẠNH THẮNG\r\nSinh năm 1973, tại Bắc Giang. Nghề nghiệp: Viết văn, biên kịch, đạo diễn điện ảnh. Sinh sống tại TP. Hồ Chí Minh từ năm 1991.\r\n\r\nTruyện dài “Kẻ trộm bất đắc dĩ” đã được chuyển thể thành kịch bản phim điện ảnh mang tên “Truy tìm kẻ trộm” và lọt vào vòng Chung khảo Cuộc thi sáng tác kịch bản điện ảnh do Cục điện ảnh tổ chức năm 2020.', 40000, 0.23, 100, 'NXB Kim Đồng', '19 x 13 x 0.8 cm', 202, 'Sách Văn Học', 'Văn Học', 'Bìa mềm', 'Chu Quang Mạnh Thắng', 'Tiếng Việt', 2022),
+(12, 'Tự Nhiên Say - Văn Học Tuổi 20', 'Tập truyện xoay quanh cuộc sống của người dân quê, nơi đất vườn đã dần hóa thành đô thị làm thay đổi cả lòng người. Cách viết mộc mạc giản dị nhưng ẩn sau là những thông điệp sâu sắc, và bàng bạc một cái tình rất đỗi tha thiết với nhân gian.', 52000, 0.16, 100, 'NXB Trẻ', '19 x 13 x 0.8 cm', 202, 'Sách Văn Học', 'Văn Học', 'Bìa mềm', 'Phát Dương', 'Tiếng Việt', 2022);
 
-INSERT INTO HINH_ANH (Anh, ID_SP)
-VALUES
-('image1.jpg', 1),
-('image2.jpg', 1),
-('image3.jpg', 2),
-('image4.jpg', 3),
-('image5.jpg', 4),
-('image6.jpg', 5);
+INSERT INTO `HINH_ANH` (`ID_HinhAnh`, `Anh`, `ID_SP`) VALUES
+(1, 'public/image/1/nha_bia.webp', 1),
+(2, 'public/image/2/van-hoc-tuoi-hoa_nhat_bia.webp', 2),
+(3, 'public/image/3/8934974187493.webp', 3),
+(4, 'public/image/4/8935236430852.webp', 4),
+(5, 'public/image/5/8935352607985.webp', 5),
+(7, 'public/image/2/2023_06_07_10_47_41_1-390x510.webp', 2),
+(8, 'public/image/2/2023_06_07_10_47_41_2-390x510.webp', 2),
+(9, 'public/image/2/2023_06_07_10_47_41_3-390x510.webp', 2),
+(10, 'public/image/1/2024_09_26_16_54_10_1-390x510.webp', 1),
+(11, 'public/image/1/2024_09_26_16_54_10_2-390x510.webp', 1),
+(12, 'public/image/1/2024_09_26_16_54_10_3-390x510.webp', 1),
+(13, 'public/image/3/2023_06_07_16_41_57_2-390x510.webp', 3),
+(14, 'public/image/3/2023_06_07_16_41_57_3-390x510.webp', 3),
+(15, 'public/image/3/2023_06_07_16_41_57_4-390x510.webp', 3),
+(16, 'public/image/4/2023_11_06_16_28_51_2-390x510.webp', 4),
+(17, 'public/image/4/2023_11_06_16_28_51_3-390x510.webp', 4),
+(18, 'public/image/4/2023_11_06_16_28_51_4-390x510.webp', 4),
+(19, 'public/image/6/8935212365857.webp', 6),
+(20, 'public/image/6/2023_12_12_15_33_45_1-390x510.webp', 6),
+(21, 'public/image/6/2023_12_12_15_33_45_2-390x510.webp', 6),
+(22, 'public/image/7/8935236425834.webp', 7),
+(23, 'public/image/7/2023_01_09_13_59_27_2-390x510.webp', 7),
+(24, 'public/image/7/2023_01_09_13_59_27_3-390x510.webp', 7),
+(25, 'public/image/7/2023_01_09_13_59_27_4-390x510.webp', 7),
+(26, 'public/image/8/image_195509_1_29510.webp', 8),
+(27, 'public/image/8/2021_06_19_10_47_06_2-390x510.webp', 8),
+(28, 'public/image/8/2021_06_19_10_47_06_3-390x510.webp', 8),
+(29, 'public/image/8/2021_06_19_10_47_06_4-390x510.webp', 8),
+(30, 'public/image/9/image_240031.webp', 9),
+(31, 'public/image/9/2021_12_09_16_08_26_2-390x510.webp', 9),
+(32, 'public/image/9/2021_12_09_16_08_26_3-390x510.webp', 9),
+(33, 'public/image/9/2021_12_09_16_08_26_4-390x510.webp', 9),
+(34, 'public/image/10/image_195509_1_38376.webp', 10),
+(35, 'public/image/11/8935244868012.webp', 11),
+(36, 'public/image/11/2022_11_09_13_50_54_2-390x510.webp', 11),
+(37, 'public/image/12/image_178919.webp', 12),
+(38, 'public/image/12/tu_nhien_say___van_hoc_tuoi_20_2_2018_10_22_10_28_52.webp', 12);
 
 INSERT INTO SAN_PHAM_DE_XUAT (TenSP, NoiDung, TrangThai, GhiChu, UID, NgayYeuCau)
 VALUES
@@ -134,29 +170,18 @@ VALUES
 (6, 'Bạn đã nhận được một mã giảm giá mới.', 'Read'),
 (7, 'Sản phẩm trong giỏ hàng của bạn sắp hết.', 'Unread');
 
-INSERT INTO TIN_TUC (TieuDe, ThoiGianTao, NoiDung, TuKhoa, TrangThai)
-VALUES
-('Tin tức 1', '10:00:00 21-10-2023', 'Nội dung tin tức 1', 'sách, giảm giá, khuyến mãi', 'Đang ẩn'),
-('Tin tức 2', '09:30:00 20-10-2023', 'Nội dung tin tức 2', 'sách mới, tác giả nổi tiếng', 'Đang ẩn'),
-('Tin tức 3', '08:45:00 19-10-2023', 'Nội dung tin tức 3', 'sự kiện, hội sách, giảm giá', 'Đang ẩn'),
-('Tin tức 4', '07:15:00 18-10-2023', 'Nội dung tin tức 4', 'tác phẩm văn học, ra mắt', 'Đang ẩn'),
-('Tin tức 5', '06:00:00 17-10-2023', 'Nội dung tin tức 5', 'ưu đãi thành viên, khách hàng VIP', 'Đang ẩn');
+INSERT INTO `TIN_TUC` (`MaTinTuc`, `TieuDe`, `ThoiGianTao`, `NoiDung`, `TuKhoa`, `TrangThai`, `MoTa`) VALUES
+(1, 'Tin tức 1', '10:00:00 21-10-2023', 'Nội dung tin tức 1', 'sách, giảm giá, khuyến mãi', 'Đang ẩn', NULL),
+(2, 'Tin tức 2', '09:30:00 20-10-2023', 'Nội dung tin tức 2', 'sách mới, tác giả nổi tiếng', 'Đang ẩn', NULL);
 
-INSERT INTO ANH_MINH_HOA (MoTa, LinkAnh, MaTinTuc)
-VALUES
-('Ảnh minh họa cho tin tức 1', 'link_anh_1.jpg', 1),
-('Ảnh minh họa cho tin tức 2', 'link_anh_2.jpg', 2),
-('Ảnh minh họa cho tin tức 3', 'link_anh_3.jpg', 3),
-('Ảnh minh họa cho tin tức 4', 'link_anh_4.jpg', 4),
-('Ảnh minh họa cho tin tức 5', 'link_anh_5.jpg', 5);
+INSERT INTO `ANH_MINH_HOA` (`MaAnh`, `MoTa`, `LinkAnh`, `MaTinTuc`) VALUES
+(1, 'Ảnh minh họa cho tin tức 1', 'public/image/tin1.jpg', 1),
+(2, 'Ảnh minh họa cho tin tức 2', 'public/image/tin2.jpg', 2);
 
-INSERT INTO BANNER (Image, IdSP, MoTa, TrangThai)
-VALUES
-('banner_1.jpg', 1, '', 'Đang hiện'),
-('banner_2.jpg', 2, '', 'Đang hiện'),
-('banner_3.jpg', 3, '', 'Đang hiện'),
-('banner_4.jpg', 4, '', 'Đang hiện'),
-('banner_5.jpg', 5, '', 'Đang hiện');
+INSERT INTO `BANNER` (`MaBanner`, `Image`, `IdSP`, `MoTa`, `TrangThai`) VALUES
+(1, 'public/image/1.webp', 1, '', 'Đang hiện'),
+(2, 'public/image/2.webp', 2, '', 'Đang hiện'),
+(3, 'public/image/3.webp', 3, '', 'Đang hiện');
 
 INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet)
 VALUES

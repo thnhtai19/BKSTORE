@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__, 3) . '/config/db.php';
+session_start();
 if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();

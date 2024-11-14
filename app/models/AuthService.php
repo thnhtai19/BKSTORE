@@ -35,7 +35,10 @@ class AuthService {
         $_SESSION["uid"] = $user['UID'];
         $_SESSION["Ten"] = $user['Ten'];
         $_SESSION["Role"] = $user['Role'];
-        $_SESSION["Avatar"] = $user['Avatar'];
+        $avatar = $user['Avatar'];
+        if ($avatar == null) {
+            $_SESSION["Avatar"] = "https://ui-avatars.com/api/?background=random&name=" . urlencode($user['Ten']);
+        }
         return [
             'success' => true,
             'message' => 'Đăng nhập thành công',
@@ -167,7 +170,8 @@ class AuthService {
     private function updatePassword($email, $newPassword) {
         $sql = "UPDATE `login` SET `Password` = ? WHERE Email = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", password_hash($newPassword, PASSWORD_DEFAULT), $email);
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $stmt->bind_param("ss", $hashedPassword, $email);
         $stmt->execute();
     }
 
