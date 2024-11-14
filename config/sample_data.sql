@@ -1,3 +1,5 @@
+USE bkstore;
+
 INSERT INTO LOGIN (Email, Password, Role, Ten, Avatar)
 VALUES
 ('user1@example.com', 'password1', 'Customer', 'User One', NULL),
@@ -59,44 +61,44 @@ VALUES
 
 INSERT INTO SAN_PHAM_DE_XUAT (TenSP, NoiDung, TrangThai, GhiChu, UID)
 VALUES
-('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', 'Pending', 'Đang chờ duyệt', 1),
-('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', 'Approved', 'Đã được duyệt', 2),
-('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', 'Rejected', 'Không được duyệt', 3),
-('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', 'Pending', 'Đang chờ duyệt', 6),
-('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', 'Approved', 'Đã được duyệt', 7);
+('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', "Đang chờ duyệt", 'Đang chờ duyệt', 1),
+('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', "Đã duyệt", 'Đã được duyệt', 2),
+('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', "Đã từ chối", 'Không được duyệt', 3),
+('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', "Đang chờ duyệt", 'Đang chờ duyệt', 6),
+('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', "Đã duyệt", 'Đã được duyệt', 7);
 
-INSERT INTO DANH_GIA (ID_SP, UID, NgayDanhGia, SoSao, NoiDung)
+INSERT INTO DANH_GIA (ID_SP, UID, NgayDanhGia, SoSao, NoiDung, TrangThai, PhanHoi)
 VALUES
-(1, 1, '20-10-2023', 5, 'Sản phẩm tuyệt vời!'),
-(2, 2, '21-10-2023', 4, 'Rất hài lòng với sản phẩm này'),
-(3, 3, '19-10-2023', 3, 'Sản phẩm tạm được, còn vài khuyết điểm'),
-(4, 6, '18-10-2023', 2, 'Không tốt như mong đợi'),
-(5, 7, '17-10-2023', 1, 'Sản phẩm rất tệ, không khuyến khích mua');
+(1, 1, '20-10-2023', 5, 'Sản phẩm tuyệt vời!', 'Đang hiện', ''),
+(2, 2, '21-10-2023', 4, 'Rất hài lòng với sản phẩm này', 'Đang hiện', ''),
+(3, 3, '19-10-2023', 3, 'Sản phẩm tạm được, còn vài khuyết điểm', 'Đang hiện', ''),
+(4, 6, '18-10-2023', 2, 'Không tốt như mong đợi', 'Đang hiện', ''),
+(5, 7, '17-10-2023', 1, 'Sản phẩm rất tệ, không khuyến khích mua', 'Đang hiện', '');
 
-INSERT INTO BINH_LUAN (ID_SP, UID, NgayBinhLuan, NoiDung)
+INSERT INTO BINH_LUAN (ID_SP, UID, NgayBinhLuan, NoiDung, PhanHoi, TrangThai)
 VALUES
-(1, 1, '21-10-2023', 'Sản phẩm rất tốt, tôi rất hài lòng.'),
-(2, 2, '21-10-2023', 'Chất lượng ổn, giao hàng nhanh.'),
-(3, 3, '20-10-2023', 'Giá hơi cao nhưng sản phẩm chất lượng.'),
-(4, 6, '19-10-2023', 'Không như mong đợi, cần cải thiện.'),
-(5, 7, '18-10-2023', 'Sản phẩm quá tệ, không đáng tiền.');
+(1, 1, '21-10-2023', 'Sản phẩm rất tốt, tôi rất hài lòng.', '', 'Đang hiện'),
+(2, 2, '21-10-2023', 'Chất lượng ổn, giao hàng nhanh.', '', 'Đang hiện'),
+(3, 3, '20-10-2023', 'Giá hơi cao nhưng sản phẩm chất lượng.', '', 'Đang hiện'),
+(4, 6, '19-10-2023', 'Không như mong đợi, cần cải thiện.', '', 'Đang hiện'),
+(5, 7, '18-10-2023', 'Sản phẩm quá tệ, không đáng tiền.', '', 'Đang hiện');
 
-INSERT INTO MA_GIAM_GIA (Ma, TienGiam, DieuKien, TrangThai)
+INSERT INTO MA_GIAM_GIA (Ma, TienGiam, DieuKien, SoLuong, TrangThai)
 VALUES
-('GIAM10K', 10000.00, 'Female', 'Active'),
-('GIAM50K', 50000.00, '> 200000', 'Active'),
-('GIAM30%', 30.00, 'Chẵn', 'Expired'),
-('GIAM50%', 50.00, '< 500000', 'Active'),
-('GIAMCOD', 25000.00, 'COD', 'Expired'),
-('FREESHIP', 0.00, 'Tất cả', 'Active');
+('GIAM10K', 10000.00, 'Female', 50, 'Kích hoạt'),
+('GIAM50K', 50000.00, '> 200000', 50, 'Kích hoạt'),
+('GIAM30%', 30.00, 'Chẵn', 50, 'Hết hạn'),
+('GIAM50%', 50.00, '< 500000', 50, 'Kích hoạt'),
+('GIAMCOD', 25000.00, 'COD', 50, 'Hết hạn'),
+('FREESHIP', 0.00, 'Tất cả', 50, 'Kích hoạt');
 
-INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, ThanhToan, PhuongThucThanhToan, TrangThai, SDT, DiaChi)
+INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, TrangThai, SDT, DiaChi, TenNguoiNhan, ThanhToan, PhuongThucThanhToan)
 VALUES
-(1, '20-10-2023', 300000.00, 'GIAM50K', TRUE, 'Bank', "Chờ xác nhận", 0123456789, 'TP.HCM'),
-(2, '19-10-2023', 150000.00, NULL, FALSE, 'COD', "Chờ lấy hàng", 0123456789, 'TP.HCM'),
-(3, '18-10-2023', 250000.00, 'GIAM10K', TRUE, 'Bank', "Đang vận chuyển", 0123456789, 'TP.HCM'),
-(6, '17-10-2023', 100000.00, NULL, FALSE, 'COD', "Đã giao hàng", 0123456789, 'TP.HCM'),
-(7, '16-10-2023', 200000.00, 'GIAMCOD', TRUE, 'Bank', "Đã hủy", 0123456789, 'TP.HCM');
+(1, '20-10-2023', 300000.00, 'GIAM50K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank'),
+(2, '19-10-2023', 150000.00, NULL,'Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
+(3, '18-10-2023', 250000.00, 'GIAM10K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank'),
+(6, '17-10-2023', 100000.00, NULL,'Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
+(7, '16-10-2023', 200000.00, 'GIAMCOD','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank');
 
 INSERT INTO GOM (ID_DonHang, ID_SP, SoLuong)
 VALUES
@@ -132,13 +134,13 @@ VALUES
 (6, 'Bạn đã nhận được một mã giảm giá mới.', 'Read'),
 (7, 'Sản phẩm trong giỏ hàng của bạn sắp hết.', 'Unread');
 
-INSERT INTO TIN_TUC (TieuDe, ThoiGianTao, NoiDung, TuKhoa)
+INSERT INTO TIN_TUC (TieuDe, ThoiGianTao, NoiDung, TuKhoa, TrangThai)
 VALUES
-('Tin tức 1', '10:00:00 21-10-2023', 'Nội dung tin tức 1', 'sách, giảm giá, khuyến mãi'),
-('Tin tức 2', '09:30:00 20-10-2023', 'Nội dung tin tức 2', 'sách mới, tác giả nổi tiếng'),
-('Tin tức 3', '08:45:00 19-10-2023', 'Nội dung tin tức 3', 'sự kiện, hội sách, giảm giá'),
-('Tin tức 4', '07:15:00 18-10-2023', 'Nội dung tin tức 4', 'tác phẩm văn học, ra mắt'),
-('Tin tức 5', '06:00:00 17-10-2023', 'Nội dung tin tức 5', 'ưu đãi thành viên, khách hàng VIP');
+('Tin tức 1', '10:00:00 21-10-2023', 'Nội dung tin tức 1', 'sách, giảm giá, khuyến mãi', 'Đang ẩn'),
+('Tin tức 2', '09:30:00 20-10-2023', 'Nội dung tin tức 2', 'sách mới, tác giả nổi tiếng', 'Đang ẩn'),
+('Tin tức 3', '08:45:00 19-10-2023', 'Nội dung tin tức 3', 'sự kiện, hội sách, giảm giá', 'Đang ẩn'),
+('Tin tức 4', '07:15:00 18-10-2023', 'Nội dung tin tức 4', 'tác phẩm văn học, ra mắt', 'Đang ẩn'),
+('Tin tức 5', '06:00:00 17-10-2023', 'Nội dung tin tức 5', 'ưu đãi thành viên, khách hàng VIP', 'Đang ẩn');
 
 INSERT INTO ANH_MINH_HOA (MoTa, LinkAnh, MaTinTuc)
 VALUES
@@ -148,38 +150,38 @@ VALUES
 ('Ảnh minh họa cho tin tức 4', 'link_anh_4.jpg', 4),
 ('Ảnh minh họa cho tin tức 5', 'link_anh_5.jpg', 5);
 
-INSERT INTO BANNER (Image, IdSP)
+INSERT INTO BANNER (Image, IdSP, MoTa, TrangThai)
 VALUES
-('banner_1.jpg', 1),
-('banner_2.jpg', 2),
-('banner_3.jpg', 3),
-('banner_4.jpg', 4),
-('banner_5.jpg', 5);
+('banner_1.jpg', 1, '', 'Đang hiện'),
+('banner_2.jpg', 2, '', 'Đang hiện'),
+('banner_3.jpg', 3, '', 'Đang hiện'),
+('banner_4.jpg', 4, '', 'Đang hiện'),
+('banner_5.jpg', 5, '', 'Đang hiện');
 
-INSERT INTO DOI_TAC (Ten, HinhAnh)
+INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet)
 VALUES
-('Đối tác A', 'doi_tac_a.jpg'),
-('Đối tác B', 'doi_tac_b.jpg'),
-('Đối tác C', 'doi_tac_c.jpg'),
-('Đối tác D', 'doi_tac_d.jpg'),
-('Đối tác E', 'doi_tac_e.jpg');
+('Đối tác A', 'doi_tac_a.jpg', 'www.google.com'),
+('Đối tác B', 'doi_tac_b.jpg', 'www.google.com'),
+('Đối tác C', 'doi_tac_c.jpg', 'www.google.com'),
+('Đối tác D', 'doi_tac_d.jpg', 'www.google.com'),
+('Đối tác E', 'doi_tac_e.jpg', 'www.google.com');
 
-INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri)
+INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri, TuKhoa, ClientID, APIKey, Checksum)
 VALUES
-(1, FALSE);  -- Hệ thống không bảo trì
+(1, FALSE, '', '', '', '');  -- Hệ thống không bảo trì
 
-INSERT INTO THONG_TIN_LIEN_HE (Loai, ThongTin)
+INSERT INTO THONG_TIN_LIEN_HE (Loai, ThongTin, HinhAnh, TrangThai)
 VALUES
-('Email', 'contact@website.com'),
-('Hotline', '+84 123 456 789'),
-('Địa chỉ', '123 Đường ABC, Quận 1, TP.HCM'),
-('Fanpage', 'facebook.com/website'),
-('Zalo', 'Zalo: +84 987 654 321');
+('Email', 'contact@website.com', 'image_1.png', 'Đang hiện'),
+('Hotline', '+84 123 456 789', 'image_1.png', 'Đang hiện'),
+('Địa chỉ', '123 Đường ABC, Quận 1, TP.HCM', 'image_1.png', 'Đang hiện'),
+('Fanpage', 'facebook.com/website', 'image_1.png', 'Đang hiện'),
+('Zalo', 'Zalo: +84 987 654 321', 'image_1.png', 'Đang hiện');
 
-INSERT INTO MANG_XA_HOI (HinhAnh, LienKet)
+INSERT INTO MANG_XA_HOI (HinhAnh, LienKet, TrangThai)
 VALUES
-('facebook_icon.jpg', 'https://www.facebook.com/website'),
-('instagram_icon.jpg', 'https://www.instagram.com/website'),
-('twitter_icon.jpg', 'https://www.twitter.com/website'),
-('linkedin_icon.jpg', 'https://www.linkedin.com/company/website'),
-('youtube_icon.jpg', 'https://www.youtube.com/website');
+('facebook_icon.jpg', 'https://www.facebook.com/website', 'Đang hiện'),
+('instagram_icon.jpg', 'https://www.instagram.com/website', 'Đang hiện'),
+('twitter_icon.jpg', 'https://www.twitter.com/website', 'Đang hiện'),
+('linkedin_icon.jpg', 'https://www.linkedin.com/company/website', 'Đang hiện'),
+('youtube_icon.jpg', 'https://www.youtube.com/website', 'Đang hiện');

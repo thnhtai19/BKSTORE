@@ -1,16 +1,19 @@
 <?php
 require_once dirname(__DIR__, 1) . '/models/support.php';
 require_once dirname(__DIR__, 1) . '/models/ProductService.php';
+require_once dirname(__DIR__, 1) . '/models/CartService.php';
 
 class OrderService {
     private $conn;
     private $support;
     private $product;
+    private $cart;
 
     public function __construct($conn) {
         $this->conn = $conn;
         $this->support = new support();
         $this->product = new ProductService($conn);
+        $this->cart = new CartService($conn);
     }
 
     public function sale($tienHang, $MaGiamGia, $phiVanChuyen, $PhuongThucThanhToan) {
@@ -42,7 +45,7 @@ class OrderService {
     }
 
     public function getPaid($uid) {
-        $sql1 = "SELECT ID_DonHang, NgayDat FROM don_hang WHERE `UID` = ? AND ThanhToan = '1'";
+        $sql1 = "SELECT ID_DonHang, NgayDat, TrangThai FROM don_hang WHERE `UID` = ?";
         $stmt1 = $this->conn->prepare($sql1);
         $stmt1->bind_param("i", $uid);
         $stmt1->execute();
@@ -88,7 +91,7 @@ class OrderService {
                     'hinh' => $image,
                     'ten_sp' => $productDetails['TenSP'],
                     'gia' => $productDetails['Gia'],
-                    'trang_thai' => '',
+                    'trang_thai' => $row['TrangThai'],
                     'ngay_dat' => $row['NgayDat'],
                     'so_luong_san_pham' => $product['COUNT']
                 ];
@@ -98,7 +101,7 @@ class OrderService {
     }
 
     public function getInfo($uid, $ID_DonHang) {
-        $sql = "SELECT NgayDat, TongTien, PhuongThucThanhToan, ThanhToan FROM don_hang WHERE `UID` = ? AND ID_DonHang = ?";
+        $sql = "SELECT NgayDat, TongTien, PhuongThucThanhToan, ThanhToan, TrangThai, SDT, DiaChi, TenNguoiNhan FROM don_hang WHERE `UID` = ? AND ID_DonHang = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $uid, $ID_DonHang);
         $stmt->execute();
@@ -109,8 +112,6 @@ class OrderService {
         }
 
         $order = $result->fetch_assoc();
-        $product = $this->getProduct($ID_DonHang);
-        if ($product['success'] === false) return ['success' => false, 'message' => $product['message']];
         
         $money = $this->getPayment($ID_DonHang);
         if ($money['status'] === false) return ['success' => false, 'message' => $money['message']];
@@ -118,42 +119,47 @@ class OrderService {
         $user = $this->getUser($uid);
         if ($user['success'] === false) return ['success' => false, 'message' => $user['message']];
 
+        $product = $this->getProduct($ID_DonHang);
+        if ($product['success'] === false) return ['success' => false, 'message' => $product['message']];
+        $product = $product['san_pham'];
+        $so_luong_san_pham = count($product);
+
         return [
             'success' => true,
             'info' => [
                 'id' => $ID_DonHang,
                 'ngay_dat' => $order['NgayDat'],
-                'trang_thai' => '',
-                'danh_sach_san_pham' => $product['san_pham'],
+                'trang_thai' => $order['TrangThai'],
+                'thanh_toan' => $order['ThanhToan'],
+                'danh_sach_san_pham' => $product,
+                'so_luong_san_pham' => $so_luong_san_pham,
                 'thong_tin_thanh_toan' => $money['thanh_toan'],
-                'thong_tin_nguoi_mua' => $user['nguoi_dung']
+                'ten_khach_hang' => $user['ten'],
+                'ten_nguoi_nhan' => $order['TenNguoiNhan'],
+                'so_dien_thoai' => $order['SDT'],
+                'dia_chi_giao_hang' => $order['DiaChi']
             ]
         ];
     }
 
-    public function order($uid, $PhuongThucThanhToan, $MaGiamGia, $SDT, $DiaChi) {
-        $sql = "SELECT * FROM `ma_giam_gia` WHERE `Ma` = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $MaGiamGia);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows == 0) {
+    public function order($uid, $PhuongThucThanhToan, $MaGiamGia, $SDT, $DiaChi, $TenNguoiNhan, $product_list) {
+        if ($this->orderSale($MaGiamGia) == false) {
             return ['success' => false, 'message' => 'Mã giảm giá không tồn tại'];
         }
-        $bill = $this->bill($uid);
-        $bill = $bill['SoLuong'] * $this->getCostProduct($bill['ID_SP']);
-        $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->conn->prepare($sql);
+        if ($this->checkCart($uid) == false) return ['success' => false, 'message' => 'Người dùng chưa thêm sản phẩm vào giỏ hàng'];
+        $bill = $this->orderCost($uid, $product_list);
+        if ($bill == 0) return ['success'=> false, 'message' => 'Danh sách sản phẩm không hợp lệ'];
         $NgayDat = $this->support->getDateNow();
-        $stmt->bind_param("isissss", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan);
-        $stmt->execute();
-        $ID_DonHang = mysqli_insert_id($this->conn);
-        $sql = "INSERT INTO gom (ID_DonHang, ID_SP, SoLuong) VALUES (?, ?, ?)";
+        foreach ($product_list as $ID_SP) {
+            if ($this->checkProduct($ID_SP, $this->countProduct($uid, $ID_SP))['success'] == false)
+            return ['success' => false, 'message' => 'Không đủ hàng trong kho'];
+        }
+        $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $rac = $this->bill($uid);
-        $stmt->bind_param("iii", $ID_DonHang, $rac['ID_SP'], $rac['SoLuong']);
+        $stmt->bind_param("isisssss", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan);
         $stmt->execute();
-        return "thanhf coong";
+        $this->addProductToOrder(mysqli_insert_id($this->conn), $uid, $product_list);
+        return ['success' => true, 'message' => 'Đặt hàng thành công'];
     }
 
     public function setOrderStatus($ID_DonHang, $ThanhToan) {
@@ -163,13 +169,142 @@ class OrderService {
         $stmt->execute();
     }
 
-    private function bill($uid) {
-        $sql = "SELECT ID_SP, SoLuong FROM trong_gio_hang WHERE `UID` = ?";
+    public function update($trang_thai, $thanh_toan, $id) {
+        $sql = "UPDATE don_hang SET ThanhToan = ?, TrangThai = ? WHERE ID_DonHang =?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $uid);
+        $stmt->bind_param("ssi", $thanh_toan, $trang_thai, $id);
+        $stmt->execute();
+        return ['success' => true, 'message' => 'Cập nhật đơn hàng thành công'];
+    }
+
+    public function list() {
+        $sql = "SELECT `UID`, ID_DonHang FROM don_hang";
+        $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        if ($result->num_rows == 0) {
+            return ["success"=> false,"message"=> "Không có đơn hàng nào"];
+        }
+        $orders = [];
+        while ($row = $result->fetch_assoc()) {
+            $orders[] = [
+                'UID' => $row['UID'],
+                'ID_DonHang'=> $row['ID_DonHang'],
+            ];
+        }
+        $list = [];
+        foreach ($orders as $order) {
+            $info = $this->getInfo($order['UID'], $order['ID_DonHang']);
+            if ($info['success'] == true) 
+                $list[] = $info;
+        }
+        return ['success'=> true,'list'=> $list];
+    }
+
+    private function orderCost($uid, $product_list) {
+        $cost = 0;
+        foreach ($product_list as $ID_SP) {
+            $count = $this->countProduct($uid, $ID_SP);
+            $bill = $count * $this->getCostProduct($ID_SP);
+            $cost += $bill;
+        }
+        return $cost;
+    }
+
+    private function checkCart($uid) {
+        $sql = 'SELECT * FROM trong_gio_hang WHERE `UID` = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) return false;
+        return true;
+    }
+
+    private function checkSale($MaGiamGia) {
+        $sql = "SELECT SoLuong FROM `ma_giam_gia` WHERE `Ma` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $MaGiamGia);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) return ['success' => false];
+        return ['success' => true, 'so_luong' => $result->fetch_assoc()['SoLuong']];
+    }
+
+    private function orderSale($MaGiamGia) {
+        $sale = $this->checkSale($MaGiamGia);
+        if ($sale['success'] == false) return false;
+        $rac = $sale['so_luong'] - 1;
+        if ($rac > 0) {
+            $sql = 'UPDATE ma_giam_gia SET SoLuong = ? WHERE Ma = ?';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("is", $rac, $MaGiamGia);
+            $stmt->execute();
+        }
+        else {
+            $sql = 'DELETE FROM ma_giam_gia WHERE Ma = ?';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('s', $MaGiamGia);
+            $stmt->execute();
+        }
+        return true;
+    }
+
+    private function checkProduct($ID_SP, $quantity) {
+        $sql = "SELECT SoLuongKho FROM san_pham WHERE ID_SP = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $ID_SP);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $result = $result->fetch_assoc()['SoLuongKho'];
+        if ($result < $quantity) return ['success' => false];
+        return ['success'=> true, 'so_luong'=> $result];
+    }
+
+    private function orderProduct($ID_SP, $quantity) {
+        $rac = $this->checkProduct($ID_SP, $quantity);
+        if ($rac['success'] == false) return false;
+        $num = $rac['so_luong'];
+        if ($num > $quantity) {
+            $num -= $quantity;
+            $sql = 'UPDATE san_pham SET SoLuongKho = ? WHERE ID_SP = ?';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('ii', $num, $ID_SP);
+            $stmt->execute();
+        }
+        else {
+            // delete product
+
+        }
+        return true;
+    }
+
+    private function addProductToOrder($ID_DonHang, $uid, $product_list) {
+        foreach ($product_list as $ID_SP) {
+            $rac = $this->countProduct($uid, $ID_SP);
+            if ($rac != 0) {
+                $sql = "INSERT INTO gom (ID_DonHang, ID_SP, SoLuong) VALUES (?, ?, ?)";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param("iii", $ID_DonHang, $ID_SP, $rac);
+                $stmt->execute();
+                $this->removeProductFromCart($uid, $ID_SP);
+                $this->orderProduct($ID_SP, $rac);
+            }
+        }
+    }
+
+    private function removeProductFromCart($uid, $product_id) {
+        $this->cart->remove($uid, $product_id);
+    }
+
+    private function countProduct($uid, $ID_SP) {
+        $sql = "SELECT SoLuong FROM trong_gio_hang WHERE `UID` = ? AND ID_SP = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $uid, $ID_SP);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) return 0;
+        return $result->fetch_assoc()['SoLuong'];
     }
 
     private function getCostProduct($ID_SP) {
@@ -179,7 +314,7 @@ class OrderService {
         $stmt->execute();
         $result = $stmt->get_result();
         $result = $result->fetch_assoc();
-        return $result['Gia'] - $result['Gia'] * $result['TyLeGiamGia'];
+        return round($result['Gia'] - $result['Gia'] * $result['TyLeGiamGia'], 2);
     }
 
     private function getProduct($orderId) {
@@ -211,7 +346,7 @@ class OrderService {
                 'ten' => $product['TenSP'],
                 'so_luong' => $products['SoLuong'],
                 'gia_san_pham' => $product['Gia'],
-                'gia_sau_giam_gia' => $product['Gia'] * (1 - $product['TyLeGiamGia']),
+                'gia_sau_giam_gia' => round($product['Gia'] * (1 - $product['TyLeGiamGia']), 2),
             ];
         }
     
@@ -243,7 +378,8 @@ class OrderService {
                     'so_tien_da_giam' => $money['so_tien_da_giam'],
                     'tong_tien_phai_tra' => $money['tong_tien_phai_tra'],
                     'trang_thai' => $order['ThanhToan'],
-                    'phuong_thuc' => $order['PhuongThucThanhToan']
+                    'phuong_thuc' => $order['PhuongThucThanhToan'],
+                    'ma_giam_gia' => $order['MaGiamGia'],
                 ]
             ];
         }
@@ -251,37 +387,21 @@ class OrderService {
         return ['status' => false, 'message' => $money['message']];
     }    
 
-    private function getUser($uid) {
-        $sql1 = "SELECT SDT, DiaChi FROM khach_hang WHERE `UID` = ?";
-        $stmt1 = $this->conn->prepare($sql1);
-        $stmt1->bind_param("i", $uid);
-        $stmt1->execute();
-        $result1 = $stmt1->get_result();
+    private function getUser($uid) {  
+        $sql = "SELECT Ten FROM `login` WHERE `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
     
-        if ($result1->num_rows === 0) {
-            return ['success' => false, 'message' => 'Không tìm thấy thông tin người dùng'];
-        }
-    
-        $user1 = $result1->fetch_assoc();
-    
-        $sql2 = "SELECT Ten FROM `login` WHERE `UID` = ?";
-        $stmt2 = $this->conn->prepare($sql2);
-        $stmt2->bind_param("i", $uid);
-        $stmt2->execute();
-        $result2 = $stmt2->get_result();
-    
-        if ($result2->num_rows === 0) {
+        if ($result->num_rows === 0) {
             return ['success' => false, 'message' => 'Không tìm thấy thông tin đăng nhập'];
         }
     
-        $user2 = $result2->fetch_assoc();
+        $user = $result->fetch_assoc();
         return [
             'success' => true,
-            'nguoi_dung' => [
-                'ten' => $user2['Ten'],
-                'SĐT' => $user1['SDT'],
-                'dia_chi' => $user1['DiaChi']
-            ]
+            'ten' => $user['Ten']
         ];
     }    
 

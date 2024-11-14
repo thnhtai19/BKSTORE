@@ -15,14 +15,36 @@ if ($method === 'POST') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
     if (isset($data['PhuongThucThanhToan'])) $PhuongThucThanhToan = $data['PhuongThucThanhToan'];
-    else $PhuongThucThanhToan = '';
+    else {
+        echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
+        return;
+    }
     if (isset($data['MaGiamGia'])) $MaGiamGia = $data['MaGiamGia'];
-    else $MaGiamGia = '';
+    else {
+        echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
+        return;
+    }
     if (isset($data['SDT'])) $SDT = $data['SDT'];
-    else $SDT = '';
+    else {
+        echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
+        return;
+    }
     if (isset($data['DiaChi'])) $DiaChi = $data['DiaChi'];
-    else $DiaChi = '';
-    echo json_encode($model->order($_SESSION["uid"], $PhuongThucThanhToan, $MaGiamGia, $SDT, $DiaChi));
+    else {
+        echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
+        return;
+    }
+    if (isset($data['TenNguoiNhan'])) $TenNguoiNhan = $data['TenNguoiNhan'];
+    else {
+        echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
+        return;
+    }
+    if (isset($data['product_list'])) $product_list = explode(',', trim($data['product_list']));
+    else {
+        echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
+        return;
+    }
+    echo json_encode($model->order($_SESSION["uid"], $PhuongThucThanhToan, $MaGiamGia, $SDT, $DiaChi, $TenNguoiNhan, $product_list));
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

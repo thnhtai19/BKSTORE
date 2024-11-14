@@ -53,10 +53,6 @@ class AdminService {
         return ['success' => true, 'user-list' => $users];
     }
 
-    public function banUser($uid) {
-        
-    }
-
     public function product() {
         return ['success' => true, 'product_list' => $this->productInfo(), 'product_category' => $this->product->getType()];
     }
@@ -90,6 +86,126 @@ class AdminService {
         $stmt->bind_param("si", $relativeAvatarPath, $ID_SP);
         $stmt->execute();
         return ['success' => true, 'message' => 'Thêm sản phẩm thành công!'];
+    }
+
+    public function propose() {
+        $propose_list = $this->proposeInfo();
+        foreach ($propose_list as &$propose) {
+            $user = $this->user->getUserInfo($propose["UID"]);
+            if ($user['success'] === false) {
+                return ['success' => false, 'message' => $user['message']];
+            }
+            
+            $login = $this->user->getLoginInfo($propose["UID"]);
+            if ($login['success'] === false) {
+                return ['success' => false, 'message' => $login['message']];
+            }
+
+            if (!$user || !$login) {
+                return ['success' => false, 'message' => 'Không tìm thấy người dùng'];
+            }            
+            $propose['ten'] = $login['name'];
+            $propose['SDT'] = $user['phone'];
+            $propose['email'] = $login['email'];
+            $propose['gioi_tinh'] = $user['sex'];
+        }
+        return ['success'=> true, 'message'=> $propose_list];
+    }
+
+    public function updatePropose($status, $content, $id) {
+        $sql = 'SELECT * FROM san_pham_de_xuat WHERE MaDeXuat = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) {
+            return ["success"=> false,"message"=> "Không tìm thấy đề xuất"];
+        }
+        if ($status != 'Đang chờ duyệt' && $status != 'Đã duyệt' && $status != 'Đã từ chối') 
+            return ['success'=> false, 'message' => 'Cập nhật thất bại'];
+        $sql = "UPDATE san_pham_de_xuat SET TrangThai = ?, GhiChu = ? WHERE MaDeXuat = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssi",$status, $content, $id);
+        $stmt->execute();
+        return ['success' => true, 'message' => 'Cập nhật thành công'];
+    }
+
+    public function deleteComment($id) {
+        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy bình luận'];
+        $sql = 'DELETE FROM binh_luan WHERE MaBinhLuan = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        return ['success'=> true, 'message'=> 'Xóa bình luận thành công'];
+    }
+
+    public function hideComment($id, $trang_thai) {
+        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy bình luận'];
+        $sql = 'SELECT * FROM binh_luan WHERE MaBinhLuan = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) return ['success'=> false, 'message'=> 'Không tìm thấy bình luận'];
+        $sql = 'UPDATE binh_luan SET TrangThai = ? WHERE MaBinhLuan = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('si', $trang_thai, $id);
+        $stmt->execute();
+        return ['success'=> true,'message'=> 'Cập nhật trạng thái thành công'];
+    }
+
+    public function repComment($id, $content) {
+        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy bình luận'];
+        $sql = 'UPDATE binh_luan SET PhanHoi = ? WHERE MaBinhLuan = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('si', $content, $id);
+        $stmt->execute();
+        return ['success'=> true,'message'=> 'Phản hồi thành công'];
+    }
+
+    public function deleteReview($id) {
+        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy đánh giá'];
+        $sql = 'DELETE FROM danh_gia WHERE MaDanhGia = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        return ['success'=> true, 'message'=> 'Xóa đánh giá thành công'];
+    }
+
+    public function hideReview($id, $trang_thai) {
+        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy đánh giá'];
+        $sql = 'SELECT TrangThai FROM danh_gia WHERE MaDanhGia = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) return ['success'=> false, 'message'=> 'Không tìm thấy đánh giá'];
+        $sql = 'UPDATE danh_gia SET TrangThai = ? WHERE MaDanhGia = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('si', $trang_thai, $id);
+        $stmt->execute();
+        return ['success'=> true,'message'=> 'Cập nhật trạng thái thành công'];
+    }
+
+    public function repReview($id, $content) {
+        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy đánh giá'];
+        $sql = 'UPDATE danh_gia SET PhanHoi = ? WHERE MaDanhGia = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('si', $content, $id);
+        $stmt->execute();
+        return ['success'=> true,'message'=> 'Phản hồi thành công'];
+    }
+
+    private function proposeInfo() {
+        $sql = "SELECT * FROM san_pham_de_xuat";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();   
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row;
+        }
+        return $result;
     }
 
     private function productInfo() {
