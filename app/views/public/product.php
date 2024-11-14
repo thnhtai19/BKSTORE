@@ -1,4 +1,30 @@
 <?php
+session_start();
+
+$idsp = $_GET['id'];
+if($idsp == ''){
+    header("Location: 404");
+    exit;
+}
+
+$data = [
+    'ID_SP' => $idsp
+];
+$jsonData = json_encode($data);
+$url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/api/product/info';
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Content-Type: application/json",
+    "Content-Length: " . strlen($jsonData)
+]);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+curl_close($ch);
+
 function renderStars($sao)
 {
     $maxStars = 5;
@@ -12,8 +38,11 @@ function renderStars($sao)
     }
     return $output;
 }
-?>
 
+function format_currency($number) {
+    return number_format($number, 0, ',', '.') . 'đ';
+}
+?>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -25,7 +54,8 @@ function renderStars($sao)
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/public/css/client.css">
-    <title>Chi tiết sản phẩm | BKSTORE</title>
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
+    <title><?=$data['ten']?> | BKSTORE</title>
 </head>
 
 <body class="bg-gray-100">
@@ -37,64 +67,62 @@ function renderStars($sao)
             <main class="container max-w-screen-1200 mx-auto min-h-screen pt-16 pb-20 lg:pb-10 px-1 lg:px-0">
                 <div class="pt-6 pb-2 w-full gap-2 items-center hidden lg:flex">
                     <div class="text-lg text-black font-bold">
-                        Dế Mèn Phiêu Lưu Ký - Tái Bản 2020
+                        <?=$data['ten']?>
                     </div>
                     <div class="flex text-base items-center">
-                        <?php echo renderStars(sao: 4); ?>
+                        <?php echo renderStars($data['so_sao_trung_binh']); ?>
                     </div>
                     <div class="text-sm">
-                        195 đánh giá
+                        <?=count($data['danh_sach_danh_gia'])?> đánh giá
                     </div>
                 </div>
                 <hr>
                 <div class="block gap-3 w-full pt-4 lg:flex">
-                    <div class="w-full h-110 lg:w-2/5">
-                        <div
-                            class="swiper-container-product-detail h-full bg-white p-2 overflow-hidden relative rounded-t-lg lg:rounded-lg">
-                            <div class="swiper-wrapper h-full">
+                    <div class="w-full lg:w-2/5">
+                    <div
+                        class="swiper-container-product-detail bg-white p-2 overflow-hidden relative rounded-t-lg lg:rounded-lg"
+                        style="height: 460px">
+                        <div class="swiper-wrapper h-full">
+                            <?php
+                            $banners = $data['hinh'];
+                            foreach ($banners as $banner) {
+                            ?>
                                 <div
-                                    class="swiper-slide-product-detail h-full bg-white flex items-center justify-center rounded-lg overflow-hidden">
-                                    <img class="h-full object-contain" src="/public/image/book1.webp" alt="1">
+                                    class="swiper-slide-product-detail bg-white flex items-center justify-center rounded-lg overflow-hidden">
+                                    <img class="h-full object-contain" src="<?=$banner?>" alt="1">
                                 </div>
-                                <div
-                                    class="swiper-slide-product-detail h-full bg-white flex items-center justify-center rounded-lg overflow-hidden">
-                                    <img class="h-full object-contain" src="/public/image/book1.webp" alt="2">
-                                </div>
-                                <div
-                                    class="swiper-slide-product-detail h-full bg-white flex items-center justify-center rounded-lg overflow-hidden">
-                                    <img class="h-full object-contain" src="/public/image/book1.webp" alt="3">
-                                </div>
-                            </div>
-                            <div
-                                class="swiper-button-pr-prev absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full hover:bg-gray-700 z-10">
-                                &#10094;
-                            </div>
-                            <div
-                                class="swiper-button-pr-next absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full hover:bg-gray-700 z-10">
-                                &#10095;
-                            </div>
+                            <?php } ?>
                         </div>
+                        <div
+                            class="swiper-button-pr-prev absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full hover:bg-gray-700 z-10">
+                            &#10094;
+                        </div>
+                        <div
+                            class="swiper-button-pr-next absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-600 text-white p-2 rounded-full hover:bg-gray-700 z-10">
+                            &#10095;
+                        </div>
+                    </div>
                     </div>
                     <div class="flex-1 h-110">
                         <div
                             class="w-full h-full bg-white p-3 pr-4 pl-4 flex flex-col justify-between rounded-b-lg lg:rounded-lg">
                             <div class="pt-6 pb-2 w-full gap-2 items-center block lg:hidden">
                                 <div class="text-lg text-black font-bold">
-                                    Dế Mèn Phiêu Lưu Ký - Tái Bản 2020
+                                    <?=$data['ten']?>
                                 </div>
                                 <div class="flex text-base items-center">
-                                    <?php echo renderStars(sao: 4); ?>
+                                    <?php echo renderStars($data['so_sao_trung_binh']); ?>
                                 </div>
                                 <div class="text-sm">
-                                    195 đánh giá
+                                    <?=count($data['danh_sach_danh_gia'])?> đánh giá
                                 </div>
                                 <div class="flex gap-2 items-center pt-4 pb-4">
                                     <div class="font-bold text-2xl text-custom-blue items-center">
-                                        42.500đ
+                                        <?=format_currency($data['gia_sau_giam_gia'])?>
                                     </div>
                                     <div class="text-gray-600 items-center">
                                         <del>
-                                            50.000đ
+                                            <?=format_currency($data['gia_san_pham'])?>
                                         </del>
                                     </div>
                                     <div class="bg-custom-background text-white text-sm font-bold p-1 rounded-lg">
@@ -110,59 +138,59 @@ function renderStars($sao)
                                     <div class="text-sm w-1/2">
                                         <div class="flex gap-1">
                                             <div>Thể loại:</div>
-                                            <div class="font-bold">Văn học</div>
+                                            <div class="font-bold"><?=$data['thong_tin_chi_tiet']['the_loai']?></div>
                                         </div>
                                         <div class="flex gap-1 pt-2">
                                             <div>Nhà xuất bản:</div>
-                                            <div class="font-bold">NXB Kim Đồng</div>
+                                            <div class="font-bold"><?=$data['thong_tin_chi_tiet']['nha_xuat_ban']?></div>
                                         </div>
                                         <div class="flex gap-1 pt-2">
                                             <div>Năm xuất bản:</div>
-                                            <div class="font-bold">2020</div>
+                                            <div class="font-bold"><?=$data['thong_tin_chi_tiet']['nam_xuat_ban']?></div>
                                         </div>
                                         <div class="flex gap-1 pt-2">
                                             <div>Kích thước:</div>
-                                            <div class="font-bold">19 x 13 cm</div>
+                                            <div class="font-bold"><?=$data['thong_tin_chi_tiet']['kich_thuoc']?></div>
                                         </div>
                                     </div>
                                     <div class="text-sm flex-1">
                                         <div class="flex gap-2">
                                             <div>Tác giả:</div>
-                                            <div class="font-bold">Tô Hoài</div>
+                                            <div class="font-bold"><?=$data['thong_tin_chi_tiet']['tac_gia']?></div>
                                         </div>
                                         <div class="flex gap-1 pt-2">
                                             <div>Hình thức:</div>
-                                            <div class="font-bold">Bìa mềm</div>
+                                            <div class="font-bold"><?=$data['thong_tin_chi_tiet']['hinh_thuc']?></div>
                                         </div>
                                         <div class="flex gap-1 pt-2">
                                             <div>Ngôn ngữ:</div>
-                                            <div class="font-bold">Tiếng việt</div>
+                                            <div class="font-bold"><?=$data['thong_tin_chi_tiet']['ngon_ngu']?></div>
                                         </div>
                                         <div class="flex gap-1 pt-2">
                                             <div>Số trang:</div>
-                                            <div class="font-bold">200</div>
+                                            <div class="font-bold"><?=$data['thong_tin_chi_tiet']['so_trang']?></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="flex gap-1 pt-1 items-center text-sm">
                                     <div class="flex text-lg items-center">
-                                        <?php echo renderStars(sao: 4); ?>
+                                        <?php echo renderStars($data['so_sao_trung_binh']); ?>
                                     </div>
                                     <div class="flex gap-2">
                                         <div>
-                                            195 đánh giá
+                                            <?=count($data['danh_sach_danh_gia'])?> đánh giá
                                         </div>
                                         <div>|</div>
-                                        <div>Đã bán 500</div>
+                                        <div>Đã bán <?=$data['so_luong_da_ban']?></div>
                                     </div>
                                 </div>
                                 <div class="flex gap-2 items-center pt-4">
                                     <div class="font-bold text-2xl text-custom-blue items-center">
-                                        42.500đ
+                                        <?=format_currency($data['gia_sau_giam_gia'])?>
                                     </div>
                                     <div class="text-gray-600 items-center">
                                         <del>
-                                            50.000đ
+                                            <?=format_currency($data['gia_san_pham'])?>
                                         </del>
                                     </div>
                                     <div class="bg-custom-background text-white text-sm font-bold p-1 rounded-lg">
@@ -174,43 +202,56 @@ function renderStars($sao)
                                 </div>
                             </div>
                             <div>
-                                <div class="pb-6 gap-2 items-center hidden lg:flex">
-                                    <div class="text-base items-center text-gray-600">
-                                        Số lượng:
-                                    </div>
-                                    <div class="flex items-center space-x-2">
-                                        <button
-                                            class="bg-custom-background rounded-lg w-6 h-6 flex items-center justify-center text-white font-bold transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95"
-                                            id="decreaseBtn">
-                                            -
-                                        </button>
-                                        <input type="number" id="quantity" value="1" min="1"
-                                            class="text-center w-16 border border-gray-300 rounded-lg" readonly>
-                                        <button
-                                            class="bg-custom-background rounded-lg w-6 h-6 flex items-center justify-center text-white font-bold transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95"
-                                            id="increaseBtn">
-                                            +
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="flex gap-2 h-14 items-center">
-                                    <div
-                                        class="bg-custom-background rounded-lg h-full flex flex-col justify-center w-2/3 items-center font-bold text-white cursor-pointer active:shadow-lg">
-                                        Mua ngay
-                                    </div>
-                                    <div
-                                        class="flex-1 border-2 border-custom-blue text-custom-blue h-full flex flex-col lg:flex-row justify-center items-center rounded-lg font-bold lg:gap-2 cursor-pointer">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" class="text-custom-blue">
-                                            <path d="M6 2H2v2h2l3.6 7.59L7.2 20H20v-2H8.4l1.6-3.2h8.8l1.2-6H6z"></path>
-                                            <circle cx="8" cy="20" r="2"></circle>
-                                            <circle cx="16" cy="20" r="2"></circle>
-                                        </svg>
-                                        <div>
-                                            Thêm vào giỏ
+                                <?php
+                                    if($data['so_luong_ton_kho'] > 0) {
+                                ?>
+                                    <div class="pb-6 gap-2 items-center hidden lg:flex">
+                                        <div class="text-base items-center text-gray-600">
+                                            Số lượng:
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button
+                                                class="bg-custom-background rounded-lg w-6 h-6 flex items-center justify-center text-white font-bold transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95"
+                                                id="decreaseBtn">
+                                                -
+                                            </button>
+                                            <input type="number" id="quantity" value="1" min="1"
+                                                class="text-center w-16 border border-gray-300 rounded-lg" readonly>
+                                            <button
+                                                class="bg-custom-background rounded-lg w-6 h-6 flex items-center justify-center text-white font-bold transition-transform duration-200 ease-in-out transform hover:scale-105 active:scale-95"
+                                                id="increaseBtn">
+                                                +
+                                            </button>
                                         </div>
                                     </div>
+                                <?php } ?>
+                                <div class="flex gap-2 h-14 items-center">
+                                    <?php
+                                        if($data['so_luong_ton_kho'] < 1){
+                                    ?>
+                                        <div
+                                            class="flex-1 border-2 border-gray-400 text-gray-400 h-full flex flex-col lg:flex-row justify-center items-center rounded-lg font-bold lg:gap-2 cursor-pointer">
+                                            Sản phẩm tạm hết hàng
+                                        </div>
+                                    <?php } else { ?> 
+                                        <div
+                                            class="bg-custom-background rounded-lg h-full flex flex-col justify-center w-2/3 items-center font-bold text-white cursor-pointer active:shadow-lg">
+                                            Mua ngay
+                                        </div>
+                                        <div id="add-to-cart"
+                                            class="flex-1 border-2 border-custom-blue text-custom-blue h-full flex flex-col lg:flex-row justify-center items-center rounded-lg font-bold lg:gap-2 cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" class="text-custom-blue">
+                                                <path d="M6 2H2v2h2l3.6 7.59L7.2 20H20v-2H8.4l1.6-3.2h8.8l1.2-6H6z"></path>
+                                                <circle cx="8" cy="20" r="2"></circle>
+                                                <circle cx="16" cy="20" r="2"></circle>
+                                            </svg>
+                                            <div>
+                                                Thêm vào giỏ
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -225,19 +266,9 @@ function renderStars($sao)
                             Mô tả sản phẩm
                         </div>
                         <div class="pt-4">
-                            <p class="pb-2"><strong>Dế Mèn Phiêu Lưu Ký - Tái Bản 2020</strong></p>
+                            <p class="pb-2"><strong><?=$data['ten']?></strong></p>
                             <p class="text-justify text-gray-700">
-                                Ấn bản minh họa màu đặc biệt của Dế Mèn phiêu lưu ký, với phần tranh ruột được in hai
-                                màu xanh - đen ấn tượng, gợi không khí đồng thoại.
-                                “Một con dế đã từ tay ông thả ra chu du thế giới tìm những điều tốt đẹp cho loài người.
-                                Và con dế ấy đã mang tên tuổi ông đi cùng trên những chặng đường phiêu lưu đến với cộng
-                                đồng những con vật trong văn học thế giới, đến với những xứ sở thiên nhiên và văn hóa
-                                của các quốc gia khác. Dế Mèn Tô Hoài đã lại sinh ra Tô Hoài Dế Mèn, một nhà văn trẻ mãi
-                                không già trong văn chương...” - Nhà phê bình Phạm Xuân Nguyên
-                                “Ông rất hiểu tư duy trẻ thơ, kể với chúng theo cách nghĩ của chúng, lí giải sự vật theo
-                                lô gích của trẻ. Hơn thế, với biệt tài miêu tả loài vật, Tô Hoài dựng lên một thế giới
-                                gần gũi với trẻ thơ. Khi cần, ông biết đem vào chất du ký khiến cho độc giả nhỏ tuổi vừa
-                                hồi hộp theo dõi, vừa thích thú khám phá.” - TS Nguyễn Đăng Điệp
+                                <?=$data['mo_ta']?>
                             </p>
                         </div>
                     </div>
@@ -249,7 +280,17 @@ function renderStars($sao)
                         </div>
                         <div class="swiper-container-product overflow-hidden">
                             <div class="swiper-wrapper">
-                                <?php for ($i = 0; $i < 10; $i++) { $heart = true ?>
+                                <?php
+                                    // $moithem = $data['danh_sach_san_pham'];
+                                    // foreach ($moithem as $item) {
+                                    //     $id = $item['id'];
+                                    //     $ten = $item['ten'];
+                                    //     $hinh = $item['hinh'][0];
+                                    //     $gia_goc = $item['gia_goc'];
+                                    //     $gia_sau_giam_gia = $item['gia_sau_giam_gia'];
+                                    //     $so_sao_trung_binh = $item['so_sao_trung_binh'];
+                                    //     $thich = $item['thich'];
+                                ?>
                                     <div class="swiper-slide-product overflow-hidden">
                                         <div class="bg-white p-2 rounded-lg shadow-lg w-full">
                                             <div class="h-44 flex justify-center">
@@ -279,7 +320,8 @@ function renderStars($sao)
                                             </div>
                                         </div>
                                     </div>
-                                <?php } ?>
+                                <?php //} ?>
+
                             </div>
                         </div>
                     </div>
@@ -291,28 +333,53 @@ function renderStars($sao)
                                 Đánh giá sản phẩm
                             </div>
                             <div class="flex flex-col gap-2 pt-2" id="reviewsContainer">
-                                <?php for ($i = 0; $i < 1; $i++) { ?>
-                                    <div class="review-item pt-2 pb-2 <?php echo $i >= 5 ? 'hidden' : ''; ?>">
+                                <?php
+                                    $danhgia = $data['danh_sach_danh_gia'];
+                                    $i = 0;
+                                    $totalReviews = count($danhgia); 
+                                    $initialVisibleReviews = 5; 
+                                    if($totalReviews < $initialVisibleReviews){
+                                        $initialVisibleReviews = $totalReviews;
+                                    }
+
+                                    foreach ($danhgia as $item) {
+                                        $id = $item['id'];
+                                        $ngay_danh_gia = $item['ngay_danh_gia'];
+                                        $so_sao = $item['so_sao'];
+                                        $noi_dung = $item['noi_dung'];
+                                        $avatar = $item['avatar'];
+                                        $ten = $item['ten'];
+                                        if ($avatar == null) {
+                                            $avatar = "https://ui-avatars.com/api/?background=random&name=" . urlencode($ten);
+                                        }
+                                ?>
+                                    <div class="review-item pt-2 pb-2 <?php echo $i >= $initialVisibleReviews ? 'hidden' : ''; ?>">
                                         <div class="flex gap-2 text-gray-700">
-                                            <img src="https://ui-avatars.com/api/?background=random&name=Thanh+Tai"
-                                                alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
+                                            <img src="<?=$avatar?>" alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
                                             <div>
                                                 <div class="flex gap-2 items-center">
-                                                    <div class="text-base font-bold">Trần Thành Tài</div>
-                                                    <div class="text-xs">10/10/2024 00:38</div>
+                                                    <div class="text-base font-bold"><?=$ten?></div>
+                                                    <div class="text-xs"><?=$ngay_danh_gia?></div>
                                                 </div>
                                                 <div class="flex items-center">
-                                                    <?php echo renderStars(sao: 4); ?>
+                                                    <?php echo renderStars($so_sao); ?>
                                                 </div>
                                                 <div class="text-sm pt-1 pb-1 text-justify">
-                                                    Sau khi mua và đọc qua, mình thấy sách có chất lượng in tốt, giấy dày và
-                                                    bìa cứng cáp. Nội dung rất cuốn hút, mang lại nhiều giá trị và kiến thức
-                                                    bổ ích. Đây là một cuốn sách đáng để sở hữu, cả về hình thức lẫn nội
-                                                    dung.
+                                                    <?=$noi_dung?>
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr>
+                                        <?php 
+                                        if ($i < max($totalReviews - 1, $initialVisibleReviews - 1)): 
+                                        ?>
+                                            <hr>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php $i++;} ?>
+                                <?php if(count($danhgia) == 0){ ?>
+                                    <div class="flex flex-col items-center justify-center gap-2 pt-2 ">
+                                        <img src="/public/image/icons8-sad-100.png" alt="sad-icon" class="w-8 h-8">
+                                        <div class="text-center text-gray-500">Chưa có đánh giá nào</div>
                                     </div>
                                 <?php } ?>
                                 <div class="flex justify-between pt-2">
@@ -327,40 +394,65 @@ function renderStars($sao)
                             <div class="text-base text-black font-bold">
                                 Nhận xét và Bình luận
                             </div>
-                            <div class="pt-4">
+                            <div class="pt-4 <?php if($_SESSION["email"] == '') echo "hidden"?>">
                                 <div class="flex gap-2">
-                                    <img src="https://ui-avatars.com/api/?background=random&name=Thanh+Tai" alt="avt"
+                                    <img src="<?=$_SESSION["Avatar"]?>" alt="avt"
                                         class="w-10 h-10 rounded-full cursor-pointer ml-3">
-                                    <textarea class="rounded-lg h-20 bg-white w-full p-2 border resize-none text-sm"
+                                    <textarea id="content-cmt" class="rounded-lg h-20 bg-white w-full p-2 border resize-none text-sm"
                                         placeholder="Xin mời để lại nhận xét và bình luận."></textarea>
                                     <button
-                                        class="flex items-center justify-center rounded-lg border border-gray-300 p-2 text-sm h-10 hover:bg-gray-100 transition duration-300">
+                                        class="flex items-center justify-center rounded-lg border border-gray-300 p-2 text-sm h-10 hover:bg-gray-100 transition duration-300" onclick="sendcmt()">
                                         <img src="/public/image/send.png" alt="send" class="h-6 w-6">
                                     </button>
                                 </div>
                             </div>
-                            <div class="flex flex-col gap-2 pt-2">
-                                <?php for ($i = 0; $i < 1; $i++) { ?>
-                                    <div class="comment-item pt-2 pb-2 <?php echo $i >= 5 ? 'hidden' : ''; ?>">
+                            <div class="flex flex-col gap-2 pt-2" id="commentContainer">
+                                <?php
+                                    $danhgia = $data['danh_sach_binh_luan'];
+                                    $i = 0;
+                                    $totalReviews = count($danhgia);
+                                    $initialVisibleReviews = 5;
+                                    if($totalReviews < $initialVisibleReviews){
+                                        $initialVisibleReviews = $totalReviews;
+                                    }
+
+                                    foreach ($danhgia as $item) {
+                                        $id = $item['id'];
+                                        $ngay_binh_luan = $item['ngay_binh_luan'];
+                                        $noi_dung = $item['noi_dung'];
+                                        $avatar = $item['avatar'];
+                                        $ten = $item['ten'];
+                                        if ($avatar == null) {
+                                            $avatar = "https://ui-avatars.com/api/?background=random&name=" . urlencode($ten);
+                                        }
+                                ?>
+                                    <div class="comment-item pt-2 pb-2 <?php echo $i >= $initialVisibleReviews ? 'hidden' : ''; ?>">
                                         <div class="pt-2 pb-2">
                                             <div class="flex gap-2 text-gray-700">
-                                                <img src="https://ui-avatars.com/api/?background=random&name=Thanh+Tai"
+                                                <img src="<?=$avatar?>"
                                                     alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
                                                 <div>
                                                     <div class="flex gap-2 items-center">
-                                                        <div class="text-base font-bold">Trần Thành Tài</div>
-                                                        <div class="text-xs">10/10/2024 00:38</div>
+                                                        <div class="text-base font-bold"><?=$ten?></div>
+                                                        <div class="text-xs"><?=$ngay_binh_luan?></div>
                                                     </div>
                                                     <div class="text-sm pt-1 text-justify">
-                                                        Sau khi mua và đọc qua, mình thấy sách có chất lượng in tốt, giấy dày và
-                                                        bìa cứng cáp. Nội dung rất cuốn hút, mang lại nhiều giá trị và kiến thức
-                                                        bổ ích. Đây là một cuốn sách đáng để sở hữu, cả về hình thức lẫn nội
-                                                        dung.
+                                                        <?=$noi_dung?>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr>
+                                        <?php 
+                                        if ($i < max($totalReviews - 1, $initialVisibleReviews - 1)): 
+                                        ?>
+                                            <div class="pt-4"><hr></div> 
+                                        <?php endif; ?>
+                                    </div>
+                                <?php $i++;} ?>
+                                <?php if(count($danhgia) == 0){ ?>
+                                    <div class="flex flex-col items-center justify-center gap-2 pt-2 " id="NoCmt">
+                                        <img src="/public/image/icons8-sad-100.png" alt="sad-icon" class="w-8 h-8">
+                                        <div class="text-center text-gray-500">Chưa có bình luận nào</div>
                                     </div>
                                 <?php } ?>
                                 <div class="flex justify-between pt-2">
@@ -373,29 +465,14 @@ function renderStars($sao)
                         </div>
                     </div>
                     <div class="flex-1">
-                        <div class="w-full rounded-lg shadow-lg bg-white p-6">
-                            <div class="text-base text-black font-bold">
-                                Tin tức về sản phẩm
-                            </div>
-                            <div class="flex flex-col pt-4 pb-2 gap-4">
-                                <?php for ($i = 0; $i < 1; $i++) { ?>
-                                    <div class="flex gap-4">
-                                        <img src="/public/image/tin1.jpg" alt="'tin1" class="rounded-lg w-32">
-                                        <a href="#" class="text-sm text-gray-700 hover:underline">
-                                            iphone 13 có còn đáng mua trong năm 2024? Đánh giá và trải nghiệm sau 5 năm sử
-                                            dụng.
-                                        </a>
-                                    </div>
-                                    <div class="flex gap-4">
-                                        <img src="/public/image/tin2.jpg" alt="'tin1" class="rounded-lg w-32">
-                                        <a href="#" class="text-sm text-gray-700 hover:underline">
-                                            Top những điện thoại màn hình 6.1 inch đáng mua nhất hiện nay
-                                        </a>
-                                    </div>
-                                <?php } ?>
-
-                            </div>
+                    <div class="w-full rounded-lg shadow-lg bg-white p-6">
+                        <div class="text-base text-black font-bold">
+                            Tin tức về sản phẩm
                         </div>
+                        <div id="news-container" class="flex flex-col pt-4 pb-2 gap-4">
+                            
+                        </div>
+                    </div>
                     </div>
                 </div>
             </main>
@@ -403,6 +480,136 @@ function renderStars($sao)
         <?php $page = 1;
         include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
+    <script>
+        fetch('api/system/inforList')
+            .then(response => response.json())
+            .then(data => {
+                const newsContainer = document.getElementById('news-container');
+                newsContainer.innerHTML = data.map(item => `
+                    <div class="flex gap-4">
+                        <img src="${item.AnhMinhHoa[0].LinkAnh}" alt="Tin tức" class="rounded-lg w-32">
+                        <a href="/news/detail?id=${item.MaTinTuc}" class="text-sm text-gray-700 hover:underline">${item.TieuDe}</a>
+                    </div>
+                `).join('');
+            })
+            .catch(error => console.error('Có lỗi khi gọi API:', error));
+
+        
+        document.getElementById('add-to-cart').addEventListener('click', function() {
+        let productId = <?= json_encode($data['id']); ?>;
+        let quantity = document.getElementById('quantity').value
+        const data = {
+            id: productId,
+            quantity: quantity
+        };
+        fetch('api/user/cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success == true) {
+                notyf.success('Thêm vào sản phẩm vào giỏ hàng thành công!');
+
+                CountCart();
+            } else {
+                notyf.error('Thêm vào sản phẩm vào giỏ hàng thất bại!');
+            }
+        })
+        .catch(error => {
+            notyf.error('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng!');
+        });
+    });
+    </script>
+    <script>
+        function addCommentToTop(commentData) {
+            const reviewsContainer = document.getElementById('commentContainer');
+
+            const comments = reviewsContainer.getElementsByClassName('comment-item').length;
+            
+
+            const newComment = document.createElement('div');
+            newComment.classList.add('comment-item', 'pt-2', 'pb-2');
+
+            newComment.innerHTML = `
+                <div class="pt-2 pb-2">
+                    <div class="flex gap-2 text-gray-700">
+                        <img src="${commentData.avatar}" 
+                            alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
+                        <div>
+                            <div class="flex gap-2 items-center">
+                                <div class="text-base font-bold">${commentData.ten}</div>
+                                <div class="text-xs">${commentData.ngay_binh_luan}</div>
+                            </div>
+                            <div class="text-sm pt-1 text-justify">
+                                ${commentData.noi_dung}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (comments > 0) {
+                const div = document.createElement('div');
+                div.classList.add('pt-4');
+                const hr = document.createElement('hr');
+                div.appendChild(hr);
+                newComment.appendChild(div);
+            }
+
+            reviewsContainer.insertAdjacentElement('afterbegin', newComment);
+        }
+
+        function sendcmt() {
+            const content = document.getElementById('content-cmt').value;
+
+            if (content.trim() === '') {
+                notyf.error('Vui lòng nhập nội dung cần bình luận!');
+                return;
+            }
+
+            const data = { ID_SP: <?= json_encode($data['id']); ?>, NoiDung: content};
+
+            fetch('api/user/comment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    notyf.success('Thêm bình luận thành công!');
+
+                    const currentDate = new Date();
+                    const day = currentDate.getDate();
+                    const month = currentDate.getMonth() + 1;
+                    const year = currentDate.getFullYear();
+                    const formattedDate = `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
+
+                    addCommentToTop({ten: <?= json_encode($_SESSION["Ten"])?>, avatar: <?= json_encode($_SESSION["Avatar"])?>, noi_dung: content, ngay_binh_luan: formattedDate}); 
+                    document.getElementById('content-cmt').value = '';
+
+                    try {
+                        document.getElementById('NoCmt').classList.add('hidden');
+                    } catch (error) {}
+
+                } else {
+                    notyf.error('Thêm bình luận thất bại!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                notyf.error('Đã xảy ra lỗi khi viết bình luận!');
+            });
+        }
+
+    </script>
+    <script src="/public/js/notyf.min.js"></script>
     <script src="/public/js/product.js"></script>
     <script src="/public/js/heart.js"></script>
     <script src="/public/js/numbox.js"></script>

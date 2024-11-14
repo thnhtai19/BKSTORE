@@ -60,8 +60,8 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                 </div>
                 <div class="relative ml-4 cursor-pointer pr-1" onclick="goCart()">
                     <img src="/public/image/cart.png" alt="Shopping Cart" class="w-8 h-8">
-                    <span
-                        class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    <span id="cart-count" 
+                        class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"></span>
                 </div>
                 <div class="relative">
                     <img src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION["Ten"]); ?>"
@@ -78,18 +78,33 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                             </div>
                             <div class="text-xs text-gray-500 pt-2">Quản lý tài khoản</div>
                             <ul class="pt-2 text-sm">
-                                <a href="/my/profile" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
-                                    <img src="/public/image/user.png" alt="user" class="h-6">
-                                    <div>Thông tin tài khoản</div>
-                                </a>
-                                <a href="/my/order" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
-                                    <img src="/public/image/his.png" alt="his" class="h-6">
-                                    <div>Lịch sử mua hàng</div>
-                                </a>
-                                <a href="/my/account" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
-                                    <img src="/public/image/pw.png" alt="warranty" class="h-6">
-                                    <div>Thay đổi mật khẩu</div>
-                                </a>
+                                <li>
+                                    <a href="/my/account" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
+                                        <img src="/public/image/user.png" alt="user" class="h-6">
+                                        <div>Thông tin tài khoản</div>
+                                    </a>
+                                </li>
+                                <?php if($_SESSION['Role'] == 'Admin'){ ?>
+                                    <li>
+                                        <a href="/admin" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
+                                            <img src="/public/image/icons8-admin-96.png" alt="user" class="h-6">
+                                            <div>Quản lý hệ thống</div>
+                                        </a>
+                                    </li>
+                                <?php } else { ?>
+                                    <li>
+                                        <a href="/my/order" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
+                                            <img src="/public/image/his.png" alt="his" class="h-6">
+                                            <div>Lịch sử mua hàng</div>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+                                <li>
+                                    <a href="/my/account" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
+                                        <img src="/public/image/pw.png" alt="warranty" class="h-6">
+                                        <div>Thay đổi mật khẩu</div>
+                                    </a>
+                                </li>
                                 <li class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center"
                                     id="logout-btn">
                                     <img src="/public/image/exit.png" alt="exit" class="h-6">
@@ -121,6 +136,34 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
 </div>
 <script>
     try {
+        function CountCart(){
+            let countCart = 0;
+
+            fetch('api/user/cart')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        countCart = data.danh_sach_san_pham.length;
+                    } else {
+                        countCart = 0;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching cart items:', error);
+                    countCart = 0;
+                })
+                .finally(() => {
+                    const cartCountElement = document.getElementById('cart-count');
+                    if (cartCountElement) {
+                        cartCountElement.textContent = countCart;
+                    }
+                });
+        }
+
+        CountCart();
+
+        
+
         function goCart() {
             window.location.href = "/cart"
         }
