@@ -7,7 +7,7 @@ $model = new OrderService($db->conn);
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'GET') {
+if ($method === 'POST') {
     $id = $_SESSION["uid"];
     if (!isset($id)) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
@@ -17,7 +17,7 @@ if ($method === 'GET') {
     $data = json_decode($json, true);
     if (isset($data['ID_DonHang'])) $ID_DonHang = $data['ID_DonHang'];
     else $ID_DonHang = '';
-    $info = $model->getInfo($id, $ID_DonHang);
+    $info = $model->getInfo($_SESSION["uid"], $ID_DonHang);
     if ($info['success'] == false) echo json_encode(['success' => false, 'message' => $info['message']]);
     else echo json_encode(['success' => true, 'info' => $info['info']]);
 }

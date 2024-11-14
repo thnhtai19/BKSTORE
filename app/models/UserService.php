@@ -91,7 +91,7 @@ class UserService {
         }
 
         // Đường dẫn đầy đủ đến tệp ảnh
-        $relativeAvatarPath = "public/image/$id/" . basename($avatarFileName);
+        $relativeAvatarPath = "public/image/user/$id/" . basename($avatarFileName);
     
         // Lưu đường dẫn và tệp ảnh vào cơ sở dữ liệu
         $avatar_sql = "UPDATE `login` SET `Avatar` = ? WHERE `UID` = ?";
@@ -111,6 +111,8 @@ class UserService {
     }
 
     public function setReview($uid, $ID_SP, $SoSao, $NoiDung) {
+        $rac = $this->buyed($uid, $ID_SP);
+        if ($rac['success'] == false) return $rac;
         if ($this->product->checkProduct($ID_SP) == false) return ['success'=> false,'message'=> 'Không tìm thấy sản phẩm'];
         $date = $this->support->getDateNow();
         $sql_check = "SELECT * FROM danh_gia WHERE UID = ? AND ID_SP = ?";
@@ -143,6 +145,39 @@ class UserService {
         $stmt_insert->bind_param("iiss", $uid, $ID_SP, $NoiDung, $date);
         $stmt_insert->execute();
         return ['success'=> true, 'message'=> 'Bình luận thành công'];
+    }
+
+    public function like($uid, $ID_SP) {
+        if ($this->product->checkProduct($ID_SP) == false) return ['success'=> false, 'message'=> 'Không tìm thấy sản phẩm'];
+        $sql = "INSERT INTO thich (`UID`, ID_SP) VALUES (?, ?)";
+        $stmt_like = $this->conn->prepare($sql);
+        $stmt_like->bind_param("ii", $uid, $ID_SP);
+        $stmt_like->execute();
+        return ["success"=> true, "message"=> "Đã thích sản phẩm"];
+    }
+
+    public function unlike($uid, $ID_SP) {
+        if ($this->product->thich($ID_SP) == false) return ['success'=> false, 'message'=> 'Chưa thích sản phẩm này!'];
+        $sql = "DELETE FROM thich WHERE `UID` = ? AND `ID_SP` = ?";
+        $stmt_like = $this->conn->prepare($sql);
+        $stmt_like->bind_param("ii", $uid, $ID_SP);
+        $stmt_like->execute();
+        return ["success"=> true, "message"=> "Bỏ thích thành công"];
+    }
+
+    private function buyed ($uid, $ID_SP) {
+        $sql = "SELECT TrangThai 
+                FROM don_hang D 
+                JOIN gom G ON G.ID_DonHang = D.ID_DonHang 
+                WHERE G.ID_SP = ? AND D.UID = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $uid, $ID_SP);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) return ["success"=> false,"message"=> "Người dùng chưa mua sản phẩm"];
+        $result = $result->fetch_assoc();
+        if ($result['TrangThai'] != 'Đã giao hàng') return ['success'=> false,'message'=> 'Người dùng chưa mua sản phẩm'];
+        return ['success'=> true, 'message' => $result['TrangThai']];
     }
 
     private function setUser($uid, $sex, $phone, $addr) {

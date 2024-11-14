@@ -15,6 +15,8 @@ class ProductService {
         $review = $this->average_star($id);
         $result['danh_sach_danh_gia'] = $review['danh_sach_danh_gia'];
         $result['danh_sach_binh_luan'] = $this->getComment($id);
+        $product = $this->get();
+        $result['danh_sach_san_pham'] = $this->getList(array_slice($product, -10));
         return $result;
     }
 
@@ -41,7 +43,8 @@ class ProductService {
                 'so_trang' => $product['SoTrang']
             ],
             'gia_san_pham' => $product['Gia'],
-            'gia_sau_giam_gia' => $product['Gia'] * (1 - $product['TyLeGiamGia']),
+            'gia_sau_giam_gia' => round($product['Gia'] * (1 - $product['TyLeGiamGia']), 2),
+            'ty_le_giam_gia' => $product['TyLeGiamGia'] * 100 . '%',
             'so_luong_ton_kho' => $product['SoLuongKho'],
             'mo_ta' => $product['MoTa'],
         ];
@@ -57,7 +60,7 @@ class ProductService {
                 'ten' => $entry['TenSP'],
                 'hinh' => $this->getImage($id),
                 'gia_goc' => $entry['Gia'],
-                'gia_sau_giam_gia' => $entry['Gia'] * (1 - $entry['TyLeGiamGia']),
+                'gia_sau_giam_gia' => round($entry['Gia'] * (1 - $entry['TyLeGiamGia']), 2),
                 'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_binh']
             ];
             switch ($trang_thai) {
@@ -92,7 +95,7 @@ class ProductService {
             }
             $result[] = [
                 'the_loai' => $type,
-                'san_pham' => $this->getList($product)
+                'san_pham' => $this->getList(array_slice($product, -10))
             ];
         }
         return $result;
@@ -293,7 +296,7 @@ class ProductService {
         return $data['total'] ?? 0;
     }
 
-    private function thich($id) {
+    public function thich($id) {
         if (isset($_SESSION["uid"])) {
             $uid = $_SESSION["uid"];
             $sql = "SELECT 1 FROM thich WHERE ID_SP = ? AND `UID` = ?";

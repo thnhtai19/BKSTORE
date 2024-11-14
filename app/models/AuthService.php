@@ -170,7 +170,8 @@ class AuthService {
     private function updatePassword($email, $newPassword) {
         $sql = "UPDATE `login` SET `Password` = ? WHERE Email = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", password_hash($newPassword, PASSWORD_DEFAULT), $email);
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $stmt->bind_param("ss", $hashedPassword, $email);
         $stmt->execute();
     }
 
