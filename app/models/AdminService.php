@@ -53,8 +53,30 @@ class AdminService {
         return ['success' => true, 'user-list' => $users];
     }
 
-    public function banUser($uid) {
+    public function updateUser($UID, $name, $email, $phone, $sex, $addr, $status) {
+        $sql1 = "UPDATE LOGIN SET Ten = ?, Email = ? WHERE UID = ?";
+        $stmt1 = $this->conn->prepare($sql1);
+        $stmt1->bind_param("ssi", $name, $email, $UID);
+        $stmt1->execute();
         
+        if ($stmt1->affected_rows === -1) {
+            return ["success" => false, "message" => "Error updating LOGIN table"];
+        }
+        
+        $stmt1->close();
+
+        // Second update statement
+        $sql2 = "
+        UPDATE KHACH_HANG SET
+            GioiTinh = ?, SDT = ?, DiaChi = ?, TrangThai = ?
+        WHERE UID = ?";
+        $stmt2 = $this->conn->prepare($sql2);
+        $stmt2->bind_param("ssssi", $sex, $phone, $addr, $status, $UID);
+        $stmt2->execute();
+        if ($stmt2->affected_rows === -1) {
+            return ["success" => false, "message" => "Error updating KHACH_HANG table"];
+        }
+        return ["success" => true, "message" => "Sửa thông tin thành công"];
     }
 
     public function product() {
@@ -100,5 +122,77 @@ class AdminService {
         }
         return $this->support->sort($product_info);
     }
+    public function updateProductInfo($ID_SP, $TenSp, $MoTa, $Gia, $TyLeGiamGia, $SoLuongKho, $NXB, $KichThuoc, $SoTrang, $PhanLoai, $TuKhoa, $HinhThuc, $TacGia, $NgonNgu, $NamXB) {
+        $sql = "
+        UPDATE SAN_PHAM SET
+        TenSP = ?,
+        MoTa = ?,
+        Gia = ?,
+        TyLeGiamGia = ?,
+        SoLuongKho = ?,
+        NXB = ?,
+        KichThuoc = ?,
+        SoTrang = ?,
+        PhanLoai = ?,
+        TuKhoa = ?,
+        HinhThuc = ?,
+        TacGia = ?,
+        NgonNgu = ?,
+        NamXB = ?
+        WHERE ID_SP = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    if (!$stmt) {
+        // Check for SQL error in prepare statement
+        return ["success" => false, "message" => "Database error: " . $this->conn->error];
+    }
+
+    $stmt->bind_param("ssidississsssii", $TenSp, $MoTa, $Gia, $TyLeGiamGia, $SoLuongKho, $NXB, $KichThuoc, $SoTrang, $PhanLoai, $TuKhoa, $HinhThuc, $TacGia, $NgonNgu, $NamXB, $ID_SP);
+    $stmt->execute();
+
+    $sqlDelete = "DELETE FROM hinh_anh WHERE ID_SP = ?";
+    $stmtDelete = $this->conn->prepare($sqlDelete);
+    $stmtDelete->bind_param("i", $ID_SP);
+    $stmtDelete->execute();
+    return ["success" => true, "message" => "Cập nhật thông tin sản phẩm thành công"];
+
+    }
+
+    public function updateProductImage ($Anh, $ID_SP) {
+        $relativeAvatarPath = "public/image/$ID_SP/" . basename($Anh);
+        // $sqlDelete = "DELETE FROM hinh_anh WHERE ID_SP = ?";
+        // $stmtDelete = $this->conn->prepare($sqlDelete);
+        // $stmtDelete->bind_param("i", $ID_SP);
+        // $stmtDelete->execute();
+
+        $sqlInsert = "INSERT INTO hinh_anh (Anh, ID_SP) VALUES (?, ?)";
+        $stmtInsert = $this->conn->prepare($sqlInsert);
+        $stmtInsert->bind_param("si", $relativeAvatarPath, $ID_SP);
+        $stmtInsert->execute();
+        return ["success" => true, "message" => "Cập nhật thành công"];
+    }
+
+    public function deleteProduct($ID_SP) {
+        $sql = "DELETE FROM SAN_PHAM WHERE ID_SP = ?";
+        $stmt = $this->conn->prepare($sql);
+    
+        if ($stmt === false) {
+            error_log("Prepare failed: (" . $this->conn->errno . ") " . $this->conn->error);
+            return ["success" => false, "message" => "Prepare failed"];
+        }
+    
+        $stmt->bind_param("i", $ID_SP);
+        $stmt->execute();
+    
+        if ($stmt->affected_rows === 0) {
+            $stmt->close();
+            return ["success" => false, "message" => "Xóa sản phẩm không thành công"];
+        }
+    
+        $stmt->close();
+        return ["success" => true, "message" => "Xóa sản phẩm thành công"];
+    }
+    
 }
 ?>

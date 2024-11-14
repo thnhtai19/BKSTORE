@@ -35,7 +35,7 @@ CREATE TABLE KHACH_HANG (
     GioiTinh ENUM('Male', 'Female'),
     SDT TEXT,
     DiaChi TEXT,
-    TrangThai INT,
+    TrangThai ENUM('Đang hoạt động', 'Bị cấm') DEFAULT 'Đang hoạt động',
     FOREIGN KEY (UID) REFERENCES LOGIN(UID)
 );
 
@@ -73,6 +73,7 @@ CREATE TABLE SAN_PHAM_DE_XUAT (
 	TrangThai ENUM("Đang chờ duyệt", "Đã duyệt", "Đã từ chối") DEFAULT "Đang chờ duyệt",
     GhiChu TEXT,
     UID INT,
+    NgayYeuCau TEXT,
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
 
@@ -84,7 +85,7 @@ CREATE TABLE DANH_GIA (
     NgayDanhGia TEXT NOT NULL,
     SoSao INT CHECK (SoSao BETWEEN 1 AND 5),
     NoiDung TEXT,
-    TrangThai ENUM("Đang hiện", "Đang ẩn"),
+    TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện",
     PhanHoi TEXT,
     FOREIGN KEY (ID_SP) REFERENCES SAN_PHAM(ID_SP),
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
@@ -98,7 +99,7 @@ CREATE TABLE BINH_LUAN (
     NgayBinhLuan TEXT NOT NULL,
     NoiDung TEXT,
     PhanHoi TEXT DEFAULT "",
-    TrangThai ENUM("Đang hiện", "Đang ẩn"),
+    TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện",
     FOREIGN KEY (ID_SP) REFERENCES SAN_PHAM(ID_SP),
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
@@ -122,7 +123,7 @@ CREATE TABLE DON_HANG (
     TrangThai ENUM("Chờ xác nhận", "Đã xác nhận", "Đang vận chuyển", "Đã giao hàng", "Đã hủy") DEFAULT "Chờ xác nhận",
     SDT TEXT,
     DiaChi TEXT,
-    ThanhToan ENUM("Chưa thanh toán", "Đã thanh toán", "Huỷ thanh toán"), -- Trang thai thanh toan
+    ThanhToan ENUM("Chưa thanh toán", "Đã thanh toán", "Huỷ thanh toán") DEFAULT "Chưa thanh toán", -- Trang thai thanh toan
     TenNguoiNhan TEXT,
     PhuongThucThanhToan ENUM('COD', 'Bank'),  -- Consistent single quotes
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID),
@@ -163,7 +164,7 @@ CREATE TABLE THONG_BAO (
     MaThongBao INT AUTO_INCREMENT PRIMARY KEY,
     UID INT,
     NoiDung TEXT,
-    TrangThai ENUM('Unread', 'Read'),
+    TrangThai ENUM('Unread', 'Read') DEFAULT "Unread",
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
 
@@ -174,7 +175,7 @@ CREATE TABLE TIN_TUC (
     ThoiGianTao TEXT,
     NoiDung TEXT,
     TuKhoa VARCHAR(255),
-    TrangThai ENUM("Đang hiện", "Đang ẩn"),
+    TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện",
     MoTa TEXT
 );
 
@@ -192,7 +193,7 @@ CREATE TABLE BANNER (
     Image VARCHAR(255),
     IdSP INT,
     MoTa TEXT,
-    TrangThai ENUM("Đang hiện", "Đang ẩn"),
+    TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện",
     FOREIGN KEY (IdSP) REFERENCES SAN_PHAM(ID_SP)
 );
 
@@ -220,7 +221,7 @@ CREATE TABLE THONG_TIN_LIEN_HE (
     Loai VARCHAR(255),
     ThongTin TEXT,
     HinhAnh VARCHAR(255),
-    TrangThai ENUM("Đang hiện", "Đang ẩn")
+    TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện"
 );
 
 -- Bảng MANG_XA_HOI
@@ -228,5 +229,5 @@ CREATE TABLE MANG_XA_HOI (
     MaMXH INT AUTO_INCREMENT PRIMARY KEY,
     HinhAnh VARCHAR(255),
     LienKet VARCHAR(255),
-    TrangThai ENUM("Đang hiện", "Đang ẩn")
+    TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện"
 );
