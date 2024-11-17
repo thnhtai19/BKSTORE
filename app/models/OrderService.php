@@ -265,16 +265,12 @@ class OrderService {
         $rac = $this->checkProduct($ID_SP, $quantity);
         if ($rac['success'] == false) return false;
         $num = $rac['so_luong'];
-        if ($num > $quantity) {
+        if ($num >= $quantity) {
             $num -= $quantity;
             $sql = 'UPDATE san_pham SET SoLuongKho = ? WHERE ID_SP = ?';
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param('ii', $num, $ID_SP);
             $stmt->execute();
-        }
-        else {
-            // delete product
-
         }
         return true;
     }
