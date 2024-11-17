@@ -36,20 +36,6 @@
                     <div>Quản lý đơn hàng</div>
                 </div>
             </a>
-            <a href="/admin/review"
-                class="rounded-lg <?php echo ($page == 5) ? 'bg-black' : ''; ?> w-full px-4 py-2 flex items-center transition-transform duration-300 ease-in-out">
-                <div class="flex gap-2 m-1 transform transition-transform duration-300 ease-in-out hover:translate-x-2">
-                    <img src="/public/image/icons8-review-100.png" alt="home" class="w-6 h-6">
-                    <div>Quản đánh giá</div>
-                </div>
-            </a>
-            <a href="/admin/comment"
-                class="rounded-lg <?php echo ($page == 6) ? 'bg-black' : ''; ?> w-full px-4 py-2 flex items-center transition-transform duration-300 ease-in-out">
-                <div class="flex gap-2 m-1 transform transition-transform duration-300 ease-in-out hover:translate-x-2">
-                    <img src="/public/image/comment-icon8.png" alt="home" class="w-6 h-6">
-                    <div>Quản lý bình luận</div>
-                </div>
-            </a>
             <a href="/admin/request"
                 class="rounded-lg <?php echo ($page == 7) ? 'bg-black' : ''; ?> w-full px-4 py-2 flex items-center transition-transform duration-300 ease-in-out">
                 <div class="flex gap-2 m-1 transform transition-transform duration-300 ease-in-out hover:translate-x-2">

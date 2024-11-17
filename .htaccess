@@ -1,10 +1,13 @@
 RewriteEngine On
 Options -Indexes
 
+RewriteRule ^test$ /app/views/client/test.php [L]
+
 #CLIENT ROUTERS FRONTEND
 RewriteRule ^$ /app/views/public/home.php [L]
 RewriteRule ^product$ /app/views/public/product.php [L]
 RewriteRule ^contact$ /app/views/public/contact.php [L]
+RewriteRule ^category$ /app/views/public/category.php [L]
 
 #USER ROUTERS FRONTEND
 RewriteRule ^cart$ /app/views/client/cart.php [L]
@@ -46,8 +49,11 @@ RewriteRule ^my/support$ /app/views/client/profile/support.php [L]
 #PUBLIC ROUTERS FRONTEND
 RewriteRule ^introduction$ /app/views/public/introduction.php [L]
 RewriteRule ^news$ /app/views/public/news.php [L]
+RewriteRule ^news/detail$ /app/views/public/news_detail.php [L]
 RewriteRule ^promotion$ /app/views/public/promotion.php [L]
 RewriteRule ^comment$ /app/views/public/comment.php [L]
+RewriteRule ^like$ /app/views/public/product_like.php [L]
+
 
 
 
@@ -120,6 +126,9 @@ RewriteRule ^api/admin/comment/rep$ /app/controllers/admin/repComment.php [L]
 RewriteRule ^api/admin/review/delete$ /app/controllers/admin/deleteReview.php [L]
 RewriteRule ^api/admin/review/hide$ /app/controllers/admin/hideReview.php [L]
 RewriteRule ^api/admin/review/rep$ /app/controllers/admin/repReview.php [L]
+RewriteRule ^api/admin/updateProduct$ /app/controllers/admin/updateProduct.php [L]
+RewriteRule ^api/admin/updateUser$ /app/controllers/admin/updateUser.php [L]
+RewriteRule ^api/admin/deleteProduct$ /app/controllers/admin/deleteProduct.php [L]
 
 #PRODUCT ROUTERS BACKEND
 RewriteRule ^api/product/info$ /app/controllers/product/info.php [L]

@@ -89,5 +89,22 @@ class support {
         $day = date('j');
         return $day % 2 === 0;
     }
+
+    public function deleteDirectory($dir) {
+        if (!is_dir($dir)) {
+            return;
+        }
+    
+        $files = array_diff(scandir($dir), array('.', '..'));
+        foreach ($files as $file) {
+            $filePath = "$dir/$file";
+            if (is_dir($filePath)) {
+                deleteDirectory($filePath);
+            } else {
+                unlink($filePath);
+            }
+        }
+        rmdir($dir);
+    }
 }
 ?>

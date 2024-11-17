@@ -1,75 +1,98 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Góp Ý - Book Store</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
+    <link href="/public/css/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/client.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
+    <title>Tài khoản | BKSTORE</title>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100">
+    <div class="h-screen">
+        <header id="header-content" class="sticky top-0 z-50">
+            <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
+        </header>
+        <div class="overflow-y-auto">
+            <main class="container max-w-screen-1200 min-h-screen mx-auto pt-16 pb-20 px-1 lg:px-0">
+                <div class="flex gap-4 pt-6">
+                    <div class="w-1/4 bg-white hidden lg:block flex flex-col text-gray-800 p-4 shadow-md rounded-lg ">
+                        <nav>
+                            <ul>
+                                <li class="mb-4">
+                                    <a href="#" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
+                                        Trang chủ
+                                    </a>
+                                </li>
+                                <li class="mb-4">
+                                    <a href="/my/account" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                        Tài khoản của bạn
+                                    </a>
+                                </li>
+                                <li class="mb-4">
+                                    <a href="/my/order" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                        Lịch sử mua hàng
+                                    </a>
+                                </li>
+                                <li class="mb-4">
+                                    <a href="/my/support" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                        Hỗ trợ
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block py-2 px-4 text-gray-800 rounded hover:bg-red-500 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                        Thoát tài khoản
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
 
-    <!-- Header -->
-    <header class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Book Store</h1>
-            <nav>
-                <a href="index.html" class="mx-2 hover:underline">Trang Chủ</a>
-                <a href="about.html" class="mx-2 hover:underline">Giới Thiệu</a>
-                <a href="books.html" class="mx-2 hover:underline">Sách</a>
-                <a href="contact.html" class="mx-2 hover:underline">Liên Hệ</a>
-                <a href="feedback.html" class="mx-2 hover:underline">Góp Ý</a>
-            </nav>
+                    <div class="w-full lg:w-3/4 rounded-lg space-y-6">
+                        <button id="likeButton">Like Product</button>
+                        <p id="responseMessage"></p>
+                    </div>
+                </div>
+
+
+            </main>
         </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="bg-cover bg-center h-64 flex items-center justify-center" style="background-image: url('https://example.com/feedback-background.jpg');">
-        <h2 class="text-4xl text-white font-bold bg-black bg-opacity-50 p-4 rounded">Góp Ý</h2>
-    </section>
-
-    <!-- Feedback Form -->
-    <section class="container mx-auto py-8">
-        <h3 class="text-3xl font-semibold mb-6 text-center">Chúng Tôi Luôn Lắng Nghe Bạn</h3>
-        <p class="text-lg text-center text-gray-700 mb-8">
-            Nếu bạn có bất kỳ góp ý hoặc ý kiến nào, vui lòng chia sẻ với chúng tôi. Mỗi ý kiến của bạn đều rất quý giá và giúp chúng tôi cải thiện dịch vụ.
-        </p>
+        <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
+    </div>
+    <!-- <script src="/public/js/client.js"></script> -->
+    <script src="/public/js/notyf.min.js"></script>
+    <!-- <script src="/public/js/profile.js"></script> -->
+    
+    <script>
+        // Check if user is logged in
         
-        <form class="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto">
-            <!-- Họ và tên -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-medium mb-2" for="name">Họ và Tên</label>
-                <input type="text" id="name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập họ và tên của bạn">
-            </div>
+        document.getElementById('likeButton').addEventListener('click', () => {
             
-            <!-- Email -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-medium mb-2" for="email">Email</label>
-                <input type="email" id="email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập email của bạn">
-            </div>
-            
-            <!-- Số điện thoại -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-medium mb-2" for="phone">Số Điện Thoại</label>
-                <input type="tel" id="phone" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập số điện thoại của bạn">
-            </div>
-            
-            <!-- Nội dung góp ý -->
-            <div class="mb-4">
-                <label class="block text-gray-700 font-medium mb-2" for="feedback">Nội Dung Góp Ý</label>
-                <textarea id="feedback" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập góp ý của bạn tại đây"></textarea>
-            </div>
-            
-            <!-- Submit Button -->
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition duration-300">Gửi Góp Ý</button>
-        </form>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-blue-600 text-white py-4">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2023 Book Store. Mọi quyền được bảo lưu.</p>
-        </div>
-    </footer>
-
+            fetch(`${window.location.origin}/api/product/like`, {  // Replace with your actual API path
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'  // Include credentials if you're using sessions
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.success) {
+                    document.getElementById('responseMessage').innerText = 'Đã thích sản phẩm';
+                } else {
+                    document.getElementById('responseMessage').innerText = data.message || 'Có lỗi xảy ra';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('responseMessage').innerText = 'Có lỗi xảy ra khi thực hiện yêu cầu';
+            });
+        });
+    </script>
+</body>
+</html> 
 </body>
 </html>
+

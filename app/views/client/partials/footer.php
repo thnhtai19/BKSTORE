@@ -1,5 +1,5 @@
 <footer
-    class="flex items-center justify-between bg-white border-t font-medium text-gray-500 text-center p-4 w-full fixed bottom-0 block md:hidden rounded-t-xl shadow-lg text-xs">
+    class="flex items-center justify-between bg-white border-t font-medium text-gray-500 text-center p-4 w-full fixed bottom-0 block md:hidden rounded-t-xl shadow-lg text-xs z-40">
     <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 1) ? 'text-custom-blue' : ''; ?>" onclick="goHome()">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
