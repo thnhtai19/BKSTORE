@@ -42,19 +42,19 @@
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Từ khoá trang web:</label>
-                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded">
+                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập từ khoá">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Client ID PayOS:</label>
-                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded">
+                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập Client ID PayOS">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">API Key PayOS:</label>
-                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded">
+                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập API Key PayOS">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Checksum Key PayOS:</label>
-                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded">
+                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Checksum Key PayOS">
                                     </div>
                                 </div>
                                 <div class="flex justify-end">

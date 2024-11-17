@@ -95,7 +95,7 @@ class ProductService {
             }
             $result[] = [
                 'the_loai' => $type,
-                'san_pham' => $this->getList(array_slice($product, -10))
+                'san_pham' => $this->getList($product)
             ];
         }
         return $result;
