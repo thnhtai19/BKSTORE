@@ -300,7 +300,7 @@ function format_currency($number) {
                             </div>
                         <?php } ?>
                     </div>
-                    <a class="flex justify-center pb-6 cursor-pointer <?php if(count(value: $san_pham) < 11) echo "hidden";?>" href="/category?keyword=<?=urlencode($the_loai)?>">
+                    <a class="flex justify-center pb-6 cursor-pointer <?php if(count($san_pham) < 11) echo "hidden";?>" href="/category?keyword=<?=urlencode($the_loai)?>">
                         <div class="bg-white py-1 px-16 rounded-md font-bold text-custom-blue border-custom-blue">Xem thêm</div>
                     </a>
                     <?php } ?>
