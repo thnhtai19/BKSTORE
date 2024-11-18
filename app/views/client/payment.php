@@ -7,16 +7,17 @@
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/client.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <title>Thanh toán đơn hàng | BKSTORE</title>
 </head>
 
 <body class="bg-gray-100">
-    <div id="loading" class="fixed inset-0 flex items-center justify-center bg-white z-50">
+    <!-- <div id="loading" class="fixed inset-0 flex items-center justify-center bg-white z-50">
         <div class="relative w-14 h-14">
             <img src="/public/image/logo.png" alt="Loading" class="absolute inset-0 w-8 h-8 mx-auto my-auto">
             <div class="loader border-8 rounded-full animate-spin"></div>
         </div>
-    </div>
+    </div> -->
     <div class="h-screen">
         <header id="header-content" class="sticky top-0 z-50">
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
@@ -43,20 +44,20 @@
                     </div>
                     <div class="bg-white rounded-lg border w-full p-4 pl-6 pr-6">
                         <div class="flex gap-5 items-center">
-                            <input type="text" class="border-b-2 border-gray-300 flex-1 p-2 focus:outline-none focus:border-blue-700" placeholder="Nhập mã giảm giá">
-                            <button class="bg-gray-200 rounded-lg px-4 py-2">Áp dụng</button>
+                            <input id="magiamgia" type="text" class="border-b-2 border-gray-300 flex-1 p-2 focus:outline-none focus:border-blue-700" placeholder="Nhập mã giảm giá">
+                            <button class="bg-gray-200 rounded-lg px-4 py-2" onclick="checkdiscount()">Áp dụng</button>
                         </div>
                         <div class="flex justify-between text-gray-500 pt-6">
                             <div>Số lượng sản phẩm</div>
-                            <div class="text-black">1</div>
+                            <div class="text-black" id="totalCount"></div>
                         </div>
                         <div class="flex justify-between text-gray-500 pt-4">
                             <div>Tiền hàng (Tạm tính)</div>
-                            <div class="text-black">100.000đ</div>
+                            <div class="text-black" id="tienhang"></div>
                         </div>
                         <div class="flex justify-between text-gray-500 pt-4">
                             <div>Giảm giá</div>
-                            <div class="text-black">0đ</div>
+                            <div class="text-black" id="giamgia">0đ</div>
                         </div>
                         <div class="flex justify-between text-gray-500 pt-4 pb-4">
                             <div>Phí vận chuyển</div>
@@ -65,7 +66,7 @@
                         <hr>
                         <div class="flex justify-between pt-4">
                             <div class="font-bold">Tổng tiền</div>
-                            <div class="text-black">100.000đ</div>
+                            <div class="text-black" id="tongtien"></div>
                         </div>
                     </div>
                     <div class="pb-2 pt-6 font-bold text-custom-blue">PHƯƠNG THỨC THANH TOÁN</div>
@@ -92,19 +93,19 @@
                                 <div class="text-gray-600 mb-2">
                                     Tên khách hàng
                                 </div>
-                                <input type="text" class="border rounded-lg w-full p-2" value="Trần Thành Tài" disabled>
+                                <input id="tenkhachhang" type="text" class="border rounded-lg w-full p-2" disabled>
                             </div>
                             <div class="w-1/2">
                                 <div class="text-gray-600 mb-2">
                                     Số điện thoại
                                 </div>
-                                <input type="text" class="border rounded-lg w-full p-2" value="0800000000" disabled>
+                                <input id="sdt" type="text" class="border rounded-lg w-full p-2" disabled>
                             </div>
                         </div>
                         <div class="text-gray-600 mb-2 mt-2">
                             Địa chỉ nhận hàng
                         </div>
-                        <input type="text" class="border rounded-lg w-full p-2" value="Trường đại học Bách Khoa TP HCM" disabled>
+                        <input id="diachi" type="text" class="border rounded-lg w-full p-2" disabled>
                     </div>
                 </div>
             </main>
@@ -116,7 +117,7 @@
                         <div class="font-bold text-custom-blue" id="totalAmount">Tạm tính: 0đ</div>
                         <div class="text-xs">Đã bao gồm các khoản phí khác</div>
                     </div>
-                    <button class="bg-custom-background text-white font-bold rounded-lg p-2">Thanh toán</button>
+                    <button class="bg-custom-background text-white font-bold rounded-lg p-2" onclick="BuyOrder()">Thanh toán</button>
                 </div>
             </div>
         </div>
@@ -124,6 +125,130 @@
     </div>
     <script src="/public/js/payment.js"></script>
     <script src="/public/js/client.js"></script>
+    <script src="/public/js/notyf.min.js"></script>
+    <script>
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+
+        function checkdiscount() {
+            const magiamgia = document.getElementById('magiamgia').value
+            const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
+            const method = document.querySelector('input[name="payment"]:checked')?.id || null;
+
+
+            if(!magiamgia){
+                return
+            }
+            fetch('/api/order/sale', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    MaGiamGia: magiamgia,
+                    tienHang: customerInfo.tongtien,
+                    phiVanChuyen: 0,
+                    PhuongThucThanhToan: method,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    notyf.error('Đã xảy ra lỗi khi kiểm tra mã giảm giá!');
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success === true) {
+                    const so_tien_da_giam = data.so_tien_da_giam;
+                    const tong_tien_phai_tra = data.tong_tien_phai_tra;
+
+                    const tongtienDiv1 = document.getElementById('tongtien');
+                    tongtienDiv1.innerText = `${tong_tien_phai_tra.toLocaleString()}đ`;
+
+                    const totalAmountDiv1 = document.getElementById('totalAmount');
+                    totalAmountDiv1.innerText = `Tạm tính: ${tong_tien_phai_tra.toLocaleString()}đ`;
+
+                    const tongtienDiv2 = document.getElementById('giamgia');
+                    tongtienDiv2.innerText = `${so_tien_da_giam.toLocaleString()}đ`;
+
+
+                    notyf.success('Áp dụng mã giảm giá thành công!');
+                    return;
+                } else {
+                    notyf.error(data.message);
+                    return;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+
+        function BuyOrder(){
+            const method = document.querySelector('input[name="payment"]:checked')?.id || null;
+            const magiamgia = document.getElementById('magiamgia').value
+            const sdt = document.getElementById('sdt').value
+            const diachi = document.getElementById('diachi').value
+            const ten = document.getElementById('tenkhachhang').value
+            const selectedProducts = JSON.parse(localStorage.getItem('selectedProducts'));
+            let list = '';
+            selectedProducts.forEach(item => {
+                list += item.id + ', '
+            });
+            list = list.replace(/,\s*$/, "");
+
+
+            if(method === 'cod'){
+                fetch('/api/order/order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        PhuongThucThanhToan: 'COD',
+                        MaGiamGia: magiamgia,
+                        SDT: sdt,
+                        DiaChi: diachi,
+                        TenNguoiNhan: ten,
+                        product_list: list
+                    }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        notyf.error('Đã xảy ra lỗi khi đặt hàng!');
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success === true) {
+                        localStorage.removeItem('selectedProducts');
+
+                        notyf.success('Đặt hàng thành công!');
+                        setTimeout(() => {
+                            window.location.href = '/order/success'
+                        }, 2000);
+                    } else {
+                        notyf.error(data.message);
+                        return;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            }
+        }
+
+
+    </script>
 </body>
 
 </html>

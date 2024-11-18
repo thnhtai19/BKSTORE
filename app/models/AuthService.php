@@ -39,6 +39,17 @@ class AuthService {
         if ($avatar == null) {
             $_SESSION["Avatar"] = "https://ui-avatars.com/api/?background=random&name=" . urlencode($user['Ten']);
         }
+
+        $stmt = $this->conn->prepare("SELECT * FROM `khach_hang` WHERE `UID` = ?");
+        $stmt->bind_param("s", $user['UID']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $_SESSION["SDT"] = $row['SDT'];
+            $_SESSION["DiaChi"] = $row['DiaChi'];
+        }
+
+
         return [
             'success' => true,
             'message' => 'Đăng nhập thành công',

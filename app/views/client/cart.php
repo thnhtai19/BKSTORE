@@ -65,7 +65,7 @@ if(!isset($_SESSION["email"])){
                         <div class="font-bold text-custom-blue" id="totalAmount">Tạm tính: 0đ</div>
                         <div class="text-xs">Chưa bao gồm mã giảm giá</div>
                     </div>
-                    <button class="bg-custom-background text-white font-bold rounded-lg p-2">Mua ngay</button>
+                    <button id="orderButton" class="bg-custom-background text-white font-bold rounded-lg p-2">Mua ngay</button>
                 </div>
             </div>
         </div>

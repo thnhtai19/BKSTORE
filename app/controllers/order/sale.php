@@ -7,7 +7,7 @@ $model = new OrderService($db->conn);
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'GET') {
+if ($method === 'POST') {
     if (!isset($_SESSION["uid"])) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
