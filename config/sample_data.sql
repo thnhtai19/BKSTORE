@@ -97,11 +97,11 @@ INSERT INTO `HINH_ANH` (`ID_HinhAnh`, `Anh`, `ID_SP`) VALUES
 
 INSERT INTO SAN_PHAM_DE_XUAT (TenSP, NoiDung, TrangThai, GhiChu, UID, NgayYeuCau)
 VALUES
-('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', "Đang chờ duyệt", 'Đang chờ duyệt', 1, '12/11/2024'),
-('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', "Đã duyệt", 'Đã được duyệt', 2, '12/11/2024'),
-('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', "Đã từ chối", 'Không được duyệt', 3, '12/11/2024'),
-('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', "Đang chờ duyệt", 'Đang chờ duyệt', 6, '12/11/2024'),
-('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', "Đã duyệt", 'Đã được duyệt', 7, '12/11/2024');
+('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', "Đang chờ duyệt", 'Đang chờ duyệt', 1, '12-11-2024'),
+('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', "Đã duyệt", 'Đã được duyệt', 2, '12-11-2024'),
+('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', "Đã từ chối", 'Không được duyệt', 3, '12-11-2024'),
+('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', "Đang chờ duyệt", 'Đang chờ duyệt', 6, '12-11-2024'),
+('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', "Đã duyệt", 'Đã được duyệt', 7, '12-11-2024');
 
 INSERT INTO DANH_GIA (ID_SP, UID, NgayDanhGia, SoSao, NoiDung, TrangThai, PhanHoi)
 VALUES
@@ -131,10 +131,10 @@ VALUES
 INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, TrangThai, SDT, DiaChi, TenNguoiNhan, ThanhToan, PhuongThucThanhToan)
 VALUES
 (1, '20-10-2023', 300000.00, 'GIAM50K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank'),
-(2, '19-10-2023', 150000.00, NULL,'Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
+(2, '19-10-2023', 150000.00, 'GIAM50%','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
 (3, '18-10-2023', 250000.00, 'GIAM10K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank'),
-(6, '17-10-2023', 100000.00, NULL,'Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
-(7, '16-10-2023', 200000.00, 'GIAMCOD','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank');
+(6, '17-10-2023', 100000.00, 'FREESHIP','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
+(7, '16-10-2023', 200000.00, 'FREESHIP','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank');
 
 INSERT INTO GOM (ID_DonHang, ID_SP, SoLuong)
 VALUES

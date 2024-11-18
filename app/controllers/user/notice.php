@@ -11,7 +11,7 @@ if ($method === 'GET') {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
-    $product = $model->getProduct();
+    $product = $model->getNotice($_SESSION["uid"]);
     echo json_encode($product);
 }
 else {

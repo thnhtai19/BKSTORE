@@ -17,7 +17,9 @@ if ($method === 'POST') {
     else $TenSP = '';
     if (isset($data['NoiDung'])) $NoiDung = $data['NoiDung'];
     else $NoiDung = '';
-    echo json_encode($model->proposeProduct($TenSP, $NoiDung, $_SESSION["uid"]));
+    if (isset($data['GhiChu'])) $GhiChu = $data['GhiChu'];
+    else $GhiChu = '';
+    echo json_encode($model->proposeProduct($TenSP, $NoiDung, $_SESSION["uid"], $GhiChu));
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

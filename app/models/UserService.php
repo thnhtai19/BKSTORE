@@ -149,10 +149,12 @@ class UserService {
 
     public function like($uid, $ID_SP) {
         if ($this->product->checkProduct($ID_SP) == false) return ['success'=> false, 'message'=> 'Không tìm thấy sản phẩm'];
-        $sql = "INSERT INTO thich (`UID`, ID_SP) VALUES (?, ?)";
-        $stmt_like = $this->conn->prepare($sql);
-        $stmt_like->bind_param("ii", $uid, $ID_SP);
-        $stmt_like->execute();
+        if ($this->product->thich($ID_SP) == false) {
+            $sql = "INSERT INTO thich (`UID`, ID_SP) VALUES (?, ?)";
+            $stmt_like = $this->conn->prepare($sql);
+            $stmt_like->bind_param("ii", $uid, $ID_SP);
+            $stmt_like->execute();
+        }
         return ["success"=> true, "message"=> "Đã thích sản phẩm"];
     }
 
@@ -163,6 +165,29 @@ class UserService {
         $stmt_like->bind_param("ii", $uid, $ID_SP);
         $stmt_like->execute();
         return ["success"=> true, "message"=> "Bỏ thích thành công"];
+    }
+
+    public function getNotice($uid) {
+        $sql = "SELECT NoiDung FROM thong_bao WHERE `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $uid);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row['NoiDung'];
+        }
+        $this->updateStatusNotice($uid);
+        return ['sucess' => true, 'notice_list' => $result];
+    }
+
+    private function updateStatusNotice($uid) {
+        $sql = 'UPDATE thong_bao SET TrangThai = ? WHERE `UID` = ? AND TrangThai = ?';
+        $stmt = $this->conn->prepare($sql);
+        $rac1 = 'Read';
+        $rac2 = 'Unread';
+        $stmt->bind_param('sis', $rac1, $uid, $rac2);
+        $stmt->execute();
     }
 
     private function buyed ($uid, $ID_SP) {
