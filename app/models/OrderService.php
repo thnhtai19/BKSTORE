@@ -166,8 +166,9 @@ class OrderService {
             $stmt->bind_param("isisssss", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan);
             $stmt->execute();
         }
-        $this->addProductToOrder(mysqli_insert_id($this->conn), $uid, $product_list);
-        return ['success' => true, 'message' => 'Đặt hàng thành công'];
+        $id_don_hang = mysqli_insert_id($this->conn);
+        $this->addProductToOrder($id_don_hang, $uid, $product_list);
+        return ['success' => true, 'message' => 'Đặt hàng thành công', 'ma_don_hang' => $id_don_hang];
     }
 
     public function setOrderStatus($ID_DonHang, $ThanhToan) {
