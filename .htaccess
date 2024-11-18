@@ -88,6 +88,7 @@ RewriteRule ^api/user/review$ /app/controllers/user/review.php [L]
 RewriteRule ^api/user/comment$ /app/controllers/user/comment.php [L]
 RewriteRule ^api/user/like$ /app/controllers/user/like.php [L]
 RewriteRule ^api/user/unlike$ /app/controllers/user/unlike.php [L]
+RewriteRule ^api/user/notice$ /app/controllers/user/notice.php [L]
 
 #CART ROUTERS BACKEND
 RewriteCond %{REQUEST_METHOD} GET
@@ -104,6 +105,7 @@ RewriteRule ^api/order/info$ /app/controllers/order/info.php [L]
 RewriteRule ^api/order/order$ /app/controllers/order/order.php [L]
 RewriteRule ^api/order/update$ /app/controllers/order/update.php [L]
 RewriteRule ^api/order/list$ /app/controllers/order/list.php [L]
+RewriteRule ^api/order/profile$ /app/controllers/order/profile.php [L]
 
 #SYSTEM ROUTERS BACKEND
 RewriteRule ^api/system/contact$ /app/controllers/system/contactInfo.php [L]
@@ -134,6 +136,7 @@ RewriteRule ^api/admin/deleteProduct$ /app/controllers/admin/deleteProduct.php [
 RewriteRule ^api/product/info$ /app/controllers/product/info.php [L]
 RewriteRule ^api/product/propose$ /app/controllers/product/propose.php [L]
 RewriteRule ^api/product/like$ /app/controllers/product/like.php [L]
+RewriteRule ^api/product/keyword$ /app/controllers/product/keyword.php [L]
 
 #PAYOS
 RewriteRule ^api/payment/create$ /app/controllers/payment/create.php [L]

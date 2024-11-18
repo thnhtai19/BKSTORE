@@ -1,18 +1,18 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
-require_once dirname(__DIR__, 2) . '/models/UserService.php';
+require_once dirname(__DIR__, 2) . '/models/OrderService.php';
 
 $db = new Database();
-$model = new UserService($db->conn);
+$model = new OrderService($db->conn);
 header('Content-Type: application/json');
+
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
     if (!isset($_SESSION["uid"])) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
-    $product = $model->getProduct();
-    echo json_encode($product);
+    echo json_encode($model->profile($_SESSION["uid"]));
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

@@ -19,7 +19,11 @@ class support {
 
     public function handle_charge($MaGiamGia, $TienGiam, $DieuKien, $tienHang, $phiVanChuyen, $PhuongThucThanhToan, $sex) {
         if (!$this->checkCondition($DieuKien, $sex, $PhuongThucThanhToan, $tienHang)) {
-            return ['success' => false, 'message' => 'Không thể áp mã giảm giá này cho đơn hàng'];
+            return ['success' => false, 'message' => [
+                'mesage' => 'Không thể áp mã giảm giá này cho đơn hàng', 
+                'Gioi_tinh' => $sex, 
+                'DB' => $DieuKien
+            ]];
         }
         $lastChar = substr($MaGiamGia, -1);
         switch ($lastChar) {
@@ -47,6 +51,8 @@ class support {
             case 'Tất cả':
                 return true;
             case 'Male':
+                if ($sex == $DieuKien) return true;
+                return false;
             case 'Female':
                 if ($sex == $DieuKien) return true;
                 return false;

@@ -20,10 +20,7 @@ if ($method === 'POST') {
         return;
     }
     if (isset($data['MaGiamGia'])) $MaGiamGia = $data['MaGiamGia'];
-    else {
-        echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
-        return;
-    }
+    else $MaGiamGia = '';
     if (isset($data['SDT'])) $SDT = $data['SDT'];
     else {
         echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);

@@ -153,7 +153,7 @@ class ProductService {
         return true;
     }
 
-    public function proposeProduct($TenSP, $NoiDung, $uid) {
+    public function proposeProduct($TenSP, $NoiDung, $uid, $GhiChu) {
         $sql = "SELECT * FROM san_pham_de_xuat WHERE TenSP = ? AND `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("si", $TenSP, $uid);
@@ -162,10 +162,10 @@ class ProductService {
         if ($result->num_rows > 0) {
             return ['success' => false, 'message' => 'Người dùng đã đề xuất'];
         }
-        
-        $sql = "INSERT INTO san_pham_de_xuat (TenSP, NoiDung, `UID`, TrangThai, GhiChu) VALUES (?, ?, ?, 'Pending', 'Đang chờ duyệt')";
+        $time = $this->support->getDateNow();
+        $sql = "INSERT INTO san_pham_de_xuat (TenSP, NoiDung, `UID`, GhiChu, NgayYeuCau) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssi", $TenSP, $NoiDung, $uid);
+        $stmt->bind_param("ssiss", $TenSP, $NoiDung, $uid, $GhiChu, $time);
         $stmt->execute();
         return ['success' => true, 'message' => 'Đề xuất thành công'];
     }
@@ -188,6 +188,32 @@ class ProductService {
             $product[] = $this->getProductById($id);
         }
         return ['success' => true, 'product_list' => $this->getList($product)];
+    }
+
+    public function keywork($keyword) {
+        $stmt = "SELECT ID_SP 
+                 FROM san_pham 
+                 WHERE TenSp LIKE ?
+                 OR MoTa LIKE ?
+                 OR Gia LIKE ?
+                 OR TyLeGiamGia LIKE ?
+                 OR NXB LIKE ?
+                 OR SoTrang LIKE ?
+                 OR PhanLoai LIKE ?
+                 OR TuKhoa LIKE ?
+                 OR HinhThuc LIKE ?
+                 OR TacGia LIKE ?
+                 OR NgonNgu LIKE ?
+                 OR NamXB LIKE ?";
+        $stmt = $this->conn->prepare($stmt);
+        $stmt->bind_param( 'ssssssssssss', $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $results = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $results[] = $this->getProductById($row['ID_SP']);
+        }
+        return ['success' => true, 'message' => $this->getList($results)];
     }
 
     private function getProductById($id) {
