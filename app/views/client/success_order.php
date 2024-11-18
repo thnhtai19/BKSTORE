@@ -4,6 +4,13 @@ if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();
 }
+
+$ID_DonHang = $_GET['id'];
+$method = $_GET['method'];
+if($ID_DonHang == '' || $method == ''){
+    header('Location: /404');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +39,7 @@ if(!isset($_SESSION["email"])){
                     <div class="pt-6 text-gray-700">Đơn hàng của bạn đã được đặt thành công.</div>
                     <div class="text-gray-700">Chúng tôi sẽ sớm liên hệ bạn!</div>
                     <div class="flex justify-center gap-4 pt-6">
-                        <a href="#"
+                        <a href="/my/order/detail?id=<?=$ID_DonHang?>"
                             class="px-4 bg-custom-background text-white py-2 rounded-lg hover:bg-blue-800 transition duration-300 cursor-pointer">
                             Xem chi tiết đơn
                         </a>

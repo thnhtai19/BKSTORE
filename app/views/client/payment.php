@@ -72,14 +72,14 @@
                     <div class="pb-2 pt-6 font-bold text-custom-blue">PHƯƠNG THỨC THANH TOÁN</div>
                     <div class="bg-white rounded-lg border h-18 w-full p-6 text-gray-600">
                         <div class="flex gap-4 items-center">
-                            <input type="radio" id="cod" name="payment" checked>
+                            <input type="radio" id="COD" name="payment" checked>
                             <div class="flex gap-2 items-center">
                                 <img class="h-6 w-6 object-contain" src="/public/image/cod.png" alt="1">
                                 <div>Thanh toán khi nhận hàng</div>
                             </div>
                         </div>
                         <div class="flex gap-4 pt-4">
-                            <input type="radio" id="bank" name="payment">
+                            <input type="radio" id="Bank" name="payment">
                             <div class="flex gap-2 items-center">
                                 <img class="h-6 w-6 object-contain" src="/public/image/bank.png" alt="1">
                                 <div>Chuyển khoản ngân hàng</div>
@@ -204,47 +204,40 @@
             });
             list = list.replace(/,\s*$/, "");
 
+            fetch('/api/order/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    PhuongThucThanhToan: 'COD',
+                    MaGiamGia: magiamgia,
+                    SDT: sdt,
+                    DiaChi: diachi,
+                    TenNguoiNhan: ten,
+                    product_list: list
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    notyf.error('Đã xảy ra lỗi khi đặt hàng!');
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success === true) {
+                    localStorage.removeItem('selectedProducts');
 
-            if(method === 'cod'){
-                fetch('/api/order/order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        PhuongThucThanhToan: 'COD',
-                        MaGiamGia: magiamgia,
-                        SDT: sdt,
-                        DiaChi: diachi,
-                        TenNguoiNhan: ten,
-                        product_list: list
-                    }),
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        notyf.error('Đã xảy ra lỗi khi đặt hàng!');
-                        return;
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success === true) {
-                        localStorage.removeItem('selectedProducts');
-
-                        notyf.success('Đặt hàng thành công!');
-                        setTimeout(() => {
-                            window.location.href = '/order/success'
-                        }, 2000);
-                    } else {
-                        notyf.error(data.message);
-                        return;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-
-            }
+                    window.location.href = `/order/success?id=${data.ma_don_hang}&method=${method}`
+                } else {
+                    notyf.error(data.message);
+                    return;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
 
 
