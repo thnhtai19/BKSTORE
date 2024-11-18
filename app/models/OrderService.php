@@ -403,22 +403,35 @@ class OrderService {
         }
     
         $order = $result->fetch_assoc();
-        $money = $this->sale($order['TongTien'], $order['MaGiamGia'], 0, $order['PhuongThucThanhToan']);
-        
-        if ($money['success'] === true) {
+        if ($order['MaGiamGia'] == null) {
             return [
                 'status' => true,
                 'thanh_toan' => [
                     'tong_tien' => $order['TongTien'],
-                    'so_tien_da_giam' => $money['so_tien_da_giam'],
-                    'tong_tien_phai_tra' => $money['tong_tien_phai_tra'],
+                    'so_tien_da_giam' => 0,
+                    'tong_tien_phai_tra' => $order['TongTien'],
                     'trang_thai' => $order['ThanhToan'],
                     'phuong_thuc' => $order['PhuongThucThanhToan'],
                     'ma_giam_gia' => $order['MaGiamGia'],
                 ]
             ];
         }
-        
+        else {
+            $money = $this->sale($order['TongTien'], $order['MaGiamGia'], 0, $order['PhuongThucThanhToan']);
+            if ($money['success'] === true) {
+                return [
+                    'status' => true,
+                    'thanh_toan' => [
+                        'tong_tien' => $order['TongTien'],
+                        'so_tien_da_giam' => $money['so_tien_da_giam'],
+                        'tong_tien_phai_tra' => $money['tong_tien_phai_tra'],
+                        'trang_thai' => $order['ThanhToan'],
+                        'phuong_thuc' => $order['PhuongThucThanhToan'],
+                        'ma_giam_gia' => $order['MaGiamGia'],
+                    ]
+                ];
+            }
+        }
         return ['status' => false, 'message' => $money['message']];
     }    
 
