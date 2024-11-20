@@ -265,7 +265,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                         <div class="flex items-center">
                             ${renderStars(product.SoSao)}
                         </div>
-                        <?php if($_SESSION['email']!=''){ ?>
+                        <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
                             <button class="heart-button focus:outline-none" data-product-id="${product.ID_SP}" onclick="toggleHeart(this)">
                                 <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out"
                                     xmlns="http://www.w3.org/2000/svg" fill="${product.YeuThich == 1 ? 'currentColor' : 'none'}" viewBox="0 0 24 24"

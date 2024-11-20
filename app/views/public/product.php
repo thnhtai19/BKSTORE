@@ -64,8 +64,33 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
 </head>
 
 <body class="bg-gray-100">
+    <div id="cmtModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg w-3/4 lg:w-1/4 z-50 overflow-y-auto" style="max-height: 700px">
+            <div class="flex justify-between items-start">
+                <h2 class="text-xl font-bold mb-4">Chỉnh sửa bình luận</h2>
+                <button onclick="closeModalCmt()">✕</button>
+            </div>
+            <div class="flex gap-2">
+                <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-700">Trạng thái bình luận:</label>
+                    <select id="trangthaicmt" class="mt-2 mb-4 w-full p-2 border rounded">
+                        <option value="Đang hiện">Đang hiện</option>
+                        <option value="Đã ẩn">Đã ẩn</option>
+                        <option value="Đã xoá">Đã xoá</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+                <button onclick="updateCmt()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
+                <button onclick="closeModalCmt()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="h-screen">
-        <header id="header-content" class="sticky top-0 z-50">
+        <header id="header-content" class="sticky top-0 z-40">
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
         </header>
         <div class="overflow-y-auto">
@@ -440,8 +465,17 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                                     alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
                                                 <div>
                                                     <div class="flex gap-2 items-center">
-                                                        <div class="text-base font-bold"><?=$ten?></div>
-                                                        <div class="text-xs"><?=$ngay_binh_luan?></div>
+                                                        <div>
+                                                            <div class="flex gap-2 items-center">
+                                                                <div class="text-base font-bold"><?=$ten?></div>
+                                                                <div class="text-xs"><?=$ngay_binh_luan?></div>
+                                                            </div>
+                                                        </div>
+                                                        <?php if (isset($_SESSION["Role"]) && $_SESSION["Role"] === 'Admin') { ?>
+                                                            <button onclick="OpenComment(<?=$id?>)">
+                                                                <img src="/public/image/icons8-edit-100.png" alt="edit" class="w-4 h-4">
+                                                            </button>
+                                                        <?php } ?>
                                                     </div>
                                                     <div class="text-sm pt-1 text-justify">
                                                         <?=$noi_dung?>
@@ -565,8 +599,15 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                             alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
                         <div>
                             <div class="flex gap-2 items-center">
-                                <div class="text-base font-bold">${commentData.ten}</div>
-                                <div class="text-xs">${commentData.ngay_binh_luan}</div>
+                                <div>
+                                    <div class="flex gap-2 items-center">
+                                        <div class="text-base font-bold">${commentData.ten}</div>
+                                        <div class="text-xs">${commentData.ngay_binh_luan}</div>
+                                    </div>
+                                </div>
+                                <button>
+                                    <img src="/public/image/icons8-edit-100.png" alt="edit" class="w-4 h-4">
+                                </button>
                             </div>
                             <div class="text-sm pt-1 text-justify">
                                 ${commentData.noi_dung}
@@ -630,6 +671,14 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                 console.error('Error:', error);
                 notyf.error('Đã xảy ra lỗi khi viết bình luận!');
             });
+        }
+
+        function OpenComment(idcmt){
+            document.getElementById("cmtModal").classList.remove("hidden");
+        }
+
+        function closeModalCmt(){
+            document.getElementById("cmtModal").classList.add("hidden");
         }
 
     </script>

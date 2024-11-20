@@ -5,12 +5,40 @@ if(!isset($_SESSION["email"])){
     exit();
 }
 
-$ID_DonHang = $_GET['id'];
-$method = $_GET['method'];
-if($ID_DonHang == '' || $method == ''){
+$ID_DonHang = $_GET['orderCode'];
+$id = $_GET['id'];
+if($ID_DonHang == ''){
     header('Location: /404');
     exit;
 }
+
+// Kiểm tra trạng thái thanh toán
+if($id != ''){
+    $data = [
+        'orderCode' => $ID_DonHang
+    ];
+    $jsonData = json_encode($data);
+    $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/api/payment/check';
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Content-Type: application/json",
+        "Content-Length: " . strlen($jsonData)
+    ]);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+    $response = curl_exec($ch);
+    $data = json_decode($response, true);
+    curl_close($ch);
+    
+    if($data['status'] != 'PAID'){
+        header("Location: /order/failure?orderCode=$ID_DonHang");
+        exit;
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>

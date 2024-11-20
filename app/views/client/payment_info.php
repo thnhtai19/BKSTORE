@@ -42,7 +42,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                         <div class="w-1/2 text-center border-b-4 p-2 cursor-pointer" style="border-color: #0887B3;">
                             1. THÔNG TIN
                         </div>
-                        <div class="w-1/2 text-center border-b-4 border-gray-200 p-2 cursor-pointer" onclick="goPayment()">
+                        <div class="w-1/2 text-center border-b-4 border-gray-200 p-2 cursor-pointer" onclick="Order()">
                             2. THANH TOÁN
                         </div>
                     </div>
@@ -112,8 +112,8 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                         <div class="flex bg-white border rounded-lg h-36 p-4">
                             <div class="flex-1">
                                 <div class="flex">
-                                    <div class="w-28">
-                                        <img class="h-full" src="${product.imageUrl}" alt="${product.name}">
+                                    <div class="w-28 h-28 cursor-pointer flex justify-center" onclick="redirectToPage(${product.id})">
+                                        <img class="h-full object-cover" src="${product.imageUrl}" alt="product">
                                     </div>
                                     <div class="flex-1">
                                         <div class="flex flex-col justify-between h-full">

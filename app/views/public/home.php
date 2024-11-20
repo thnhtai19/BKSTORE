@@ -75,7 +75,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                             </svg>
                         </a>
                         <a
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1"  href="/likez">
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1"  href="/like">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/product.png" alt="product" class="w-6 h-6 mr-2">
                                 <div>
@@ -215,7 +215,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                     $gia_goc = $item['gia_goc'];
                                     $gia_sau_giam_gia = $item['gia_sau_giam_gia'];
                                     $so_sao_trung_binh = $item['so_sao_trung_binh'];
-                                    $thich = $item['thich'];
+                                    $thich = $item['thich'] ?? false;
                             ?>
                                 <div class="swiper-slide-product overflow-hidden">
                                     <div class="bg-white p-2 rounded-lg shadow-lg w-full">
@@ -236,7 +236,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                             <div class="flex items-center">
                                                 <?php echo renderStars(sao: $so_sao_trung_binh); ?>
                                             </div>
-                                            <?php if($_SESSION['email']!=''){ ?>
+                                            <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
                                                 <button class="heart-button focus:outline-none" data-product-id="<?= $id ?>">
                                                     <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out  <?= $thich ? 'isheart' : '' ?>"
                                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -275,7 +275,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                 $gia_goc = $book['gia_goc'];
                                 $gia_sau_giam_gia = $book['gia_sau_giam_gia'];
                                 $so_sao_trung_binh = $book['so_sao_trung_binh'];
-                                $thich = $book['thich'];
+                                $thich = $book['thich'] ?? false;
                         ?>
                             <div class="bg-white p-2 rounded-lg shadow-lg w-full">
                                 <div class="cursor-pointer" onclick="redirectToPage(<?= $id ?>)">
@@ -295,7 +295,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                     <div class="flex items-center">
                                         <?php echo renderStars(sao: $so_sao_trung_binh); ?>
                                     </div>
-                                    <?php if($_SESSION['email']!=''){ ?>
+                                    <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
                                         <button class="heart-button focus:outline-none" data-product-id="<?= $id ?>">
                                             <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out  <?= $thich ? 'isheart' : '' ?>"
                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

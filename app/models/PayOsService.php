@@ -1,11 +1,14 @@
 <?php
 require_once dirname(__DIR__, 2) . '/config/db.php';
+require_once dirname(__DIR__, 1) . '/models/OrderService.php';
 
 class PayOsService {
     private $conn;
+    private $order;
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->order = new OrderService($conn);
     }
 
     public function create_payment($orderCode, $amount, $description, $buyerName, $buyerEmail, $cancelUrl, $returnUrl){
@@ -43,7 +46,7 @@ class PayOsService {
         return $responseData;
     }
 
-    public function check_payment($orderCode){
+    public function check_payment($orderCode): mixed{
         if(!isset($orderCode)){
                 return [
                     'status' => false,
@@ -62,6 +65,15 @@ class PayOsService {
         $response = curl_exec($ch);
         curl_close($ch);
         $responseData = json_decode($response, true);
+
+        if($responseData['status'] == 'CANCELLED'){
+            // huỷ đơn hàng
+            $this->order->update('Đã huỷ','Huỷ thanh toán', $orderCode);
+            
+        }else if ($responseData['status'] == 'PAID'){
+            $this->order->update('Đã xác nhận','Đã thanh toán', $orderCode);
+        }
+
         return $responseData;
     }
 }

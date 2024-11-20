@@ -198,6 +198,11 @@
             const diachi = document.getElementById('diachi').value
             const ten = document.getElementById('tenkhachhang').value
             const selectedProducts = JSON.parse(localStorage.getItem('selectedProducts'));
+
+            const tongtienDiv1 = document.getElementById('tongtien');
+            const tongTienText = tongtienDiv1.innerText;
+            const amountTmp = parseInt(tongTienText.replace(/[^0-9]/g, ''), 10);
+
             let list = '';
             selectedProducts.forEach(item => {
                 list += item.id + ', '
@@ -229,7 +234,15 @@
                 if (data.success === true) {
                     localStorage.removeItem('selectedProducts');
 
-                    window.location.href = `/order/success?id=${data.ma_don_hang}&method=${method}`
+                    if(method === 'Bank'){
+                        const res = create_link(data.ma_don_hang, amountTmp)
+                        if(res === false){
+                            window.location.href = `/order/failure?orderCode=${data.ma_don_hang}&method=${method}`
+                            return
+                        }
+                    }
+
+                    window.location.href = `/order/success?orderCode=${data.ma_don_hang}&method=${method}`
                 } else {
                     notyf.error(data.message);
                     return;
@@ -238,6 +251,47 @@
             .catch(error => {
                 console.error('Error:', error);
             });
+        }
+
+
+        function create_link(orderCode, amount){
+            const fullDomain = window.location.origin
+
+            fetch('/api/payment/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    orderCode: orderCode,
+                    amount: amount,
+                    description: "Thanh toán BKSTORE",
+                    buyerName: "Thanh Tai",
+                    buyerEmail: "tai@gmail.com",
+                    cancelUrl: fullDomain + '/order/failure',
+                    returnUrl: fullDomain + '/order/success'
+
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return false;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.checkoutUrl !== '') {
+
+                    window.location.href = data.checkoutUrl;
+                    return
+                } else {
+                    return false;
+                }
+            })
+            .catch(error => {
+                return false;
+            });
+
         }
 
 
