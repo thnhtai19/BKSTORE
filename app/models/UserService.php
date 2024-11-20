@@ -246,7 +246,7 @@ class UserService {
             return ["success" => false,"message" => "Không tìm thấy thông tin người dùng"];
         }
         $user = $result->fetch_assoc();
-        return ["success" => true, 'phone' => $user['SDT'], 'sex' => $user['GioiTinh'], 'address' => $user['DiaChi'],];
+        return ["success" => true, 'phone' => $user['SDT'], 'sex' => $user['GioiTinh'], 'address' => $user['DiaChi'], 'status' => $user['TrangThai']];
     }
 
     public function getLoginInfo($uid) {

@@ -122,21 +122,48 @@ RewriteCond %{REQUEST_METHOD} GET
 RewriteRule ^api/admin/propose$ /app/controllers/admin/propose.php [L]
 RewriteCond %{REQUEST_METHOD} POST
 RewriteRule ^api/admin/propose$ /app/controllers/admin/updatePropose.php [L]
-RewriteRule ^api/admin/comment/delete$ /app/controllers/admin/deleteComment.php [L]
-RewriteRule ^api/admin/comment/hide$ /app/controllers/admin/hideComment.php [L]
+RewriteRule ^api/admin/comment/status$ /app/controllers/admin/statusComment.php [L]
 RewriteRule ^api/admin/comment/rep$ /app/controllers/admin/repComment.php [L]
-RewriteRule ^api/admin/review/delete$ /app/controllers/admin/deleteReview.php [L]
-RewriteRule ^api/admin/review/hide$ /app/controllers/admin/hideReview.php [L]
+RewriteRule ^api/admin/review/status$ /app/controllers/admin/statusReview.php [L]
 RewriteRule ^api/admin/review/rep$ /app/controllers/admin/repReview.php [L]
 RewriteRule ^api/admin/updateProduct$ /app/controllers/admin/updateProduct.php [L]
 RewriteRule ^api/admin/updateUser$ /app/controllers/admin/updateUser.php [L]
 RewriteRule ^api/admin/deleteProduct$ /app/controllers/admin/deleteProduct.php [L]
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^api/admin/sale$ /app/controllers/admin/getSale.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/admin/sale$ /app/controllers/admin/setSale.php [L]
+RewriteRule ^api/admin/updateSale$ /app/controllers/admin/updateSale.php [L]
 
 #PRODUCT ROUTERS BACKEND
 RewriteRule ^api/product/info$ /app/controllers/product/info.php [L]
 RewriteRule ^api/product/propose$ /app/controllers/product/propose.php [L]
 RewriteRule ^api/product/like$ /app/controllers/product/like.php [L]
 RewriteRule ^api/product/keyword$ /app/controllers/product/keyword.php [L]
+
+#NEWS ROUTERS BACKEND
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^api/news$ /app/controllers/news/get.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/news$ /app/controllers/news/set.php [L]
+RewriteRule ^api/news/update$ /app/controllers/news/update.php [L]
+RewriteRule ^api/news/delete$ /app/controllers/news/delete.php [L]
+
+#BANNER ROUTERS BACKEND
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^api/banner$ /app/controllers/banner/get.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/banner$ /app/controllers/banner/set.php [L]
+RewriteRule ^api/banner/update$ /app/controllers/banner/update.php [L]
+RewriteRule ^api/banner/delete$ /app/controllers/banner/delete.php [L]
+
+#CONTACT ROUTERS BACKEND
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^api/contact$ /app/controllers/contact/get.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/contact$ /app/controllers/contact/set.php [L]
+RewriteRule ^api/contact/update$ /app/controllers/contact/update.php [L]
+RewriteRule ^api/contact/delete$ /app/controllers/contact/delete.php [L]
 
 #PAYOS
 RewriteRule ^api/payment/create$ /app/controllers/payment/create.php [L]

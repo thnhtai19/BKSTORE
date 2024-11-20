@@ -128,13 +128,13 @@ VALUES
 ('GIAMCOD', 25000.00, 'COD', 50, 'Hết hạn'),
 ('FREESHIP', 0.00, 'Tất cả', 50, 'Kích hoạt');
 
-INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, TrangThai, SDT, DiaChi, TenNguoiNhan, ThanhToan, PhuongThucThanhToan)
+INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, TrangThai, SDT, DiaChi, TenNguoiNhan, ThanhToan, PhuongThucThanhToan, HoaDon)
 VALUES
-(1, '20-10-2023', 300000.00, 'GIAM50K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank'),
-(2, '19-10-2023', 150000.00, 'GIAM50%','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
-(3, '18-10-2023', 250000.00, 'GIAM10K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank'),
-(6, '17-10-2023', 100000.00, 'FREESHIP','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
-(7, '16-10-2023', 200000.00, 'FREESHIP','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank');
+(1, '20-10-2023', 300000.00, 'GIAM50K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank', 250000.00),
+(2, '19-10-2023', 150000.00, 'GIAM50%','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD', 75000.00),
+(3, '18-10-2023', 250000.00, 'GIAM10K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank', 240000.00),
+(6, '17-10-2023', 100000.00, 'FREESHIP','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD', 100000.00),
+(7, '16-10-2023', 200000.00, 'FREESHIP','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank', 200000.00);
 
 INSERT INTO GOM (ID_DonHang, ID_SP, SoLuong)
 VALUES

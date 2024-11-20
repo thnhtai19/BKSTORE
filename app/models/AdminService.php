@@ -47,7 +47,8 @@ class AdminService {
                 'phone' => $user['phone'],
                 'sex' => $user['sex'],
                 'address' => $user['address'],
-                'avatar' => $login['avatar']
+                'avatar' => $login['avatar'],
+                'status' => $user['status']
             ];
         }
         return ['success' => true, 'user-list' => $users];
@@ -156,16 +157,7 @@ class AdminService {
         return ['success' => true, 'message' => 'Cập nhật thành công'];
     }
 
-    public function deleteComment($id) {
-        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy bình luận'];
-        $sql = 'DELETE FROM binh_luan WHERE MaBinhLuan = ?';
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        return ['success'=> true, 'message'=> 'Xóa bình luận thành công'];
-    }
-
-    public function hideComment($id, $trang_thai) {
+    public function statusComment($id, $trang_thai) {
         if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy bình luận'];
         $sql = 'SELECT * FROM binh_luan WHERE MaBinhLuan = ?';
         $stmt = $this->conn->prepare($sql);
@@ -189,18 +181,9 @@ class AdminService {
         return ['success'=> true,'message'=> 'Phản hồi thành công'];
     }
 
-    public function deleteReview($id) {
+    public function statusReview($id, $trang_thai) {
         if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy đánh giá'];
-        $sql = 'DELETE FROM danh_gia WHERE MaDanhGia = ?';
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        return ['success'=> true, 'message'=> 'Xóa đánh giá thành công'];
-    }
-
-    public function hideReview($id, $trang_thai) {
-        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy đánh giá'];
-        $sql = 'SELECT TrangThai FROM danh_gia WHERE MaDanhGia = ?';
+        $sql = 'SELECT * FROM danh_gia WHERE MaDanhGia = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -220,6 +203,87 @@ class AdminService {
         $stmt->bind_param('si', $content, $id);
         $stmt->execute();
         return ['success'=> true,'message'=> 'Phản hồi thành công'];
+    }
+
+    public function sale() {
+        $sql = 'SELECT * FROM ma_giam_gia WHERE TrangThai != ?';
+        $stmt = $this->conn->prepare($sql);
+        $rac = 'Đã xóa';
+        $stmt->bind_param('s', $rac);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    public function conditionSale() {
+        $sql = 'SELECT DieuKien FROM ma_giam_gia WHERE TrangThai != ?';
+        $stmt = $this->conn->prepare($sql);
+        $rac = 'Đã xóa';
+        $stmt->bind_param('s', $rac);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row['DieuKien'];
+        }
+        return $result;
+    }
+
+    public function updateSale($ID_GiamGia, $Ma, $TienGiam, $DieuKien, $SoLuong, $TrangThai) {
+        $rac = $this->getSaleById($ID_GiamGia);
+        // Tiền xử lý dữ liệu
+        $Ma = $Ma == '' ? $rac['Ma'] : $Ma;
+        $TienGiam = $TienGiam < 0 ? $rac['TienGiam'] : $TienGiam;
+        $DieuKien = $DieuKien == '' ? $rac['DieuKien'] : $DieuKien;
+        $SoLuong = $SoLuong < 0 ? $rac['SoLuong'] : $SoLuong;
+        $TrangThai = $TrangThai == '' ? $rac['TrangThai'] : $TrangThai;
+        // // Cập nhật database
+        $sql = 'UPDATE ma_giam_gia SET Ma = ?, TienGiam = ?, DieuKien = ?, SoLuong = ?, TrangThai = ? WHERE ID_GiamGia = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('sssiss', $Ma, $TienGiam, $DieuKien, $SoLuong, $TrangThai, $ID_GiamGia);
+        $stmt->execute();
+        return ['success'=> true,'message'=> 'Cập nhật mã giảm giá thành thành công'];
+    }
+
+    public function setSale($Ma, $TienGiam, $DieuKien, $SoLuong) {
+        if (!(is_numeric($TienGiam) && is_numeric($SoLuong) && $this->checkConditionSale($DieuKien))) return ['success'=> false,'message'=> 'Đầu vào không hợp lệ'];
+        $sql = "INSERT INTO ma_giam_gia (Ma, TienGiam, DieuKien, SoLuong) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sisi", $Ma, $TienGiam, $DieuKien, $SoLuong);
+        $stmt->execute();
+        return ["success"=> true,"message"=> "Thêm khuyến mãi thành công"];
+    }
+
+    private function checkConditionSale($DieuKien) {
+        switch ($DieuKien) {
+            case 'Tất cả':
+                return true;
+            case 'Male':
+                return true;
+            case 'Female':
+                return true;
+            case 'Chẵn':   
+                return true;
+            case 'Lẻ':  
+                return true;
+            case 'COD':      
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private function getSaleById($id) {
+        $sql = 'SELECT * FROM ma_giam_gia WHERE ID_GiamGia = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        return $stmt->fetch_assoc();
     }
 
     private function proposeInfo() {

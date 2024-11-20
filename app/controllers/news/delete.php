@@ -1,9 +1,9 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
-require_once dirname(__DIR__, 2) . '/models/AdminService.php';
+require_once dirname(__DIR__, 2) . '/models/SystemService.php';
 
 $db = new Database();
-$model = new AdminService($db->conn);
+$model = new SystemService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
@@ -14,21 +14,24 @@ if ($method === 'POST') {
         if ($_SESSION["Role"] == 'Admin') {
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
-            if (isset($data['MaDanhGia'])) $MaDanhGia = $data['MaDanhGia'];
+            if (isset($data['MaTinTuc'])) $MaTinTuc = $data['MaTinTuc'];
             else {
                 echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
                 return;
             }
-            if (isset($data['TrangThai'])) $TrangThai = $data['TrangThai'];
-            else {
-                echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
-                return;
+            $image = $model->deleteImageNews($MaTinTuc);
+            $news = $model->deleteNews($MaTinTuc);
+            $deleteDir = dirname(__DIR__, 3) . "/public/image/new/$MaTinTuc";
+            if (is_dir($deleteDir)) {
+                $files = array_diff(scandir($deleteDir), ['.', '..']);
+                foreach ($files as $file) {
+                    $filePath = $deleteDir . DIRECTORY_SEPARATOR . $file;
+                    unlink($filePath);
+                }
+                rmdir($deleteDir);
             }
-            if ($TrangThai != 'Đang ẩn' && $TrangThai != 'Đang hiện') {
-                echo json_encode(['success' => false, 'message' => 'Trạng thái không hợp lệ!']);
-                return;
-            }
-            echo json_encode($model->hideReview($MaDanhGia, $TrangThai));
+            if ($news && $image) echo json_encode(['success' => true, 'message' => 'Xóa tin tức thành công']);
+            else echo json_encode(['success' => false, 'message' => 'Xóa tin tức thất bại']);
         }
         else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
     }

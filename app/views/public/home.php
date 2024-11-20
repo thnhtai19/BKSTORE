@@ -210,7 +210,7 @@ function format_currency($number) {
                                     $gia_goc = $item['gia_goc'];
                                     $gia_sau_giam_gia = $item['gia_sau_giam_gia'];
                                     $so_sao_trung_binh = $item['so_sao_trung_binh'];
-                                    $thich = $item['thich'];
+                                    $thich = $item['thich'] ?? false;
                             ?>
                                 <div class="swiper-slide-product overflow-hidden">
                                     <div class="bg-white p-2 rounded-lg shadow-lg w-full">
@@ -268,7 +268,7 @@ function format_currency($number) {
                                 $gia_goc = $book['gia_goc'];
                                 $gia_sau_giam_gia = $book['gia_sau_giam_gia'];
                                 $so_sao_trung_binh = $book['so_sao_trung_binh'];
-                                $thich = $book['thich'];
+                                $thich = $book['thich'] ?? false;
                         ?>
                             <div class="bg-white p-2 rounded-lg shadow-lg w-full">
                                 <div class="cursor-pointer" onclick="redirectToPage(<?= $id ?>)">

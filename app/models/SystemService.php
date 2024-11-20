@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__, 2) . '/config/db.php';
-// require_once dirname(__DIR__, 1) . '/models/support.php';
+require_once dirname(__DIR__, 1) . '/models/support.php';
 
 class SystemService {
     private $conn;
@@ -8,7 +8,7 @@ class SystemService {
 
     public function __construct($conn) {
         $this->conn = $conn;
-        // $this->support = new support();
+        $this->support = new support();
     }
 
     public function getInfoList() {
@@ -71,12 +71,247 @@ class SystemService {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaTinTuc);
         $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function getNewsList() {
+        $sql = 'SELECT * FROM tin_tuc';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $row['Anh'] = $this->getImageNews($row['MaTinTuc']);
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    public function setNews($TieuDe, $MoTa, $NoiDung, $TuKhoa) {
+        $time = $this->support->startTime();
+        $sql = "INSERT INTO tin_tuc (TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sssss", $TieuDe, $time, $NoiDung, $TuKhoa, $MoTa);
+        $stmt->execute();
+        return ['success' => true, 'news_id' => mysqli_insert_id($this->conn)];
+    }
+
+    public function setImageNews($newsPath, $MaTinTuc, $MoTaHinhAnh) {
+        $sql = "INSERT INTO anh_minh_hoa (MaTinTuc, LinkAnh, MoTa) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("iss", $MaTinTuc, $newsPath, $MoTaHinhAnh);
+        $stmt->execute();
+        return ['success' => true, 'message' => 'Thêm tin tức thành công'];
+    }
+
+    public function deleteNews($MaTinTuc) {
+        $sql = 'DELETE FROM tin_tuc WHERE MaTinTuc = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaTinTuc);
+        $stmt->execute();
+        return true;
+    }
+
+    public function deleteImageNews($MaTinTuc) {
+        $sql = 'DELETE FROM anh_minh_hoa WHERE MaTinTuc = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaTinTuc);
+        $stmt->execute();
+        return true;
+    }
+
+    public function updateNews($TieuDe, $MoTa, $NoiDung, $TuKhoa, $MaTinTuc, $TrangThai) {
+        $rac = $this->getNew($MaTinTuc);
+        
+        $TieuDe = $TieuDe != null ? $TieuDe : $rac['TieuDe'];
+        $MoTa = $MoTa != null ? $MoTa : $rac['MoTa'];
+        $NoiDung = $NoiDung != null ? $NoiDung : $rac['NoiDung'];
+        $TuKhoa = $TuKhoa != null ? $TuKhoa : $rac['TuKhoa'];
+        $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
+
+        $sql = "UPDATE tin_tuc SET TieuDe = ?, MoTa = ?, NoiDung = ?, TuKhoa = ?, TrangThai = ? WHERE MaTinTuc = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sssssi", $TieuDe,  $MoTa, $NoiDung, $TuKhoa, $TrangThai, $MaTinTuc);
+        $stmt->execute();
+        return true;
+    }
+
+    public function updateNewsImage($AnhMuonXoa, $MoTaHinhAnh, $MaTinTuc) {
+        $del = $this->deleteImageNew($MaTinTuc, $AnhMuonXoa);
+        $uploadDir = dirname(__DIR__, 2) . "/public/image/new/$MaTinTuc/";
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        $uploaded = false;
+        if (isset($_FILES) && $_FILES != []) {
+            foreach ($_FILES as $uploadFile) {
+                $count = count($uploadFile['error']);
+                for ($i = 0; $i < $count; $i++) { 
+                    if ($uploadFile['error'][$i] == UPLOAD_ERR_OK) {
+                        $newsTmpPath = $uploadFile['tmp_name'][$i];
+                        $newsFileName = time() . '_' . uniqid() . '.' . pathinfo($uploadFile['name'][$i], PATHINFO_EXTENSION); 
+
+                        $newsPath = $uploadDir . $newsFileName;
+
+                        if (move_uploaded_file($newsTmpPath, $newsPath)) {
+                            $result = $this->setImageNews("/public/image/new/$MaTinTuc/" . $newsFileName, $MaTinTuc, $MoTaHinhAnh[$i]);
+                            $uploaded = true;
+                        }
+                    }
+                }
+            }
+            if (!$uploaded) return false;
+            else if ($del) return $result['success'];
+            else return false;
+        }
+        return $del;
+    }
+
+    public function getBannerList() {
+        $sql = 'SELECT * FROM banner';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
         $stmt = $stmt->get_result();
         $result = [];
         while ($row = $stmt->fetch_assoc()) {
             $result[] = $row;
         }
         return $result;
+    }
+
+    public function setBanner($IdSP, $MoTa) {
+        $sql = "INSERT INTO banner (IdSP, MoTa) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("is", $IdSP, $MoTa);
+        $stmt->execute();
+        return ['success' => true, 'banner_id' => mysqli_insert_id($this->conn)];
+    }
+
+    public function updateBanner($MaBanner, $Image, $IdSP, $MoTa, $TrangThai) {
+        $rac = $this->getBanner($MaBanner);
+        
+        $Image = $Image != null ? $Image : $rac['Image'];
+        $MoTa = $MoTa != null ? $MoTa : $rac['MoTa'];
+        $IdSP = $IdSP != null ? $IdSP : $rac['IdSP'];
+        $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
+
+        $sql = "UPDATE banner SET Image = ?, MoTa = ?, IdSP = ?, TrangThai = ? WHERE MaBanner = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssisi", $Image,  $MoTa, $IdSP, $TrangThai, $MaBanner);
+        $stmt->execute();
+        return true;
+    }
+
+    public function getBanner($MaBanner) {
+        $sql = 'SELECT * FROM banner WHERE MaBanner = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaBanner);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function deleteImageBanner($MaBanner) {
+        $Anh = $this->getBanner($MaBanner)['Image'];
+        if ($Anh != null) {
+            $filePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($Anh, '/'));
+            chmod($filePath, 0777);
+            unlink($filePath);
+        }
+        return;
+    }
+
+    public function deleteBanner($MaBanner) {
+        $sql = 'DELETE FROM banner WHERE MaBanner = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaBanner);
+        $stmt->execute();
+        return true;
+    }
+
+    public function getContactList() {
+        $sql = 'SELECT * FROM thong_tin_lien_he';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    public function setContact($Loai, $ThongTin) {
+        $sql = "INSERT INTO thong_tin_lien_he (Loai, ThongTin) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $Loai, $ThongTin);
+        $stmt->execute();
+        return ['success' => true, 'contact_id' => mysqli_insert_id($this->conn)];
+    }
+
+    public function updateContact($MaContact, $Image, $Loai, $ThongTin, $TrangThai) {
+        $rac = $this->getContact($MaContact);
+        
+        $Image = $Image != null ? $Image : $rac['HinhAnh'];
+        $Loai = $Loai != null ? $Loai : $rac['Loai'];
+        $ThongTin = $ThongTin != null ? $ThongTin : $rac['ThongTin'];
+        $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
+
+        $sql = "UPDATE thong_tin_lien_he SET HinhAnh = ?, Loai = ?, ThongTin = ?, TrangThai = ? WHERE MaThongTin = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssssi", $Image,  $Loai, $ThongTin, $TrangThai, $MaContact);
+        $stmt->execute();
+        return true;
+    }
+
+    public function getContact($MaThongTin) {
+        $sql = 'SELECT * FROM thong_tin_lien_he WHERE MaThongTin = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaThongTin);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function deleteImageContact($MaContact) {
+        $Anh = $this->getContact($MaContact)['HinhAnh'];
+        if ($Anh != null) {
+            $filePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($Anh, '/'));
+            chmod($filePath, 0777);
+            unlink($filePath);
+        }
+        return;
+    }
+
+    public function deleteContact($MaContact) {
+        $sql = 'DELETE FROM thong_tin_lien_he WHERE MaThongTin = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaContact);
+        $stmt->execute();
+        return true;
+    }
+
+    private function deleteImageNew($MaTinTuc, $AnhMuonXoa) {
+        foreach ($AnhMuonXoa as $Anh) {
+            $filePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($Anh, '/'));
+            chmod($filePath, 0777);
+            unlink($filePath);
+            $sql = "DELETE FROM anh_minh_hoa WHERE MaTinTuc = ? AND LinkAnh = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("is", $MaTinTuc, $Anh);
+            $stmt->execute();
+        }
+        return true;
+    }
+
+    private function getImageNews($MaTinTuc) {
+        $sql = "SELECT LinkAnh FROM anh_minh_hoa WHERE MaTinTuc = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $MaTinTuc);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        return $stmt->fetch_assoc()['LinkAnh'];
     }
 }
 ?>

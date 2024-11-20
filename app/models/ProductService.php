@@ -10,11 +10,11 @@ class ProductService {
         $this->support = new support();
     }
 
-    public function getInfo($id) {
+    public function getInfo($id, $status) {
         $result = $this->getProductInfo($id);
-        $review = $this->average_star($id);
+        $review = $this->average_star($id, $status);
         $result['danh_sach_danh_gia'] = $review['danh_sach_danh_gia'];
-        $result['danh_sach_binh_luan'] = $this->getComment($id);
+        $result['danh_sach_binh_luan'] = $this->getComment($id, $status);
         $product = $this->get();
         $result['danh_sach_san_pham'] = $this->getList(array_slice($product, -10));
         return $result;
@@ -25,7 +25,7 @@ class ProductService {
         if (!$product) {
             return ['success' => false, 'message' => 'Không tìm thấy sản phẩm'];
         }
-        $review = $this->average_star($id)['so_sao_trung_binh'];
+        $review = $this->average_star($id, 1)['so_sao_trung_binh'];
         return [
             'id' => $id,
             'ten' => $product['TenSP'],
@@ -61,7 +61,7 @@ class ProductService {
                 'hinh' => $this->getImage($id),
                 'gia_goc' => $entry['Gia'],
                 'gia_sau_giam_gia' => round($entry['Gia'] * (1 - $entry['TyLeGiamGia']), 2),
-                'so_sao_trung_binh' => $this->average_star($id)['so_sao_trung_binh']
+                'so_sao_trung_binh' => $this->average_star($id, 1)['so_sao_trung_binh']
             ];
             switch ($trang_thai) {
                 case -1:
@@ -193,18 +193,18 @@ class ProductService {
     public function keywork($keyword) {
         $stmt = "SELECT ID_SP 
                  FROM san_pham 
-                 WHERE TenSp LIKE ?
-                 OR MoTa LIKE ?
-                 OR Gia LIKE ?
-                 OR TyLeGiamGia LIKE ?
-                 OR NXB LIKE ?
-                 OR SoTrang LIKE ?
-                 OR PhanLoai LIKE ?
-                 OR TuKhoa LIKE ?
-                 OR HinhThuc LIKE ?
-                 OR TacGia LIKE ?
-                 OR NgonNgu LIKE ?
-                 OR NamXB LIKE ?";
+                 WHERE TenSp REGEXP ?
+                 OR MoTa REGEXP ?
+                 OR Gia REGEXP ?
+                 OR TyLeGiamGia REGEXP ?
+                 OR NXB REGEXP ?
+                 OR SoTrang REGEXP ?
+                 OR PhanLoai REGEXP ?
+                 OR TuKhoa REGEXP ?
+                 OR HinhThuc REGEXP ?
+                 OR TacGia REGEXP ?
+                 OR NgonNgu REGEXP ?
+                 OR NamXB REGEXP ?";
         $stmt = $this->conn->prepare($stmt);
         $stmt->bind_param( 'ssssssssssss', $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword, $keyword);
         $stmt->execute();
@@ -213,7 +213,9 @@ class ProductService {
         while ($row = $stmt->fetch_assoc()) {
             $results[] = $this->getProductById($row['ID_SP']);
         }
-        return ['success' => true, 'message' => $this->getList($results)];
+        $results = $this->getList($results);
+        if ($results != []) return ['success' => true, 'message' => $results];
+        else return ['success' => false, 'message' => 'Không tìm thấy sản phẩm!'];
     }
 
     private function getProductById($id) {
@@ -228,9 +230,9 @@ class ProductService {
         return $result->fetch_assoc();
     }
 
-    private function getComment($id) {
+    private function getComment($id, $status) {
         $sql = "
-            SELECT binh_luan.MaBinhLuan, binh_luan.NgayBinhLuan, binh_luan.NoiDung, login.Ten, login.Avatar
+            SELECT binh_luan.MaBinhLuan, binh_luan.NgayBinhLuan, binh_luan.NoiDung, login.Ten, login.Avatar, binh_luan.TrangThai
             FROM binh_luan
             JOIN login ON binh_luan.UID = login.UID
             WHERE binh_luan.ID_SP = ?
@@ -246,21 +248,35 @@ class ProductService {
         }
         
         $comments = [];
-        while ($row = $result->fetch_assoc()) {
-            $comments[] = [
-                'id' => $row['MaBinhLuan'],
-                'ngay_binh_luan' => $row['NgayBinhLuan'],
-                'noi_dung' => $row['NoiDung'],
-                'avatar' => $row['Avatar'],
-                'ten' => $row['Ten']
-            ];
+        if ($status == 1) {
+            while ($row = $result->fetch_assoc()) {
+                $comments[] = [
+                    'id' => $row['MaBinhLuan'],
+                    'ngay_binh_luan' => $row['NgayBinhLuan'],
+                    'noi_dung' => $row['NoiDung'],
+                    'avatar' => $row['Avatar'],
+                    'ten' => $row['Ten']
+                ];
+            }
+        } 
+        else {
+            while ($row = $result->fetch_assoc()) {
+                if ($row['TrangThai'] == 'Đang hiện')
+                $comments[] = [
+                    'id' => $row['MaBinhLuan'],
+                    'ngay_binh_luan' => $row['NgayBinhLuan'],
+                    'noi_dung' => $row['NoiDung'],
+                    'avatar' => $row['Avatar'],
+                    'ten' => $row['Ten']
+                ];
+            }
         }
         return $comments;
     }
 
-    private function getReview($id) {
+    private function getReview($id, $status) {
         $sql = "
-            SELECT danh_gia.MaDanhGia, danh_gia.NgayDanhGia, danh_gia.SoSao, danh_gia.NoiDung, login.Ten, login.Avatar 
+            SELECT danh_gia.MaDanhGia, danh_gia.NgayDanhGia, danh_gia.SoSao, danh_gia.NoiDung, login.Ten, login.Avatar, danh_gia.TrangThai 
             FROM danh_gia 
             JOIN login ON danh_gia.UID = login.UID
             WHERE ID_SP = ?
@@ -275,21 +291,36 @@ class ProductService {
         }
         
         $reviews = [];
-        while ($row = $result->fetch_assoc()) {
-            $reviews[] = [
-                'id' => $row['MaDanhGia'],
-                'ngay_danh_gia' => $row['NgayDanhGia'],
-                'so_sao' => $row['SoSao'],
-                'noi_dung' => $row['NoiDung'],
-                'avatar' => $row['Avatar'],
-                'ten' => $row['Ten']
-            ];
+        if ($status == 1) {
+            while ($row = $result->fetch_assoc()) {
+                $reviews[] = [
+                    'id' => $row['MaDanhGia'],
+                    'ngay_danh_gia' => $row['NgayDanhGia'],
+                    'so_sao' => $row['SoSao'],
+                    'noi_dung' => $row['NoiDung'],
+                    'avatar' => $row['Avatar'],
+                    'ten' => $row['Ten']
+                ];
+            }
+        }
+        else {
+            while ($row = $result->fetch_assoc()) {
+                if ($row['TrangThai'] == 'Đang hiện')
+                $reviews[] = [
+                    'id' => $row['MaDanhGia'],
+                    'ngay_danh_gia' => $row['NgayDanhGia'],
+                    'so_sao' => $row['SoSao'],
+                    'noi_dung' => $row['NoiDung'],
+                    'avatar' => $row['Avatar'],
+                    'ten' => $row['Ten']
+                ];
+            }
         }
         return $this->support->sort($reviews);
     }
 
-    private function average_star($id) {
-        $review = $this->getReview($id);
+    private function average_star($id, $status) {
+        $review = $this->getReview($id, $status);
         if (isset($review['success']) && !$review['success']) {
             return [
                 'so_sao_trung_binh' => 0,

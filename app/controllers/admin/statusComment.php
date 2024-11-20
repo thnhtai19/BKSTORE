@@ -24,11 +24,11 @@ if ($method === 'POST') {
                 echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
                 return;
             }
-            if ($TrangThai != 'Đang ẩn' && $TrangThai != 'Đang hiện') {
+            if ($TrangThai != 'Đang ẩn' && $TrangThai != 'Đang hiện' && $TrangThai != 'Đã xóa') {
                 echo json_encode(['success' => false, 'message' => 'Trạng thái không hợp lệ!']);
                 return;
             }
-            echo json_encode($model->hideComment($MaBinhLuan, $TrangThai));
+            echo json_encode($model->statusComment($MaBinhLuan, $TrangThai));
         }
         else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
     }

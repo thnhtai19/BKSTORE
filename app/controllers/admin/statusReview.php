@@ -19,7 +19,16 @@ if ($method === 'POST') {
                 echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
                 return;
             }
-            echo json_encode($model->deleteReview($MaDanhGia));
+            if (isset($data['TrangThai'])) $TrangThai = $data['TrangThai'];
+            else {
+                echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
+                return;
+            }
+            if ($TrangThai != 'Đang ẩn' && $TrangThai != 'Đang hiện' && $TrangThai != 'Đã xóa') {
+                echo json_encode(['success' => false, 'message' => 'Trạng thái không hợp lệ!']);
+                return;
+            }
+            echo json_encode($model->statusReview($MaDanhGia, $TrangThai));
         }
         else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
     }
