@@ -139,7 +139,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
         function CountCart(){
             let countCart = 0;
 
-            fetch('api/user/cart')
+            fetch('/api/user/cart')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {

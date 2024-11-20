@@ -57,8 +57,8 @@ function displayCartItems(products) {
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <div class="flex gap-2 text-sm">
-                                            <div class="text-custom-blue font-bold price">${formatCurrency(product.gia_khuyen_mai)}</div>
-                                            <div class="text-gray-600 items-center hidden lg:block">
+                                            <div class="text-custom-blue font-bold pricesale">${formatCurrency(product.gia_khuyen_mai)}</div>
+                                            <div class="price text-gray-600 items-center hidden lg:block">
                                                 <del>${formatCurrency(product.gia_goc)}</del>
                                             </div>
                                         </div>
@@ -135,7 +135,7 @@ function updateTotalAmount() {
     let total = 0;
     document.querySelectorAll('.product-checkbox:checked').forEach((checkbox) => {
         const quantity = parseInt(checkbox.closest('.flex').querySelector('.quantity-input').value);
-        const priceText = checkbox.closest('.flex').querySelector('.price').innerText.replace('đ', '').replace('.', '');
+        const priceText = checkbox.closest('.flex').querySelector('.pricesale').innerText.replace('đ', '').replace('.', '');
         const price = parseInt(priceText);
         total += price * quantity;
     });
@@ -176,7 +176,7 @@ const totalAmountDisplay = document.getElementById('totalAmount');
 let total = 0;
 document.querySelectorAll('.product-checkbox:checked').forEach((checkbox) => {
     const quantity = parseInt(checkbox.closest('.flex').querySelector('.quantity-input').value);
-    const priceText = checkbox.closest('.flex').querySelector('.price').innerText.replace('đ', '').replace('.', '');
+    const priceText = checkbox.closest('.flex').querySelector('.pricesale').innerText.replace('đ', '').replace('.', '');
     const price = parseInt(priceText);
     total += price * quantity;
 });
@@ -256,3 +256,43 @@ function editAmount(productId, action) {
         console.error(error);
     });
 }
+
+function saveSelectedProducts() {
+    const selectedProducts = [];
+    document.querySelectorAll('.product-checkbox:checked').forEach((checkbox) => {
+        const productItem = checkbox.closest('.product-item');
+        const id = productItem.dataset.id;
+        const name = productItem.querySelector('.text-sm').innerText;
+        const priceText = productItem.querySelector('.price').innerText.replace('đ', '').replace(/\./g, '');
+        const price = parseInt(priceText, 10);
+        const priceTextSale = productItem.querySelector('.pricesale').innerText.replace('đ', '').replace(/\./g, '');
+        const pricesale = parseInt(priceTextSale, 10);
+        const quantity = parseInt(productItem.querySelector('.quantity-input').value, 10);
+        const imageUrl = productItem.querySelector('img').src;
+
+        selectedProducts.push({
+            id: id,
+            name: name,
+            price: price,
+            pricesale: pricesale,
+            quantity: quantity,
+            imageUrl: imageUrl
+        });
+    });
+
+    localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+    console.log('Selected products saved to localStorage:', selectedProducts);
+}
+
+document.getElementById('orderButton').addEventListener('click', () => {
+    const selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
+
+    if (selectedCheckboxes.length === 0) {
+        notyf.error('Vui lòng chọn sản phẩm cần mua!');
+        return;
+    }
+
+    saveSelectedProducts();
+    window.location.href = '/checkout/preview';
+});
+

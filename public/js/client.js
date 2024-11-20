@@ -96,6 +96,15 @@ function goBack() {
 }
 
 function goPayment() {
+    const customerName = document.getElementById('customerName').value;
+    const customerPhone = document.getElementById('customerPhone').value;
+    const customerAddress = document.getElementById('customerAddress').value;
+
+    if(!customerName || !customerPhone || !customerAddress){
+        notyf.error("Vui lòng điền đầy đủ thông tin nhận hàng!")
+        return
+    }
+
     window.location.href = "/checkout/payment"
 }
 

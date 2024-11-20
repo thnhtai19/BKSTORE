@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 $idsp = $_GET['id'];
 if($idsp == ''){
@@ -7,6 +6,7 @@ if($idsp == ''){
     exit;
 }
 
+$cookies = http_build_query($_COOKIE, '', '; ');
 $data = [
     'ID_SP' => $idsp
 ];
@@ -17,6 +17,7 @@ curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Content-Type: application/json",
+    "Cookie: $cookies",
     "Content-Length: " . strlen($jsonData)
 ]);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -44,6 +45,10 @@ function format_currency($number) {
 }
 ?>
 
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -59,8 +64,33 @@ function format_currency($number) {
 </head>
 
 <body class="bg-gray-100">
+    <div id="cmtModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg w-3/4 lg:w-1/4 z-50 overflow-y-auto" style="max-height: 700px">
+            <div class="flex justify-between items-start">
+                <h2 class="text-xl font-bold mb-4">Chỉnh sửa bình luận</h2>
+                <button onclick="closeModalCmt()">✕</button>
+            </div>
+            <div class="flex gap-2">
+                <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-700">Trạng thái bình luận:</label>
+                    <select id="trangthaicmt" class="mt-2 mb-4 w-full p-2 border rounded">
+                        <option value="Đang hiện">Đang hiện</option>
+                        <option value="Đã ẩn">Đã ẩn</option>
+                        <option value="Đã xoá">Đã xoá</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+                <button onclick="updateCmt()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
+                <button onclick="closeModalCmt()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="h-screen">
-        <header id="header-content" class="sticky top-0 z-50">
+        <header id="header-content" class="sticky top-0 z-40">
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
         </header>
         <div class="overflow-y-auto">
@@ -126,7 +156,7 @@ function format_currency($number) {
                                         </del>
                                     </div>
                                     <div class="bg-custom-background text-white text-sm font-bold p-1 rounded-lg">
-                                        -15%
+                                        -<?=$data['ty_le_giam_gia']?>
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +224,7 @@ function format_currency($number) {
                                         </del>
                                     </div>
                                     <div class="bg-custom-background text-white text-sm font-bold p-1 rounded-lg">
-                                        -15%
+                                        -<?=$data['ty_le_giam_gia']?>
                                     </div>
                                 </div>
                                 <div class="text-base text-black font-bold pt-6">
@@ -281,47 +311,49 @@ function format_currency($number) {
                         <div class="swiper-container-product overflow-hidden">
                             <div class="swiper-wrapper">
                                 <?php
-                                    // $moithem = $data['danh_sach_san_pham'];
-                                    // foreach ($moithem as $item) {
-                                    //     $id = $item['id'];
-                                    //     $ten = $item['ten'];
-                                    //     $hinh = $item['hinh'][0];
-                                    //     $gia_goc = $item['gia_goc'];
-                                    //     $gia_sau_giam_gia = $item['gia_sau_giam_gia'];
-                                    //     $so_sao_trung_binh = $item['so_sao_trung_binh'];
-                                    //     $thich = $item['thich'];
+                                    $moithem = $data['danh_sach_san_pham'];
+                                    foreach ($moithem as $item) {
+                                        $id = $item['id'];
+                                        $ten = $item['ten'];
+                                        $hinh = $item['hinh'][0];
+                                        $gia_goc = $item['gia_goc'];
+                                        $gia_sau_giam_gia = $item['gia_sau_giam_gia'];
+                                        $so_sao_trung_binh = $item['so_sao_trung_binh'];
+                                        $thich = $item['thich'];
                                 ?>
                                     <div class="swiper-slide-product overflow-hidden">
                                         <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                                            <div class="h-44 flex justify-center">
-                                                <img src="/public/image/book1.webp" alt="Product Image"
-                                                    class="object-cover h-full rounded-md">
-                                            </div>
-                                            <div class="pt-4 pb-4 text-sm">
-                                                <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký -
-                                                    Tái
-                                                    Bản
-                                                    2020</div>
-                                                <p class="text-custom-blue font-bold text-base">42.500đ</p>
+                                            <div class="cursor-pointer" onclick="redirectToPage(<?= $id ?>)">
+                                                <div class="h-44 flex justify-center">
+                                                    <img src="/<?= $hinh ?>" alt="Product Image"
+                                                        class="object-cover h-full rounded-md">
+                                                </div>
+                                                <div class="pt-4 pb-4 text-sm">
+                                                    <div class="font-semibold mt-2 h-16 text-black-700"><?= $ten ?></div>
+                                                    <div class="flex gap-2 items-center">
+                                                        <p class="text-custom-blue font-bold text-base"><?= format_currency($gia_sau_giam_gia) ?></p>
+                                                        <p class="text-gray-500 text-sm"><del><?= format_currency($gia_goc) ?></del></p>                                             
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="flex justify-between items-center">
                                                 <div class="flex items-center">
-                                                    <?php echo renderStars(sao: 4); ?>
+                                                    <?php echo renderStars(sao: $so_sao_trung_binh); ?>
                                                 </div>
-                                                <button class="heart-button focus:outline-none">
-                                                    <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                        stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                                    </svg>
-                                                </button>
+                                                <?php if($_SESSION['email']!=''){ ?>
+                                                    <button class="heart-button focus:outline-none" data-product-id="<?= $id ?>">
+                                                        <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out  <?= $thich ? 'isheart' : '' ?>"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                            stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
+                                                        </svg>
+                                                    </button>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
-                                <?php //} ?>
-
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -433,8 +465,17 @@ function format_currency($number) {
                                                     alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
                                                 <div>
                                                     <div class="flex gap-2 items-center">
-                                                        <div class="text-base font-bold"><?=$ten?></div>
-                                                        <div class="text-xs"><?=$ngay_binh_luan?></div>
+                                                        <div>
+                                                            <div class="flex gap-2 items-center">
+                                                                <div class="text-base font-bold"><?=$ten?></div>
+                                                                <div class="text-xs"><?=$ngay_binh_luan?></div>
+                                                            </div>
+                                                        </div>
+                                                        <?php if (isset($_SESSION["Role"]) && $_SESSION["Role"] === 'Admin') { ?>
+                                                            <button onclick="OpenComment(<?=$id?>)">
+                                                                <img src="/public/image/icons8-edit-100.png" alt="edit" class="w-4 h-4">
+                                                            </button>
+                                                        <?php } ?>
                                                     </div>
                                                     <div class="text-sm pt-1 text-justify">
                                                         <?=$noi_dung?>
@@ -481,6 +522,10 @@ function format_currency($number) {
         include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
     <script>
+        function redirectToPage(id) {
+            const targetUrl = `/product?id=${id}`;
+            window.location.href = targetUrl;
+        }
         fetch('api/system/inforList')
             .then(response => response.json())
             .then(data => {
@@ -496,6 +541,19 @@ function format_currency($number) {
 
         
         document.getElementById('add-to-cart').addEventListener('click', function() {
+        let login = <?= json_encode($_SESSION['email']); ?>;
+       
+        if (!login) {
+            notyf.error('Vui lòng đăng nhập để thêm vào giỏ hàng!');
+            setTimeout(() => {
+                window.location.href = 'auth/login';
+            }, 2000);
+            return
+        }
+
+
+
+
         let productId = <?= json_encode($data['id']); ?>;
         let quantity = document.getElementById('quantity').value
         const data = {
@@ -541,8 +599,15 @@ function format_currency($number) {
                             alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
                         <div>
                             <div class="flex gap-2 items-center">
-                                <div class="text-base font-bold">${commentData.ten}</div>
-                                <div class="text-xs">${commentData.ngay_binh_luan}</div>
+                                <div>
+                                    <div class="flex gap-2 items-center">
+                                        <div class="text-base font-bold">${commentData.ten}</div>
+                                        <div class="text-xs">${commentData.ngay_binh_luan}</div>
+                                    </div>
+                                </div>
+                                <button>
+                                    <img src="/public/image/icons8-edit-100.png" alt="edit" class="w-4 h-4">
+                                </button>
                             </div>
                             <div class="text-sm pt-1 text-justify">
                                 ${commentData.noi_dung}
@@ -606,6 +671,14 @@ function format_currency($number) {
                 console.error('Error:', error);
                 notyf.error('Đã xảy ra lỗi khi viết bình luận!');
             });
+        }
+
+        function OpenComment(idcmt){
+            document.getElementById("cmtModal").classList.remove("hidden");
+        }
+
+        function closeModalCmt(){
+            document.getElementById("cmtModal").classList.add("hidden");
         }
 
     </script>

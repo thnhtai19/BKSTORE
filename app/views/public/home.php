@@ -1,4 +1,5 @@
 <?php
+
 $cookies = http_build_query($_COOKIE, '', '; ');
 $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/api/user';
 
@@ -16,6 +17,10 @@ curl_close($ch);
 function format_currency($number) {
     return number_format($number, 0, ',', '.') . 'đ';
 }
+?>
+
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +75,7 @@ function format_currency($number) {
                             </svg>
                         </a>
                         <a
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1"  href="/favorite">
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1"  href="/like">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/product.png" alt="product" class="w-6 h-6 mr-2">
                                 <div>
@@ -210,7 +215,7 @@ function format_currency($number) {
                                     $gia_goc = $item['gia_goc'];
                                     $gia_sau_giam_gia = $item['gia_sau_giam_gia'];
                                     $so_sao_trung_binh = $item['so_sao_trung_binh'];
-                                    $thich = $item['thich'];
+                                    $thich = $item['thich'] ?? false;
                             ?>
                                 <div class="swiper-slide-product overflow-hidden">
                                     <div class="bg-white p-2 rounded-lg shadow-lg w-full">
@@ -231,14 +236,16 @@ function format_currency($number) {
                                             <div class="flex items-center">
                                                 <?php echo renderStars(sao: $so_sao_trung_binh); ?>
                                             </div>
-                                            <button class="heart-button focus:outline-none">
-                                                <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out  <?= $thich ? 'isheart' : '' ?>"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                                </svg>
-                                            </button>
+                                            <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
+                                                <button class="heart-button focus:outline-none" data-product-id="<?= $id ?>">
+                                                    <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out  <?= $thich ? 'isheart' : '' ?>"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                        stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
+                                                    </svg>
+                                                </button>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -268,7 +275,7 @@ function format_currency($number) {
                                 $gia_goc = $book['gia_goc'];
                                 $gia_sau_giam_gia = $book['gia_sau_giam_gia'];
                                 $so_sao_trung_binh = $book['so_sao_trung_binh'];
-                                $thich = $book['thich'];
+                                $thich = $book['thich'] ?? false;
                         ?>
                             <div class="bg-white p-2 rounded-lg shadow-lg w-full">
                                 <div class="cursor-pointer" onclick="redirectToPage(<?= $id ?>)">
@@ -288,14 +295,16 @@ function format_currency($number) {
                                     <div class="flex items-center">
                                         <?php echo renderStars(sao: $so_sao_trung_binh); ?>
                                     </div>
-                                    <button class="heart-button focus:outline-none">
-                                        <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out  <?= $thich ? 'isheart' : '' ?>"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                        </svg>
-                                    </button>
+                                    <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
+                                        <button class="heart-button focus:outline-none" data-product-id="<?= $id ?>">
+                                            <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out  <?= $thich ? 'isheart' : '' ?>"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
+                                            </svg>
+                                        </button>
+                                    <?php } ?>
                                 </div>
                             </div>
                         <?php } ?>

@@ -4,6 +4,36 @@ if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();
 }
+
+
+$ID_DonHang = $_GET['orderCode'];
+$id = $_GET['id'];
+if($ID_DonHang == ''){
+    header('Location: /404');
+    exit;
+}
+
+// Kiểm tra trạng thái thanh toán
+if($id != ''){
+    $data = [
+        'orderCode' => $ID_DonHang
+    ];
+    $jsonData = json_encode($data);
+    $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/api/payment/check';
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Content-Type: application/json",
+        "Content-Length: " . strlen($jsonData)
+    ]);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+    $response = curl_exec($ch);
+    $data = json_decode($response, true);
+    curl_close($ch);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -25,9 +55,9 @@ if(!isset($_SESSION["email"])){
         <div class="overflow-y-auto">
             <main class="container max-w-screen-1200 mx-auto min-h-screen pt-16 pb-20 px-2 lg:px-0">
                 <div class="flex flex-col items-center pt-14">
-                    <div class="font-bold text-xl text-custom-blue">Đặt hàng thất bại</div>
+                    <div class="font-bold text-xl text-red-500">Đặt hàng thất bại</div>
                     <div class="pt-8">
-                        <img src="/public/image/error.png" alt="success" class="w-20 h-20">
+                        <img src="/public/image/icons8-cancel-100.png" alt="success" class="w-20 h-20">
                     </div>
                     <div class="pt-6 text-gray-700">Đơn hàng của bạn đã bị huỷ.</div>
                     <div class="text-gray-700">Nếu đây là lỗi vui lòng liên hệ cho chúng tôi!</div>
