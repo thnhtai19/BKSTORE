@@ -12,18 +12,17 @@ if ($method === 'POST') {
     }
     else {
         if ($_SESSION["Role"] == 'Admin') {
-            if (isset($_POST['MaContact'])) $MaContact = $_POST['MaContact'];
+            if (isset($_POST['MaDoiTac'])) $MaDoiTac = $_POST['MaDoiTac'];
             else {
                 echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
                 return;
             }
-            $Loai = isset($_POST['Loai']) ? $_POST['Loai'] : null;
-            $ThongTin = isset($_POST['ThongTin']) ? $_POST['ThongTin'] : null;
-            $TrangThai = isset($_POST['TrangThai']) ? $_POST['TrangThai'] : null;
+            $Ten = isset($_POST['Ten']) ? $_POST['Ten'] : null;
+            $LienKet = isset($_POST['LienKet']) ? $_POST['LienKet'] : null;
 
             if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
-                $model->deleteImageContact($MaContact);
-                $uploadDir = dirname(__DIR__, 3) . "/public/image/contact/$MaContact/";
+                $model->deleteImagePartner($MaDoiTac);
+                $uploadDir = dirname(__DIR__, 3) . "/public/image/partner/$MaDoiTac/";
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -33,21 +32,21 @@ if ($method === 'POST') {
                 $newsPath = $uploadDir . $newsFileName;
 
                 if (move_uploaded_file($newsTmpPath, $newsPath)) {
-                    $result = $model->updateContact($MaContact, "/public/image/contact/$MaContact/" . $newsFileName, $Loai, $ThongTin, $TrangThai);
+                    $result = $model->updatePartner($MaDoiTac, "/public/image/partner/$MaDoiTac/" . $newsFileName, $LienKet, $Ten);
                     $uploaded = true;
                 }
 
                 if (!$uploaded) {
                     echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh sản phẩm']);
                 } else {
-                    if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên lạc thành công']);
-                    else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên lạc thất bại']);
+                    if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật đối tác thành công']);
+                    else echo json_encode(['success' => false, 'message' => 'Cập nhật đối tác thất bại']);
                 }
             }
             else {
-                $result = $model->updateContact($MaContact, null, $Loai, $ThongTin, $TrangThai);
-                if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên lạc thành công']);
-                else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên lạc thất bại']);
+                $result = $model->updatePartner($MaDoiTac, null, $LienKet, $Ten);
+                if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật đối tác thành công']);
+                else echo json_encode(['success' => false, 'message' => 'Cập nhật đối tác thất bại']);
             }
         }
         else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);

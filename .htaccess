@@ -165,6 +165,22 @@ RewriteRule ^api/contact$ /app/controllers/contact/set.php [L]
 RewriteRule ^api/contact/update$ /app/controllers/contact/update.php [L]
 RewriteRule ^api/contact/delete$ /app/controllers/contact/delete.php [L]
 
+#SOCIAL ROUTERS BACKEND
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^api/social$ /app/controllers/social/get.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/social$ /app/controllers/social/set.php [L]
+RewriteRule ^api/social/update$ /app/controllers/social/update.php [L]
+RewriteRule ^api/social/delete$ /app/controllers/social/delete.php [L]
+
+#PARTNER ROUTERS BACKEND
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^api/partner$ /app/controllers/partner/get.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/partner$ /app/controllers/partner/set.php [L]
+RewriteRule ^api/partner/update$ /app/controllers/partner/update.php [L]
+RewriteRule ^api/partner/delete$ /app/controllers/partner/delete.php [L]
+
 #PAYOS
 RewriteRule ^api/payment/create$ /app/controllers/payment/create.php [L]
 RewriteRule ^api/payment/check$ /app/controllers/payment/check.php [L]

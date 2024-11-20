@@ -12,43 +12,41 @@ if ($method === 'POST') {
     }
     else {
         if ($_SESSION["Role"] == 'Admin') {
-            if (isset($_POST['MaContact'])) $MaContact = $_POST['MaContact'];
+            $LienKet = isset($_POST['LienKet']) ? $_POST['LienKet'] : null;
+            
+            $news = $model->setSocial($LienKet);
+            if ($news['success'] == true) {
+                $MaMXH = $news['social_id'];
+            }
             else {
-                echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
+                echo json_encode(['success' => false, 'message' => $product['message']]);
                 return;
             }
-            $Loai = isset($_POST['Loai']) ? $_POST['Loai'] : null;
-            $ThongTin = isset($_POST['ThongTin']) ? $_POST['ThongTin'] : null;
-            $TrangThai = isset($_POST['TrangThai']) ? $_POST['TrangThai'] : null;
+            $uploadDir = dirname(__DIR__, 3) . "/public/image/social/$MaMXH/";
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            $uploaded = false;
 
             if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
-                $model->deleteImageContact($MaContact);
-                $uploadDir = dirname(__DIR__, 3) . "/public/image/contact/$MaContact/";
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
                 $newsTmpPath = $_FILES['file']['tmp_name'];
                 $newsFileName = time() . '_' . uniqid() . '.' . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION); 
 
                 $newsPath = $uploadDir . $newsFileName;
 
                 if (move_uploaded_file($newsTmpPath, $newsPath)) {
-                    $result = $model->updateContact($MaContact, "/public/image/contact/$MaContact/" . $newsFileName, $Loai, $ThongTin, $TrangThai);
+                    $result = $model->updateSocial($MaMXH, "/public/image/social/$MaMXH/" . $newsFileName, null, null);
                     $uploaded = true;
                 }
 
                 if (!$uploaded) {
                     echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh sản phẩm']);
                 } else {
-                    if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên lạc thành công']);
-                    else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên lạc thất bại']);
+                    if ($result) echo json_encode(['success' => true, 'message' => 'Thêm mạng xã hội thành công']);
+                    else echo json_encode(['success' => false, 'message' => 'Thêm mạng xã hội thất bại']);
                 }
             }
-            else {
-                $result = $model->updateContact($MaContact, null, $Loai, $ThongTin, $TrangThai);
-                if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên lạc thành công']);
-                else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên lạc thất bại']);
-            }
+            else echo json_encode(['success' => true, 'message' => 'Thêm mạng xã hội thành công']);
         }
         else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
     }

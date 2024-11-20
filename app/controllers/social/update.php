@@ -12,18 +12,17 @@ if ($method === 'POST') {
     }
     else {
         if ($_SESSION["Role"] == 'Admin') {
-            if (isset($_POST['MaContact'])) $MaContact = $_POST['MaContact'];
+            if (isset($_POST['MaMXH'])) $MaMXH = $_POST['MaMXH'];
             else {
                 echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
                 return;
             }
-            $Loai = isset($_POST['Loai']) ? $_POST['Loai'] : null;
-            $ThongTin = isset($_POST['ThongTin']) ? $_POST['ThongTin'] : null;
+            $LienKet = isset($_POST['LienKet']) ? $_POST['LienKet'] : null;
             $TrangThai = isset($_POST['TrangThai']) ? $_POST['TrangThai'] : null;
 
             if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
-                $model->deleteImageContact($MaContact);
-                $uploadDir = dirname(__DIR__, 3) . "/public/image/contact/$MaContact/";
+                $model->deleteImageSocial($MaMXH);
+                $uploadDir = dirname(__DIR__, 3) . "/public/image/social/$MaMXH/";
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -33,21 +32,21 @@ if ($method === 'POST') {
                 $newsPath = $uploadDir . $newsFileName;
 
                 if (move_uploaded_file($newsTmpPath, $newsPath)) {
-                    $result = $model->updateContact($MaContact, "/public/image/contact/$MaContact/" . $newsFileName, $Loai, $ThongTin, $TrangThai);
+                    $result = $model->updateSocial($MaMXH, "/public/image/social/$MaMXH/" . $newsFileName, $LienKet, $TrangThai);
                     $uploaded = true;
                 }
 
                 if (!$uploaded) {
                     echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh sản phẩm']);
                 } else {
-                    if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên lạc thành công']);
-                    else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên lạc thất bại']);
+                    if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật mạng xã hội thành công']);
+                    else echo json_encode(['success' => false, 'message' => 'Cập nhật mạng xã hội thất bại']);
                 }
             }
             else {
-                $result = $model->updateContact($MaContact, null, $Loai, $ThongTin, $TrangThai);
-                if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên lạc thành công']);
-                else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên lạc thất bại']);
+                $result = $model->updateSocial($MaMXH, null, $LienKet, $TrangThai);
+                if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật mạng xã hội thành công']);
+                else echo json_encode(['success' => false, 'message' => 'Cập nhật mạng xã hội thất bại']);
             }
         }
         else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);

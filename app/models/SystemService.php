@@ -292,6 +292,128 @@ class SystemService {
         return true;
     }
 
+    public function getSocialList() {
+        $sql = 'SELECT * FROM mang_xa_hoi';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    public function setSocial($Lienket) {
+        $sql = "INSERT INTO mang_xa_hoi (Lienket) VALUES (?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $Lienket);
+        $stmt->execute();
+        return ['success' => true, 'social_id' => mysqli_insert_id($this->conn)];
+    }
+
+    public function updateSocial($MaMXH, $HinhAnh, $LienKet, $TrangThai) {
+        $rac = $this->getSocial($MaMXH);
+        
+        $HinhAnh = $HinhAnh != null ? $HinhAnh : $rac['HinhAnh'];
+        $LienKet = $LienKet != null ? $LienKet : $rac['LienKet'];
+        $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
+
+        $sql = "UPDATE mang_xa_hoi SET HinhAnh = ?, LienKet = ?, TrangThai = ? WHERE MaMXH = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sssi", $HinhAnh, $LienKet, $TrangThai, $MaMXH);
+        $stmt->execute();
+        return true;
+    }
+
+    public function getSocial($MaMXH) {
+        $sql = 'SELECT * FROM mang_xa_hoi WHERE MaMXH = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaMXH);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function deleteImageSocial($MaMXH) {
+        $Anh = $this->getSocial($MaMXH)['HinhAnh'];
+        if ($Anh != null) {
+            $filePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($Anh, '/'));
+            chmod($filePath, 0777);
+            unlink($filePath);
+        }
+        return;
+    }
+
+    public function deleteSocial($MaMXH) {
+        $sql = 'DELETE FROM mang_xa_hoi WHERE MaMXH = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaMXH);
+        $stmt->execute();
+        return true;
+    }
+
+    public function getPartnerList() {
+        $sql = 'SELECT * FROM doi_tac';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    public function setPartner($Lienket, $Ten) {
+        $sql = "INSERT INTO doi_tac (Lienket, Ten) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $Lienket, $Ten);
+        $stmt->execute();
+        return ['success' => true, 'partner_id' => mysqli_insert_id($this->conn)];
+    }
+
+    public function updatePartner($MaDoiTac, $HinhAnh, $LienKet, $Ten) {
+        $rac = $this->getPartner($MaDoiTac);
+        
+        $HinhAnh = $HinhAnh != null ? $HinhAnh : $rac['HinhAnh'];
+        $LienKet = $LienKet != null ? $LienKet : $rac['LienKet'];
+        $Ten = ($Ten == 'Đang ẩn' || $Ten == 'Đang hiện') ? $Ten : $rac['Ten'];
+
+        $sql = "UPDATE doi_tac SET HinhAnh = ?, LienKet = ?, Ten = ? WHERE MaDoiTac = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sssi", $HinhAnh, $LienKet, $Ten, $MaDoiTac);
+        $stmt->execute();
+        return true;
+    }
+
+    public function getPartner($MaDoiTac) {
+        $sql = 'SELECT * FROM doi_tac WHERE Ma$MaDoiTac = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaDoiTac);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function deleteImagePartner($MaDoiTac) {
+        $Anh = $this->getPartner($MaDoiTac)['HinhAnh'];
+        if ($Anh != null) {
+            $filePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($Anh, '/'));
+            chmod($filePath, 0777);
+            unlink($filePath);
+        }
+        return;
+    }
+
+    public function deletePartner($MaDoiTac) {
+        $sql = 'DELETE FROM doi_tac WHERE MaDoiTac = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaDoiTac);
+        $stmt->execute();
+        return true;
+    }
+
     private function deleteImageNew($MaTinTuc, $AnhMuonXoa) {
         foreach ($AnhMuonXoa as $Anh) {
             $filePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($Anh, '/'));
