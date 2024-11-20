@@ -1,9 +1,31 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    const loading = document.getElementById("loading");
-    setTimeout(() => {
-        loading.classList.add("hidden");
-    }, 1000);
+    const selectedProducts = JSON.parse(localStorage.getItem('selectedProducts')) || [];
+    if (selectedProducts.length === 0) {
+        window.location.href = '/404';
+        return;
+    }
+
+    const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
+    if (!customerInfo || Object.keys(customerInfo).length === 0) {
+        window.location.href = '/404';
+    }else{
+        const totalAmountDiv = document.getElementById('totalAmount');
+        totalAmountDiv.innerText = `Tạm tính: ${customerInfo.tongtien.toLocaleString()}đ`;
+
+        const totalCountDiv = document.getElementById('totalCount');
+        totalCountDiv.innerText = `${customerInfo.soluong}`;
+
+        const tienhangDiv = document.getElementById('tienhang');
+        tienhangDiv.innerText = `${customerInfo.tongtien.toLocaleString()}đ`;
+
+        const tongtienDiv = document.getElementById('tongtien');
+        tongtienDiv.innerText = `${customerInfo.tongtien.toLocaleString()}đ`;
+
+        document.getElementById('tenkhachhang').value = customerInfo.customerName;
+        document.getElementById('diachi').value = customerInfo.customerAddress;
+        document.getElementById('sdt').value = customerInfo.customerPhone;
+    }
 
     const codRadio = document.getElementById("cod");
     const bankRadio = document.getElementById("bank");

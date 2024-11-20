@@ -31,8 +31,6 @@
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Thể loại:</label>
                     <select id="theloai" class="mt-2 mb-4 w-full p-2 border rounded">
-                        <option value="Văn học">Văn học</option>
-                        <option value="Thiếu nhi">Thiếu nhi</option>
                     </select>
                 </div>
                 <div class="w-1/2">
@@ -144,8 +142,6 @@
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Thể loại:</label>
                     <select id="themtheloai" class="h-10 mt-2 mb-4 w-full p-2 border rounded" onchange="toggleCustomInput()">
-                        <option value="vanhoc">Sách Văn Học</option>
-                        <option value="thieunhi">Sách Thiếu Nhi</option>
                         <option value="other">Khác</option>
                     </select>
                     
@@ -270,118 +266,8 @@
                                 action: "Hành động"
                             };
 
-                            const data = [
-                                {
-                                    id: "2210",
-                                    name: 'Dế Mèn Phiêu Lưu Ký - Tái Bản 2020',
-                                    theloai: 'Văn học',
-                                    tacgia: 'Tô Hoài',
-                                    price: '50.000đ',
-                                    tylegiamgia: "0.15",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2211",
-                                    name: 'Những Ngày Xưa Ấy',
-                                    theloai: 'Văn học',
-                                    tacgia: 'Nguyễn Nhật Ánh',
-                                    price: '40.000đ',
-                                    tylegiamgia: "0.10",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2212",
-                                    name: 'Mắt Biếc',
-                                    theloai: 'Văn học',
-                                    tacgia: 'Nguyễn Nhật Ánh',
-                                    price: '60.000đ',
-                                    tylegiamgia: "0.05",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2213",
-                                    name: 'Số Đỏ',
-                                    theloai: 'Văn học',
-                                    tacgia: 'Ngô Tất Tố',
-                                    price: '55.000đ',
-                                    tylegiamgia: "0.20",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2214",
-                                    name: 'Tắt Đèn',
-                                    theloai: 'Văn học',
-                                    tacgia: 'Nguyễn Công Hoan',
-                                    price: '45.000đ',
-                                    tylegiamgia: "0.25",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2215",
-                                    name: 'Bố Già',
-                                    theloai: 'Văn học',
-                                    tacgia: 'Mario Puzo',
-                                    price: '80.000đ',
-                                    tylegiamgia: "0.30",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2216",
-                                    name: 'Moby Dick',
-                                    theloai: 'Văn học',
-                                    tacgia: 'Herman Melville',
-                                    price: '75.000đ',
-                                    tylegiamgia: "0.12",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2217",
-                                    name: 'Gatsby Vĩ Đại',
-                                    theloai: 'Văn học',
-                                    tacgia: 'F. Scott Fitzgerald',
-                                    price: '70.000đ',
-                                    tylegiamgia: "0.18",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2218",
-                                    name: 'Đời Sống Dưới Đáy',
-                                    theloai: 'Văn học',
-                                    tacgia: 'Fyodor Dostoevsky',
-                                    price: '90.000đ',
-                                    tylegiamgia: "0.22",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                },
-                                {
-                                    id: "2219",
-                                    name: 'Hạnh Phúc Từ Những Điều Nhỏ Nhặt',
-                                    theloai: 'Tâm lý',
-                                    tacgia: 'Phạm Lữ Ân',
-                                    price: '30.000đ',
-                                    tylegiamgia: "0.10",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
-                                    ]
-                                }
-                            ];
+                            let data = []
+                            let categorys = []
 
                             function editProduct(item) {
                                 document.getElementById("editProductModal").classList.remove("hidden");
@@ -402,7 +288,6 @@
                                 document.getElementById("soluongkho").value = parseItem.soluongkho; 
                                 document.getElementById("mota").value = parseItem.mota; 
                                 document.getElementById("kichthuoc").value = parseItem.kichthuoc; 
-                                
                                 
                             }
 
@@ -436,6 +321,80 @@
                                     customInput.value = ""; 
                                 }
                             }
+
+                            async function getItems() {
+                                const response = await fetch(`/api/admin/product`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+                                if (response.ok) {
+                                    const dataItems = await response.json();
+                                    if(!dataItems.success){
+                                        if(dataItems.message === "Người dùng chưa đăng nhập"){
+                                            window.location.href = '/auth/login'
+                                            return
+                                        }else if(dataItems.message === "Không có quyền truy cập"){
+                                            window.location.href = '/404'
+                                            return
+                                        }
+                                    }
+
+                                    categorys = dataItems['product_category']
+                                    const selectElement = document.getElementById("themtheloai");
+                                    categorys.forEach((option, index) => {
+                                        const optionElement = document.createElement("option");
+                                        optionElement.value = option;
+                                        optionElement.textContent = option;
+                                        if (index === categorys.length - 1) {
+                                            optionElement.selected = true;
+                                        }
+                                        selectElement.prepend(optionElement);
+                                    });
+
+                                    const selectElementEdit = document.getElementById("theloai");
+                                    categorys.forEach((option, index) => {
+                                        const optionElement = document.createElement("option");
+                                        optionElement.value = option;
+                                        optionElement.textContent = option;
+                                        selectElementEdit.prepend(optionElement);
+                                    });
+
+                                    dataItems['product_list'].forEach(item => {
+                                        data.push({
+                                            id: item.id,
+                                            name: item.ten,
+                                            theloai: item.thong_tin_chi_tiet.the_loai,
+                                            tacgia: item.thong_tin_chi_tiet.tac_gia,
+                                            price: item.gia_san_pham,
+                                            tylegiamgia: parseFloat(item.ty_le_giam_gia) / 100,
+                                            nxb: item.thong_tin_chi_tiet.nha_xuat_ban,
+                                            namxb: item.thong_tin_chi_tiet.nam_xuat_ban,
+                                            sotrang: item.thong_tin_chi_tiet.so_trang,
+                                            hinhthuc: item.thong_tin_chi_tiet.hinhthuc,
+                                            ngonngu: item.thong_tin_chi_tiet.ngon_ngu,
+                                            soluongkho: item.so_luong_ton_kho,
+                                            mota: item.mo_ta,
+                                            kichthuoc: item.thong_tin_chi_tiet.kich_thuoc,
+                                            action: [
+                                                { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
+                                            ]
+                                        });
+                                    });
+
+                                    const event = new CustomEvent('dataReady', { detail: dataItems });
+                                    window.dispatchEvent(event);
+                                } else {
+                                    console.error("Lỗi khi lấy dữ liệu từ API:", response.status);
+                                }
+                            }
+
+                            window.onload = async function() {
+                                await getItems(); 
+                            };
+
                         </script>
                         <?php
                             $title = "Quản lý sản phẩm";
