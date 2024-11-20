@@ -11,7 +11,9 @@ if ($method === 'GET') {
     $data = json_decode($json, true);
     if (isset($data['ID_SP'])) $ID_SP = $data['ID_SP'];
     else $ID_SP = '';
-    echo json_encode($model->getInfo($ID_SP));
+    if ($_SESSION["Role"] == 'Admin') $status = true; 
+    else $status = false;
+    echo json_encode($model->getInfo($ID_SP, $status));
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

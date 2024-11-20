@@ -26,12 +26,14 @@ class OrderService {
         if ($result1->num_rows == 0) {
             return ['success' => false, 'message' => 'Mã giảm giá không tồn tại'];
         }
-
         $row = $result1->fetch_assoc();
         if ($row['TrangThai'] == 'Hết hạn') {
             return ['success'=> false, 'message'=> 'Mã giảm giá đã hết hạn'];
         }
-
+        if ($row['TrangThai'] == 'Đã xóa') {
+            return ['success'=> false, 'message'=> 'Mã giảm giá không tồn tại'];
+        }
+        
         $id = $_SESSION["uid"];
         $sql2 = "SELECT GioiTinh FROM `khach_hang` WHERE `UID` = ?";
         $stmt2 = $this->conn->prepare($sql2);
@@ -101,7 +103,7 @@ class OrderService {
     }
 
     public function getInfo($uid, $ID_DonHang) {
-        $sql = "SELECT NgayDat, TongTien, PhuongThucThanhToan, ThanhToan, TrangThai, SDT, DiaChi, TenNguoiNhan FROM don_hang WHERE `UID` = ? AND ID_DonHang = ?";
+        $sql = "SELECT NgayDat, ThanhToan, TrangThai, SDT, DiaChi, TenNguoiNhan FROM don_hang WHERE `UID` = ? AND ID_DonHang = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $uid, $ID_DonHang);
         $stmt->execute();
@@ -155,19 +157,20 @@ class OrderService {
             return ['success' => false, 'message' => 'Không đủ hàng trong kho'];
         }
         if ($MaGiamGia == '') {
-            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("isissss", $uid, $NgayDat, $bill, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan);
+            $stmt->bind_param("isisssss", $uid, $NgayDat, $bill, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan, $bill);
             $stmt->execute();
         }
         else {
-            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sale = $this->sale($bill, $MaGiamGia, 0, $PhuongThucThanhToan)['tong_tien_phai_tra'];
+            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("isisssss", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan);
+            $stmt->bind_param("isissssss", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan, $sale);
             $stmt->execute();
         }
         $id_don_hang = mysqli_insert_id($this->conn);
-        $this->addProductToOrder($id_don_hang, $uid, $product_list);
+        // $this->addProductToOrder($id_don_hang, $uid, $product_list);
         return ['success' => true, 'message' => 'Đặt hàng thành công', 'ma_don_hang' => $id_don_hang];
     }
 
@@ -217,7 +220,7 @@ class OrderService {
         $stmt->execute();
         $result = $stmt->get_result();
         $num = $result->fetch_assoc()['count'];
-        $sql = 'SELECT TrangThai, TongTien, MaGiamGia, PhuongThucThanhToan
+        $sql = 'SELECT TrangThai, HoaDon
                 FROM don_hang 
                 WHERE `UID` = ?';
         $stmt = $this->conn->prepare($sql);
@@ -235,7 +238,7 @@ class OrderService {
         $money = 0;
         foreach ($data as $order) {
             if ($order['TrangThai'] == 'Đã giao hàng')
-            $money += $this->sale($order['TongTien'], $order['MaGiamGia'], 0, $order['PhuongThucThanhToan'])['tong_tien_phai_tra'];
+            $money += $order['HoaDon'];
         }
         return $money;
     }
@@ -392,7 +395,7 @@ class OrderService {
     }
 
     private function getPayment($orderId) {
-        $sql = "SELECT TongTien, ThanhToan, PhuongThucThanhToan, MaGiamGia FROM don_hang WHERE ID_DonHang = ?";
+        $sql = "SELECT TongTien, ThanhToan, PhuongThucThanhToan, MaGiamGia, HoaDon FROM don_hang WHERE ID_DonHang = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $orderId);
         $stmt->execute();
@@ -417,22 +420,18 @@ class OrderService {
             ];
         }
         else {
-            $money = $this->sale($order['TongTien'], $order['MaGiamGia'], 0, $order['PhuongThucThanhToan']);
-            if ($money['success'] === true) {
-                return [
-                    'status' => true,
-                    'thanh_toan' => [
-                        'tong_tien' => $order['TongTien'],
-                        'so_tien_da_giam' => $money['so_tien_da_giam'],
-                        'tong_tien_phai_tra' => $money['tong_tien_phai_tra'],
-                        'trang_thai' => $order['ThanhToan'],
-                        'phuong_thuc' => $order['PhuongThucThanhToan'],
-                        'ma_giam_gia' => $order['MaGiamGia'],
-                    ]
-                ];
-            }
+            return [
+                'status' => true,
+                'thanh_toan' => [
+                    'tong_tien' => $order['TongTien'],
+                    'so_tien_da_giam' => $order['TongTien'] - $order['HoaDon'],
+                    'tong_tien_phai_tra' => $order['HoaDon'],
+                    'trang_thai' => $order['ThanhToan'],
+                    'phuong_thuc' => $order['PhuongThucThanhToan'],
+                    'ma_giam_gia' => $order['MaGiamGia'],
+                ]
+            ];
         }
-        return ['status' => false, 'message' => $money['message']];
     }    
 
     private function getUser($uid) {  

@@ -6,16 +6,15 @@ $db = new Database();
 $model = new SystemService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'POST') {
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-    if (isset($data['MaTinTuc'])) $MaTinTuc = $data['MaTinTuc'];
-    else $MaTinTuc = '';
-    $response = $model->getNew($MaTinTuc);
-    if ($response) {
-        echo json_encode($response);
-    } else {
-        echo json_encode(['status' => 'Error', 'message' => 'Có lỗi xảy ra!']);
+if ($method === 'GET') {
+    if (!isset($_SESSION["email"])) {
+        echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
+    }
+    else {
+        if ($_SESSION["Role"] == 'Admin') {
+            echo json_encode($model->getPartnerList());
+        }
+        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
     }
 }
 else {
