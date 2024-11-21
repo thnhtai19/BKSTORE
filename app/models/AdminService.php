@@ -299,7 +299,7 @@ class AdminService {
     }
 
     private function productInfo() {
-        $product_list = $this->product->get();
+        $product_list = $this->product->get_admin();
         $product_info = [];
         foreach ($product_list as $product) {
             $product_info[] = $this->product->getProductInfo($product['ID_SP']);
@@ -358,11 +358,11 @@ class AdminService {
     }
 
     public function deleteProduct($ID_SP) {
-        $sql = "DELETE FROM SAN_PHAM WHERE ID_SP = ?";
+        $sql = "UPDATE SAN_PHAM SET TrangThai = 'Đã xóa' WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
     
         if ($stmt === false) {
-            error_log("Prepare failed: (" . $this->conn->errno . ") " . $this->conn->error);
+            error_log("Prepare failed: (" . $this->conn->error . ") " . $this->conn->error);
             return ["success" => false, "message" => "Prepare failed"];
         }
     
