@@ -6,11 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="/public/css/admin.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <title>Quản lý sản phẩm | ADMIN BKSTORE</title>
 </head>
 
 <body class="bg-gray-100">
+    <div id="confirmModal" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <p class="text-lg mb-4 text-center">Bạn có muốn xoá sản phẩm này không?</p>
+            <div class="flex justify-end gap-4">
+                <button id="confirmDelete" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Có</button>
+                <button id="cancelDelete" class="bg-gray-300 text-gray-800 py-2 px-4 rounded hover:bg-gray-400">Không</button>
+            </div>
+        </div>
+    </div>
     <div id="editProductModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-40">
         <div class="bg-white p-6 rounded-lg w-11/12 lg:w-2/4 z-50 overflow-y-auto" style="max-height: 700px">
             <div class="flex justify-between items-start">
@@ -94,19 +104,7 @@
             </div>
             <div class="w-full pb-6">
                 <label for="hinhanh" class="block text-sm font-medium text-gray-700">Hình ảnh:</label>
-                <div class="flex flex-wrap gap-4 mt-2">
-                    <div class="relative border border-gray-300 p-1 rounded-md">
-                        <img src="/public/image/book1.webp" alt="Hình ảnh 1" class="w-16 h-16 object-cover rounded">
-                        <button class="absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">
-                            ✕
-                        </button>
-                    </div>
-                    <div class="relative border border-gray-300 p-1 rounded-md">
-                        <img src="/public/image/book1.webp" alt="Hình ảnh 2" class="w-16 h-16 object-cover rounded">
-                        <button class="absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">
-                            ✕
-                        </button>
-                    </div>
+                <div class="flex flex-wrap gap-4 mt-2" id="imagePreviewContainer">
                     
                     <div class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
                         <input type="file" id="uploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUpload(this)">
@@ -115,8 +113,8 @@
                 </div>
             </div>
             <div class="flex justify-end space-x-4">
-                <button onclick="updateProduct()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
-                <button class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
+                <button onclick="handleUpdateProduct()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
+                <button onclick="deleteProduct()" class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
                 <button onclick="closeModalProduct()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
@@ -205,28 +203,16 @@
             </div>
             <div class="w-full pb-6">
                 <label for="hinhanh" class="block text-sm font-medium text-gray-700">Hình ảnh:</label>
-                <div class="flex flex-wrap gap-4 mt-2">
-                    <div class="relative border border-gray-300 p-1 rounded-md">
-                        <img src="/public/image/book1.webp" alt="Hình ảnh 1" class="w-16 h-16 object-cover rounded">
-                        <button class="absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">
-                            ✕
-                        </button>
-                    </div>
-                    <div class="relative border border-gray-300 p-1 rounded-md">
-                        <img src="/public/image/book1.webp" alt="Hình ảnh 2" class="w-16 h-16 object-cover rounded">
-                        <button class="absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">
-                            ✕
-                        </button>
-                    </div>
+                <div id="previewImage" class="flex flex-wrap gap-4 mt-2">
                     
                     <div class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
-                        <input type="file" id="uploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUpload(this)">
+                        <input type="file" id="uploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUploadAdd(this)">
                         <span class="text-gray-400">+</span>
                     </div>
                 </div>
             </div>
             <div class="flex justify-end space-x-4">
-                <button class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
+                <button onclick="handleSaveProduct()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
                 <button onclick="closeModalAddProduct()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
@@ -288,13 +274,30 @@
                                 document.getElementById("soluongkho").value = parseItem.soluongkho; 
                                 document.getElementById("mota").value = parseItem.mota; 
                                 document.getElementById("kichthuoc").value = parseItem.kichthuoc; 
-                                
+
+                                const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+                                parseItem.hinhanh.forEach(imageSrc => {
+                                    const imageDiv = document.createElement('div');
+                                    imageDiv.classList.add('relative', 'border', 'border-gray-300', 'p-1', 'rounded-md');
+                                    imageDiv.innerHTML = `
+                                        <img src="${imageSrc}" alt="Hình ảnh" class="w-16 h-16 object-cover rounded">
+                                        <button class="delete-image absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">✕</button>
+                                    `;
+                                    imagePreviewContainer.appendChild(imageDiv);
+                                });
+
+                                attachDeleteEvent();
                             }
 
-                            function updateProduct() {
-                                const status = document.getElementById("userStatus").value;
-                                alert(`User status updated to: ${status}`);
-                                closeModal();
+                            function attachDeleteEvent() {
+                                const deleteButtons = document.querySelectorAll('.delete-image');
+                                deleteButtons.forEach(button => {
+                                    button.addEventListener('click', function () {
+                                        const imageDiv = this.parentElement;
+                                        imageDiv.remove();
+                                    });
+                                });
                             }
 
                             function closeModalProduct() {
@@ -378,6 +381,7 @@
                                             soluongkho: item.so_luong_ton_kho,
                                             mota: item.mo_ta,
                                             kichthuoc: item.thong_tin_chi_tiet.kich_thuoc,
+                                            hinhanh: item.hinh,
                                             action: [
                                                 { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editProduct' },
                                             ]
@@ -406,7 +410,339 @@
             </div>
         </div>
     </div>
+    <script src="/public/js/notyf.min.js"></script>
     <script src="/public/js/sidebar.js"></script>
+    <script>
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+
+
+        function deleteProduct(){
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('hidden');
+
+            const id = document.getElementById('idProduct').value
+
+            document.getElementById('confirmDelete').onclick = function() {
+                
+
+                modal.classList.add('hidden');
+            }
+
+            document.getElementById('cancelDelete').onclick = function() {
+                modal.classList.add('hidden');
+            }
+            
+        }
+
+        function handleImageUploadAdd(input) {
+            const previewContainer = document.getElementById('previewImage');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imageWrapper = document.createElement('div');
+                    imageWrapper.className = "relative border border-gray-300 p-1 rounded-md";
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = "Uploaded Image";
+                    img.className = "w-16 h-16 object-cover rounded";
+
+                    const removeButton = document.createElement('button');
+                    removeButton.className = "absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none";
+                    removeButton.innerHTML = "✕";
+
+                    removeButton.onclick = function () {
+                        previewContainer.removeChild(imageWrapper);
+                    };
+
+                    imageWrapper.appendChild(img);
+                    imageWrapper.appendChild(removeButton);
+
+                    previewContainer.appendChild(imageWrapper);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function handleImageUpload(input) {
+            const previewContainer = document.getElementById('imagePreviewContainer');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imageWrapper = document.createElement('div');
+                    imageWrapper.className = "relative border border-gray-300 p-1 rounded-md";
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = "Uploaded Image";
+                    img.className = "w-16 h-16 object-cover rounded";
+
+                    const removeButton = document.createElement('button');
+                    removeButton.className = "absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none";
+                    removeButton.innerHTML = "✕";
+
+                    removeButton.onclick = function () {
+                        previewContainer.removeChild(imageWrapper);
+                    };
+
+                    imageWrapper.appendChild(img);
+                    imageWrapper.appendChild(removeButton);
+
+                    previewContainer.appendChild(imageWrapper);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function handleSaveProduct() {
+            const apiUrl = '/api/admin/product';
+
+            const name = document.getElementById('themnameProduct').value.trim();
+            const author = document.getElementById('themtacgia').value.trim();
+            const category = document.getElementById('themtheloai').value.trim();
+            const customCategory = document.getElementById('customTheloai').value.trim();
+            const quantity = document.getElementById('themsoluongkho').value.trim();
+            const price = document.getElementById('themgia').value.trim();
+            const discount = document.getElementById('themtylegiamgia').value.trim();
+            const publisher = document.getElementById('themnxb').value.trim();
+            const year = document.getElementById('themnamxb').value.trim();
+            const size = document.getElementById('themkichthuoc').value.trim();
+            const pages = document.getElementById('themsotrang').value.trim();
+            const format = document.getElementById('themhinhthuc').value.trim();
+            const language = document.getElementById('themngonngu').value.trim();
+            const keywords = document.getElementById('themtukhoa').value.trim();
+            const description = document.getElementById('themmota').value.trim();
+
+            const finalCategory = category === 'other' ? customCategory : category;
+
+            let errorMessage = "";
+
+            if (!name) {
+                notyf.error('Tên sản phẩm không được để trống.');
+                return false;
+            }
+            if (!author) {
+                notyf.error("Tác giả không được để trống.");
+                return false;
+            }
+            if (!finalCategory) {
+                notyf.error("Thể loại không được để trống.");
+                return false;
+            }
+            if (!quantity || isNaN(quantity) || parseInt(quantity) <= 0) {
+                notyf.error("Số lượng phải là số nguyên dương.");
+                return false;
+            }
+            if (!price || isNaN(price) || parseFloat(price) <= 0) {
+                notyf.error("Giá phải là số lớn hơn 0.");
+                return false;
+            }
+            if (discount && (isNaN(discount) || parseFloat(discount) < 0 || parseFloat(discount) > 1)) {
+                notyf.error("Tỷ lệ giảm giá phải nằm trong khoảng 0 - 1");
+                return false;
+            }
+
+            if (!publisher) {
+                notyf.error("Nhà xuất bản không được để trống.");
+                return false;
+            }
+            if (!year || isNaN(year) || parseInt(year) < 1000 || parseInt(year) > new Date().getFullYear()) {
+                notyf.error("Năm xuất bản phải hợp lệ.");
+                return false;
+            }
+            if (pages && (isNaN(pages) || parseInt(pages) <= 0)) {
+                notyf.error("Số trang phải là số nguyên dương.");
+                return false;
+            }
+
+            const previewContainer = document.getElementById('previewImage');
+            const images = previewContainer.querySelectorAll('img');
+            if (images.length === 0) {
+                notyf.error("Bạn cần tải lên ít nhất một hình ảnh.");
+                return false;
+            }
+
+            const formData = new FormData();
+            formData.append('TenSp', name);
+            formData.append('TacGia', author);
+            formData.append('PhanLoai', finalCategory);
+            formData.append('SoLuongKho', quantity);
+            formData.append('Gia', price);
+            formData.append('TyLeGiamGia', discount);
+            formData.append('NXB', publisher);
+            formData.append('NamXB', year);
+            formData.append('KichThuoc', size);
+            formData.append('SoTrang', pages);
+            formData.append('HinhThuc', format);
+            formData.append('NgonNgu', language);
+            formData.append('TuKhoa', keywords);
+            formData.append('MoTa', description);
+
+            for (const img of images) {
+                const response = await fetch(img.src);
+                const blob = await response.blob();
+                formData.append('product[]', blob, `image_${Date.now()}.jpg`);
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    notyf.error('Xảy ra lỗi khi thêm sản phẩm!');
+                    return
+                }
+
+                const result = await response.json();
+                if(result['success']){
+                    notyf.success('Thêm sản phẩm thành công!');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);   
+                }else{
+                    notyf.error('Thêm sản phẩm thất bại!');
+                    return
+                }
+            } catch (error) {
+                notyf.error('Xảy ra lỗi khi thêm sản phẩm!');
+            }
+        }
+
+        async function handleUpdateProduct() {
+            const apiUrl = '/api/admin/updateProduct';
+
+            const idsp = document.getElementById('idProduct').value.trim();
+            const name = document.getElementById('nameProduct').value.trim();
+            const author = document.getElementById('tacgia').value.trim();
+            const category = document.getElementById('theloai').value.trim();
+            const quantity = document.getElementById('soluongkho').value.trim();
+            const price = document.getElementById('gia').value.trim();
+            const discount = document.getElementById('tylegiamgia').value.trim();
+            const publisher = document.getElementById('nxb').value.trim();
+            const year = document.getElementById('namxb').value.trim();
+            const size = document.getElementById('kichthuoc').value.trim();
+            const pages = document.getElementById('sotrang').value.trim();
+            const format = document.getElementById('hinhthuc').value.trim();
+            const language = document.getElementById('ngonngu').value.trim();
+            const keywords = document.getElementById('tukhoa').value.trim();
+            const description = document.getElementById('mota').value.trim();
+
+            let errorMessage = "";
+
+            if (!idsp) {
+                notyf.error('Không tìm thấy ID sản phẩm.');
+                return false;
+            }
+            if (!name) {
+                notyf.error('Tên sản phẩm không được để trống.');
+                return false;
+            }
+            if (!author) {
+                notyf.error("Tác giả không được để trống.");
+                return false;
+            }
+            if (!category) {
+                notyf.error("Thể loại không được để trống.");
+                return false;
+            }
+            if (!quantity || isNaN(quantity) || parseInt(quantity) <= 0) {
+                notyf.error("Số lượng phải là số nguyên dương.");
+                return false;
+            }
+            if (!price || isNaN(price) || parseFloat(price) <= 0) {
+                notyf.error("Giá phải là số lớn hơn 0.");
+                return false;
+            }
+            if (discount && (isNaN(discount) || parseFloat(discount) < 0 || parseFloat(discount) > 1)) {
+                notyf.error("Tỷ lệ giảm giá phải nằm trong khoảng 0 - 1");
+                return false;
+            }
+
+            if (!publisher) {
+                notyf.error("Nhà xuất bản không được để trống.");
+                return false;
+            }
+            if (!year || isNaN(year) || parseInt(year) < 1000 || parseInt(year) > new Date().getFullYear()) {
+                notyf.error("Năm xuất bản phải hợp lệ.");
+                return false;
+            }
+            if (pages && (isNaN(pages) || parseInt(pages) <= 0)) {
+                notyf.error("Số trang phải là số nguyên dương.");
+                return false;
+            }
+
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const images = previewContainer.querySelectorAll('img');
+            if (images.length === 0) {
+                notyf.error("Bạn cần tải lên ít nhất một hình ảnh.");
+                return false;
+            }
+
+            const formData = new FormData();
+            formData.append('ID_SP', idsp);
+            formData.append('TenSp', name);
+            formData.append('TacGia', author);
+            formData.append('PhanLoai', category);
+            formData.append('SoLuongKho', quantity);
+            formData.append('Gia', price);
+            formData.append('TyLeGiamGia', discount);
+            formData.append('NXB', publisher);
+            formData.append('NamXB', year);
+            formData.append('KichThuoc', size);
+            formData.append('SoTrang', pages);
+            formData.append('HinhThuc', format);
+            formData.append('NgonNgu', language);
+            formData.append('TuKhoa', keywords);
+            formData.append('MoTa', description);
+
+            for (const img of images) {
+                const response = await fetch(img.src);
+                const blob = await response.blob();
+                formData.append('product[]', blob, `image_${Date.now()}.jpg`);
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    notyf.error('Xảy ra lỗi khi cập nhật sản phẩm!');
+                    return
+                }
+
+                const result = await response.json();
+                if(result['success']){
+                    notyf.success('Cập nhật sản phẩm thành công!');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);   
+                }else{
+                    notyf.error('Cập nhật sản phẩm thất bại!');
+                    return
+                }
+            } catch (error) {
+                notyf.error('Xảy ra lỗi khi cập nhật sản phẩm!');
+            }
+        }
+
+
+    </script>
 </body>
 
 </html>
