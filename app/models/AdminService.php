@@ -107,7 +107,7 @@ class AdminService {
     }
 
     public function addProductImage ($Anh, $ID_SP) {
-        $relativeAvatarPath = "public/image/$ID_SP/" . basename($Anh);
+        $relativeAvatarPath = "public/image/product/$ID_SP/" . basename($Anh);
         $sql = "INSERT INTO hinh_anh (Anh, ID_SP) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("si", $relativeAvatarPath, $ID_SP);
@@ -240,7 +240,7 @@ class AdminService {
         $TienGiam = $TienGiam < 0 ? $rac['TienGiam'] : $TienGiam;
         $DieuKien = $DieuKien == '' ? $rac['DieuKien'] : $DieuKien;
         $SoLuong = $SoLuong < 0 ? $rac['SoLuong'] : $SoLuong;
-        $TrangThai = $TrangThai == '' ? $rac['TrangThai'] : $TrangThai;
+        $TrangThai = $TrangThai == '' ? $rac['TrangThai'] : $TrangThai; 
         // // Cập nhật database
         $sql = 'UPDATE ma_giam_gia SET Ma = ?, TienGiam = ?, DieuKien = ?, SoLuong = ?, TrangThai = ? WHERE ID_GiamGia = ?';
         $stmt = $this->conn->prepare($sql);

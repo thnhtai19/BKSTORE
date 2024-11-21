@@ -14,7 +14,7 @@ if ($method === 'GET') {
         if ($_SESSION["Role"] == 'Admin') {
             echo json_encode($model->getPartnerList());
         }
-        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }
 }
 else {

@@ -38,19 +38,19 @@ if ($method === 'POST') {
                 }
 
                 if (!$uploaded) {
-                    echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh sản phẩm']);
+                    echo json_encode(['success' => false, 'message' => 'Không thể tải hình ảnh thông tin liên hệ']);
                 } else {
-                    if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên lạc thành công']);
-                    else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên lạc thất bại']);
+                    if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên hệ thành công']);
+                    else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên hệ thất bại']);
                 }
             }
             else {
                 $result = $model->updateContact($MaContact, null, $Loai, $ThongTin, $TrangThai);
-                if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên lạc thành công']);
-                else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên lạc thất bại']);
+                if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin liên hệ thành công']);
+                else echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin liên hệ thất bại']);
             }
         }
-        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }
 }
 else {

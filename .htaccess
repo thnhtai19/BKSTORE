@@ -110,6 +110,11 @@ RewriteRule ^api/order/profile$ /app/controllers/order/profile.php [L]
 #SYSTEM ROUTERS BACKEND
 RewriteRule ^api/system/contact$ /app/controllers/system/contactInfo.php [L]
 RewriteRule ^api/system/new$ /app/controllers/system/new.php [L]
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^api/system$ /app/controllers/system/get.php [L]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/system$ /app/controllers/system/set.php [L]
+RewriteRule ^api/system/statistical$ /app/controllers/system/statistical.php [L]
 
 #ADMIN ROUTERS BACKEND
 RewriteRule ^api/admin/user$ /app/controllers/admin/userInfo.php [L]

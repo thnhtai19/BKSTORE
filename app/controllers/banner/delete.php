@@ -24,7 +24,7 @@ if ($method === 'POST') {
             if ($result) echo json_encode(['success' => true,'message' => 'Xóa banner thành công']);
             else echo json_encode(['success' => false, 'message' => 'Xóa banner thất bại']);
         }
-        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }
 }
 else {

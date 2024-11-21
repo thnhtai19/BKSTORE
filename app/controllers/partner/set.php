@@ -15,7 +15,7 @@ if ($method === 'POST') {
             $Ten = isset($_POST['Ten']) ? $_POST['Ten'] : null;
             $LienKet = isset($_POST['LienKet']) ? $_POST['LienKet'] : null;
             
-            $news = $model->setPartner($Ten, $LienKet);
+            $news = $model->setPartner($LienKet, $Ten);
             if ($news['success'] == true) {
                 $MaDoiTac = $news['partner_id'];
             }
@@ -41,7 +41,7 @@ if ($method === 'POST') {
                 }
 
                 if (!$uploaded) {
-                    echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh sản phẩm']);
+                    echo json_encode(['success' => false, 'message' => 'Không thể tải hình ảnh đối tác']);
                 } else {
                     if ($result) echo json_encode(['success' => true, 'message' => 'Thêm đối tác thành công']);
                     else echo json_encode(['success' => false, 'message' => 'Thêm đối tác thất bại']);
@@ -49,7 +49,7 @@ if ($method === 'POST') {
             }
             else echo json_encode(['success' => true, 'message' => 'Thêm đối tác thành công']);
         }
-        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'không có quyền truy cập']);
     }
 }
 else {
