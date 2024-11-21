@@ -45,7 +45,7 @@ if(!isset($_SESSION["email"])){
                                 </li>
                                 <li class="mb-4">
                                     <a href="/my/support" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
-                                        Hồ sơ
+                                        Hồ trợ
                                     </a>
                                 </li>
                                 <li>
@@ -87,11 +87,17 @@ if(!isset($_SESSION["email"])){
             fetch(`${window.location.origin}/api/order/paid`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     if (data.success) {
                         ordersData = data.message;
                         renderOrders('all', currentPage);
                     } else {
-                        orderList.innerHTML = `<p class="text-gray-700">${data.message}</p>`;
+                        orderList.innerHTML = `
+                        <div class="flex flex-col items-center justify-center gap-2 pt-10" id="noProduct">
+                            <img src="/public/image/icons8-sad-100.png" alt="sad-icon" class="w-8 h-8">
+                            <div class="text-center text-gray-500">Chưa có sản phẩm nào trong lịch sử mua hàng</div>
+                        </div>
+                        `;
                     }
                 })
                 .catch(error => {
@@ -104,7 +110,14 @@ if(!isset($_SESSION["email"])){
                 const start = (page - 1) * ordersPerPage;
                 const end = start + ordersPerPage;
                 const paginatedOrders = filteredOrders.slice(start, end);
-                
+                if(paginatedOrders.length == 0) {
+                    orderList.innerHTML = `
+                        <div class="flex flex-col items-center justify-center gap-2 pt-10" id="noProduct">
+                            <img src="/public/image/icons8-sad-100.png" alt="sad-icon" class="w-8 h-8">
+                            <div class="text-center text-gray-500">Chưa có sản phẩm nào trong trạng thái "${status}"</div>
+                        </div>
+                        `;
+                } 
                 paginatedOrders.forEach(order => {
                     const orderItem = document.createElement('div');
                     orderItem.classList.add('flex', 'flex-col', 'md:flex-row', 'bg-white', 'border', 'rounded-lg', 'p-4', 'md:h-42');
@@ -128,7 +141,7 @@ if(!isset($_SESSION["email"])){
                        <div class="flex-1">
                             <div class="flex">
                                 <div class="w-32">
-                                    <img src="${order.hinh[0]}" alt="product">
+                                    <img src="/${order.hinh[0]}" alt="product">
                                 </div>
                                 <div class="flex-1">
                                     <div class="h-full w-full">

@@ -1,3 +1,10 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+if(!($_SESSION["Role"] == 'Admin')){
+    header("Location: /404");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 

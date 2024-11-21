@@ -1,3 +1,10 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+if(!($_SESSION["Role"] == 'Admin')){
+    header("Location: /404");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -5,8 +12,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="/public/css/admin.css">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/admin.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <title>Yêu cầu bán sách | ADMIN BKSTORE</title>
 </head>
 
@@ -105,24 +113,44 @@
                                 status: 'Trạng thái',
                                 action: "Hành động"
                             };
+                            let data = [];
 
-                            const data = [
-                                {
-                                    id: '2210',
-                                    name: 'Trần Thành Tài',
-                                    email: 'tai.tranthanh@hcmut.edu.vn',
-                                    date: '04/10/2004',
-                                    phone: '08000008',
-                                    nameProduct: 'Thám tử lừng danh Conan tập cuối',
-                                    content: 'Nội dung yêu cầu',
-                                    sex: 'Nam',
-                                    status: "Đang chờ duyệt",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editOrder' },
-                                    ]
-                                },
-                                
-                            ];
+                            async function getListRequest() {
+                                const response = await fetch(`${window.location.origin}/api/admin/propose`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+                                if (response.ok) {
+                                    const ListRequest = await response.json();
+                                    console.log(ListRequest); 
+                                    ListRequest['message'].forEach(request => {
+                                        data.push({
+                                            id: request.UID,
+                                            name: request.ten,
+                                            email: request.email,
+                                            date: request.NgayYeuCau,
+                                            phone: request.SDT,
+                                            nameProduct: request.TenSP,
+                                            content: request.NoiDung,
+                                            sex: request.gioi_tinh,
+                                            status: request.TrangThai,
+                                            action: [
+                                                { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editOrder' },
+                                            ]
+                                        });
+
+                                    });
+                                    console.log(data); 
+
+                                    const event = new CustomEvent('dataReady', { detail: ListRequest });
+                                    window.dispatchEvent(event);
+                                } else {
+                                    console.error("Lỗi khi lấy dữ liệu từ API:", response.status);
+                                }
+                            }
 
                             function editOrder(item) {
                                 document.getElementById("editRequestModal").classList.remove("hidden");
@@ -137,7 +165,6 @@
                                 document.getElementById("nameProduct").value = parseItem.nameProduct;
                                 document.getElementById("trangthai").value = parseItem.status;
                                 document.getElementById("noidung").value = parseItem.content;
-             
 
                             }
 
@@ -155,6 +182,9 @@
                                 }
                             }
 
+                            window.onload = async function() {
+                                await getListRequest(); 
+                            };
                         </script>
                         <?php
                             $title = "Yêu cầu bán sách";
@@ -167,6 +197,51 @@
         </div>
     </div>
     <script src="/public/js/sidebar.js"></script>
+    <script src="/public/js/notyf.min.js"></script>
+    <script>
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+        function updateRequest() {
+            const MaDeXuat = document.getElementById("idRequest").value;
+            const TrangThai = document.getElementById("trangthai").value;
+            const GhiChu = document.getElementById("note").value;
+
+            const payload = {
+                MaDeXuat: MaDeXuat,
+                TrangThai: TrangThai,
+                GhiChu: GhiChu
+            };
+            console.log(payload)
+            fetch(`${window.location.origin}/api/admin/propose`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    notyf.success(data.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 5000);
+
+                } else {
+                    notyf.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                notyf.error("Không thể kết nối đến server. Vui lòng thử lại sau.");
+            });
+        }
+    </script>
 </body>
 
 </html>

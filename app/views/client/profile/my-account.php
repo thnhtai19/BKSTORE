@@ -80,12 +80,6 @@ if(!isset($_SESSION["email"])){
 
                                 <div class="flex flex-col md:flex-row md:space-x-4 mb-4">
                                     <div class="flex-1">
-                                        <label for="username" class="block text-gray-700 font-semibold mb-2">Tên tài khoản</label>
-                                        <input type="text" id="username" 
-                                        class="block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm bg-gray-100 cursor-not-allowed" 
-                                        value="<?php echo $_SESSION["Ten"]; ?>" readonly>
-                                    </div>
-                                    <div class="flex-1">
                                         <label for="phone" class="block text-gray-700 font-semibold mb-2">Số điện thoại</label>
                                         <input type="tel" id="phone" 
                                             class="block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" 
@@ -160,39 +154,163 @@ if(!isset($_SESSION["email"])){
                                 </form>
                             </div>
                         </div>
+                        <script src="/public/js/notyf.min.js"></script>
+                        <script>
+                            var notyf = new Notyf({
+                                duration: 3000,
+                                position: {
+                                x: 'right',
+                                y: 'top',
+                                },
+                            });
 
-                        <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                            <h1 class="text-3xl font-bold mb-4">Nhật ký hoạt động</h1>
-                            
-                            <div class="overflow-x-auto">
-                                <table class="table-auto w-full mb-6">
-                                    <thead>
-                                        <tr class="bg-gray-200 text-left">
-                                            <th class="px-4 py-2">Thời gian</th>
-                                            <th class="px-4 py-2">Nội dung</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="diaryTable">
-                                    </tbody>
-                                </table>
-                            </div>
+                            const columnTitles = {
+                                date: 'Thời gian',
+                                content: 'Nội dung',
+                            };
 
-                            <div id="paginationContainer" class="flex justify-end mt-6 space-x-4 hidden">
-                                <button id="prevPage" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onclick="previousPage()">Trước</button>
-                                <span id="currentPageDisplay" class="px-4 py-2 text-gray-700 bg-gray-200">1</span>
-                                <button id="nextPage" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onclick="nextPage()">Sau</button>
-                            </div>
-                        </div>
+                            let data = [];
 
+                            document.getElementById("changePasswordForm").addEventListener("submit", function (event) {
+                                event.preventDefault();
+                                const oldPassword = document.getElementById("old-password").value;
+                                const newPassword = document.getElementById("new-password").value;
+                                const confirmPassword = document.getElementById("auth-password").value;
+
+                                if (newPassword !== confirmPassword) {
+                                    notyf.error('Mật khẩu mới và mật khẩu xác nhận không khớp.');
+                                    return;
+                                }
+
+                                const button = document.getElementById("change-password-btn");
+                                button.textContent = "Đang xử lý...";
+                                button.disabled = true;
+
+                                fetch(`${window.location.origin}/api/auth/change`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        current_password: oldPassword,
+                                        new_password: newPassword,
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        notyf.success(data.message);
+                                        document.getElementById("changePasswordForm").reset();
+                                    } else {
+                                        notyf.error("Lỗi: " + data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    notyf.error("Đã xảy ra lỗi:", error);
+                                })
+                                .finally(() => {
+                                    button.textContent = "Thay đổi";
+                                    button.disabled = false;
+                                });
+                            });
+
+                            async function fetchUserData() {
+                                fetch(`${window.location.origin}/api/user/info`, {
+                                    method: 'GET',
+                                    headers: { 
+                                        'Content-Type': 'application/json' 
+                                    },
+                                    credentials: 'same-origin'
+                                })
+                                .then(response => response.json())
+                                .then(dataUser => {
+                                    console.log(dataUser);
+                                    try {
+                                        document.getElementById("full-name").value = dataUser.thong_tin.name;
+                                        if(dataUser.thong_tin.phone) {
+                                            document.getElementById("phone").value = dataUser.thong_tin.phone;
+                                        }
+                                        if(dataUser.thong_tin.address) {
+                                            document.getElementById("address").value = dataUser.thong_tin.address;
+                                        }
+                                        if(!dataUser.thong_tin.sex) {
+                                            document.getElementById("other").checked = true;
+                                            document.getElementById("Male").checked = false;
+                                            document.getElementById("Female").checked = false;
+                                        } else if (dataUser.thong_tin.sex == "Male") {
+                                            document.getElementById("other").checked = false;
+                                            document.getElementById("Male").checked = true;
+                                            document.getElementById("Female").checked = false;
+                                        } else {
+                                            document.getElementById("other").checked = false;
+                                            document.getElementById("Male").checked = false;
+                                            document.getElementById("Female").checked = true;
+                                        }
+                                        document.getElementById("level").value = dataUser.thong_tin.role;
+
+                                        dataUser['nhat_ky'].forEach(diaryData => {
+                                        data.push({
+                                            date: diaryData.ThoiGian,
+                                            content: diaryData.NoiDung,
+                                        });
+
+                                        const event = new CustomEvent('dataReady', { detail: dataUser });
+                                        window.dispatchEvent(event);
+                                    });
+                                    } catch (error) {
+                                        console.error('Lỗi phân tích JSON:', error);
+                                        notyf.error('Lỗi phản hồi máy chủ');
+                                    }
+                                })
+                                .catch(error => {
+                                    console(error);
+                                    notyf.error('Lỗi kết nối' + error);
+                                });
+                            }
+
+                            function updateUserInfo() {
+                                const name = document.getElementById('full-name').value;
+                                const sex = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : '';
+                                const phone = document.getElementById('phone').value;
+                                const address = document.getElementById('address').value;
+
+                                fetch(`${window.location.origin}/api/user/info`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    credentials: 'same-origin',
+                                    body: JSON.stringify({ name, sex, phone, address })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        notyf.success(data.message);
+                                        fetchUserData();
+                                    } else {
+                                        notyf.error(data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    notyf.error(data.error);
+                                });
+                            }
+
+                            window.onload = async function() {
+                                await fetchUserData(); 
+                                console.log(data)
+                            };
+
+                        </script>
+                        <?php
+                            $title = "Nhật ký người dùng";
+                            include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/table.php';
+                        ?>
                     </div>
                 </div>
             </main>
         </div>
         <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
-    <!-- <script src="/public/js/client.js"></script> -->
-    <script src="/public/js/notyf.min.js"></script>
-    <script src="/public/js/account.js"></script>
-
 </body>
 </html>
