@@ -139,7 +139,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
         function CountCart(){
             let countCart = 0;
 
-            fetch(`${window.location.origin}/api/user/cart`)
+            fetch('/api/user/cart')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -192,7 +192,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
             }
         });
         document.getElementById("logout-btn").addEventListener("click", function () {
-            fetch(`${window.location.origin}/api/auth/logout`, {
+            fetch('api/auth/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
