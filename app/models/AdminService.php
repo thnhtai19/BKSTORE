@@ -344,7 +344,7 @@ class AdminService {
     }
 
     public function updateProductImage ($Anh, $ID_SP) {
-        $relativeAvatarPath = "public/image/$ID_SP/" . basename($Anh);
+        $relativeAvatarPath = "public/image/product/$ID_SP/" . basename($Anh);
         // $sqlDelete = "DELETE FROM hinh_anh WHERE ID_SP = ?";
         // $stmtDelete = $this->conn->prepare($sqlDelete);
         // $stmtDelete->bind_param("i", $ID_SP);
