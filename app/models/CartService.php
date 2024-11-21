@@ -93,6 +93,7 @@ class CartService {
         if ($result_check->num_rows === 0) {
             return ['success' => false, 'message' => 'Chưa thêm sản phẩm vào giỏ hàng'];
         }
+        if ($this->checkCount($product_id, $quantity) == false) return ['success' => false, 'message' => 'Không đủ sảm phẩm trong kho'] ;
         if ($quantity > 0) {
             $sql_update = "UPDATE trong_gio_hang SET SoLuong = ? WHERE `ID_SP` = ? AND `UID` = ?";
             $stmt = $this->conn->prepare($sql_update);
@@ -101,6 +102,16 @@ class CartService {
         }
         else $this->remove($uid, $product_id);
         return ['success' => true, 'message' => 'Cập nhật đơn hàng thành công'];
+    }
+
+    private function checkCount($ID_SP, $quantity) {
+        $sql = 'SELECT SoLuongKho FROM san_pham WHERE `ID_SP` = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $ID_SP);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->fetch_assoc()['SoLuongKho'] < $quantity) return false;
+        return true;
     }
 
     private function getInfo($id) {
@@ -116,7 +127,7 @@ class CartService {
         return [
             'ten' => $product['TenSP'],
             'gia_goc' => intval($product['Gia']),
-            'gia_khuyen_mai' => $product['Gia'] - $product['Gia'] * $product['TyLeGiamGia'],
+            'gia_khuyen_mai' => round($product['Gia'] - $product['Gia'] * $product['TyLeGiamGia'], 2)
         ];  
     }
 

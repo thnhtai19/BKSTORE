@@ -139,25 +139,11 @@
                                     </p>
                                 </div>
                             </div>
-                            <form class="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto mt-5">
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-medium mb-2" for="name">Họ và Tên</label>
-                                    <input type="text" id="name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập họ và tên của bạn">
-                                </div>
+                            <form class="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto mt-5" id="comment">
                                 
                                 <div class="mb-4">
-                                    <label class="block text-gray-700 font-medium mb-2" for="email">Email</label>
-                                    <input type="email" id="email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập email của bạn">
-                                </div>
-                                
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-medium mb-2" for="email">Tên sản phẩm</label>
-                                    <input type="text" id="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập tên sản phẩm bạn muốn góp ý">
-                                </div>
-                                
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 font-medium mb-2" for="email">Tiêu đề</label>
-                                    <input type="text" id="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập tiêu đề bạn muốn">
+                                    <label class="block text-gray-700 font-medium mb-2" for="name">Tên sản phẩm</label>
+                                    <input type="text" id="name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập tên sản phẩm bạn muốn góp ý">
                                 </div>
 
                                 <div class="mb-4">
@@ -179,6 +165,44 @@
     <script src="/public/js/heart.js"></script>
     <script src="/public/js/swiper-bundle.min.js"></script>
     <script src="/public/js/client.js"></script>
+
+    <script>
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+        document.getElementById('comment').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const TenSP = document.getElementById('name').value;
+            const NoiDung = document.getElementById('feedback').value;
+
+            try {
+                const response = await fetch(`${window.location.origin}/api/product/propose`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ TenSP, NoiDung })
+                });
+                
+                const result = await response.json();
+                console.log(result)
+                if (result.success) {
+                    notyf.success(result.message);
+                } else {
+                    notyf.error(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                notyf.error(error);
+
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -8,12 +8,11 @@ header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
-    $id = $_SESSION["uid"];
-    if (!isset($id)) {
+    if (!isset($_SESSION["uid"])) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
         return;
     }
-    $paid = $model->getPaid($id);
+    $paid = $model->getPaid($_SESSION["uid"]);
     if ($paid['success'] === true) {
         echo json_encode(['success' => true, 'message' => $paid['message']]);
     }

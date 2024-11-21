@@ -1,3 +1,12 @@
+<?php
+require_once dirname(__DIR__, 4) . '/config/db.php';
+require_once dirname(__DIR__, 3) . '/models/UserService.php';
+if(!isset($_SESSION["email"])){
+    header("Location: /auth/login");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,22 +29,22 @@
                         <nav>
                             <ul>
                                 <li class="mb-4">
-                                    <a href="/app/views/client/profile/profile.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                    <a href="/my/profile" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
                                         Trang chủ
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="/app/views/client/profile/my-account.php" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                    <a href="/my/account" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
                                         Tài khoản của bạn
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="#" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
+                                    <a href="/my/order" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
                                         Lịch sử mua hàng
                                     </a>
                                 </li>
                                 <li class="mb-4">
-                                    <a href="#" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
+                                    <a href="/my/support" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
                                         Hồ sơ
                                     </a>
                                 </li>
@@ -49,64 +58,16 @@
                     </div>
 
                     <div class="w-full lg:w-3/4 rounded-lg space-y-6">
-                        <div class="flex items-center space-x-6">
-                            <img src="/public/image/facebook.png" alt="Avatar" class="w-16 h-16 rounded-full">
-                            
-                            <div>
-                                <h2 class="text-2xl font-bold text-blue-600">Khương Gia Túc</h2>
-                                <p class="text-gray-600">tuc.khuongbk@hcmut.edu.vn</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col md:flex-row gap-2">
-                            <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">4</h3>
-                                <p class="text-sm text-center text-gray-600 mb-2">Đơn hàng</p>
-                            </div>
-                            <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">14M</h3>
-                                <p class="text-sm text-center text-gray-600 mb-2">Tổng tiền mua hàng</p>
-                            </div>
-                            <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">Thành viên</h3>
-                                <p class="text-sm text-center text-gray-600 mb-2">Cấp bậc</p>
-                            </div>
+                        <div class="flex gap-2 pb-4">
+                        <button data-status="all" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Tất cả</button>
+                            <button data-status="Đã giao hàng" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đã giao hàng</button>
+                            <button data-status="Đang xử lý" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đang xử lý</button>
+                            <button data-status="Đã hủy" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đã hủy</button>
                         </div>
 
-                        <p class="bg-gray-200 text-blue-500 text-sm block px-2 py-2 rounder-lg">
-                            Cập nhật thông tin cá nhân và địa chỉ 
-                            để có trải nghiệm đặt hàng nhanh và thuận tiện hơn.
-                            <a href="#" class="underline text-blue-800">Cập nhập?</a>
-                        </p>
-                        
-                        <?php for ($i = 0; $i < 5; $i++) { ?>
-                            <div class="flex bg-white border rounded-lg h-36 p-4">
-                                <div class="flex-1">
-                                    <div class="flex">
-                                        <div class="w-28">
-                                            <img class="h-full" src="/public/image/book1.webp" alt="product">
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="h-full w-full">
-                                                <div class="flex justify-between mb-4 h-full">
-                                                    <div class="flex">
-                                                        <div>
-                                                            <p class="text-gray-700 font-medium">Dế Mèn Phiêu Lưu Ký - Tái Bản 2020</p>
-                                                            <p class="text-gray-600">Ngày đặt: <span class="font-medium text-gray-700">10/10/2024</span></p>
-                                                            <p class="text-gray-700 font-semibold justify-end">200,000₫</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex flex-col justify-between">
-                                                        <p class="text-sm px-3 py-1 bg-green-100 text-green-700 font-medium rounded-full">Đã giao hàng</p>
-                                                        <a href="#" class="text-blue-500 hover:underline font-medium">Xem chi tiết>></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php } ?>
+                        <div id="order-list" class="space-y-6"></div>
+
+                        <div id="pagination" class="flex justify-center gap-2 pt-4"></div>
                     </div>
                 </div>
             </main>
@@ -114,5 +75,115 @@
         <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
     <script src="/public/js/client.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const orderList = document.getElementById('order-list');
+            const pagination = document.getElementById('pagination');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            let ordersData = [];
+            let currentPage = 1;
+            const ordersPerPage = 3;
+
+            fetch(`${window.location.origin}/api/order/paid`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        ordersData = data.message;
+                        renderOrders('all', currentPage);
+                    } else {
+                        orderList.innerHTML = `<p class="text-gray-700">${data.message}</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching orders:", error);
+                });
+
+            function renderOrders(status, page) {
+                orderList.innerHTML = '';
+                const filteredOrders = status === 'all' ? ordersData : ordersData.filter(order => order.trang_thai === status);
+                const start = (page - 1) * ordersPerPage;
+                const end = start + ordersPerPage;
+                const paginatedOrders = filteredOrders.slice(start, end);
+                
+                paginatedOrders.forEach(order => {
+                    const orderItem = document.createElement('div');
+                    orderItem.classList.add('flex', 'flex-col', 'md:flex-row', 'bg-white', 'border', 'rounded-lg', 'p-4', 'md:h-42');
+                    
+                    let bgColor;
+                    switch (order.trang_thai) {
+                        case 'Đã giao hàng':
+                            bgColor = 'bg-green-200';
+                            break;
+                        case 'Đang xử lý':
+                            bgColor = 'bg-blue-200';
+                            break;
+                        case 'Đã hủy':
+                            bgColor = 'bg-red-200';
+                            break;
+                        default:
+                            bgColor = 'bg-gray-200';
+                    }
+
+                    orderItem.innerHTML = `
+                       <div class="flex-1">
+                            <div class="flex">
+                                <div class="w-32">
+                                    <img src="${order.hinh[0]}" alt="product">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="h-full w-full">
+                                        <div class="flex flex-col justify-between md:flex-1 md:px-4">
+                                            <div class="flex">
+                                                <div>
+                                                    <p class="text-gray-700 font-medium">${order.ten_sp}</p>
+                                                    <p class="text-gray-600">Ngày đặt: <span class="font-medium text-gray-700">${order.ngay_dat}</span></p>
+                                                    <p class="text-gray-600">Số lượng: <span class="font-medium text-gray-700">${order.so_luong_san_pham}</span></p>
+                                                    <p class="text-gray-700 font-semibold">${order.gia.toLocaleString('vi-VN')}₫</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col md:justify-between md:items-end mt-2 md:mt-0">
+                                                <p class="text-sm px-3 py-1 ${bgColor} text-green-700 font-medium rounded-full">${order.trang_thai}</p>
+                                                <a href="/my/order/detail?id=${order.id}" class="text-blue-500 hover:underline font-medium">Xem chi tiết>></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    orderList.appendChild(orderItem);
+                });
+
+                renderPagination(filteredOrders.length, page);
+            }
+
+            function renderPagination(totalOrders, currentPage) {
+                pagination.innerHTML = '';
+                const totalPages = Math.ceil(totalOrders / ordersPerPage);
+                console.log(totalOrders)
+                
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.innerText = i;
+                    pageButton.classList.add('px-4', 'py-2', 'rounded', 'mx-1');
+                    pageButton.classList.add('bg-blue-500', 'text-white');
+                    
+                    pageButton.addEventListener('click', () => {
+                        renderOrders(document.querySelector('.filter-btn.bg-gray-300')?.getAttribute('data-status') || 'all', i);
+                        currentPage = i;
+                    });
+
+                    pagination.appendChild(pageButton);
+                }
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const status = button.getAttribute('data-status');
+                    renderOrders(status, 1);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

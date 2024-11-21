@@ -146,4 +146,10 @@
 
     renderTableHeader();
     paginateData();
+
+    window.addEventListener('dataReady', function(event) {
+        console.log("SDSADS")
+        renderTableHeader();
+        paginateData();
+    });
 </script>
