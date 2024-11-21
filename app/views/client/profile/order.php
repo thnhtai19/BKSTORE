@@ -201,9 +201,9 @@ if(!isset($_SESSION["email"])){
                         document.getElementById('discount').innerText = `${info.thong_tin_thanh_toan.so_tien_da_giam.toLocaleString('vi-VN')} ₫`;
                         document.getElementById('total-amount').innerText = `${info.thong_tin_thanh_toan.tong_tien_phai_tra.toLocaleString('vi-VN')}₫`;
 
-                        document.getElementById('customer-name').value = info.thong_tin_nguoi_mua.ten;
-                        document.getElementById('customer-phone').value = info.thong_tin_nguoi_mua.SĐT;
-                        document.getElementById('customer-address').value = info.thong_tin_nguoi_mua.dia_chi;
+                        document.getElementById('customer-name').value = info.ten_khach_hang;
+                        document.getElementById('customer-phone').value = info.so_dien_thoai;
+                        document.getElementById('customer-address').value = info.dia_chi_giao_hang;
                     } else {
                         console.error(data.message);
                         alert(data.message); 
