@@ -1,3 +1,12 @@
+<?php
+require_once dirname(__DIR__, 4) . '/config/db.php';
+require_once dirname(__DIR__, 3) . '/models/UserService.php';
+if(!isset($_SESSION["email"])){
+    header("Location: /auth/login");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

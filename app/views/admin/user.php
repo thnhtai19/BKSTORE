@@ -1,3 +1,11 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+require_once dirname(__DIR__, 2) . '/models/UserService.php';
+if(!($_SESSION["Role"] == 'Admin')){
+    header("Location: /404");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -6,8 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
-    <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/admin.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <title>Quản lý người dùng | ADMIN BKSTORE</title>
 </head>
 
@@ -83,7 +91,6 @@
                             <div class="text-gray-500">Quản lý người dùng</div>
                         </nav>
                         <script>
-
                             const columnTitles = {
                                 id: 'ID',
                                 name: 'Họ và tên',
@@ -93,46 +100,8 @@
                                 action: "Hành động"
                             };
 
-                            // let data = [
-                            //     {
-                            //         id: "2210",
-                            //         name: 'Trần Thành Tài',
-                            //         email: 'tai.tranthanh@hcmut.edu.vn',
-                            //         phone: '08000008',
-                            //         address: 'Trường đại học Bách Khoa',
-                            //         status: "Đang hoạt động",
-                            //         sex: 'Nam',
-                            //         action: [
-                            //             { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
-                            //         ]
-                            //     },
-                            //     {
-                            //         id: "2211",
-                            //         name: 'Nguyễn Hữu Nhân',
-                            //         email: 'nhan.nguyenhuucse@hcmut.edu.vn',
-                            //         phone: '08000009',
-                            //         address: 'Trường đại học Bách Khoa',
-                            //         status: "Đang hoạt động",
-                            //         sex: 'Nam',
-                            //         action: [   
-                            //             { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
-                            //         ]
-                            //     },
-                            //     {
-                            //         id: "2212",
-                            //         name: 'Nguyễn Trường Thịnh',
-                            //         email: 'thinh.nguyentruong@hcmut.edu.vn',
-                            //         phone: '08000009',
-                            //         address: 'Trường đại học Bách Khoa',
-                            //         status: "Đang hoạt động",
-                            //         sex: 'Nam',
-                            //         action: [
-                            //             { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
-                            //         ]
-                            //     },
-                            // ];
-
                             let data = [];
+                            
                             function editUser(item) {
                                 document.getElementById("editUserModal").classList.remove("hidden");
                                 const parseItem = JSON.parse(decodeURIComponent(item));
@@ -144,12 +113,6 @@
                                 document.getElementById("address").value = parseItem.address;
                                 document.getElementById("trangthai").value = parseItem.status;
                                 document.getElementById("sex").value = parseItem.sex;
-                            }
-
-                            function updateUser() {
-                                const status = document.getElementById("userStatus").value;
-                                alert(`User status updated to: ${status}`);
-                                closeModal();
                             }
 
                             function closeModal() {
@@ -206,6 +169,57 @@
         </div>
     </div>
     <script src="/public/js/sidebar.js"></script>
+    <script src="/public/js/notyf.min.js"></script>
+    <script>
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+        function updateUser() {
+            const uid = document.getElementById("idUser").value;
+            const name = document.getElementById("nameUser").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const sex = document.getElementById("sex").value;
+            const status = document.getElementById("trangthai").value;
+            const address = document.getElementById("address").value;
+
+            const payload = {
+                UID: Number(uid), 
+                name: name,
+                email: email,
+                phone: phone,
+                sex: sex,
+                status: status,
+                address: address
+            };
+            fetch(`${window.location.origin}/api/admin/updateUser`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    notyf.success(data.message);
+                    location.reload();
+                } else {
+                    notyf.error(data.message);
+                }
+            })
+            .catch(error => {
+                // Xử lý lỗi kết nối hoặc lỗi khác
+                console.error("Error:", error);
+                notyf.error("Không thể kết nối đến server. Vui lòng thử lại sau.");
+            });
+        }
+
+    </script>
 </body>
 
 </html>

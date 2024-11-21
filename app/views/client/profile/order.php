@@ -73,8 +73,7 @@ if(!isset($_SESSION["email"])){
                         </div>
                         
                         <div>
-                            <div id="products-container" class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">></div>
-
+                            <div id="products-container" class="space-y-2"></div>
                             <div class="pb-2 pt-6 font-bold text-custom-blue">THÔNG TIN THANH TOÁN</div>
                             <div class="bg-white rounded-lg border w-full p-4 pl-6 pr-6">
                                 <div class="flex justify-between text-gray-500 pt-6">
@@ -154,10 +153,11 @@ if(!isset($_SESSION["email"])){
                         productsContainer.innerHTML = ''; // Xóa nội dung cũ
                         info.danh_sach_san_pham.forEach(product => {
                             const productHTML = `
+                            <div class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">
                                 <div class="flex-1 pb-2">
                                     <div class="flex flex-col md:flex-row">
                                         <div class="w-full md:w-40">
-                                            <img id="" src="${product.anh[0]}" alt="product">
+                                            <img id="" src="/${product.anh[0]}" alt="product">
                                         </div>
                                         <div class="flex-1">
                                             <div class="h-full w-full">
@@ -190,8 +190,9 @@ if(!isset($_SESSION["email"])){
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             `;
-                            productsContainer.insertAdjacentHTML('beforeend', productHTML);
+                            productsContainer.insertAdjacentHTML('afterbegin', productHTML);
                         });
 
                         document.getElementById('payment').innerText = info.thong_tin_thanh_toan.phuong_thuc;
