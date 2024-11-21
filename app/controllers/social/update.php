@@ -37,7 +37,7 @@ if ($method === 'POST') {
                 }
 
                 if (!$uploaded) {
-                    echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh sản phẩm']);
+                    echo json_encode(['success' => false, 'message' => 'Không thể tải hình ảnh mạng xã hội']);
                 } else {
                     if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật mạng xã hội thành công']);
                     else echo json_encode(['success' => false, 'message' => 'Cập nhật mạng xã hội thất bại']);
@@ -49,7 +49,7 @@ if ($method === 'POST') {
                 else echo json_encode(['success' => false, 'message' => 'Cập nhật mạng xã hội thất bại']);
             }
         }
-        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }
 }
 else {

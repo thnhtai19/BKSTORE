@@ -30,7 +30,7 @@ if ($method === 'POST') {
             if ($news && $image) echo json_encode(['success' => true, 'message' => 'Cập nhật tin tức thành công']);
             else echo json_encode(['success' => false, 'message' => 'Cập nhật tin tức thất bại']);
         }
-        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }
 }
 else {

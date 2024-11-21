@@ -38,7 +38,7 @@ if ($method === 'POST') {
                 }
 
                 if (!$uploaded) {
-                    echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh sản phẩm']);
+                    echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh banner']);
                 } else {
                     if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật banner thành công']);
                     else echo json_encode(['success' => false, 'message' => 'Cập nhật banner thất bại']);
@@ -50,7 +50,7 @@ if ($method === 'POST') {
                 else echo json_encode(['success' => false, 'message' => 'Cập nhật banner thất bại']);
             }
         }
-        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }
 }
 else {

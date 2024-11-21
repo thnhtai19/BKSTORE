@@ -365,10 +365,10 @@ class SystemService {
         return $result;
     }
 
-    public function setPartner($Lienket, $Ten) {
+    public function setPartner($LienKet, $Ten) {
         $sql = "INSERT INTO doi_tac (Lienket, Ten) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $Lienket, $Ten);
+        $stmt->bind_param("ss", $LienKet, $Ten);
         $stmt->execute();
         return ['success' => true, 'partner_id' => mysqli_insert_id($this->conn)];
     }
@@ -378,7 +378,7 @@ class SystemService {
         
         $HinhAnh = $HinhAnh != null ? $HinhAnh : $rac['HinhAnh'];
         $LienKet = $LienKet != null ? $LienKet : $rac['LienKet'];
-        $Ten = ($Ten == 'Đang ẩn' || $Ten == 'Đang hiện') ? $Ten : $rac['Ten'];
+        $Ten = $Ten != null ? $Ten : $rac['Ten'];
 
         $sql = "UPDATE doi_tac SET HinhAnh = ?, LienKet = ?, Ten = ? WHERE MaDoiTac = ?";
         $stmt = $this->conn->prepare($sql);
@@ -388,7 +388,7 @@ class SystemService {
     }
 
     public function getPartner($MaDoiTac) {
-        $sql = 'SELECT * FROM doi_tac WHERE Ma$MaDoiTac = ?';
+        $sql = 'SELECT * FROM doi_tac WHERE MaDoiTac = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaDoiTac);
         $stmt->execute();
@@ -412,6 +412,71 @@ class SystemService {
         $stmt->bind_param('i', $MaDoiTac);
         $stmt->execute();
         return true;
+    }
+
+    public function getSystem() {
+        $sql = 'SELECT * FROM he_thong';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    public function updateSystem($MaHeThong, $TuKhoa, $ClientID, $APIKey, $Checksum, $TrangThaiBaoTri) {
+        $rac = $this->getSystemById($MaHeThong);
+        
+        $TuKhoa = $TuKhoa != null ? $TuKhoa : $rac['TuKhoa'];
+        $ClientID = $ClientID != null ? $ClientID : $rac['ClientID'];
+        $APIKey = $APIKey != null ? $APIKey : $rac['APIKey'];
+        $Checksum = $Checksum != null ? $Checksum : $rac['Checksum'];
+        $TrangThaiBaoTri = $TrangThaiBaoTri != -1 ? $TrangThaiBaoTri : $rac['TrangThaiBaoTri'];
+
+        $sql = "UPDATE he_thong SET TuKhoa = ?, ClientID = ?, APIKey = ?, `Checksum` = ?, TrangThaiBaoTri = ? WHERE MaHeThong = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssssii", $TuKhoa, $ClientID, $APIKey, $Checksum, $TrangThaiBaoTri, $MaHeThong);
+        $stmt->execute();
+        return true;
+    }
+
+    private function getSystemById($MaHeThong) {
+        $sql = 'SELECT * FROM he_thong WHERE MaHeThong = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $MaHeThong);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function countUser() {
+        $sql = 'SELECT COUNT(*) as count FROM `login`';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc()['count'];
+    }
+
+    public function countOrder() {
+        $sql = 'SELECT COUNT(*) as count, SUM(HoaDon) as hoadon FROM don_hang';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $result = $result->fetch_assoc();
+        return [
+            'count' => $result['count'],
+            'revenue' => intval($result['hoadon'])
+        ];
+    }
+
+    public function countPropose() {
+        $sql = 'SELECT COUNT(*) as count FROM san_pham_de_xuat';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc()['count'];
     }
 
     private function deleteImageNew($MaTinTuc, $AnhMuonXoa) {

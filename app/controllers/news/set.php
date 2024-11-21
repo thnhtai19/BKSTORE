@@ -51,7 +51,7 @@ if ($method === 'POST') {
                     }
                 }
                 if (!$uploaded) {
-                    echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh sản phẩm']);
+                    echo json_encode(['success' => false, 'message' => 'Không thể tải ảnh tin tức']);
                 }
                 else echo json_encode($result);
             }
@@ -60,7 +60,7 @@ if ($method === 'POST') {
                 echo json_encode($result);
             }
         }
-        else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
+        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }
 }
 else {
