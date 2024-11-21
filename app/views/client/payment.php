@@ -1,6 +1,5 @@
 <?php
-require_once dirname(__DIR__, 4) . '/config/db.php';
-require_once dirname(__DIR__, 3) . '/models/UserService.php';
+require_once dirname(__DIR__, 3) . '/config/db.php';
 if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();
