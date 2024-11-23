@@ -35,9 +35,12 @@ class AuthService {
         $_SESSION["uid"] = $user['UID'];
         $_SESSION["Ten"] = $user['Ten'];
         $_SESSION["Role"] = $user['Role'];
+        $_SESSION["Avatar"] = '';
         $avatar = $user['Avatar'];
         if ($avatar == null) {
             $_SESSION["Avatar"] = "https://ui-avatars.com/api/?background=random&name=" . urlencode($user['Ten']);
+        }else{
+            $_SESSION["Avatar"] = "/".$avatar; 
         }
 
         $stmt = $this->conn->prepare("SELECT * FROM `khach_hang` WHERE `UID` = ?");

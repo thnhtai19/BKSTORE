@@ -64,12 +64,12 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                         class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"></span>
                 </div>
                 <div class="relative">
-                    <img src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION["Ten"]); ?>"
+                    <img src="<?=$_SESSION["Avatar"]?>"
                         alt="User Avatar" class="w-8 h-8 rounded-full cursor-pointer ml-3" id="avatar">
                     <div id="dropdown" class="absolute right-0 top-10 bg-white border rounded-lg shadow-lg hidden">
                         <div class="pt-4 pb-4 pr-3 pl-3 w-72">
                             <div class="flex gap-2 w-full">
-                                <img src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION["Ten"]); ?>"
+                                <img src="<?=$_SESSION["Avatar"]?>"
                                     alt="User Avatar" class="w-10 h-10 rounded-full cursor-pointer">
                                 <div class="flex-1">
                                     <div class="font-bold"><?php echo $_SESSION["Ten"]; ?></div>
