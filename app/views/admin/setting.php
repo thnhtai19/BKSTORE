@@ -14,6 +14,7 @@ if(!($_SESSION["Role"] == 'Admin')){
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="/public/css/admin.css">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <title>Cấu hình hệ thống | ADMIN BKSTORE</title>
 </head>
 
@@ -43,8 +44,8 @@ if(!($_SESSION["Role"] == 'Admin')){
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Trạng thái:</label>
                                         <select id="trangthai" class="mt-2 mb-4 w-full p-2 border rounded h-10">
-                                            <option value="Đang hiện">Đang hoạt động</option>
-                                            <option value="Đang ẩn">Đang bảo trì</option>
+                                            <option value="0">Đang hoạt động</option>
+                                            <option value="1">Đang bảo trì</option>
                                         </select>
                                     </div>
                                     <div>
@@ -53,19 +54,19 @@ if(!($_SESSION["Role"] == 'Admin')){
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Client ID PayOS:</label>
-                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập Client ID PayOS">
+                                        <input type="text" id="clientid" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập Client ID PayOS">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">API Key PayOS:</label>
-                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập API Key PayOS">
+                                        <input type="text" id="apikey" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập API Key PayOS">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Checksum Key PayOS:</label>
-                                        <input type="text" id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Checksum Key PayOS">
+                                        <input type="text" id="checksum" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Checksum Key PayOS">
                                     </div>
                                 </div>
                                 <div class="flex justify-end">
-                                    <button class="px-4 py-1 bg-green-500 text-white rounded-md">
+                                    <button onclick="saveconfig()" class="px-4 py-1 bg-green-500 text-white rounded-md">
                                         Lưu
                                     </button>
                                 </div>
@@ -79,6 +80,95 @@ if(!($_SESSION["Role"] == 'Admin')){
         </div>
     </div>
     <script src="/public/js/sidebar.js"></script>
+    <script src="/public/js/notyf.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch("/api/system");
+                if (!response.ok){
+                    console.log("lỗi")
+                    return
+                }
+                const data = await response.json();
+                if(data[0] !== null){
+                    document.getElementById("clientid").value = data[0].ClientID;
+                    document.getElementById("tukhoa").value = data[0].TuKhoa;
+                    document.getElementById("apikey").value = data[0].APIKey;
+                    document.getElementById("checksum").value = data[0].Checksum;
+                    document.getElementById("trangthai").value = data[0].TrangThaiBaoTri;
+                    
+                    
+                }else{
+                    if(data.message === "Người dùng chưa đăng nhập"){
+                        window.location.href = '/auth/login'
+                        return
+                    }else if(data.message === "Không có quyền truy cập"){
+                        window.location.href = '/404'
+                        return
+                    }
+                }   
+
+            } catch (error) {
+                console.log(error)
+            }
+        });
+
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+
+        function saveconfig(){
+            const clientId = document.getElementById("clientid").value;
+            const tukhoa = document.getElementById("tukhoa").value;
+            const apikey = document.getElementById("apikey").value;
+            const checksum = document.getElementById("checksum").value;
+            const trangthai = document.getElementById("trangthai").value;
+
+            if(!clientId || !tukhoa || !apikey || !checksum || !trangthai){
+                notyf.error("Vui lòng nhập đầy đủ thông tin!")
+                return;
+            }
+
+            fetch('/api/system', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    MaHeThong: 1,
+                    TuKhoa: tukhoa,
+                    ClientID: clientId,
+                    APIKey: apikey,
+                    Checksum: checksum,
+                    TrangThaiBaoTri: trangthai
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    notyf.error("Đã xảy ra lỗi khi cập nhật dữ liệu!")
+                    return false;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    notyf.success("Cập nhật dữ liệu hệ thống thành công!")
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    notyf.error("Cập nhật dữ liệu hệ thống thất bại!")
+                }
+            })
+            .catch(error => {
+                notyf.error("Đã xảy ra lỗi khi cập nhật dữ liệu!")
+            });
+        }
+    </script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 $idsp = $_GET['id'];
 if($idsp == ''){
     header("Location: 404");
@@ -79,6 +79,10 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                         <option value="Đã xoá">Đã xoá</option>
                     </select>
                 </div>
+            </div>
+            <div class="w-full">
+                <label for="mota" class="block text-sm font-medium text-gray-700">Phản hồi:</label>
+                <textarea id="phanhoi" class="mt-2 mb-4 w-full p-2 border rounded" rows="3" placeholder="Vui lòng nhập phản hồi"></textarea>
             </div>
 
             <div class="flex justify-end space-x-4">
@@ -473,7 +477,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                                         </div>
                                                         <?php if (isset($_SESSION["Role"]) && $_SESSION["Role"] === 'Admin') { ?>
                                                             <button onclick="OpenComment(<?=$id?>)">
-                                                                <img src="/public/image/icons8-edit-100.png" alt="edit" class="w-4 h-4">
+                                                                <img src="/public/image/edit.png" alt="edit" class="w-4 h-4">
                                                             </button>
                                                         <?php } ?>
                                                     </div>
@@ -606,7 +610,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                     </div>
                                 </div>
                                 <button>
-                                    <img src="/public/image/icons8-edit-100.png" alt="edit" class="w-4 h-4">
+                                    <img src="/public/image/edit.png" alt="edit" class="w-4 h-4">
                                 </button>
                             </div>
                             <div class="text-sm pt-1 text-justify">
