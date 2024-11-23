@@ -55,7 +55,8 @@ CREATE TABLE SAN_PHAM (
     HinhThuc VARCHAR(255),
     TacGia VARCHAR(255),
     NgonNgu VARCHAR(255),
-    NamXB INT
+    NamXB INT,
+    TrangThai ENUM('Đang hiện', 'Đang ẩn', 'Đã xoá') DEFAULT 'Đang hiện'
 );
 
 CREATE TABLE HINH_ANH (
