@@ -40,13 +40,15 @@ class ProductService {
                 'nam_xuat_ban' => $product['NamXB'],
                 'ngon_ngu' => $product['NgonNgu'],
                 'kich_thuoc' => $product['KichThuoc'],
-                'so_trang' => $product['SoTrang']
+                'so_trang' => $product['SoTrang'],
+                'tu_khoa' => $product['TuKhoa']
             ],
             'gia_san_pham' => $product['Gia'],
             'gia_sau_giam_gia' => round($product['Gia'] * (1 - $product['TyLeGiamGia']), 2),
             'ty_le_giam_gia' => $product['TyLeGiamGia'] * 100 . '%',
             'so_luong_ton_kho' => $product['SoLuongKho'],
             'mo_ta' => $product['MoTa'],
+            'trang_thai' => $product['TrangThai']
         ];
     }
 
@@ -102,7 +104,17 @@ class ProductService {
     }
 
     public function get() {
-        $sql = "SELECT * FROM san_pham";
+        $sql = "SELECT * FROM san_pham WHERE TrangThai = 'Đang hiện'";
+        $result = $this->conn->query($sql);
+        $products = [];
+        while ($row = $result->fetch_assoc()) {
+            $products[] = $row;
+        }
+        return $products;
+    }
+
+    public function get_admin() {
+        $sql = "SELECT * FROM san_pham WHERE TrangThai = 'Đang hiện' OR TrangThai = 'Đang ẩn'";
         $result = $this->conn->query($sql);
         $products = [];
         while ($row = $result->fetch_assoc()) {
