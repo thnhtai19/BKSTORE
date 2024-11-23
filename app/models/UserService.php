@@ -1,16 +1,19 @@
 <?php
 require_once dirname(__DIR__, 1) . '/models/support.php';
 require_once dirname(__DIR__, 1) . '/models/ProductService.php';
+require_once dirname(__DIR__, 1) . '/models/OrderService.php';
 
 class UserService {
     private $conn;
     private $support;
     private $product;
+    private $order;
 
     public function __construct($conn) {
         $this->conn = $conn;
         $this->support = new support();
         $this->product = new ProductService($conn);
+        $this->order = new OrderService($conn);
     }
 
     public function info($id) {
@@ -179,6 +182,41 @@ class UserService {
         }
         $this->updateStatusNotice($uid);
         return ['sucess' => true, 'notice_list' => $result];
+    }
+
+    public function buyNow($uid, $PhuongThucThanhToan, $MaGiamGia, $SDT, $DiaChi, $TenNguoiNhan, $ID_SP, $SoLuong) {
+        if ($MaGiamGia != '' && $this->order->orderSale($MaGiamGia) == false) {
+            return ['success' => false, 'message' => 'Mã giảm giá không tồn tại'];
+        }
+        $bill = $this->order->getCostProduct($ID_SP) * $SoLuong;
+        if ($bill == 0) return ['success'=> false, 'message' => 'Danh sách sản phẩm không hợp lệ'];
+        $NgayDat = $this->support->getDateNow();
+        if ($this->order->checkProduct($ID_SP, $SoLuong)['success'] == false)
+            return ['success' => false, 'message' => 'Không đủ hàng trong kho'];
+        if ($MaGiamGia == '') {
+            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("isissssi", $uid, $NgayDat, $bill, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan, $bill);
+            $stmt->execute();
+        }
+        else {
+            $sale = $this->order->sale($bill, $MaGiamGia, 0, $PhuongThucThanhToan)['tong_tien_phai_tra'];
+            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("isisssssi", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan, $sale);
+            $stmt->execute();
+        }
+        $id_don_hang = mysqli_insert_id($this->conn);
+        $this->addProductToOrder($id_don_hang, $ID_SP, $SoLuong);
+        return ['success' => true, 'message' => 'Đặt hàng thành công', 'ma_don_hang' => $id_don_hang];
+    }
+
+    public function addProductToOrder($ID_DonHang, $ID_SP, $SoLuong) {
+        $sql = "INSERT INTO gom (ID_DonHang, ID_SP, SoLuong) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("iii", $ID_DonHang, $ID_SP, $SoLuong);
+        $stmt->execute();
+        $this->order->orderProduct($ID_SP, $SoLuong);
     }
 
     private function updateStatusNotice($uid) {
