@@ -55,8 +55,7 @@ CREATE TABLE SAN_PHAM (
     HinhThuc VARCHAR(255),
     TacGia VARCHAR(255),
     NgonNgu VARCHAR(255),
-    NamXB INT,
-    TrangThai ENUM('Đang hiện', 'Đang ẩn', 'Đã xoá') DEFAULT 'Đang hiện'
+    NamXB INT
 );
 
 CREATE TABLE HINH_ANH (
@@ -86,7 +85,7 @@ CREATE TABLE DANH_GIA (
     NgayDanhGia TEXT NOT NULL,
     SoSao INT CHECK (SoSao BETWEEN 1 AND 5),
     NoiDung TEXT,
-    TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện",
+    TrangThai ENUM("Đang hiện", "Đang ẩn", "Đã xóa") DEFAULT "Đang hiện",
     PhanHoi TEXT,
     FOREIGN KEY (ID_SP) REFERENCES SAN_PHAM(ID_SP),
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
@@ -100,18 +99,19 @@ CREATE TABLE BINH_LUAN (
     NgayBinhLuan TEXT NOT NULL,
     NoiDung TEXT,
     PhanHoi TEXT DEFAULT "",
-    TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện",
+    TrangThai ENUM("Đang hiện", "Đang ẩn", "Đã xóa") DEFAULT "Đang hiện",
     FOREIGN KEY (ID_SP) REFERENCES SAN_PHAM(ID_SP),
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
 );
 
 -- Table for MÃ_GIẢM_GIÁ
 CREATE TABLE MA_GIAM_GIA (
-    Ma VARCHAR(50) PRIMARY KEY,
+    ID_GiamGia INT AUTO_INCREMENT PRIMARY KEY,
+    Ma VARCHAR(50) UNIQUE,
     TienGiam DECIMAL(10, 2) NOT NULL,
     DieuKien TEXT,
     SoLuong INT,
-    TrangThai ENUM("Kích hoạt", "Hết hạn") DEFAULT "Kích hoạt"
+    TrangThai ENUM("Kích hoạt", "Hết hạn", "Đã xóa") DEFAULT "Kích hoạt"
 );
 
 -- Table for ĐƠN_HÀNG
@@ -127,8 +127,9 @@ CREATE TABLE DON_HANG (
     ThanhToan ENUM("Chưa thanh toán", "Đã thanh toán", "Huỷ thanh toán") DEFAULT "Chưa thanh toán", -- Trang thai thanh toan
     TenNguoiNhan TEXT,
     PhuongThucThanhToan ENUM('COD', 'Bank') DEFAULT 'COD',  -- Consistent single quotes
+    HoaDon DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID),
-    FOREIGN KEY (MaGiamGia) REFERENCES MA_GIAM_GIA(Ma)
+    FOREIGN KEY (MaGiamGia) REFERENCES MA_GIAM_GIA(Ma) ON UPDATE CASCADE
 );
 
 -- Table for GỒM

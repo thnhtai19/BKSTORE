@@ -57,51 +57,51 @@ INSERT INTO `SAN_PHAM` (`ID_SP`, `TenSP`, `MoTa`, `Gia`, `TyLeGiamGia`, `SoLuong
 (12, 'Tự Nhiên Say - Văn Học Tuổi 20', 'Tập truyện xoay quanh cuộc sống của người dân quê, nơi đất vườn đã dần hóa thành đô thị làm thay đổi cả lòng người. Cách viết mộc mạc giản dị nhưng ẩn sau là những thông điệp sâu sắc, và bàng bạc một cái tình rất đỗi tha thiết với nhân gian.', 52000, 0.16, 100, 'NXB Trẻ', '19 x 13 x 0.8 cm', 202, 'Sách Văn Học', 'Văn Học', 'Bìa mềm', 'Phát Dương', 'Tiếng Việt', 2022);
 
 INSERT INTO `HINH_ANH` (`ID_HinhAnh`, `Anh`, `ID_SP`) VALUES
-(1, 'public/image/1/nha_bia.webp', 1),
-(2, 'public/image/2/van-hoc-tuoi-hoa_nhat_bia.webp', 2),
-(3, 'public/image/3/8934974187493.webp', 3),
-(4, 'public/image/4/8935236430852.webp', 4),
-(5, 'public/image/5/8935352607985.webp', 5),
-(7, 'public/image/2/2023_06_07_10_47_41_1-390x510.webp', 2),
-(8, 'public/image/2/2023_06_07_10_47_41_2-390x510.webp', 2),
-(9, 'public/image/2/2023_06_07_10_47_41_3-390x510.webp', 2),
-(10, 'public/image/1/2024_09_26_16_54_10_1-390x510.webp', 1),
-(11, 'public/image/1/2024_09_26_16_54_10_2-390x510.webp', 1),
-(12, 'public/image/1/2024_09_26_16_54_10_3-390x510.webp', 1),
-(13, 'public/image/3/2023_06_07_16_41_57_2-390x510.webp', 3),
-(14, 'public/image/3/2023_06_07_16_41_57_3-390x510.webp', 3),
-(15, 'public/image/3/2023_06_07_16_41_57_4-390x510.webp', 3),
-(16, 'public/image/4/2023_11_06_16_28_51_2-390x510.webp', 4),
-(17, 'public/image/4/2023_11_06_16_28_51_3-390x510.webp', 4),
-(18, 'public/image/4/2023_11_06_16_28_51_4-390x510.webp', 4),
-(19, 'public/image/6/8935212365857.webp', 6),
-(20, 'public/image/6/2023_12_12_15_33_45_1-390x510.webp', 6),
-(21, 'public/image/6/2023_12_12_15_33_45_2-390x510.webp', 6),
-(22, 'public/image/7/8935236425834.webp', 7),
-(23, 'public/image/7/2023_01_09_13_59_27_2-390x510.webp', 7),
-(24, 'public/image/7/2023_01_09_13_59_27_3-390x510.webp', 7),
-(25, 'public/image/7/2023_01_09_13_59_27_4-390x510.webp', 7),
-(26, 'public/image/8/image_195509_1_29510.webp', 8),
-(27, 'public/image/8/2021_06_19_10_47_06_2-390x510.webp', 8),
-(28, 'public/image/8/2021_06_19_10_47_06_3-390x510.webp', 8),
-(29, 'public/image/8/2021_06_19_10_47_06_4-390x510.webp', 8),
-(30, 'public/image/9/image_240031.webp', 9),
-(31, 'public/image/9/2021_12_09_16_08_26_2-390x510.webp', 9),
-(32, 'public/image/9/2021_12_09_16_08_26_3-390x510.webp', 9),
-(33, 'public/image/9/2021_12_09_16_08_26_4-390x510.webp', 9),
-(34, 'public/image/10/image_195509_1_38376.webp', 10),
-(35, 'public/image/11/8935244868012.webp', 11),
-(36, 'public/image/11/2022_11_09_13_50_54_2-390x510.webp', 11),
-(37, 'public/image/12/image_178919.webp', 12),
-(38, 'public/image/12/tu_nhien_say___van_hoc_tuoi_20_2_2018_10_22_10_28_52.webp', 12);
+(1, 'public/image/product/1/nha_bia.webp', 1),
+(2, 'public/image/product/2/van-hoc-tuoi-hoa_nhat_bia.webp', 2),
+(3, 'public/image/product/3/8934974187493.webp', 3),
+(4, 'public/image/product/4/8935236430852.webp', 4),
+(5, 'public/image/product/5/8935352607985.webp', 5),
+(7, 'public/image/product/2/2023_06_07_10_47_41_1-390x510.webp', 2),
+(8, 'public/image/product/2/2023_06_07_10_47_41_2-390x510.webp', 2),
+(9, 'public/image/product/2/2023_06_07_10_47_41_3-390x510.webp', 2),
+(10, 'public/image/product/1/2024_09_26_16_54_10_1-390x510.webp', 1),
+(11, 'public/image/product/1/2024_09_26_16_54_10_2-390x510.webp', 1),
+(12, 'public/image/product/1/2024_09_26_16_54_10_3-390x510.webp', 1),
+(13, 'public/image/product/3/2023_06_07_16_41_57_2-390x510.webp', 3),
+(14, 'public/image/product/3/2023_06_07_16_41_57_3-390x510.webp', 3),
+(15, 'public/image/product/3/2023_06_07_16_41_57_4-390x510.webp', 3),
+(16, 'public/image/product/4/2023_11_06_16_28_51_2-390x510.webp', 4),
+(17, 'public/image/product/4/2023_11_06_16_28_51_3-390x510.webp', 4),
+(18, 'public/image/product/4/2023_11_06_16_28_51_4-390x510.webp', 4),
+(19, 'public/image/product/6/8935212365857.webp', 6),
+(20, 'public/image/product/6/2023_12_12_15_33_45_1-390x510.webp', 6),
+(21, 'public/image/product/6/2023_12_12_15_33_45_2-390x510.webp', 6),
+(22, 'public/image/product/7/8935236425834.webp', 7),
+(23, 'public/image/product/7/2023_01_09_13_59_27_2-390x510.webp', 7),
+(24, 'public/image/product/7/2023_01_09_13_59_27_3-390x510.webp', 7),
+(25, 'public/image/product/7/2023_01_09_13_59_27_4-390x510.webp', 7),
+(26, 'public/image/product/8/image_195509_1_29510.webp', 8),
+(27, 'public/image/product/8/2021_06_19_10_47_06_2-390x510.webp', 8),
+(28, 'public/image/product/8/2021_06_19_10_47_06_3-390x510.webp', 8),
+(29, 'public/image/product/8/2021_06_19_10_47_06_4-390x510.webp', 8),
+(30, 'public/image/product/9/image_240031.webp', 9),
+(31, 'public/image/product/9/2021_12_09_16_08_26_2-390x510.webp', 9),
+(32, 'public/image/product/9/2021_12_09_16_08_26_3-390x510.webp', 9),
+(33, 'public/image/product/9/2021_12_09_16_08_26_4-390x510.webp', 9),
+(34, 'public/image/product/10/image_195509_1_38376.webp', 10),
+(35, 'public/image/product/11/8935244868012.webp', 11),
+(36, 'public/image/product/11/2022_11_09_13_50_54_2-390x510.webp', 11),
+(37, 'public/image/product/12/image_178919.webp', 12),
+(38, 'public/image/product/12/tu_nhien_say___van_hoc_tuoi_20_2_2018_10_22_10_28_52.webp', 12);
 
 INSERT INTO SAN_PHAM_DE_XUAT (TenSP, NoiDung, TrangThai, GhiChu, UID, NgayYeuCau)
 VALUES
-('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', "Đang chờ duyệt", 'Đang chờ duyệt', 1, '12/11/2024'),
-('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', "Đã duyệt", 'Đã được duyệt', 2, '12/11/2024'),
-('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', "Đã từ chối", 'Không được duyệt', 3, '12/11/2024'),
-('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', "Đang chờ duyệt", 'Đang chờ duyệt', 6, '12/11/2024'),
-('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', "Đã duyệt", 'Đã được duyệt', 7, '12/11/2024');
+('Sản phẩm đề xuất 1', 'Đề xuất sản phẩm mới 1', "Đang chờ duyệt", 'Đang chờ duyệt', 1, '12-11-2024'),
+('Sản phẩm đề xuất 2', 'Đề xuất sản phẩm mới 2', "Đã duyệt", 'Đã được duyệt', 2, '12-11-2024'),
+('Sản phẩm đề xuất 3', 'Đề xuất sản phẩm mới 3', "Đã từ chối", 'Không được duyệt', 3, '12-11-2024'),
+('Sản phẩm đề xuất 4', 'Đề xuất sản phẩm mới 4', "Đang chờ duyệt", 'Đang chờ duyệt', 6, '12-11-2024'),
+('Sản phẩm đề xuất 5', 'Đề xuất sản phẩm mới 5', "Đã duyệt", 'Đã được duyệt', 7, '12-11-2024');
 
 INSERT INTO DANH_GIA (ID_SP, UID, NgayDanhGia, SoSao, NoiDung, TrangThai, PhanHoi)
 VALUES
@@ -128,13 +128,13 @@ VALUES
 ('GIAMCOD', 25000.00, 'COD', 50, 'Hết hạn'),
 ('FREESHIP', 0.00, 'Tất cả', 50, 'Kích hoạt');
 
-INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, TrangThai, SDT, DiaChi, TenNguoiNhan, ThanhToan, PhuongThucThanhToan)
+INSERT INTO DON_HANG (UID, NgayDat, TongTien, MaGiamGia, TrangThai, SDT, DiaChi, TenNguoiNhan, ThanhToan, PhuongThucThanhToan, HoaDon)
 VALUES
-(1, '20-10-2023', 300000.00, 'GIAM50K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank'),
-(2, '19-10-2023', 150000.00, NULL,'Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
-(3, '18-10-2023', 250000.00, 'GIAM10K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank'),
-(6, '17-10-2023', 100000.00, NULL,'Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD'),
-(7, '16-10-2023', 200000.00, 'GIAMCOD','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank');
+(1, '20-10-2023', 300000.00, 'GIAM50K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank', 250000.00),
+(2, '19-10-2023', 150000.00, 'GIAM50%','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD', 75000.00),
+(3, '18-10-2023', 250000.00, 'GIAM10K','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank', 240000.00),
+(6, '17-10-2023', 100000.00, 'FREESHIP','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'COD', 100000.00),
+(7, '16-10-2023', 200000.00, 'FREESHIP','Chờ xác nhận', 0123456789, 'TP.HCM', 'Trần Thành Tài','Chưa thanh toán', 'Bank', 200000.00);
 
 INSERT INTO GOM (ID_DonHang, ID_SP, SoLuong)
 VALUES
@@ -193,15 +193,19 @@ VALUES
 
 INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri, TuKhoa, ClientID, APIKey, Checksum)
 VALUES
-(1, FALSE, '', '', '', '');  -- Hệ thống không bảo trì
+(1, FALSE, '', '', '', ''); 
 
 INSERT INTO THONG_TIN_LIEN_HE (Loai, ThongTin, HinhAnh, TrangThai)
 VALUES
-('Email', 'contact@website.com', 'image_1.png', 'Đang hiện'),
+('Email', 'contact@website.com', 'public/image/email.png', 'Đang hiện'),
 ('Hotline', '+84 123 456 789', 'image_1.png', 'Đang hiện'),
 ('Địa chỉ', '123 Đường ABC, Quận 1, TP.HCM', 'image_1.png', 'Đang hiện'),
 ('Fanpage', 'facebook.com/website', 'image_1.png', 'Đang hiện'),
-('Zalo', 'Zalo: +84 987 654 321', 'image_1.png', 'Đang hiện');
+('Zalo', 'Zalo: +84 987 654 321', 'image_1.png', 'Đang hiện'),
+('Tư vấn mua hàng', '+84 123 456 789', 'public/image/consultation.jpg', 'Đang hiện'),
+('Tư vấn đổi sách', '+84 123 456 745', 'public/image/warranty.jfif', 'Đang hiện'),
+('Khiếu nại', '+84 123 456 123', 'public/image/complaint.jfif', 'Đang hiện');
+
 
 INSERT INTO MANG_XA_HOI (HinhAnh, LienKet, TrangThai)
 VALUES
