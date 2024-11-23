@@ -1,3 +1,10 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+if(!($_SESSION["Role"] == 'Admin')){
+    header("Location: /404");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -5,8 +12,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="/public/css/admin.css">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/admin.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <title>Quản đơn hàng | ADMIN BKSTORE</title>
 </head>
 
@@ -67,7 +75,7 @@
                     </select>
                 </div>
                 <div class="w-1/2">
-                    <label class="block text-sm font-medium text-gray-700">Trạng thái thanh toán:</label>
+                    <label class="block text-sm font-medium text-gray-700">Trạng thái đơn hàng:</label>
                     <select id="trangthaidonhang" class="mt-2 mb-4 w-full p-2 border rounded">
                         <option value="Chờ xác nhận">Chờ xác nhận</option>
                         <option value="Đã xác nhận">Đã xác nhận</option>
@@ -79,7 +87,7 @@
 
             <div class="w-full pb-6">
                 <label for="hinhanh" class="block text-sm font-medium text-gray-700">Danh sách sản phẩm:</label>
-                <div class="flex flex-wrap gap-4 mt-2">
+                <div id="list-product" class="flex flex-wrap gap-4 mt-2">
                     <div class="w-full border border-gray-300 p-2 rounded-md flex gap-5">
                         <img src="/public/image/book1.webp" alt="Hình ảnh 1" class="w-16 h-16 object-cover rounded">
                         <div class="flex-1">
@@ -130,47 +138,124 @@
                                 trangthai: 'Trạng thái đơn hàng',
                                 action: "Hành động"
                             };
+                            let data = [];
+                            let dataOrder = [];
 
-                            const data = [
-                                {
-                                    id: '2210',
-                                    name: 'Trần Thành Tài',
-                                    ngaydat: '04/10/2024',
-                                    tongtien: "100000",
-                                    trangthaithanhtoan: 'Chưa thanh toán',
-                                    trangthai: 'Chờ xác nhận',
-                                    phone: '08000008',
-                                    diachigiaohang: "Đại học Bách Khoa",
-                                    soluongsanpham: '1',
-                                    magiamgia: "NAPCARD20K",
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editOrder' },
-                                    ]
-                                },
-                                
-                            ];
+                            async function getListOrder() {
+                                const response = await fetch(`${window.location.origin}/api/order/list`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+                                if (response.ok) {
+                                    const ListOrder = await response.json();
+                                    console.log(ListOrder); 
+                                    ListOrder['list'].forEach(order => {
+                                        data.push({
+                                            id: order.info.id,
+                                            name: order.info.ten_nguoi_nhan,
+                                            ngaydat: order.info.ngay_dat,
+                                            tongtien: order.info.thong_tin_thanh_toan.tong_tien,
+                                            trangthaithanhtoan: order.info.thong_tin_thanh_toan.trang_thai,
+                                            trangthai: order.info.trang_thai,
+                                            phone: order.info.so_dien_thoai,
+                                            diachigiaohang: order.info.dia_chi_giao_hang,
+                                            soluongsanpham: order.info.so_luong_san_pham,
+                                            magiamgia: order.info.thong_tin_thanh_toan.ma_giam_gia,
+                                            action: [
+                                                { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editOrder' },
+                                            ]
+                                        });
+                                        dataOrder.push({
+                                            id: order.info.id,
+                                            danh_sach_san_pham: order.info.danh_sach_san_pham
+                                        });
+                                    });
+                                    console.log(data); 
+                                    console.log(dataOrder); 
+
+                                    const event = new CustomEvent('dataReady', { detail: ListOrder });
+                                    window.dispatchEvent(event);
+                                } else {
+                                    console.error("Lỗi khi lấy dữ liệu từ API:", response.status);
+                                }
+                            }
 
                             function editOrder(item) {
                                 document.getElementById("editOrderModal").classList.remove("hidden");
                                 const parseItem= JSON.parse(decodeURIComponent(item));
-                                
+
+                                const thanhToan = document.getElementById("trangthaithanhtoan");
+                                thanhToan.value = parseItem.trangthaithanhtoan;
+                                const trangThai = document.getElementById("trangthaidonhang");
+                                trangThai.value = parseItem.trangthai;
                                 document.getElementById("idOrder").value = parseItem.id;
                                 document.getElementById("nameUser").value = parseItem.name;
-                                document.getElementById("trangthaithanhtoan").value = parseItem.trangthaithanhtoan;
-                                document.getElementById("trangthaidonhang").value = parseItem.trangthai;
                                 document.getElementById("phone").value = parseItem.phone;
                                 document.getElementById("diachigiaohang").value = parseItem.diachigiaohang;
                                 document.getElementById("soluongsanpham").value = parseItem.soluongsanpham;
                                 document.getElementById("magiamgia").value = parseItem.magiamgia;
                                 document.getElementById("tongtien").value = parseItem.tongtien;
                                 document.getElementById("ngaydat").value = parseItem.ngaydat;
-             
+                                
+                                let currentValue = parseItem.trangthai;
+                                let statusOrder = [
+                                    "Chờ xác nhận",
+                                    "Đã xác nhận",
+                                    "Đang vận chuyển",
+                                    "Đã giao hàng"
+                                ];
+                                let currentIndex = statusOrder.indexOf(currentValue);
+                                Array.from(trangThai.options).forEach((option, index) => {
+                                    option.disabled = index < currentIndex; 
+                                });
+
+                                currentValue = parseItem.trangthaithanhtoan;
+                                statusOrder = [
+                                    "Chưa thanh toán",
+                                    "Đã thanh toán",
+                                    "Huỷ thanh toán"
+                                ];
+                                currentIndex = statusOrder.indexOf(currentValue);
+                                Array.from(thanhToan.options).forEach((option, index) => {
+                                    option.disabled = index < currentIndex; 
+                                });
+
+                                dataOrder.forEach(order => {
+                                    if(order.id == parseItem.id) {
+                                        const containerProduct = document.getElementById("list-product");
+                                        containerProduct.innerHTML='';
+                                        order.danh_sach_san_pham.forEach(product => {
+                                            const productHTML = `
+                                                <div class="w-full border border-gray-300 p-2 rounded-md flex gap-5">
+                                                    <img src="/${product.anh[0]}" alt="${product.ten}" class="w-16 h-16 object-cover rounded">
+                                                    <div class="flex-1">
+                                                        <div class="">
+                                                            <div class="text-gray-600 font-bold">${product.ten}</div>
+                                                            <div class="flex justify-between pt-2">
+                                                                <div class="text-custom-blue font-bold text-sm">${product.gia_sau_giam_gia}</div>
+                                                                <div class="text-gray-600">x${product.so_luong}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            `;
+                                            containerProduct.insertAdjacentHTML('afterbegin', productHTML);
+                                        });
+                                    }
+                                });
 
                             }
 
                             function closeModalOrder() {
                                 document.getElementById("editOrderModal").classList.add("hidden");
                             }
+
+                            window.onload = async function() {
+                                await getListOrder(); 
+                            };
 
                         </script>
                         <?php
@@ -184,6 +269,51 @@
         </div>
     </div>
     <script src="/public/js/sidebar.js"></script>
+    <script src="/public/js/notyf.min.js"></script>
+    <script>
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+        function updateOrder() {
+            const ID_DonHang = document.getElementById("idOrder").value;
+            const thanhToan = document.getElementById("trangthaithanhtoan").value;
+            const trangThai = document.getElementById("trangthaidonhang").value;
+
+            const payload = {
+                ID_DonHang: ID_DonHang,
+                ThanhToan: thanhToan,
+                TrangThai: trangThai
+            };
+            console.log(payload)
+            fetch(`${window.location.origin}/api/order/update`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    notyf.success(data.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 5000);
+
+                } else {
+                    notyf.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                notyf.error("Không thể kết nối đến server. Vui lòng thử lại sau.");
+            });
+        }
+    </script>
 </body>
 
 </html>

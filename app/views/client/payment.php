@@ -1,3 +1,11 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+if(!isset($_SESSION["email"])){
+    header("Location: /auth/login");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

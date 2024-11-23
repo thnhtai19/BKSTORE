@@ -78,11 +78,11 @@
 
                     newItem.innerHTML = `
                         <div class="bg-white flex items-center justify-center text-white rounded-lg overflow-hidden">
-                            <img src="${New.AnhMinhHoa[0].LinkAnh}" alt="1">
+                            <img src="${New.AnhMinhHoa[0].LinkAnh}" alt="Tin tức ${New.MaTinTuc}">
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-xl mb-2 text-blue-900">${New.TieuDe}</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-800 mt-2 block">Đọc thêm &rarr;</a>
+                            <a href="/news/detail?id=${New.MaTinTuc}" class="text-blue-500 hover:text-blue-800 mt-2 block">Đọc thêm &rarr;</a>
                         </div>
                     `;
                     news.appendChild(newItem);
@@ -103,10 +103,10 @@
 
                     newItem.innerHTML = `
                         <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <img src="${New.AnhMinhHoa[0].LinkAnh}" alt="Tin tức 1" class="w-full h-24 object-cover">
+                            <img src="${New.AnhMinhHoa[0].LinkAnh}" alt="Tin tức ${New.MaTinTuc}" class="w-full h-24 object-cover">
                             <div class="p-3 flex flex-col justify-center">
                                 <h3 class="font-bold text-sm text-blue-900">${New.TieuDe}</h3>
-                                <a href="#" class="text-blue-500 hover:text-blue-800 text-xs mt-1">Đọc thêm &rarr;</a>
+                                <a href="/news/detail?id=${New.MaTinTuc}" class="text-blue-500 hover:text-blue-800 text-xs mt-1">Đọc thêm &rarr;</a>
                             </div>
                         </div>
                     `;
