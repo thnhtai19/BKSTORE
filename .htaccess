@@ -89,6 +89,7 @@ RewriteRule ^api/user/comment$ /app/controllers/user/comment.php [L]
 RewriteRule ^api/user/like$ /app/controllers/user/like.php [L]
 RewriteRule ^api/user/unlike$ /app/controllers/user/unlike.php [L]
 RewriteRule ^api/user/notice$ /app/controllers/user/notice.php [L]
+RewriteRule ^api/user/buynow$ /app/controllers/user/buyNow.php [L]
 
 #CART ROUTERS BACKEND
 RewriteCond %{REQUEST_METHOD} GET
@@ -115,6 +116,7 @@ RewriteRule ^api/system$ /app/controllers/system/get.php [L]
 RewriteCond %{REQUEST_METHOD} POST
 RewriteRule ^api/system$ /app/controllers/system/set.php [L]
 RewriteRule ^api/system/statistical$ /app/controllers/system/statistical.php [L]
+RewriteRule ^api/system/footer$ /app/controllers/system/footer.php [L]
 
 #ADMIN ROUTERS BACKEND
 RewriteRule ^api/admin/user$ /app/controllers/admin/userInfo.php [L]
@@ -128,9 +130,7 @@ RewriteRule ^api/admin/propose$ /app/controllers/admin/propose.php [L]
 RewriteCond %{REQUEST_METHOD} POST
 RewriteRule ^api/admin/propose$ /app/controllers/admin/updatePropose.php [L]
 RewriteRule ^api/admin/comment/status$ /app/controllers/admin/statusComment.php [L]
-RewriteRule ^api/admin/comment/rep$ /app/controllers/admin/repComment.php [L]
 RewriteRule ^api/admin/review/status$ /app/controllers/admin/statusReview.php [L]
-RewriteRule ^api/admin/review/rep$ /app/controllers/admin/repReview.php [L]
 RewriteRule ^api/admin/updateProduct$ /app/controllers/admin/updateProduct.php [L]
 RewriteRule ^api/admin/updateUser$ /app/controllers/admin/updateUser.php [L]
 RewriteRule ^api/admin/deleteProduct$ /app/controllers/admin/deleteProduct.php [L]
@@ -145,6 +145,8 @@ RewriteRule ^api/product/info$ /app/controllers/product/info.php [L]
 RewriteRule ^api/product/propose$ /app/controllers/product/propose.php [L]
 RewriteRule ^api/product/like$ /app/controllers/product/like.php [L]
 RewriteRule ^api/product/keyword$ /app/controllers/product/keyword.php [L]
+RewriteRule ^api/product/getpropose$ /app/controllers/product/getPropose.php [L]
+RewriteRule ^api/product/proposeinfo$ /app/controllers/product/proposeInfo.php [L]
 
 #NEWS ROUTERS BACKEND
 RewriteCond %{REQUEST_METHOD} GET

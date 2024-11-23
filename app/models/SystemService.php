@@ -13,7 +13,7 @@ class SystemService {
 
     public function getInfoList() {
         // Query to fetch MaTinTuc and TieuDe
-        $sql1 = "SELECT MaTinTuc, TieuDe FROM TIN_TUC";
+        $sql1 = "SELECT MaTinTuc, TieuDe FROM tin_tuc";
         $query1 = $this->conn->prepare($sql1);
         $query1->execute();
         $result1 = $query1->get_result();
@@ -24,7 +24,7 @@ class SystemService {
             $tieuDe = $row['TieuDe'];
     
             // Query to fetch LinkAnh based on MaTinTuc
-            $sql2 = "SELECT LinkAnh FROM ANH_MINH_HOA WHERE MaTinTuc = ?";
+            $sql2 = "SELECT LinkAnh FROM anh_minh_hoa WHERE MaTinTuc = ?";
             $query2 = $this->conn->prepare($sql2);
             $query2->bind_param('i', $maTinTuc);
             $query2->execute();
@@ -75,8 +75,16 @@ class SystemService {
         return $result->fetch_assoc();
     }
 
+    public function footer() {
+        return [
+            'mang_xa_hoi' => $this->getSocialList(),
+            'doi_tac' => $this->getPartnerList(),
+            'thong_tin_lien_he' => $this->getContactList()
+        ];
+    }
+
     public function getNewsList() {
-        $sql = 'SELECT * FROM tin_tuc';
+        $sql = 'SELECT * FROM tin_tuc WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -169,7 +177,7 @@ class SystemService {
     }
 
     public function getBannerList() {
-        $sql = 'SELECT * FROM banner';
+        $sql = 'SELECT * FROM banner WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -231,7 +239,7 @@ class SystemService {
     }
 
     public function getContactList() {
-        $sql = 'SELECT * FROM thong_tin_lien_he';
+        $sql = 'SELECT * FROM thong_tin_lien_he WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -293,7 +301,7 @@ class SystemService {
     }
 
     public function getSocialList() {
-        $sql = 'SELECT * FROM mang_xa_hoi';
+        $sql = 'SELECT * FROM mang_xa_hoi WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();

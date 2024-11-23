@@ -218,6 +218,34 @@ class ProductService {
         else return ['success' => false, 'message' => 'Không tìm thấy sản phẩm!'];
     }
 
+    public function getPropose($uid) {
+        $sql = "SELECT MaDeXuat, TenSP, NoiDung FROM san_pham_de_xuat WHERE `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $uid);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        if ($stmt->num_rows === 0) {
+            return ['success' => false, 'message' => 'Chưa đề xuất sản phẩm nào!'];
+        }
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row;
+        }
+        return ['success' => true, 'danh_sach_de_xuat' => $result];
+    }
+
+    public function proposeInfo($uid, $MaDeXuat) {
+        $sql = "SELECT * FROM san_pham_de_xuat WHERE `UID` = ? AND MaDeXuat = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $uid, $MaDeXuat);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
+            return ['success' => false, 'message' => 'Chưa đề xuất!'];
+        }
+        return ['success' => true, 'danh_sach_de_xuat' => $result->fetch_assoc()];
+    }
+
     private function getProductById($id) {
         $sql = "SELECT * FROM san_pham WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
@@ -232,7 +260,7 @@ class ProductService {
 
     private function getComment($id, $status) {
         $sql = "
-            SELECT binh_luan.MaBinhLuan, binh_luan.NgayBinhLuan, binh_luan.NoiDung, login.Ten, login.Avatar, binh_luan.TrangThai
+            SELECT binh_luan.MaBinhLuan, binh_luan.NgayBinhLuan, binh_luan.NoiDung, login.Ten, login.Avatar, binh_luan.TrangThai, binh_luan.PhanHoi
             FROM binh_luan
             JOIN login ON binh_luan.UID = login.UID
             WHERE binh_luan.ID_SP = ?
@@ -250,12 +278,15 @@ class ProductService {
         $comments = [];
         if ($status == 1) {
             while ($row = $result->fetch_assoc()) {
+                if ($row['TrangThai'] != 'Đã xóa')
                 $comments[] = [
                     'id' => $row['MaBinhLuan'],
                     'ngay_binh_luan' => $row['NgayBinhLuan'],
                     'noi_dung' => $row['NoiDung'],
                     'avatar' => $row['Avatar'],
-                    'ten' => $row['Ten']
+                    'ten' => $row['Ten'],
+                    'trang_thai' => $row['TrangThai'],
+                    'phan_hoi' => $row['PhanHoi']
                 ];
             }
         } 
@@ -267,7 +298,8 @@ class ProductService {
                     'ngay_binh_luan' => $row['NgayBinhLuan'],
                     'noi_dung' => $row['NoiDung'],
                     'avatar' => $row['Avatar'],
-                    'ten' => $row['Ten']
+                    'ten' => $row['Ten'],
+                    'phan_hoi' => $row['PhanHoi']
                 ];
             }
         }
@@ -276,7 +308,7 @@ class ProductService {
 
     private function getReview($id, $status) {
         $sql = "
-            SELECT danh_gia.MaDanhGia, danh_gia.NgayDanhGia, danh_gia.SoSao, danh_gia.NoiDung, login.Ten, login.Avatar, danh_gia.TrangThai 
+            SELECT danh_gia.MaDanhGia, danh_gia.NgayDanhGia, danh_gia.SoSao, danh_gia.NoiDung, login.Ten, login.Avatar, danh_gia.TrangThai, danh_gia.PhanHoi
             FROM danh_gia 
             JOIN login ON danh_gia.UID = login.UID
             WHERE ID_SP = ?
@@ -293,13 +325,16 @@ class ProductService {
         $reviews = [];
         if ($status == 1) {
             while ($row = $result->fetch_assoc()) {
+                if ($row['TrangThai'] != 'Đã xóa')
                 $reviews[] = [
                     'id' => $row['MaDanhGia'],
                     'ngay_danh_gia' => $row['NgayDanhGia'],
                     'so_sao' => $row['SoSao'],
                     'noi_dung' => $row['NoiDung'],
                     'avatar' => $row['Avatar'],
-                    'ten' => $row['Ten']
+                    'ten' => $row['Ten'],
+                    'trang_thai' => $row['TrangThai'],
+                    'phan_hoi' => $row['PhanHoi']
                 ];
             }
         }
@@ -312,7 +347,8 @@ class ProductService {
                     'so_sao' => $row['SoSao'],
                     'noi_dung' => $row['NoiDung'],
                     'avatar' => $row['Avatar'],
-                    'ten' => $row['Ten']
+                    'ten' => $row['Ten'],
+                    'phan_hoi' => $row['PhanHoi']
                 ];
             }
         }

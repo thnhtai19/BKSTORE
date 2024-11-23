@@ -55,6 +55,9 @@ class AdminService {
     }
 
     public function updateUser($UID, $name, $email, $phone, $sex, $addr, $status) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ['success' => false, 'message' => 'Email không hợp lệ'];
+        }
         $sql1 = "UPDATE LOGIN SET Ten = ?, Email = ? WHERE UID = ?";
         $stmt1 = $this->conn->prepare($sql1);
         $stmt1->bind_param("ssi", $name, $email, $UID);
@@ -157,7 +160,7 @@ class AdminService {
         return ['success' => true, 'message' => 'Cập nhật thành công'];
     }
 
-    public function statusComment($id, $trang_thai) {
+    public function statusComment($id, $trang_thai, $content) {
         if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy bình luận'];
         $sql = 'SELECT * FROM binh_luan WHERE MaBinhLuan = ?';
         $stmt = $this->conn->prepare($sql);
@@ -165,23 +168,14 @@ class AdminService {
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows == 0) return ['success'=> false, 'message'=> 'Không tìm thấy bình luận'];
-        $sql = 'UPDATE binh_luan SET TrangThai = ? WHERE MaBinhLuan = ?';
+        $sql = 'UPDATE binh_luan SET TrangThai = ?, PhanHoi = ? WHERE MaBinhLuan = ?';
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('si', $trang_thai, $id);
+        $stmt->bind_param('ssi', $trang_thai, $content, $id);
         $stmt->execute();
-        return ['success'=> true,'message'=> 'Cập nhật trạng thái thành công'];
+        return ['success'=> true,'message'=> 'Cập nhật bình luận thành công'];
     }
 
-    public function repComment($id, $content) {
-        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy bình luận'];
-        $sql = 'UPDATE binh_luan SET PhanHoi = ? WHERE MaBinhLuan = ?';
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('si', $content, $id);
-        $stmt->execute();
-        return ['success'=> true,'message'=> 'Phản hồi thành công'];
-    }
-
-    public function statusReview($id, $trang_thai) {
+    public function statusReview($id, $trang_thai, $content) {
         if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy đánh giá'];
         $sql = 'SELECT * FROM danh_gia WHERE MaDanhGia = ?';
         $stmt = $this->conn->prepare($sql);
@@ -189,20 +183,11 @@ class AdminService {
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows == 0) return ['success'=> false, 'message'=> 'Không tìm thấy đánh giá'];
-        $sql = 'UPDATE danh_gia SET TrangThai = ? WHERE MaDanhGia = ?';
+        $sql = 'UPDATE danh_gia SET TrangThai = ?, PhanHoi = ? WHERE MaDanhGia = ?';
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('si', $trang_thai, $id);
+        $stmt->bind_param('ssi', $trang_thai, $content, $id);
         $stmt->execute();
-        return ['success'=> true,'message'=> 'Cập nhật trạng thái thành công'];
-    }
-
-    public function repReview($id, $content) {
-        if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy đánh giá'];
-        $sql = 'UPDATE danh_gia SET PhanHoi = ? WHERE MaDanhGia = ?';
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('si', $content, $id);
-        $stmt->execute();
-        return ['success'=> true,'message'=> 'Phản hồi thành công'];
+        return ['success'=> true,'message'=> 'Cập nhật đánh giá thành công'];
     }
 
     public function sale() {
@@ -344,7 +329,7 @@ class AdminService {
     }
 
     public function updateProductImage ($Anh, $ID_SP) {
-        $relativeAvatarPath = "public/image/$ID_SP/" . basename($Anh);
+        $relativeAvatarPath = "public/image/product/$ID_SP/" . basename($Anh);
         // $sqlDelete = "DELETE FROM hinh_anh WHERE ID_SP = ?";
         // $stmtDelete = $this->conn->prepare($sqlDelete);
         // $stmtDelete->bind_param("i", $ID_SP);

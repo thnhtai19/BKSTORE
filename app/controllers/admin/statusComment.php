@@ -28,7 +28,9 @@ if ($method === 'POST') {
                 echo json_encode(['success' => false, 'message' => 'Trạng thái không hợp lệ!']);
                 return;
             }
-            echo json_encode($model->statusComment($MaBinhLuan, $TrangThai));
+            if (isset($data['PhanHoi'])) $PhanHoi = $data['PhanHoi'];
+            else $PhanHoi = '';
+            echo json_encode($model->statusComment($MaBinhLuan, $TrangThai, $PhanHoi));
         }
         else echo json_encode(['success' => false, 'message' => 'Người dùng không có quyền truy cập']);
     }
