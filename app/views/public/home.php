@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 $cookies = http_build_query($_COOKIE, '', '; ');
 $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/api/user';
 

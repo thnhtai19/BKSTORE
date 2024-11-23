@@ -19,6 +19,24 @@ class PayOsService {
                     'message' => "Thiếu dữ liệu đầu vào"
                 ];
         }
+
+        $sql = "SELECT * FROM he_thong";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $clientid = $row['ClientID'];
+        $apikey = $row['APIKey'];
+        $checksum = $row['Checksum'];
+
+        if($clientid == '' || $apikey == '' || $checksum == ''){
+            return [
+                'status' => false,
+                'message' => "Lỗi cấu hình hệ thống"
+            ];
+        }
+
         $url = 'https://payos-i4bq.onrender.com/payment/create_payment';
         $data = json_encode([
             "orderCode" => $orderCode,
@@ -27,7 +45,10 @@ class PayOsService {
             "buyerName" =>  $buyerName,
             "buyerEmail"    => $buyerEmail,
             "cancelUrl" =>  $cancelUrl,
-            "returnUrl" =>  $returnUrl
+            "returnUrl" =>  $returnUrl,
+            "clientid"  => $clientid,
+            "apikey"    => $apikey,
+            "checksum"  => $checksum
         ]);
     
         $ch = curl_init();
@@ -53,13 +74,41 @@ class PayOsService {
                     'message' => "Thiếu dữ liệu đầu vào"
                 ];
         }
-        $url = "https://payos-i4bq.onrender.com/payment/get_payment/$orderCode";
+
+        $sql = "SELECT * FROM he_thong";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $clientid = $row['ClientID'];
+        $apikey = $row['APIKey'];
+        $checksum = $row['Checksum'];
+
+        if($clientid == '' || $apikey == '' || $checksum == ''){
+            return [
+                'status' => false,
+                'message' => "Lỗi cấu hình hệ thống"
+            ];
+        }
+
+        $url = "https://payos-i4bq.onrender.com/payment/get_payment";
+
+        $data = json_encode([
+            "id" => $orderCode,
+            "clientid"  => $clientid,
+            "apikey"    => $apikey,
+            "checksum"  => $checksum
+        ]);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json'
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data)
         ));
     
         $response = curl_exec($ch);

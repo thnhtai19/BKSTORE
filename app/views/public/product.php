@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 $idsp = $_GET['id'];
 if($idsp == ''){
     header("Location: 404");

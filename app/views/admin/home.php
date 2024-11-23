@@ -41,7 +41,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 </div>
                                 <div class="flex flex-col justify-between">
                                     <div class="font-semibold text-lg text-white">Tổng người dùng</div>
-                                    <div class="text-white">100</div>
+                                    <div class="text-white" id="user-count"></div>
                                 </div>
                             </div>
                             <div class="bg-white rounded-lg p-4 h-24 shadow-sm flex items-center gap-4" style="background-color: #007D88">
@@ -50,7 +50,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 </div>
                                 <div class="flex flex-col justify-between">
                                     <div class="font-semibold text-lg text-white">Số đơn hàng</div>
-                                    <div class="text-white">200</div>
+                                    <div class="text-white" id="order-count"></div>
                                 </div>
                             </div>
                             <div class="bg-white rounded-lg p-4 h-24 shadow-sm flex items-center gap-4" style="background-color: #0069F7">
@@ -59,7 +59,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 </div>
                                 <div class="flex flex-col justify-between">
                                     <div class="font-semibold text-lg text-white">Doanh thu</div>
-                                    <div class="text-white">200.000.000đ</div>
+                                    <div class="text-white" id="revenue-count"></div>
                                 </div>
                             </div>
                             <div class="bg-white rounded-lg p-4 h-24 shadow-sm flex items-center gap-4" style="background-color: #262A2E">
@@ -68,7 +68,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 </div>
                                 <div class="flex flex-col justify-between">
                                     <div class="font-semibold text-lg text-white">Yêu cầu</div>
-                                    <div class="text-white">300</div>
+                                    <div class="text-white" id="request-count"></div>
                                 </div>
                             </div>
                         </div>
@@ -79,6 +79,39 @@ if(!($_SESSION["Role"] == 'Admin')){
         </div>
     </div>
     <script src="/public/js/sidebar.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch("/api/system/statistical");
+                if (!response.ok){
+                    console.log("lỗi")
+                    return
+                }
+                const data = await response.json();
+                if(data.success){
+                    document.getElementById("user-count").textContent = data.tong_nguoi_dung;
+                    document.getElementById("order-count").textContent = data.so_don_hang;
+                    document.getElementById("revenue-count").textContent = new Intl.NumberFormat('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }).format(data.doanh_thu);
+                    document.getElementById("request-count").textContent = data.so_yeu_cau_ban_sach;
+                }else{
+                    if(data.message === "Người dùng chưa đăng nhập"){
+                        window.location.href = '/auth/login'
+                        return
+                    }else if(data.message === "Không có quyền truy cập"){
+                        window.location.href = '/404'
+                        return
+                    }
+                }   
+
+            } catch (error) {
+                console.log("lỗi")
+            }
+        });
+    </script>
+
 </body>
 
 </html>
