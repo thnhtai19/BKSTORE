@@ -15,20 +15,14 @@ if ($method === 'POST') {
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
             if (isset($data['TrangThai'])) $TrangThai = $data['TrangThai'];
-            else {
-                echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
-                return;
-            }
-            if ($TrangThai != 'Chờ xác nhận' && $TrangThai != 'Đã xác nhận' && $TrangThai != 'Đang vận chuyển' && $TrangThai != 'Đã giao hàng' && $TrangThai != 'Đã hủy') {
+            else $TrangThai = '';
+            if ($TrangThai != 'Chờ xác nhận' && $TrangThai != 'Đã xác nhận' && $TrangThai != 'Đang vận chuyển' && $TrangThai != 'Đã giao hàng' && $TrangThai != 'Đã hủy' && $TrangThai != '') {
                 echo json_encode(['success'=> false, 'message'=> 'Thông tin trạng thái không hợp lệ']);
                 return;
             }
             if (isset($data['ThanhToan'])) $ThanhToan = $data['ThanhToan'];
-            else {
-                echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
-                return;
-            }
-            if ($ThanhToan != 'Chưa thanh toán' && $ThanhToan != 'Đã thanh toán' && $ThanhToan != 'Hủy thanh toán') {
+            else $ThanhToan = '';
+            if ($ThanhToan != 'Chưa thanh toán' && $ThanhToan != 'Đã thanh toán' && $ThanhToan != 'Hủy thanh toán' && $ThanhToan != '') {
                 echo json_encode(['success'=> false, 'message'=> 'Trạng thái thanh toán không hợp lệ']);
                 return;
             }

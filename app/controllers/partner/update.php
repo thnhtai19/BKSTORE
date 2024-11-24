@@ -19,6 +19,7 @@ if ($method === 'POST') {
             }
             $Ten = isset($_POST['Ten']) ? $_POST['Ten'] : null;
             $LienKet = isset($_POST['LienKet']) ? $_POST['LienKet'] : null;
+            $TrangThai = isset($_POST['TrangThai']) ? $_POST['TrangThai'] : null;
 
             if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
                 $model->deleteImagePartner($MaDoiTac);
@@ -32,7 +33,7 @@ if ($method === 'POST') {
                 $newsPath = $uploadDir . $newsFileName;
 
                 if (move_uploaded_file($newsTmpPath, $newsPath)) {
-                    $result = $model->updatePartner($MaDoiTac, "/public/image/partner/$MaDoiTac/" . $newsFileName, $LienKet, $Ten);
+                    $result = $model->updatePartner($MaDoiTac, "/public/image/partner/$MaDoiTac/" . $newsFileName, $LienKet, $Ten, $TrangThai);
                     $uploaded = true;
                 }
 

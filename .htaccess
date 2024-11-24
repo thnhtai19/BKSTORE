@@ -89,6 +89,7 @@ RewriteRule ^api/user/comment$ /app/controllers/user/comment.php [L]
 RewriteRule ^api/user/like$ /app/controllers/user/like.php [L]
 RewriteRule ^api/user/unlike$ /app/controllers/user/unlike.php [L]
 RewriteRule ^api/user/notice$ /app/controllers/user/notice.php [L]
+RewriteRule ^api/user/noticeInfo$ /app/controllers/user/noticeInfo.php [L]
 RewriteRule ^api/user/buynow$ /app/controllers/user/buyNow.php [L]
 
 #CART ROUTERS BACKEND
