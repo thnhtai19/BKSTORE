@@ -1,21 +1,22 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
-require_once dirname(__DIR__, 2) . '/models/SystemService.php';
+require_once dirname(__DIR__, 2) . '/models/UserService.php';
 
 $db = new Database();
-$model = new SystemService($db->conn);
+$model = new UserService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
-    if (!isset($_SESSION["email"])) {
+    if (!isset($_SESSION["uid"])) {
         echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
+        return;
     }
-    else {
-        if ($_SESSION["Role"] == 'Admin') {
-            echo json_encode($model->getSystem());
-        }
-        else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
-    }
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    if (isset($data['MaThongBao'])) $MaThongBao = $data['MaThongBao'];
+    else $MaThongBao = '';
+    $result = $model->updateStatusNotice($_SESSION["uid"], $MaThongBao);
+    echo json_encode($result);
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

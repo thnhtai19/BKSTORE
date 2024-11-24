@@ -172,7 +172,7 @@ class OrderService {
         $type = 'Đơn hàng';
         $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $NoiDung = "Đơn hàng " . $id_don_hang > " được đặt thành công"; 
+        $NoiDung = "Đơn hàng " . $id_don_hang . " được đặt thành công"; 
         $stmt->bind_param("iss", $uid, $NoiDung, $type);
         $stmt->execute();
         $id_thong_bao = mysqli_insert_id($this->conn);

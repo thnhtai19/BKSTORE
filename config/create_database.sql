@@ -39,24 +39,25 @@
         FOREIGN KEY (UID) REFERENCES LOGIN(UID)
     );
 
-    -- Table for SẢN_PHẨM
-    CREATE TABLE SAN_PHAM (
-        ID_SP INT AUTO_INCREMENT PRIMARY KEY,
-        TenSP VARCHAR(255) NOT NULL,
-        MoTa TEXT,
-        Gia INT NOT NULL,
-        TyLeGiamGia FLOAT,
-        SoLuongKho INT NOT NULL,
-        NXB VARCHAR(255),
-        KichThuoc VARCHAR(255),
-        SoTrang INT,
-        PhanLoai VARCHAR(255),
-        TuKhoa VARCHAR(255),
-        HinhThuc VARCHAR(255),
-        TacGia VARCHAR(255),
-        NgonNgu VARCHAR(255),
-        NamXB INT
-    );
+-- Table for SẢN_PHẨM
+CREATE TABLE SAN_PHAM (
+    ID_SP INT AUTO_INCREMENT PRIMARY KEY,
+    TenSP VARCHAR(255) NOT NULL,
+    MoTa TEXT,
+    Gia INT NOT NULL,
+    TyLeGiamGia FLOAT,
+    SoLuongKho INT NOT NULL,
+    NXB VARCHAR(255),
+    KichThuoc VARCHAR(255),
+    SoTrang INT,
+    PhanLoai VARCHAR(255),
+    TuKhoa VARCHAR(255),
+    HinhThuc VARCHAR(255),
+    TacGia VARCHAR(255),
+    NgonNgu VARCHAR(255),
+    NamXB INT,
+    TrangThai ENUM('Đang hiện', 'Đang ẩn', 'Đã xoá') DEFAULT 'Đang hiện'
+);
 
     CREATE TABLE HINH_ANH (
         ID_HinhAnh INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
