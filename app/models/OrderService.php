@@ -191,21 +191,26 @@ class OrderService {
             $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $NoiDung = "Đơn hàng " . $id . ": " . $trang_thai;
-            $stmt->bind_param("iss", $_SESSION["uid"], $NoiDung, $type);
+            $stmt->bind_param("iss", $order['UID'], $NoiDung, $type);
+            $stmt->execute();
+            $id_thong_bao = mysqli_insert_id($this->conn);
+            $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $id_thong_bao, $id);
             $stmt->execute();
         }
         if ($thanh_toan != '') {
             $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $NoiDung = "Đơn hàng " . $id . ": " . $thanh_toan . " thành công";
-            $stmt->bind_param("iss", $_SESSION["uid"], $NoiDung, $type);
+            $stmt->bind_param("iss", $order['UID'], $NoiDung, $type);
+            $stmt->execute();
+            $id_thong_bao = mysqli_insert_id($this->conn);
+            $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $id_thong_bao, $id);
             $stmt->execute();
         }
-        $id_thong_bao = mysqli_insert_id($this->conn);
-        $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $id_thong_bao, $id);
-        $stmt->execute();
         $thanh_toan = $thanh_toan != '' ? $thanh_toan : $order['ThanhToan'];
         $trang_thai = $trang_thai != '' ? $trang_thai : $order['TrangThai'];
         $sql = "UPDATE don_hang SET ThanhToan = ?, TrangThai = ? WHERE ID_DonHang =?";
