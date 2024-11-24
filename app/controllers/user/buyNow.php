@@ -37,7 +37,7 @@ if ($method === 'POST') {
         echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
         return;
     }
-    if (isset($data['ID_SP'])) $ID_SP = explode(',', trim($data['ID_SP']));
+    if (isset($data['ID_SP'])) $ID_SP = $data['ID_SP'];
     else {
         echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
         return;
