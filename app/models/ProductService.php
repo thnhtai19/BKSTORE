@@ -267,7 +267,7 @@ class ProductService {
         if ($result->num_rows === 0) {
             return ['success' => false, 'message' => 'Chưa đề xuất!'];
         }
-        return ['success' => true, 'danh_sach_de_xuat' => $result->fetch_assoc()];
+        return ['success' => true, 'chi_tiet_de_xuat' => $result->fetch_assoc()];
     }
 
     private function getProductById($id) {

@@ -7,6 +7,10 @@ $model = new ProductService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
+    if (!isset($_SESSION["uid"])) {
+        echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
+        return;
+    }
     echo json_encode($model->getPropose($_SESSION["uid"]));
 }
 else {

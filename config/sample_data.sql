@@ -191,13 +191,13 @@
     (2, 'public/image/2.webp', 2, '', 'Đang hiện'),
     (3, 'public/image/3.webp', 3, '', 'Đang hiện');
 
-    INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet)
+    INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet, `TrangThai`)
     VALUES
-    ('Đối tác A', 'doi_tac_a.jpg', 'www.google.com'),
-    ('Đối tác B', 'doi_tac_b.jpg', 'www.google.com'),
-    ('Đối tác C', 'doi_tac_c.jpg', 'www.google.com'),
-    ('Đối tác D', 'doi_tac_d.jpg', 'www.google.com'),
-    ('Đối tác E', 'doi_tac_e.jpg', 'www.google.com');
+    ('Đối tác A', 'doi_tac_a.jpg', 'www.google.com', 'Đang hiện'),
+    ('Đối tác B', 'doi_tac_b.jpg', 'www.google.com', 'Đang hiện'),
+    ('Đối tác C', 'doi_tac_c.jpg', 'www.google.com', 'Đang hiện'),
+    ('Đối tác D', 'doi_tac_d.jpg', 'www.google.com', 'Đang hiện'),
+    ('Đối tác E', 'doi_tac_e.jpg', 'www.google.com', 'Đang hiện');
 
     INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri, TuKhoa, ClientID, APIKey, Checksum)
     VALUES

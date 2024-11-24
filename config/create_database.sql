@@ -217,7 +217,8 @@ CREATE TABLE SAN_PHAM (
         MaDoiTac INT AUTO_INCREMENT PRIMARY KEY,
         Ten VARCHAR(255),
         HinhAnh TEXT,
-        LienKet VARCHAR(255)
+        LienKet VARCHAR(255),
+        TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện"
     );
 
     -- Bảng HE_THONG
