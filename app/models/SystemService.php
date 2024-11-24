@@ -381,16 +381,17 @@ class SystemService {
         return ['success' => true, 'partner_id' => mysqli_insert_id($this->conn)];
     }
 
-    public function updatePartner($MaDoiTac, $HinhAnh, $LienKet, $Ten) {
+    public function updatePartner($MaDoiTac, $HinhAnh, $LienKet, $Ten, $TrangThai) {
         $rac = $this->getPartner($MaDoiTac);
         
         $HinhAnh = $HinhAnh != null ? $HinhAnh : $rac['HinhAnh'];
         $LienKet = $LienKet != null ? $LienKet : $rac['LienKet'];
+        $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
         $Ten = $Ten != null ? $Ten : $rac['Ten'];
 
-        $sql = "UPDATE doi_tac SET HinhAnh = ?, LienKet = ?, Ten = ? WHERE MaDoiTac = ?";
+        $sql = "UPDATE doi_tac SET HinhAnh = ?, LienKet = ?, Ten = ?, TrangThai = ? WHERE MaDoiTac = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sssi", $HinhAnh, $LienKet, $Ten, $MaDoiTac);
+        $stmt->bind_param("ssssi", $HinhAnh, $LienKet, $Ten, $TrangThai, $MaDoiTac);
         $stmt->execute();
         return true;
     }

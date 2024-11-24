@@ -162,13 +162,21 @@ VALUES
 (6, 5),  -- Khách hàng 6 thích sản phẩm 5
 (7, 1);  -- Khách hàng 7 thích sản phẩm 1
 
-INSERT INTO THONG_BAO (UID, NoiDung, TrangThai)
+INSERT INTO THONG_BAO (UID, NoiDung, TrangThai, Type)
 VALUES
-(1, 'Đơn hàng của bạn đã được xác nhận.', 'Unread'),
-(2, 'Sản phẩm yêu thích của bạn đã có hàng.', 'Read'),
-(3, 'Đơn hàng của bạn đang được vận chuyển.', 'Unread'),
-(6, 'Bạn đã nhận được một mã giảm giá mới.', 'Read'),
-(7, 'Sản phẩm trong giỏ hàng của bạn sắp hết.', 'Unread');
+(1, 'Đơn hàng của bạn đã được xác nhận.', 'Unread', 'Đơn hàng'),
+(2, 'Sản phẩm yêu thích của bạn đã có hàng.', 'Read', 'Đơn hàng'),
+(3, 'Đơn hàng của bạn đang được vận chuyển.', 'Unread', 'Đơn hàng'),
+(6, 'Bạn đã nhận được một mã giảm giá mới.', 'Read', 'Đơn hàng'),
+(7, 'Sản phẩm trong giỏ hàng của bạn sắp hết.', 'Unread', 'Đơn hàng');
+
+INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang, MaDeXuat)
+VALUES
+(1, 1, NULL),
+(2, 2, NULL),
+(3, 3, NULL),
+(4, 4, NULL),
+(5, 5, NULL);
 
 INSERT INTO `TIN_TUC` (`MaTinTuc`, `TieuDe`, `ThoiGianTao`, `NoiDung`, `TuKhoa`, `TrangThai`, `MoTa`) VALUES
 (1, 'Tin tức 1', '10:00:00 21-10-2023', 'Nội dung tin tức 1', 'sách, giảm giá, khuyến mãi', 'Đang ẩn', NULL),

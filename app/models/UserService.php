@@ -180,7 +180,7 @@ class UserService {
         while ($row = $stmt->fetch_assoc()) {
             $result[] = $row['NoiDung'];
         }
-        $this->updateStatusNotice($uid);
+        // $this->updateStatusNotice($uid);
         return ['sucess' => true, 'notice_list' => $result];
     }
 

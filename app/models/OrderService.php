@@ -169,22 +169,50 @@ class OrderService {
             $stmt->execute();
         }
         $id_don_hang = mysqli_insert_id($this->conn);
+        $type = 'Đơn hàng';
+        $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $NoiDung = "Đơn hàng " . $id_don_hang > " được đặt thành công"; 
+        $stmt->bind_param("iss", $uid, $NoiDung, $type);
+        $stmt->execute();
+        $id_thong_bao = mysqli_insert_id($this->conn);
+        $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $id_thong_bao, $id_don_hang);
+        $stmt->execute();
         return ['success' => true, 'message' => 'Đặt hàng thành công', 'ma_don_hang' => $id_don_hang];
     }
 
-    public function setOrderStatus($ID_DonHang, $ThanhToan) {
-        $sql = "UPDATE don_hang SET ThanhToan = ? WHERE ID_DonHang =?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("si", $ThanhToan, $ID_DonHang);
-        $stmt->execute();
-    }
-
     public function update($trang_thai, $thanh_toan, $id) {
+        if ($trang_thai == '' && $thanh_toan == '') return ['success' => false, 'message' => 'Chưa điền đầy đủ thông tin'];
+        $order = $this->getOrderById($id);
+        $type = 'Đơn hàng';
+        if ($trang_thai != '') {
+            $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $NoiDung = "Đơn hàng " . $id . ": " . $trang_thai;
+            $stmt->bind_param("iss", $_SESSION["uid"], $NoiDung, $type);
+            $stmt->execute();
+        }
+        if ($thanh_toan != '') {
+            $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $NoiDung = "Đơn hàng " . $id . ": " . $thanh_toan . " thành công";
+            $stmt->bind_param("iss", $_SESSION["uid"], $NoiDung, $type);
+            $stmt->execute();
+        }
+        $id_thong_bao = mysqli_insert_id($this->conn);
+        $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $id_thong_bao, $id);
+        $stmt->execute();
+        $thanh_toan = $thanh_toan != '' ? $thanh_toan : $order['ThanhToan'];
+        $trang_thai = $trang_thai != '' ? $trang_thai : $order['TrangThai'];
         $sql = "UPDATE don_hang SET ThanhToan = ?, TrangThai = ? WHERE ID_DonHang =?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssi", $thanh_toan, $trang_thai, $id);
         $stmt->execute();
-        return ['success' => true, 'message' => 'Cập nhật đơn hàng thành công'];
+        return ['success' => true, 'message' => 'Cập nhật đơn hàng thành công', 'ma_don_hang' => $id];
     }
 
     public function list() {
@@ -465,6 +493,19 @@ class OrderService {
         $product = $result->fetch_assoc();
         $product['success'] = true;
         return $product;
+    }
+
+    private function getOrderById($ID_DonHang) {
+        $sql = "SELECT * FROM don_hang WHERE ID_DonHang =?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $ID_DonHang);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
+            return ['success' => false, 'message' => 'Không tìm thấy đơn hàng'];
+        }
+        return $result->fetch_assoc();
+
     }
 }
 ?>

@@ -179,6 +179,18 @@ class ProductService {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssiss", $TenSP, $NoiDung, $uid, $GhiChu, $time);
         $stmt->execute();
+        $id_de_xuat =  mysqli_insert_id($this->conn);
+        $type = 'Đề xuất';
+        $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $NoiDung = "Đề xuất " . $id_de_xuat . " được đặt thành công"; 
+        $stmt->bind_param("iss", $uid, $NoiDung, $type);
+        $stmt->execute();
+        $id_thong_bao = mysqli_insert_id($this->conn);
+        $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $id_thong_bao, $id_de_xuat);
+        $stmt->execute();
         return ['success' => true, 'message' => 'Đề xuất thành công'];
     }
 
