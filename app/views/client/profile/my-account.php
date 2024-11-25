@@ -1,6 +1,12 @@
 <?php
 require_once dirname(__DIR__, 4) . '/config/db.php';
 require_once dirname(__DIR__, 3) . '/models/UserService.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+
 if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();
@@ -312,5 +318,6 @@ if(!isset($_SESSION["email"])){
         </div>
         <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
+    <script src="/public/js/client.js"></script>
 </body>
 </html>

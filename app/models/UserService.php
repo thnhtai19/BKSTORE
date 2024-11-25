@@ -147,7 +147,8 @@ class UserService {
         $stmt_insert = $this->conn->prepare($sql_insert);
         $stmt_insert->bind_param("iiss", $uid, $ID_SP, $NoiDung, $date);
         $stmt_insert->execute();
-        return ['success'=> true, 'message'=> 'Bình luận thành công'];
+        $newCommentId = $this->conn->insert_id;
+        return ['success'=> true, 'message'=> 'Bình luận thành công', "idcmt" => $newCommentId];
     }
 
     public function like($uid, $ID_SP) {

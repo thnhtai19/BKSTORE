@@ -9,9 +9,9 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
             <div class="hidden md:block">BKSTORE</div>
         </div>
         <div class="flex items-center mx-4 ml-6 flex-1 justify-center">
-            <input type="text" placeholder="Tìm kiếm sản phẩm..."
+            <input id="searchInput" type="text" placeholder="Tìm kiếm sản phẩm..."
                 class="border rounded-l-md p-2 h-10 w-full lg:w-4/6 focus:outline-none">
-            <button class="bg-white text-white rounded-r-md p-2 hover:bg-gray-200 h-10">
+            <button onclick="goSearch()" class="bg-white text-white rounded-r-md p-2 hover:bg-gray-200 h-10">
                 <img src="/public/image/search.png" alt="Search" class="w-5 h-5">
             </button>
         </div>
@@ -79,7 +79,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                             <div class="text-xs text-gray-500 pt-2">Quản lý tài khoản</div>
                             <ul class="pt-2 text-sm">
                                 <li>
-                                    <a href="/my/account" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
+                                    <a href="/my/profile" class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-lg flex gap-1 items-center">
                                         <img src="/public/image/user.png" alt="user" class="h-6">
                                         <div>Thông tin tài khoản</div>
                                     </a>
@@ -208,6 +208,17 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                 .catch(error => {
                     console.error('Lỗi:', error);
                 });
+        });
+
+        function goSearch(){
+            const inputElement = document.getElementById('searchInput').value;
+            window.location.href = `/search?keyword=${inputElement}`
+        }
+        
+        document.getElementById('searchInput').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                goSearch();
+            }
         });
     } catch { }
 </script>
