@@ -8,12 +8,13 @@ class SystemService {
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->conn->set_charset('utf8mb4');
         $this->support = new support();
     }
 
     public function getInfoList() {
         // Query to fetch MaTinTuc and TieuDe
-        $sql1 = "SELECT MaTinTuc, TieuDe FROM tin_tuc WHERE TrangThai != 'Đang ẩn'";
+        $sql1 = "SELECT MaTinTuc, TieuDe FROM TIN_TUC WHERE TrangThai != 'Đang ẩn'";
         $query1 = $this->conn->prepare($sql1);
         $query1->execute();
         $result1 = $query1->get_result();
@@ -24,7 +25,7 @@ class SystemService {
             $tieuDe = $row['TieuDe'];
     
             // Query to fetch LinkAnh based on MaTinTuc
-            $sql2 = "SELECT LinkAnh FROM anh_minh_hoa WHERE MaTinTuc = ?";
+            $sql2 = "SELECT LinkAnh FROM ANH_MINH_HOA WHERE MaTinTuc = ?";
             $query2 = $this->conn->prepare($sql2);
             $query2->bind_param('i', $maTinTuc);
             $query2->execute();
@@ -47,7 +48,7 @@ class SystemService {
     }
     
     public function getContactInfo() {
-        $sql = "SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM thong_tin_lien_he";
+        $sql = "SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM THONG_TIN_LIEN_HE";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -67,7 +68,7 @@ class SystemService {
     }
 
     public function getNew($MaTinTuc) {
-        $sql = 'SELECT * FROM tin_tuc WHERE MaTinTuc = ?';
+        $sql = 'SELECT * FROM TIN_TUC WHERE MaTinTuc = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaTinTuc);
         $stmt->execute();
@@ -84,7 +85,7 @@ class SystemService {
     }
 
     public function getNewsList() {
-        $sql = 'SELECT MaTinTuc, TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa FROM tin_tuc WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaTinTuc, TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa FROM TIN_TUC WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -98,7 +99,7 @@ class SystemService {
 
     public function setNews($TieuDe, $MoTa, $NoiDung, $TuKhoa) {
         $time = $this->support->startTime();
-        $sql = "INSERT INTO tin_tuc (TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO TIN_TUC (TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sssss", $TieuDe, $time, $NoiDung, $TuKhoa, $MoTa);
         $stmt->execute();
@@ -106,7 +107,7 @@ class SystemService {
     }
 
     public function setImageNews($newsPath, $MaTinTuc, $MoTaHinhAnh) {
-        $sql = "INSERT INTO anh_minh_hoa (MaTinTuc, LinkAnh, MoTa) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO ANH_MINH_HOA (MaTinTuc, LinkAnh, MoTa) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("iss", $MaTinTuc, $newsPath, $MoTaHinhAnh);
         $stmt->execute();
@@ -114,7 +115,7 @@ class SystemService {
     }
 
     public function deleteNews($MaTinTuc) {
-        $sql = 'DELETE FROM tin_tuc WHERE MaTinTuc = ?';
+        $sql = 'DELETE FROM TIN_TUC WHERE MaTinTuc = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaTinTuc);
         $stmt->execute();
@@ -122,7 +123,7 @@ class SystemService {
     }
 
     public function deleteImageNews($MaTinTuc) {
-        $sql = 'DELETE FROM anh_minh_hoa WHERE MaTinTuc = ?';
+        $sql = 'DELETE FROM ANH_MINH_HOA WHERE MaTinTuc = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaTinTuc);
         $stmt->execute();
@@ -138,7 +139,7 @@ class SystemService {
         $TuKhoa = $TuKhoa != null ? $TuKhoa : $rac['TuKhoa'];
         $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
 
-        $sql = "UPDATE tin_tuc SET TieuDe = ?, MoTa = ?, NoiDung = ?, TuKhoa = ?, TrangThai = ? WHERE MaTinTuc = ?";
+        $sql = "UPDATE TIN_TUC SET TieuDe = ?, MoTa = ?, NoiDung = ?, TuKhoa = ?, TrangThai = ? WHERE MaTinTuc = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sssssi", $TieuDe,  $MoTa, $NoiDung, $TuKhoa, $TrangThai, $MaTinTuc);
         $stmt->execute();
@@ -177,7 +178,7 @@ class SystemService {
     }
 
     public function getBannerList() {
-        $sql = 'SELECT * FROM banner WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT * FROM BANNER WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -189,7 +190,7 @@ class SystemService {
     }
 
     public function setBanner($IdSP, $MoTa) {
-        $sql = "INSERT INTO banner (IdSP, MoTa) VALUES (?, ?)";
+        $sql = "INSERT INTO BANNER (IdSP, MoTa) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("is", $IdSP, $MoTa);
         $stmt->execute();
@@ -204,7 +205,7 @@ class SystemService {
         $IdSP = $IdSP != null ? $IdSP : $rac['IdSP'];
         $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
 
-        $sql = "UPDATE banner SET Image = ?, MoTa = ?, IdSP = ?, TrangThai = ? WHERE MaBanner = ?";
+        $sql = "UPDATE BANNER SET Image = ?, MoTa = ?, IdSP = ?, TrangThai = ? WHERE MaBanner = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssisi", $Image,  $MoTa, $IdSP, $TrangThai, $MaBanner);
         $stmt->execute();
@@ -212,7 +213,7 @@ class SystemService {
     }
 
     public function getBanner($MaBanner) {
-        $sql = 'SELECT * FROM banner WHERE MaBanner = ?';
+        $sql = 'SELECT * FROM BANNER WHERE MaBanner = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaBanner);
         $stmt->execute();
@@ -231,7 +232,7 @@ class SystemService {
     }
 
     public function deleteBanner($MaBanner) {
-        $sql = 'DELETE FROM banner WHERE MaBanner = ?';
+        $sql = 'DELETE FROM BANNER WHERE MaBanner = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaBanner);
         $stmt->execute();
@@ -239,7 +240,7 @@ class SystemService {
     }
 
     public function getContactList() {
-        $sql = 'SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM thong_tin_lien_he WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM THONG_TIN_LIEN_HE WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -251,7 +252,7 @@ class SystemService {
     }
 
     public function setContact($Loai, $ThongTin) {
-        $sql = "INSERT INTO thong_tin_lien_he (Loai, ThongTin) VALUES (?, ?)";
+        $sql = "INSERT INTO THONG_TIN_LIEN_HE (Loai, ThongTin) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ss", $Loai, $ThongTin);
         $stmt->execute();
@@ -266,7 +267,7 @@ class SystemService {
         $ThongTin = $ThongTin != null ? $ThongTin : $rac['ThongTin'];
         $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
 
-        $sql = "UPDATE thong_tin_lien_he SET HinhAnh = ?, Loai = ?, ThongTin = ?, TrangThai = ? WHERE MaThongTin = ?";
+        $sql = "UPDATE THONG_TIN_LIEN_HE SET HinhAnh = ?, Loai = ?, ThongTin = ?, TrangThai = ? WHERE MaThongTin = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssssi", $Image,  $Loai, $ThongTin, $TrangThai, $MaContact);
         $stmt->execute();
@@ -274,7 +275,7 @@ class SystemService {
     }
 
     public function getContact($MaThongTin) {
-        $sql = 'SELECT * FROM thong_tin_lien_he WHERE MaThongTin = ?';
+        $sql = 'SELECT * FROM THONG_TIN_LIEN_HE WHERE MaThongTin = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaThongTin);
         $stmt->execute();
@@ -293,7 +294,7 @@ class SystemService {
     }
 
     public function deleteContact($MaContact) {
-        $sql = 'DELETE FROM thong_tin_lien_he WHERE MaThongTin = ?';
+        $sql = 'DELETE FROM THONG_TIN_LIEN_HE WHERE MaThongTin = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaContact);
         $stmt->execute();
@@ -301,7 +302,7 @@ class SystemService {
     }
 
     public function getSocialList() {
-        $sql = 'SELECT MaMXH, HinhAnh, LienKet FROM mang_xa_hoi WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaMXH, HinhAnh, LienKet FROM MANG_XA_HOI WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -313,7 +314,7 @@ class SystemService {
     }
 
     public function setSocial($Lienket) {
-        $sql = "INSERT INTO mang_xa_hoi (Lienket) VALUES (?)";
+        $sql = "INSERT INTO MANG_XA_HOI (Lienket) VALUES (?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $Lienket);
         $stmt->execute();
@@ -327,7 +328,7 @@ class SystemService {
         $LienKet = $LienKet != null ? $LienKet : $rac['LienKet'];
         $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
 
-        $sql = "UPDATE mang_xa_hoi SET HinhAnh = ?, LienKet = ?, TrangThai = ? WHERE MaMXH = ?";
+        $sql = "UPDATE MANG_XA_HOI SET HinhAnh = ?, LienKet = ?, TrangThai = ? WHERE MaMXH = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sssi", $HinhAnh, $LienKet, $TrangThai, $MaMXH);
         $stmt->execute();
@@ -335,7 +336,7 @@ class SystemService {
     }
 
     public function getSocial($MaMXH) {
-        $sql = 'SELECT * FROM mang_xa_hoi WHERE MaMXH = ?';
+        $sql = 'SELECT * FROM MANG_XA_HOI WHERE MaMXH = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaMXH);
         $stmt->execute();
@@ -354,7 +355,7 @@ class SystemService {
     }
 
     public function deleteSocial($MaMXH) {
-        $sql = 'DELETE FROM mang_xa_hoi WHERE MaMXH = ?';
+        $sql = 'DELETE FROM MANG_XA_HOI WHERE MaMXH = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaMXH);
         $stmt->execute();
@@ -362,7 +363,7 @@ class SystemService {
     }
 
     public function getPartnerList() {
-        $sql = 'SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM doi_tac WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM DOI_TAC WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -374,7 +375,7 @@ class SystemService {
     }
 
     public function setPartner($LienKet, $Ten) {
-        $sql = "INSERT INTO doi_tac (Lienket, Ten) VALUES (?, ?)";
+        $sql = "INSERT INTO DOI_TAC (Lienket, Ten) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ss", $LienKet, $Ten);
         $stmt->execute();
@@ -389,7 +390,7 @@ class SystemService {
         $TrangThai = ($TrangThai == 'Đang ẩn' || $TrangThai == 'Đang hiện') ? $TrangThai : $rac['TrangThai'];
         $Ten = $Ten != null ? $Ten : $rac['Ten'];
 
-        $sql = "UPDATE doi_tac SET HinhAnh = ?, LienKet = ?, Ten = ?, TrangThai = ? WHERE MaDoiTac = ?";
+        $sql = "UPDATE DOI_TAC SET HinhAnh = ?, LienKet = ?, Ten = ?, TrangThai = ? WHERE MaDoiTac = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssssi", $HinhAnh, $LienKet, $Ten, $TrangThai, $MaDoiTac);
         $stmt->execute();
@@ -397,7 +398,7 @@ class SystemService {
     }
 
     public function getPartner($MaDoiTac) {
-        $sql = 'SELECT * FROM doi_tac WHERE MaDoiTac = ?';
+        $sql = 'SELECT * FROM DOI_TAC WHERE MaDoiTac = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaDoiTac);
         $stmt->execute();
@@ -416,7 +417,7 @@ class SystemService {
     }
 
     public function deletePartner($MaDoiTac) {
-        $sql = 'DELETE FROM doi_tac WHERE MaDoiTac = ?';
+        $sql = 'DELETE FROM DOI_TAC WHERE MaDoiTac = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaDoiTac);
         $stmt->execute();
@@ -424,7 +425,7 @@ class SystemService {
     }
 
     public function getSystem() {
-        $sql = 'SELECT * FROM he_thong';
+        $sql = 'SELECT * FROM HE_THONG';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -444,7 +445,7 @@ class SystemService {
         $Checksum = $Checksum != null ? $Checksum : $rac['Checksum'];
         $TrangThaiBaoTri = $TrangThaiBaoTri != -1 ? $TrangThaiBaoTri : $rac['TrangThaiBaoTri'];
 
-        $sql = "UPDATE he_thong SET TuKhoa = ?, ClientID = ?, APIKey = ?, `Checksum` = ?, TrangThaiBaoTri = ? WHERE MaHeThong = ?";
+        $sql = "UPDATE HE_THONG SET TuKhoa = ?, ClientID = ?, APIKey = ?, `Checksum` = ?, TrangThaiBaoTri = ? WHERE MaHeThong = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssssii", $TuKhoa, $ClientID, $APIKey, $Checksum, $TrangThaiBaoTri, $MaHeThong);
         $stmt->execute();
@@ -452,7 +453,7 @@ class SystemService {
     }
 
     private function getSystemById($MaHeThong) {
-        $sql = 'SELECT * FROM he_thong WHERE MaHeThong = ?';
+        $sql = 'SELECT * FROM HE_THONG WHERE MaHeThong = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $MaHeThong);
         $stmt->execute();
@@ -461,7 +462,7 @@ class SystemService {
     }
 
     public function countUser() {
-        $sql = 'SELECT COUNT(*) as count FROM `login`';
+        $sql = 'SELECT COUNT(*) as count FROM `LOGIN`';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -469,7 +470,7 @@ class SystemService {
     }
 
     public function countOrder() {
-        $sql = 'SELECT COUNT(*) as count, SUM(HoaDon) as hoadon FROM don_hang';
+        $sql = 'SELECT COUNT(*) as count, SUM(HoaDon) as hoadon FROM DON_HANG';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -481,7 +482,7 @@ class SystemService {
     }
 
     public function countPropose() {
-        $sql = 'SELECT COUNT(*) as count FROM san_pham_de_xuat';
+        $sql = 'SELECT COUNT(*) as count FROM SAN_PHAM_DE_XUAT';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -493,7 +494,7 @@ class SystemService {
             $filePath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($Anh, '/'));
             chmod($filePath, 0777);
             unlink($filePath);
-            $sql = "DELETE FROM anh_minh_hoa WHERE MaTinTuc = ? AND LinkAnh = ?";
+            $sql = "DELETE FROM ANH_MINH_HOA WHERE MaTinTuc = ? AND LinkAnh = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("is", $MaTinTuc, $Anh);
             $stmt->execute();
@@ -502,7 +503,7 @@ class SystemService {
     }
 
     private function getImageNews($MaTinTuc) {
-        $sql = "SELECT LinkAnh FROM anh_minh_hoa WHERE MaTinTuc = ?";
+        $sql = "SELECT LinkAnh FROM ANH_MINH_HOA WHERE MaTinTuc = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $MaTinTuc);
         $stmt->execute();

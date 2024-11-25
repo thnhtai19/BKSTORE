@@ -7,11 +7,12 @@ class CartService {
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->conn->set_charset('utf8mb4');
         $this->support = new support();
     }
 
     public function get($uid) {
-        $sql = "SELECT * FROM trong_gio_hang WHERE `UID` = ?";
+        $sql = "SELECT * FROM TRONG_GIO_HANG WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();
@@ -41,7 +42,7 @@ class CartService {
     }
 
     public function set($id, $product_id, $quantity) {
-        $sql = "SELECT * FROM san_pham WHERE ID_SP = ?";
+        $sql = "SELECT * FROM SAN_PHAM WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $product_id);
         $stmt->execute();
@@ -53,13 +54,13 @@ class CartService {
         if ($row['SoLuongKho'] < $quantity) {
             return ['success'=> false, 'message' => 'Trong kho không đủ sản phẩm'];
         }
-        $check = "SELECT SoLuong FROM trong_gio_hang WHERE ID_SP = ? AND `UID` = ?";
+        $check = "SELECT SoLuong FROM TRONG_GIO_HANG WHERE ID_SP = ? AND `UID` = ?";
         $stmt = $this->conn->prepare($check);
         $stmt->bind_param("ii", $product_id, $id);
         $stmt->execute();
         $result = $stmt->get_result();     
         if ($result->num_rows === 0) {
-            $cart = "INSERT INTO trong_gio_hang (`UID`, ID_SP, SoLuong) VALUES (?, ?, ?)";
+            $cart = "INSERT INTO TRONG_GIO_HANG (`UID`, ID_SP, SoLuong) VALUES (?, ?, ?)";
             $stmt = $this->conn->prepare($cart);
             $stmt->bind_param("iii", $id, $product_id, $quantity);
             $stmt->execute();
@@ -69,7 +70,7 @@ class CartService {
     }
 
     public function remove($uid, $product_id) {
-        $sql_check = "SELECT * FROM trong_gio_hang WHERE ID_SP = ? AND `UID` = ?";
+        $sql_check = "SELECT * FROM TRONG_GIO_HANG WHERE ID_SP = ? AND `UID` = ?";
         $stmt_check = $this->conn->prepare($sql_check);
         $stmt_check->bind_param("ii", $product_id, $uid);
         $stmt_check->execute();
@@ -77,7 +78,7 @@ class CartService {
         if ($result_check->num_rows === 0) {
             return ['success' => false, 'message' => 'Chưa thêm sản phẩm vào giỏ hàng'];
         }
-        $check = "DELETE FROM trong_gio_hang WHERE ID_SP = ? AND `UID` = ?";
+        $check = "DELETE FROM TRONG_GIO_HANG WHERE ID_SP = ? AND `UID` = ?";
         $stmt = $this->conn->prepare($check);
         $stmt->bind_param("ii", $product_id, $uid);
         $stmt->execute();
@@ -85,7 +86,7 @@ class CartService {
     }
 
     public function update($uid, $product_id, $quantity) {
-        $sql_check = "SELECT SoLuong FROM trong_gio_hang WHERE ID_SP = ? AND `UID` = ?";
+        $sql_check = "SELECT SoLuong FROM TRONG_GIO_HANG WHERE ID_SP = ? AND `UID` = ?";
         $stmt_check = $this->conn->prepare($sql_check);
         $stmt_check->bind_param("ii", $product_id, $uid);
         $stmt_check->execute();
@@ -95,7 +96,7 @@ class CartService {
         }
         if ($this->checkCount($product_id, $quantity) == false) return ['success' => false, 'message' => 'Không đủ sảm phẩm trong kho'] ;
         if ($quantity > 0) {
-            $sql_update = "UPDATE trong_gio_hang SET SoLuong = ? WHERE `ID_SP` = ? AND `UID` = ?";
+            $sql_update = "UPDATE TRONG_GIO_HANG SET SoLuong = ? WHERE `ID_SP` = ? AND `UID` = ?";
             $stmt = $this->conn->prepare($sql_update);
             $stmt->bind_param("iii", $quantity, $product_id, $uid);
             $stmt->execute();
@@ -105,7 +106,7 @@ class CartService {
     }
 
     private function checkCount($ID_SP, $quantity) {
-        $sql = 'SELECT SoLuongKho FROM san_pham WHERE `ID_SP` = ?';
+        $sql = 'SELECT SoLuongKho FROM SAN_PHAM WHERE `ID_SP` = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $ID_SP);
         $stmt->execute();
@@ -115,7 +116,7 @@ class CartService {
     }
 
     private function getInfo($id) {
-        $sql = "SELECT * FROM san_pham WHERE ID_SP = ?";
+        $sql = "SELECT * FROM SAN_PHAM WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -132,7 +133,7 @@ class CartService {
     }
 
     private function getImage($id) {
-        $sql = "SELECT * FROM hinh_anh WHERE ID_SP = ?";
+        $sql = "SELECT * FROM HINH_ANH WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();

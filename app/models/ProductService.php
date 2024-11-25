@@ -7,6 +7,7 @@ class ProductService {
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->conn->set_charset('utf8mb4');
         $this->support = new support();
     }
 
@@ -85,7 +86,7 @@ class ProductService {
     public function getProductList($typeList) {
         $result = [];
         foreach ($typeList as $type) {
-            $sql = "SELECT * FROM san_pham WHERE PhanLoai = ?";
+            $sql = "SELECT * FROM SAN_PHAM WHERE PhanLoai = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("s", $type);
             $stmt->execute();
@@ -104,7 +105,7 @@ class ProductService {
     }
 
     public function get() {
-        $sql = "SELECT * FROM san_pham WHERE TrangThai = 'Đang hiện'";
+        $sql = "SELECT * FROM SAN_PHAM WHERE TrangThai = 'Đang hiện'";
         $result = $this->conn->query($sql);
         $products = [];
         while ($row = $result->fetch_assoc()) {
@@ -114,7 +115,7 @@ class ProductService {
     }
 
     public function get_admin() {
-        $sql = "SELECT * FROM san_pham WHERE TrangThai = 'Đang hiện' OR TrangThai = 'Đang ẩn'";
+        $sql = "SELECT * FROM SAN_PHAM WHERE TrangThai = 'Đang hiện' OR TrangThai = 'Đang ẩn'";
         $result = $this->conn->query($sql);
         $products = [];
         while ($row = $result->fetch_assoc()) {
@@ -124,7 +125,7 @@ class ProductService {
     }
 
     public function getType() {
-        $sql = "SELECT DISTINCT PhanLoai FROM san_pham";
+        $sql = "SELECT DISTINCT PhanLoai FROM SAN_PHAM";
         $result = $this->conn->query($sql);
         $products = [];
         while ($row = $result->fetch_assoc()) {
@@ -134,7 +135,7 @@ class ProductService {
     }
 
     public function getImage($id) {
-        $sql = "SELECT Anh FROM hinh_anh WHERE ID_SP = ?";
+        $sql = "SELECT Anh FROM HINH_ANH WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -152,7 +153,7 @@ class ProductService {
     }
 
     public function checkProduct($id) {
-        $sql = "SELECT * FROM san_pham WHERE ID_SP = ?";
+        $sql = "SELECT * FROM SAN_PHAM WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -166,7 +167,7 @@ class ProductService {
     }
 
     public function proposeProduct($TenSP, $NoiDung, $uid, $GhiChu) {
-        $sql = "SELECT * FROM san_pham_de_xuat WHERE TenSP = ? AND `UID` = ?";
+        $sql = "SELECT * FROM SAN_PHAM_DE_XUAT WHERE TenSP = ? AND `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("si", $TenSP, $uid);
         $stmt->execute();
@@ -175,19 +176,19 @@ class ProductService {
             return ['success' => false, 'message' => 'Người dùng đã đề xuất'];
         }
         $time = $this->support->getDateNow();
-        $sql = "INSERT INTO san_pham_de_xuat (TenSP, NoiDung, `UID`, GhiChu, NgayYeuCau) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO SAN_PHAM_DE_XUAT (TenSP, NoiDung, `UID`, GhiChu, NgayYeuCau) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssiss", $TenSP, $NoiDung, $uid, $GhiChu, $time);
         $stmt->execute();
         $id_de_xuat =  mysqli_insert_id($this->conn);
         $type = 'Đề xuất';
-        $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $NoiDung = "Đề xuất " . $id_de_xuat . " được đặt thành công"; 
         $stmt->bind_param("iss", $uid, $NoiDung, $type);
         $stmt->execute();
         $id_thong_bao = mysqli_insert_id($this->conn);
-        $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+        $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $id_thong_bao, $id_de_xuat);
         $stmt->execute();
@@ -195,7 +196,7 @@ class ProductService {
     }
 
     public function like($uid) {
-        $sql = "SELECT ID_SP FROM thich WHERE `UID` = ?";
+        $sql = "SELECT ID_SP FROM THICH WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();
@@ -216,7 +217,7 @@ class ProductService {
 
     public function keywork($keyword) {
         $stmt = "SELECT ID_SP 
-                 FROM san_pham 
+                 FROM SAN_PHAM 
                  WHERE TenSp REGEXP ?
                  OR MoTa REGEXP ?
                  OR Gia REGEXP ?
@@ -243,7 +244,7 @@ class ProductService {
     }
 
     public function getPropose($uid) {
-        $sql = "SELECT MaDeXuat, TenSP, NoiDung FROM san_pham_de_xuat WHERE `UID` = ?";
+        $sql = "SELECT MaDeXuat, TenSP, NoiDung FROM SAN_PHAM_DE_XUAT WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();
@@ -259,7 +260,7 @@ class ProductService {
     }
 
     public function proposeInfo($uid, $MaDeXuat) {
-        $sql = "SELECT * FROM san_pham_de_xuat WHERE `UID` = ? AND MaDeXuat = ?";
+        $sql = "SELECT * FROM SAN_PHAM_DE_XUAT WHERE `UID` = ? AND MaDeXuat = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $uid, $MaDeXuat);
         $stmt->execute();
@@ -271,7 +272,7 @@ class ProductService {
     }
 
     private function getProductById($id) {
-        $sql = "SELECT * FROM san_pham WHERE ID_SP = ?";
+        $sql = "SELECT * FROM SAN_PHAM WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -284,11 +285,11 @@ class ProductService {
 
     private function getComment($id, $status) {
         $sql = "
-            SELECT binh_luan.MaBinhLuan, binh_luan.NgayBinhLuan, binh_luan.NoiDung, login.Ten, login.Avatar, binh_luan.TrangThai, binh_luan.PhanHoi
-            FROM binh_luan
-            JOIN login ON binh_luan.UID = login.UID
-            WHERE binh_luan.ID_SP = ?
-            ORDER BY binh_luan.MaBinhLuan DESC";
+            SELECT BINH_LUAN.MaBinhLuan, BINH_LUAN.NgayBinhLuan, BINH_LUAN.NoiDung, LOGIN.Ten, LOGIN.Avatar, BINH_LUAN.TrangThai, BINH_LUAN.PhanHoi
+            FROM BINH_LUAN
+            JOIN LOGIN ON BINH_LUAN.UID = LOGIN.UID
+            WHERE BINH_LUAN.ID_SP = ?
+            ORDER BY BINH_LUAN.MaBinhLuan DESC";
         
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
@@ -332,11 +333,11 @@ class ProductService {
 
     private function getReview($id, $status) {
         $sql = "
-            SELECT danh_gia.MaDanhGia, danh_gia.NgayDanhGia, danh_gia.SoSao, danh_gia.NoiDung, login.Ten, login.Avatar, danh_gia.TrangThai, danh_gia.PhanHoi
-            FROM danh_gia 
-            JOIN login ON danh_gia.UID = login.UID
+            SELECT DANH_GIA.MaDanhGia, DANH_GIA.NgayDanhGia, DANH_GIA.SoSao, DANH_GIA.NoiDung, LOGIN.Ten, LOGIN.Avatar, DANH_GIA.TrangThai, DANH_GIA.PhanHoi
+            FROM DANH_GIA 
+            JOIN LOGIN ON DANH_GIA.UID = LOGIN.UID
             WHERE ID_SP = ?
-            ORDER BY danh_gia.MaDanhGia";
+            ORDER BY DANH_GIA.MaDanhGia";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -403,7 +404,7 @@ class ProductService {
     }
     
     private function countProduct($id) {
-        $sql = "SELECT SUM(SoLuong) as total FROM gom WHERE ID_SP = ?";
+        $sql = "SELECT SUM(SoLuong) as total FROM GOM WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -416,7 +417,7 @@ class ProductService {
     public function thich($id) {
         if (isset($_SESSION["uid"])) {
             $uid = $_SESSION["uid"];
-            $sql = "SELECT 1 FROM thich WHERE ID_SP = ? AND `UID` = ?";
+            $sql = "SELECT 1 FROM THICH WHERE ID_SP = ? AND `UID` = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("ii", $id, $uid);
             $stmt->execute();

@@ -7,11 +7,12 @@ class AuthService {
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->conn->set_charset('utf8mb4');
         $this->support = new support();
     }
 
     public function login($email, $password) {
-        $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE Email = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM `LOGIN` WHERE Email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -25,7 +26,7 @@ class AuthService {
         $ip = $this->getIPAddress();
         $thoi_gian = $this->support->startTime();
         $uid = $user['UID'];
-        $nhat_ky = "INSERT INTO lich_su_dang_nhap (`UID`, ThoiGian, NoiDung) VALUES (?, ?, ?)";
+        $nhat_ky = "INSERT INTO LICH_SU_DANG_NHAP (`UID`, ThoiGian, NoiDung) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($nhat_ky);
         $noi_dung = "Đã đăng nhập tài khoản IP: $ip";
         $stmt->bind_param("iss", $uid, $thoi_gian, $noi_dung);
@@ -43,7 +44,7 @@ class AuthService {
             $_SESSION["Avatar"] = "/".$avatar; 
         }
 
-        $stmt = $this->conn->prepare("SELECT * FROM `khach_hang` WHERE `UID` = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM `KHACH_HANG` WHERE `UID` = ?");
         $stmt->bind_param("s", $user['UID']);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -67,7 +68,7 @@ class AuthService {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return ['success' => false, 'message' => 'Email không hợp lệ'];
         }
-        $checkEmailQuery = $this->conn->prepare("SELECT * FROM `login` WHERE email = ?");
+        $checkEmailQuery = $this->conn->prepare("SELECT * FROM `LOGIN` WHERE email = ?");
         $checkEmailQuery->bind_param("s", $email);
         $checkEmailQuery->execute();
         $result = $checkEmailQuery->get_result();
@@ -78,18 +79,18 @@ class AuthService {
             return ['success' => false, 'message' => 'Vui lòng nhập mật khẩu'];
         }
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO `login` (ten, email, `password`, `role`) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO `LOGIN` (ten, email, `password`, `role`) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $role = "Customer";
         $stmt->bind_param("ssss", $name, $email, $hashedPassword, $role);
         $stmt->execute();
-        $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE email = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM `LOGIN` WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
         $uid = $user['UID'];
-        $stmt = $this->conn->prepare("INSERT INTO `khach_hang` (`UID`) VALUES (?)");
+        $stmt = $this->conn->prepare("INSERT INTO `KHACH_HANG` (`UID`) VALUES (?)");
         $stmt->bind_param("s", $uid);
         $stmt->execute();        
         return [
@@ -103,7 +104,7 @@ class AuthService {
     }
 
     public function forgotPassword($email) {
-        $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE Email = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM `LOGIN` WHERE Email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -121,7 +122,7 @@ class AuthService {
     }
 
     public function changePassword($email, $current_password, $new_password) {
-        $stmt = $this->conn->prepare("SELECT * FROM `login` WHERE Email = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM `LOGIN` WHERE Email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -182,7 +183,7 @@ class AuthService {
     }
     
     private function updatePassword($email, $newPassword) {
-        $sql = "UPDATE `login` SET `Password` = ? WHERE Email = ?";
+        $sql = "UPDATE `LOGIN` SET `Password` = ? WHERE Email = ?";
         $stmt = $this->conn->prepare($sql);
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         $stmt->bind_param("ss", $hashedPassword, $email);
