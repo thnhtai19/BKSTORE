@@ -7,10 +7,6 @@ $model = new ProductService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
-    if (!isset($_SESSION["uid"])) {
-        echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
-        return;
-    }
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
     if (isset($data['ID_SP'])) $ID_SP = $data['ID_SP'];

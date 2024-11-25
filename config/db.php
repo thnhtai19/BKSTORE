@@ -18,7 +18,7 @@ class Database {
     }
 
     public function BaoTri() {
-        $sql = "SELECT TrangThaiBaoTri FROM He_THONG WHERE 1 LIMIT 1";
+        $sql = "SELECT TrangThaiBaoTri FROM HE_THONG WHERE 1 LIMIT 1";
         $result = $this->conn->query($sql);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();

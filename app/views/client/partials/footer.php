@@ -70,11 +70,8 @@
                 văn phòng cũng như tất cả Hệ Thống BKSTORE trên toàn quốc.
             </div>
             <div class="text-gray-800 pb-2">Kết nối với chúng tôi</div>
-            <div class="flex items-center gap-3">
-                <img src="/public/image/facebook.png" alt="social logo" class="w-8 h-8" >
-                <img src="/public/image/instagram.png" alt="social logo" class="w-8 h-8">
-                <img src="/public/image/youtube.png" alt="social logo" class="w-8 h-8" >
-                <img src="/public/image/telegram.png" alt="social logo" class="w-8 h-8">
+            <div class="flex items-center gap-3 container-mxh">
+    
             </div>
         </div>
         <div>
@@ -112,14 +109,64 @@
                 <div class="pt-5">
                     Đối tác kết hợp
                 </div>
-                <div class="pt-2 flex flex-wrap gap-10">
-                    <img src="/public/image/vnpost1.png" alt="shipping logo" class="h-8">
-                    <img src="/public/image/Logo_ninjavan.webp" alt="shipping logo" class="h-8">
-                    <img src="/public/image/ahamove_logo3.webp" alt="shipping logo" class="h-8">
-                    <img src="/public/image/icon_snappy1.webp" alt="shipping logo" class="h-8">
-                    <img src="/public/image/payos.svg" alt="payment logo" class="h-8">
-                </div>
+                <div class="pt-2 flex flex-wrap gap-10 container-doitac"></div>
             </div>
         </div>
     </div>
 </footer>
+<script>
+    try{
+        function getinfo(){
+            let mang_xa_hoi = [];
+            let doi_tac = [];
+
+            fetch('/api/system/footer')
+            .then(response => response.json())
+            .then(data => {
+                mang_xa_hoi = data.mang_xa_hoi;
+                doi_tac = data.doi_tac;
+                const thong_tin_lien_he = data.thong_tin_lien_he;
+            })
+            .catch(error => {
+                console.error('Error fetching items:', error);
+            })
+            .finally(() => {
+                const socialIconsContainer = document.querySelector('.container-mxh');
+                mang_xa_hoi.forEach(icon => {
+                    const anchor = document.createElement('a');
+                    anchor.href = icon.LienKet;
+                    anchor.target = '_blank';
+                    anchor.rel = 'noopener noreferrer';
+
+                    const img = document.createElement('img');
+                    img.src = "/"+icon.HinhAnh;
+                    img.alt = "mxh";
+                    img.classList.add('w-8', 'h-8');
+                    anchor.appendChild(img);
+
+                    socialIconsContainer.appendChild(anchor);
+                });
+
+                const partnerIconsContainer = document.querySelector('.container-doitac');
+                doi_tac.forEach(icon => {
+                    const anchor = document.createElement('a');
+                    anchor.href = icon.LienKet;
+                    anchor.target = '_blank';
+                    anchor.rel = 'noopener noreferrer';
+
+                    const img = document.createElement('img');
+                    img.src = "/"+icon.HinhAnh;
+                    img.alt = icon.Ten;
+                    img.classList.add('h-8');
+                    anchor.appendChild(img);
+
+                    partnerIconsContainer.appendChild(anchor);
+                });
+
+                
+            });
+        }
+
+        getinfo();
+    } catch {}
+</script>

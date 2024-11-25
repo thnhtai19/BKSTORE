@@ -20,41 +20,13 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                 <div class="relative">
                     <div class="relative ml-4 cursor-pointer pr-1 hidden md:block" id="notice">
                         <img src="/public/image/bell.png" alt="Bell" class="w-8 h-8">
-                        <span
+                        <span id="cart-notice"
                             class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">3</span>
                     </div>
                     <div id="dropdown-notice" class="absolute right-0 top-10 bg-white border rounded-lg shadow-lg hidden">
                         <div class="pt-4 pb-4 pr-3 pl-3 w-80 h-80 overflow-y-auto">
                             <div class="font-bold">Thông báo</div>
-                            <div class="flex flex-col gap-2">
-                                <div class="pt-2 flex gap-2 cursor-pointer">
-                                    <div
-                                        class="flex justify-center items-center rounded-full bg-custom-background h-12 w-12">
-                                        <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
-                                    </div>
-                                    <div class="text-sm flex-1">
-                                        Đơn hàng #BKS1234 đã được giao cho đơn vị vận chuyển.
-                                    </div>
-                                </div>
-                                <div class="pt-2 flex gap-2 cursor-pointer">
-                                    <div
-                                        class="flex justify-center items-center rounded-full bg-custom-background h-12 w-12">
-                                        <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
-                                    </div>
-                                    <div class="text-sm flex-1">
-                                        Đơn hàng #BKS1235 đã được giao cho đơn vị vận chuyển.
-                                    </div>
-                                </div>
-                                <div class="pt-2 flex gap-2 cursor-pointer">
-                                    <div
-                                        class="flex justify-center items-center rounded-full bg-custom-background h-12 w-12">
-                                        <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
-                                    </div>
-                                    <div class="text-sm flex-1">
-                                        Đơn hàng #BKS1236 đã được giao cho đơn vị vận chuyển.
-                                    </div>
-                                </div>
-                            </div>
+                            <div id="notifications" class="flex flex-col gap-1 pt-2"></div>
                         </div>
                     </div>
                 </div>
@@ -164,8 +136,112 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                 });
         }
 
+        function CountNotice(){
+            let countNotice = 0;
+            let Notice = [];
+            const mail = <?php echo json_encode( $_SESSION["email"]); ?>;
+            if(!mail){
+                return
+            }
+
+            fetch('/api/user/notice')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.sucess) {
+                        countNotice = data.notice_list.filter(item => item.TrangThai === "Unread").length;
+                        Notice = data.notice_list;
+                    } else {
+                        countNotice = 0;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching cart items:', error);
+                    countNotice = 0;
+                })
+                .finally(() => {
+                    const cartNoticeElement = document.getElementById('cart-notice');
+                    if (cartNoticeElement) {
+                        cartNoticeElement.textContent = countNotice;
+                    }
+                    if(Notice.length){
+                        const notificationsContainer = document.getElementById("notifications");
+                        Notice.forEach(order => {
+                            const notificationItem = document.createElement("div");
+                            notificationItem.onclick = function () {
+                                go(order.type, order.ID_Redirect, order.id)
+                            };
+                            notificationItem.className = `flex gap-2 cursor-pointer rounded-md py-2 px-1 ${order.TrangThai === "Unread" ? 'bg-blue-100' : ''}`;
+
+                            notificationItem.innerHTML = `
+                                <div class="flex justify-center items-center rounded-full bg-custom-background h-12 w-12">
+                                    <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
+                                </div>
+                                <div class="text-sm flex-1">
+                                    ${order.noi_dung}
+                                </div>
+                            `;
+
+                            notificationsContainer.appendChild(notificationItem);
+                        });
+                    }
+
+                    if(Notice.length === 0){
+                        const notificationsContainer = document.getElementById("notifications");
+                        const notificationItem = document.createElement("div");
+                        notificationItem.className = `flex flex-col items-center justify-center gap-2 pt-10`;
+                        notificationItem.innerHTML = `
+                            <img src="/public/image/icons8-sad-100.png" alt="sad-icon" class="w-8 h-8">
+                            <div class="text-center text-gray-500">Chưa có thông báo nào!</div>
+                        `
+                        notificationsContainer.appendChild(notificationItem);
+                    }
+                });
+        }
+
+        function go(type,id,idthongbao){
+            if(type === "Đơn hàng"){
+                fetch('/api/user/noticeInfo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        MaThongBao: idthongbao
+                    }),
+                })
+                .then(response => {
+                    
+                    return response.json();
+                })
+                .catch(error => {})
+                .finally(() => {
+                    window.location.href = `/my/order/detail?id=${id}`
+                })
+            }else if(type === "Yêu cầu"){
+                fetch('/api/user/noticeInfo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        MaThongBao: idthongbao
+                    }),
+                })
+                .then(response => {
+                    
+                    return response.json();
+                })
+                .catch(error => {})
+                .finally(() => {
+                    window.location.href = `/my/order/detail?id=${id}`
+                })
+            }
+
+        }
+
         CountCart();
 
+        CountNotice();
         
 
         function goCart() {

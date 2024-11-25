@@ -24,7 +24,7 @@ curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
 $response = curl_exec($ch);
 $data = json_decode($response, true);
-curl_close($ch);
+curl_close(handle: $ch);
 
 function renderStars($sao)
 {
