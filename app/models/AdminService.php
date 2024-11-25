@@ -154,9 +154,22 @@ class AdminService {
         }
         if ($status != 'Đang chờ duyệt' && $status != 'Đã duyệt' && $status != 'Đã từ chối') 
             return ['success'=> false, 'message' => 'Cập nhật thất bại'];
+        $type = 'Yêu cầu';
+        $date = $this->support->startTime();
+        $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $NoiDung = "Đề xuất " . $id . ": " . $status;
+        $stmt->bind_param("isss", $result->fetch_assoc()['UID'], $NoiDung, $type, $date);
+        $stmt->execute();
+        $id_thong_bao = mysqli_insert_id($this->conn);
+        $sql = "INSERT INTO loai_thong_bao (MaThongBao, MaDeXuat) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $id_thong_bao, $id);
+        $stmt->execute();
+        $content = $content != '' ? $content : $result['GhiChu'];
         $sql = "UPDATE SAN_PHAM_DE_XUAT SET TrangThai = ?, GhiChu = ? WHERE MaDeXuat = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssi",$status, $content, $id);
+        $stmt->bind_param("ssi", $status, $content, $id);
         $stmt->execute();
         return ['success' => true, 'message' => 'Cập nhật thành công'];
     }

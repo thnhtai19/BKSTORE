@@ -164,13 +164,13 @@
     (6, 5),  -- Khách hàng 6 thích sản phẩm 5
     (7, 1);  -- Khách hàng 7 thích sản phẩm 1
 
-    INSERT INTO THONG_BAO (UID, NoiDung, TrangThai, Type)
+    INSERT INTO THONG_BAO (UID, NoiDung, TrangThai, Type, NgayThongBao)
     VALUES
-    (1, 'Đơn hàng của bạn đã được xác nhận.', 'Unread', 'Đơn hàng'),
-    (2, 'Sản phẩm yêu thích của bạn đã có hàng.', 'Read', 'Đơn hàng'),
-    (3, 'Đơn hàng của bạn đang được vận chuyển.', 'Unread', 'Đơn hàng'),
-    (6, 'Bạn đã nhận được một mã giảm giá mới.', 'Read', 'Đơn hàng'),
-    (7, 'Sản phẩm trong giỏ hàng của bạn sắp hết.', 'Unread', 'Đơn hàng');
+    (1, 'Đơn hàng của bạn đã được xác nhận.', 'Unread', 'Đơn hàng', '10:00:00 21-10-2023'),
+    (2, 'Sản phẩm yêu thích của bạn đã có hàng.', 'Read', 'Đơn hàng', '10:00:00 21-10-2023'),
+    (3, 'Đơn hàng của bạn đang được vận chuyển.', 'Unread', 'Đơn hàng', '10:00:00 21-10-2023'),
+    (6, 'Bạn đã nhận được một mã giảm giá mới.', 'Read', 'Đơn hàng', '10:00:00 21-10-2023'),
+    (7, 'Sản phẩm trong giỏ hàng của bạn sắp hết.', 'Unread', 'Đơn hàng', '10:00:00 21-10-2023');
 
     INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang, MaDeXuat)
     VALUES

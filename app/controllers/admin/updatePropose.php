@@ -17,7 +17,7 @@ if ($method === 'POST') {
             if (isset($data['TrangThai'])) $TrangThai = $data['TrangThai'];
             else echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
             if (isset($data['GhiChu'])) $GhiChu = $data['GhiChu'];
-            else echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
+            else $GhiChu = '';
             if (isset($data['MaDeXuat'])) $MaDeXuat = $data['MaDeXuat'];
             else echo json_encode(['success' => false, 'message' => 'Chưa điền đầy đủ thông tin']);
             echo json_encode($model->updatePropose($TrangThai, $GhiChu, $MaDeXuat));

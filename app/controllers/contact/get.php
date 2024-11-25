@@ -12,7 +12,7 @@ if ($method === 'GET') {
     }
     else {
         if ($_SESSION["Role"] == 'Admin') {
-            echo json_encode($model->getContactList());
+            echo json_encode(['success' => true, 'danh_sach_lien_he' => $model->getContactList()]);
         }
         else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }

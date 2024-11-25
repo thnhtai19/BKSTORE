@@ -14,7 +14,7 @@ class SystemService {
 
     public function getInfoList() {
         // Query to fetch MaTinTuc and TieuDe
-        $sql1 = "SELECT MaTinTuc, TieuDe FROM TIN_TUC WHERE TrangThai != 'Đang ẩn'";
+        $sql1 = "SELECT MaTinTuc, TieuDe FROM TIN_TUC WHERE TrangThai != 'Đang ẩn' ORDER BY MaTinTuc DESC";
         $query1 = $this->conn->prepare($sql1);
         $query1->execute();
         $result1 = $query1->get_result();
@@ -85,14 +85,22 @@ class SystemService {
     }
 
     public function getNewsList() {
-        $sql = 'SELECT MaTinTuc, TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa FROM TIN_TUC WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaTinTuc, TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa FROM TIN_TUC WHERE TrangThai != "Đang ẩn" ORDER BY MaTinTuc DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
         $result = [];
         while ($row = $stmt->fetch_assoc()) {
             $row['Anh'] = $this->getImageNews($row['MaTinTuc']);
-            $result[] = $row;
+            $result[] = [
+                'MaTinTuc' => $row['MaTinTuc'],
+                'tieu_de' => $row['TieuDe'],
+                'anh' => $row['Anh'],
+                'noi_dung' => $row['NoiDung'],
+                'thoi_gian_tao' => $row['ThoiGianTao'],
+                'tu_khoa' => $row['TuKhoa'],
+                'mo_ta' => $row['MoTa'],
+            ];
         }
         return $result;
     }
@@ -178,13 +186,20 @@ class SystemService {
     }
 
     public function getBannerList() {
-        $sql = 'SELECT * FROM BANNER WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT * FROM BANNER WHERE TrangThai != "Đang ẩn" ORDER BY MaBanner DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
         $result = [];
         while ($row = $stmt->fetch_assoc()) {
-            $result[] = $row;
+            $tenSP = $this->getNameBanner($row['IdSP']);
+            $result[] = [
+                'MaBanner' => $row['MaBanner'],
+                'Image' => $row['Image'],
+                'IdSP' => $row['IdSP'],
+                'MoTa' => $row['MoTa'],
+                'TenSP' => $tenSP
+            ];
         }
         return $result;
     }
@@ -240,13 +255,18 @@ class SystemService {
     }
 
     public function getContactList() {
-        $sql = 'SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM THONG_TIN_LIEN_HE WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT * FROM THONG_TIN_LIEN_HE WHERE TrangThai != "Đang ẩn" ORDER BY MaThongTin DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
         $result = [];
         while ($row = $stmt->fetch_assoc()) {
-            $result[] = $row;
+            $result[] = [
+                'MaThongTin' => $row['MaThongTin'],
+                'Image' => $row['HinhAnh'],
+                'Loai' => $row['Loai'],
+                'ThongTin' => $row['ThongTin']
+            ];
         }
         return $result;
     }
@@ -302,13 +322,17 @@ class SystemService {
     }
 
     public function getSocialList() {
-        $sql = 'SELECT MaMXH, HinhAnh, LienKet FROM MANG_XA_HOI WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaMXH, HinhAnh, LienKet FROM MANG_XA_HOI WHERE TrangThai != "Đang ẩn" ORDER BY MaMXH DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
         $result = [];
         while ($row = $stmt->fetch_assoc()) {
-            $result[] = $row;
+            $result[] = [
+                'MaMXH' => $row['MaMXH'],
+                'Image' => $row['HinhAnh'],
+                'Link' => $row['LienKet']
+            ];
         }
         return $result;
     }
@@ -363,13 +387,18 @@ class SystemService {
     }
 
     public function getPartnerList() {
-        $sql = 'SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM DOI_TAC WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM DOI_TAC WHERE TrangThai != "Đang ẩn" ORDER BY MaDoiTac DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
         $result = [];
         while ($row = $stmt->fetch_assoc()) {
-            $result[] = $row;
+            $result[] = [
+                'MaDoiTac' => $row['MaDoiTac'],
+                'name' => $row['Ten'],
+                'image' => $row['HinhAnh'],
+                'link' => $row['LienKet']
+            ];
         }
         return $result;
     }
@@ -452,6 +481,8 @@ class SystemService {
         return true;
     }
 
+
+
     private function getSystemById($MaHeThong) {
         $sql = 'SELECT * FROM HE_THONG WHERE MaHeThong = ?';
         $stmt = $this->conn->prepare($sql);
@@ -487,6 +518,15 @@ class SystemService {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_assoc()['count'];
+    }
+
+    private function getNameBanner($IdSP) {
+        $sql = "SELECT TenSP FROM san_pham WHERE ID_SP =?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $IdSP);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc()['TenSP'];
     }
 
     private function deleteImageNew($MaTinTuc, $AnhMuonXoa) {

@@ -48,7 +48,7 @@ class OrderService {
     }
 
     public function getPaid($uid) {
-        $sql1 = "SELECT ID_DonHang, NgayDat, TrangThai FROM DON_HANG WHERE `UID` = ?";
+        $sql1 = "SELECT ID_DonHang, NgayDat, TrangThai FROM DON_HANG WHERE `UID` = ? ORDER BY ID_DonHang DESC";
         $stmt1 = $this->conn->prepare($sql1);
         $stmt1->bind_param("i", $uid);
         $stmt1->execute();
@@ -100,7 +100,7 @@ class OrderService {
                 ];
             }
         }
-        return ['success' => true, 'message' => $this->support->sort($result)];
+        return ['success' => true, 'message' => $result];
     }
 
     public function getInfo($uid, $ID_DonHang) {
@@ -171,10 +171,11 @@ class OrderService {
         }
         $id_don_hang = mysqli_insert_id($this->conn);
         $type = 'Đơn hàng';
-        $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+        $date = $this->support->startTime();
+        $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $NoiDung = "Đơn hàng " . $id_don_hang . " được đặt thành công"; 
-        $stmt->bind_param("iss", $uid, $NoiDung, $type);
+        $stmt->bind_param("isss", $uid, $NoiDung, $type, $date);
         $stmt->execute();
         $id_thong_bao = mysqli_insert_id($this->conn);
         $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";
@@ -188,11 +189,12 @@ class OrderService {
         if ($trang_thai == '' && $thanh_toan == '') return ['success' => false, 'message' => 'Chưa điền đầy đủ thông tin'];
         $order = $this->getOrderById($id);
         $type = 'Đơn hàng';
+        $date = $this->support->startTime();
         if ($trang_thai != '') {
-            $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $NoiDung = "Đơn hàng " . $id . ": " . $trang_thai;
-            $stmt->bind_param("iss", $order['UID'], $NoiDung, $type);
+            $stmt->bind_param("isss", $order['UID'], $NoiDung, $type. $date);
             $stmt->execute();
             $id_thong_bao = mysqli_insert_id($this->conn);
             $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";
@@ -201,10 +203,10 @@ class OrderService {
             $stmt->execute();
         }
         if ($thanh_toan != '') {
-            $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $NoiDung = "Đơn hàng " . $id . ": " . $thanh_toan . " thành công";
-            $stmt->bind_param("iss", $order['UID'], $NoiDung, $type);
+            $stmt->bind_param("isss", $order['UID'], $NoiDung, $type, $date);
             $stmt->execute();
             $id_thong_bao = mysqli_insert_id($this->conn);
             $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";
@@ -389,7 +391,7 @@ class OrderService {
     }
 
     private function getProduct($orderId) {
-        $sql = "SELECT ID_SP, SoLuong FROM GOM WHERE ID_DonHang = ?";
+        $sql = "SELECT ID_SP, SoLuong FROM GOM WHERE ID_DonHang = ? ORDER BY ID_SP DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $orderId);
         $stmt->execute();
@@ -423,7 +425,7 @@ class OrderService {
     
         return [
             "success" => true,
-            "san_pham" => $this->support->sort($resultList)
+            "san_pham" => $resultList
         ];
     }
 

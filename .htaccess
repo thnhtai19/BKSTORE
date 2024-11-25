@@ -95,6 +95,7 @@ RewriteRule ^api/user/unlike$ /app/controllers/user/unlike.php [L]
 RewriteRule ^api/user/notice$ /app/controllers/user/notice.php [L]
 RewriteRule ^api/user/noticeInfo$ /app/controllers/user/noticeInfo.php [L]
 RewriteRule ^api/user/buynow$ /app/controllers/user/buyNow.php [L]
+RewriteRule ^api/user/sale$ /app/controllers/user/sale.php [L]
 
 #CART ROUTERS BACKEND
 RewriteCond %{REQUEST_METHOD} GET
