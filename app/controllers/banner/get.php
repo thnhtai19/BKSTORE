@@ -12,7 +12,7 @@ if ($method === 'GET') {
     }
     else {
         if ($_SESSION["Role"] == 'Admin') {
-            echo json_encode($model->getBannerList());
+            echo json_encode(['success' => true, 'danh_sach_banner' => $model->getBannerList()]);
         }
         else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }

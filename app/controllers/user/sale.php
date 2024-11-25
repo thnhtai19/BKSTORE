@@ -7,13 +7,8 @@ $model = new ProductService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-    if (isset($data['ID_SP'])) $ID_SP = $data['ID_SP'];
-    else $ID_SP = '';
-    if ($_SESSION["Role"] == 'Admin') $status = true; 
-    else $status = false;
-    echo json_encode($model->getInfo($ID_SP, $status));
+    $product = $model->getSale();
+    echo json_encode($product);
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];

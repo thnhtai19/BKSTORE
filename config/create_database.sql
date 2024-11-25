@@ -129,7 +129,7 @@ CREATE TABLE SAN_PHAM (
         TenNguoiNhan TEXT,
         PhuongThucThanhToan ENUM('COD', 'Bank') DEFAULT 'COD',  -- Consistent single quotes
         HoaDon DECIMAL(10, 2) NOT NULL,
-        FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID),
+        FOREIGN KEY (UID) REFERENCES LOGIN(UID),
         FOREIGN KEY (MaGiamGia) REFERENCES MA_GIAM_GIA(Ma) ON UPDATE CASCADE
     );
 
@@ -169,6 +169,7 @@ CREATE TABLE SAN_PHAM (
         NoiDung TEXT,
         TrangThai ENUM('Unread', 'Read') DEFAULT "Unread",
         Type ENUM('Yêu cầu', 'Đơn hàng'),
+        NgayThongBao TEXT,
         FOREIGN KEY (UID) REFERENCES LOGIN(UID)
     );
 

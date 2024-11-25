@@ -12,7 +12,7 @@ if ($method === 'GET') {
     }
     else {
         if ($_SESSION["Role"] == 'Admin') {
-            echo json_encode($model->getNewsList());
+            echo json_encode(['success' => true, 'danh_sach_tin_tuc' => $model->getNewsList()]);
         }
         else echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
     }
