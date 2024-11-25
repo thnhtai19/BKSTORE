@@ -180,14 +180,15 @@ class ProductService {
         $stmt->bind_param("ssiss", $TenSP, $NoiDung, $uid, $GhiChu, $time);
         $stmt->execute();
         $id_de_xuat =  mysqli_insert_id($this->conn);
-        $type = 'Đề xuất';
-        $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+        $type = 'Yêu cầu';
+        $date = $this->support->startTime();
+        $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $NoiDung = "Đề xuất " . $id_de_xuat . " được đặt thành công"; 
-        $stmt->bind_param("iss", $uid, $NoiDung, $type);
+        $NoiDung = "Đề xuất " . $id_de_xuat . " thành công"; 
+        $stmt->bind_param("isss", $uid, $NoiDung, $type, $date);
         $stmt->execute();
         $id_thong_bao = mysqli_insert_id($this->conn);
-        $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+        $sql = "INSERT INTO loai_thong_bao (MaThongBao, MaDeXuat) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $id_thong_bao, $id_de_xuat);
         $stmt->execute();
@@ -270,6 +271,24 @@ class ProductService {
         return ['success' => true, 'chi_tiet_de_xuat' => $result->fetch_assoc()];
     }
 
+    public function getSale() {
+        $sql = "SELECT ID_GiamGia, Ma, TienGiam, DieuKien, SoLuong FROM MA_GIAM_GIA WHERE TrangThai != 'Hết hạn' ORDER BY ID_GiamGia DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $sale = [];
+        while ($row = $result->fetch_assoc()) {
+            $sale[] = [
+                'ID_GiamGia' => $row['ID_GiamGia'],
+                'ma' => $row['Ma'],
+                'tien_giam' => $row['TienGiam'],
+                'dieu_kien' => $row['DieuKien'],
+                'so_luong' => $row['SoLuong'],
+            ];
+        }
+        return ['success' => true, 'danh_sach_giam_gia' => $sale];
+    }
+
     private function getProductById($id) {
         $sql = "SELECT * FROM san_pham WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
@@ -336,7 +355,7 @@ class ProductService {
             FROM danh_gia 
             JOIN login ON danh_gia.UID = login.UID
             WHERE ID_SP = ?
-            ORDER BY danh_gia.MaDanhGia";
+            ORDER BY danh_gia.MaDanhGia DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -376,7 +395,7 @@ class ProductService {
                 ];
             }
         }
-        return $this->support->sort($reviews);
+        return $reviews;
     }
 
     private function average_star($id, $status) {

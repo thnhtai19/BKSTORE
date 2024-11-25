@@ -11,7 +11,7 @@ class CartService {
     }
 
     public function get($uid) {
-        $sql = "SELECT * FROM trong_gio_hang WHERE `UID` = ?";
+        $sql = "SELECT * FROM trong_gio_hang WHERE `UID` = ? ORDER BY ID_SP DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();
@@ -36,7 +36,6 @@ class CartService {
                 'so_luong' => $product['SoLuong']
             ];
         }
-        $res = $this->support->sort($res); 
         return ['success' => true, 'danh_sach_san_pham' => $res];
     }
 
