@@ -238,7 +238,7 @@ class UserService {
             return ['success' => false, 'message' => 'Mã giảm giá không tồn tại'];
         }
         $bill = $this->order->getCostProduct($ID_SP) * $SoLuong;
-        if ($bill == 0) return ['success'=> false, 'message' => 'Danh sách sản phẩm không hợp lệ'];
+        if ($bill == 0) return ['success'=> false, 'message' => 'Dữ liệu không hợp lệ'];
         $NgayDat = $this->support->getDateNow();
         if ($this->order->checkProduct($ID_SP, $SoLuong)['success'] == false)
             return ['success' => false, 'message' => 'Không đủ hàng trong kho'];

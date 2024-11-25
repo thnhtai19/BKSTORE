@@ -169,7 +169,7 @@ CREATE TABLE SAN_PHAM (
         NoiDung TEXT,
         TrangThai ENUM('Unread', 'Read') DEFAULT "Unread",
         Type ENUM('Yêu cầu', 'Đơn hàng'),
-        FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
+        FOREIGN KEY (UID) REFERENCES LOGIN(UID)
     );
 
     -- Table for LOẠI THÔNG_BÁO
@@ -217,7 +217,8 @@ CREATE TABLE SAN_PHAM (
         MaDoiTac INT AUTO_INCREMENT PRIMARY KEY,
         Ten VARCHAR(255),
         HinhAnh TEXT,
-        LienKet VARCHAR(255)
+        LienKet VARCHAR(255),
+        TrangThai ENUM("Đang hiện", "Đang ẩn") DEFAULT "Đang hiện"
     );
 
     -- Bảng HE_THONG

@@ -13,7 +13,7 @@ class SystemService {
 
     public function getInfoList() {
         // Query to fetch MaTinTuc and TieuDe
-        $sql1 = "SELECT MaTinTuc, TieuDe FROM tin_tuc";
+        $sql1 = "SELECT MaTinTuc, TieuDe FROM tin_tuc WHERE TrangThai != 'Đang ẩn'";
         $query1 = $this->conn->prepare($sql1);
         $query1->execute();
         $result1 = $query1->get_result();
@@ -84,7 +84,7 @@ class SystemService {
     }
 
     public function getNewsList() {
-        $sql = 'SELECT * FROM tin_tuc WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaTinTuc, TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa FROM tin_tuc WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -239,7 +239,7 @@ class SystemService {
     }
 
     public function getContactList() {
-        $sql = 'SELECT * FROM thong_tin_lien_he WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM thong_tin_lien_he WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -301,7 +301,7 @@ class SystemService {
     }
 
     public function getSocialList() {
-        $sql = 'SELECT * FROM mang_xa_hoi WHERE TrangThai != "Đang ẩn"';
+        $sql = 'SELECT MaMXH, HinhAnh, LienKet FROM mang_xa_hoi WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -362,7 +362,7 @@ class SystemService {
     }
 
     public function getPartnerList() {
-        $sql = 'SELECT * FROM doi_tac';
+        $sql = 'SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM doi_tac WHERE TrangThai != "Đang ẩn"';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -507,7 +507,11 @@ class SystemService {
         $stmt->bind_param("i", $MaTinTuc);
         $stmt->execute();
         $stmt = $stmt->get_result();
-        return $stmt->fetch_assoc()['LinkAnh'];
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = $row['LinkAnh'];
+        }
+        return $result;
     }
 }
 ?>
