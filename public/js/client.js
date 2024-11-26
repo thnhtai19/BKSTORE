@@ -108,16 +108,24 @@ function goPayment() {
     window.location.href = "/checkout/payment"
 }
 
-function goPaymentInfo() {
-    window.location.href = "/checkout/preview"
-}
-
 function goNotice() {
     window.location.href = "/notice"
 }
 
 function goHome() {
     window.location.href = "/"
+}
+
+function goKhuyenMai() {
+    window.location.href = "/promotion"
+}
+
+function goTinTuc() {
+    window.location.href = "/news"
+}
+
+function goTaiKhoan() {
+    window.location.href = "/account"
 }
 
 var notyf = new Notyf({

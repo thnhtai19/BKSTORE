@@ -1,13 +1,7 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
-
-if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
-    header("Location: /maintain");
-    exit;
-}
-
 if(isset($_SESSION["email"])){
-    header("Location: /");
+    header("Location: /admin");
     exit();
 }
 ?>
@@ -21,18 +15,15 @@ if(isset($_SESSION["email"])){
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/client.css">
     <link rel="stylesheet" href="/public/css/notyf.min.css">
-    <title>Đăng nhập | BKSTORE</title> 
+    <title>Đăng nhập | BKSTORE ADMIN</title> 
 </head>
 <body class="bg-gray-100">
     <div class="h-screen">
-        <header id="header-content" class="sticky top-0 z-50">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
-        </header>
 
         <div class="overflow-y-auto">
             <main class="container max-w-screen-1200 mx-auto min-h-screen pt-20 pb-20 px-2 lg:px-0 flex justify-center items-center">
                 <div class="w-full max-w-xl p-8 bg-white shadow-md rounded-lg">
-                    <h2 class="text-3xl font-bold text-center mb-4 text-blue-600">Đăng nhập</h2>
+                    <h2 class="text-3xl font-bold text-center mb-4 text-gray-600">Quản trị hệ thống</h2>
                     <form id="login-form" class="mt-8 space-y-6">
                         <div>
                             <div>                                    
@@ -62,28 +53,11 @@ if(isset($_SESSION["email"])){
                                 </button>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <input id="remember_me" name="remember_me" type="checkbox"
-                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                <label for="remember_me" class="ml-2 block text-sm text-gray-900"> Ghi nhớ mặt khẩu</label>
-                            </div>
-                        </div>
-
                         <div>
                             <button id="submit" type="submit"
-                                class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Đăng nhập
                             </button>
-
-                            <a href="/auth/register" 
-                                class="my-2 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                Đăng ký
-                            </a>
-                          
-                            <div class="text-sm">
-                                <a href="/auth/forgot_password" class="font-medium text-indigo-600 hover:text-indigo-500"> Quên mặt khẩu? </a>
-                            </div>
                         </div>
                         
                     </form>
@@ -105,7 +79,6 @@ if(isset($_SESSION["email"])){
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('remember_me').checked;
 
             if (!email || !password) {
                 notyf.error('Vui lòng nhập đầy đủ thông tin!');
@@ -131,7 +104,7 @@ if(isset($_SESSION["email"])){
                 if (data.success) {
                     notyf.success('Đăng nhập thành công!');
                     setTimeout(() => {
-                        window.history.back();
+                        window.location.href = '/admin'
                     }, 2000);
                 } else {
                     notyf.error(data.message);

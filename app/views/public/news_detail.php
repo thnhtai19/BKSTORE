@@ -1,3 +1,11 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -35,7 +43,7 @@
                 </div>
             </main>
         </div>
-        <?php $page = 1;
+        <?php $page = 5;
         include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
     <script src="/public/js/notyf.min.js"></script>

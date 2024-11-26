@@ -1,3 +1,11 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -228,7 +236,10 @@
                             productsContainer.insertAdjacentHTML('beforeend', productHTML);
                         });
                 } else {
-                    document.getElementById('products-container').innerText = data.message;
+                    if(data.message === "Người dùng chưa đăng nhập"){
+                        window.location.href = '/auth/login'
+                        return
+                    }
                 }
             })
             .catch(error => {

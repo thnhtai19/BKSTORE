@@ -8,6 +8,7 @@ class PayOsService {
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->conn->set_charset('utf8mb4');
         $this->order = new OrderService($conn);
     }
 
@@ -20,7 +21,7 @@ class PayOsService {
                 ];
         }
 
-        $sql = "SELECT * FROM he_thong";
+        $sql = "SELECT * FROM HE_THONG";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -75,7 +76,7 @@ class PayOsService {
                 ];
         }
 
-        $sql = "SELECT * FROM he_thong";
+        $sql = "SELECT * FROM HE_THONG";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
