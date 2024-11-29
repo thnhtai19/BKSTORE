@@ -7,10 +7,6 @@ $model = new ProductService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
-    if (!isset($_SESSION["uid"])) {
-        echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
-        return;
-    }
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
     $type = $data['PhanLoai'];
