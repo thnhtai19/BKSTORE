@@ -134,12 +134,12 @@
                 const socialIconsContainer = document.querySelector('.container-mxh');
                 mang_xa_hoi.forEach(icon => {
                     const anchor = document.createElement('a');
-                    anchor.href = icon.LienKet;
+                    anchor.href = icon.Link;
                     anchor.target = '_blank';
                     anchor.rel = 'noopener noreferrer';
 
                     const img = document.createElement('img');
-                    img.src = "/"+icon.HinhAnh;
+                    img.src = "/"+icon.Image;
                     img.alt = "mxh";
                     img.classList.add('w-8', 'h-8');
                     anchor.appendChild(img);
@@ -150,12 +150,12 @@
                 const partnerIconsContainer = document.querySelector('.container-doitac');
                 doi_tac.forEach(icon => {
                     const anchor = document.createElement('a');
-                    anchor.href = icon.LienKet;
+                    anchor.href = icon.link;
                     anchor.target = '_blank';
                     anchor.rel = 'noopener noreferrer';
 
                     const img = document.createElement('img');
-                    img.src = "/"+icon.HinhAnh;
+                    img.src = "/"+icon.image;
                     img.alt = icon.Ten;
                     img.classList.add('h-8');
                     anchor.appendChild(img);

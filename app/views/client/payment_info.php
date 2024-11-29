@@ -164,6 +164,15 @@ $type = $_GET['type'];
             },
         });
 
+        function isValidPhoneNumber(phone) {
+            const trimmedPhone = phone.trim();
+            const phoneRegex = /^(0|\+84)(\d{9}|\d{8})$/;
+
+            return phoneRegex.test(trimmedPhone);
+        }
+
+
+
         function Order(){
             const customerName = document.getElementById('customerName').value;
             const customerPhone = document.getElementById('customerPhone').value;
@@ -171,6 +180,11 @@ $type = $_GET['type'];
 
             if(!customerName || !customerPhone || !customerAddress){
                 notyf.error("Vui lòng điền đầy đủ thông tin nhận hàng!")
+                return
+            }
+
+            if(!isValidPhoneNumber(customerPhone)){
+                notyf.error("Vui lòng nhập số điện thoại hợp lệ!")
                 return
             }
 
