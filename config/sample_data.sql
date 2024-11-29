@@ -37,6 +37,7 @@ VALUES
 (1, 'Male', '0123456789', '123 Main St', 'Đang hoạt động'),
 (2, 'Female', '0987654321', '456 Oak Ave', 'Đang hoạt động'),
 (3, 'Male', '0123456789', '789 Pine Rd', 'Đang hoạt động'),
+(4, 'Male', '0123456789', '789 Pine Rd', 'Đang hoạt động'),
 (6, 'Female', '0987654321', '101 Birch Ln', 'Đang hoạt động'),
 (7, 'Male', '0123456789', '202 Cedar St', 'Đang hoạt động'),
 (9, 'Female', '0987654321', '303 Maple Ave', 'Đang hoạt động'),
