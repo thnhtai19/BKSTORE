@@ -1,5 +1,12 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+
+$type = $_GET['type'];
 ?>
 
 <!DOCTYPE html>
@@ -176,7 +183,9 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
             }
             localStorage.setItem('customerInfo', JSON.stringify(info));
             
-            window.location.href = '/checkout/payment'
+            const type = '<?php echo $type; ?>'
+            
+            window.location.href = `/checkout/payment?type=${type}`
         }
 
     </script>

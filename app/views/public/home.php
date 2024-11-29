@@ -21,6 +21,11 @@ function format_currency($number) {
 
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>

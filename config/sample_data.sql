@@ -11,13 +11,15 @@
     ('user5@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Five', NULL),
     ('admin3@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Admin', 'Admin Three', NULL),
     ('user6@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Six', NULL),
-    ('user7@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Seven', NULL);
+    ('user7@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Seven', NULL),
+    ('tai.tranthanh@hcmut.edu.vn', '$2y$10$92USNqUYOyy0nArIY1LKouJDAWwVUh3TmNlcA4Oh3T6HjTCXc7VKS', 'Admin', 'Trần Thành Tài', NULL);
 
     INSERT INTO ADMIN (UID)
     VALUES
     (4),  -- Corresponds to 'admin1@example.com'
     (5),  -- Corresponds to 'admin2@example.com'
-    (8);  -- Corresponds to 'admin3@example.com'
+    (8),  -- Corresponds to 'admin3@example.com'
+    (11);
 
     INSERT INTO LICH_SU_DANG_NHAP (UID, ThoiGian, NoiDung)
     VALUES
@@ -193,11 +195,11 @@
 
     INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet, `TrangThai`)
     VALUES
-    ('Đối tác A', 'doi_tac_a.jpg', 'www.google.com', 'Đang hiện'),
-    ('Đối tác B', 'doi_tac_b.jpg', 'www.google.com', 'Đang hiện'),
-    ('Đối tác C', 'doi_tac_c.jpg', 'www.google.com', 'Đang hiện'),
-    ('Đối tác D', 'doi_tac_d.jpg', 'www.google.com', 'Đang hiện'),
-    ('Đối tác E', 'doi_tac_e.jpg', 'www.google.com', 'Đang hiện');
+    ('VNPOST', 'public/image/vnpost1.png', 'https://vnpost.vn/', 'Đang hiện'),
+    ('Ninja Van', 'public/image/Logo_ninjavan.webp', 'https://www.ninjavan.co/vi-vn', 'Đang hiện'),
+    ('Ahamove', 'public/image/ahamove_logo3.webp', 'https://www.ahamove.com/', 'Đang hiện'),
+    ('Snappy', 'public/image/icon_snappy1.webp', 'https://snappy.vn/', 'Đang hiện'),
+    ('Pay Os', 'public/image/payos.svg', 'https://payos.vn/', 'Đang hiện');
 
     INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri, TuKhoa, ClientID, APIKey, Checksum)
     VALUES
@@ -217,8 +219,7 @@
 
     INSERT INTO MANG_XA_HOI (HinhAnh, LienKet, TrangThai)
     VALUES
-    ('facebook_icon.jpg', 'https://www.facebook.com/website', 'Đang hiện'),
-    ('instagram_icon.jpg', 'https://www.instagram.com/website', 'Đang hiện'),
-    ('twitter_icon.jpg', 'https://www.twitter.com/website', 'Đang hiện'),
-    ('linkedin_icon.jpg', 'https://www.linkedin.com/company/website', 'Đang hiện'),
-    ('youtube_icon.jpg', 'https://www.youtube.com/website', 'Đang hiện');
+    ('public/image/facebook.png', 'https://www.facebook.com', 'Đang hiện'),
+    ('public/image/instagram.png', 'https://www.instagram.com/website', 'Đang hiện'),
+    ('public/image/youtube.png', 'https://www.youtube.com', 'Đang hiện'),
+    ('public/image/telegram.png', 'https://web.telegram.org/', 'Đang hiện');

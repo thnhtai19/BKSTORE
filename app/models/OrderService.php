@@ -11,13 +11,14 @@ class OrderService {
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->conn->set_charset('utf8mb4');
         $this->support = new support();
         $this->product = new ProductService($conn);
         $this->cart = new CartService($conn);
     }
 
     public function sale($tienHang, $MaGiamGia, $phiVanChuyen, $PhuongThucThanhToan) {
-        $sql1 = "SELECT * FROM `ma_giam_gia` WHERE `Ma` = ?";
+        $sql1 = "SELECT * FROM `MA_GIAM_GIA` WHERE `Ma` = ?";
         $stmt1 = $this->conn->prepare($sql1);
         $stmt1->bind_param("s", $MaGiamGia);
         $stmt1->execute();
@@ -35,7 +36,7 @@ class OrderService {
         }
         
         $id = $_SESSION["uid"];
-        $sql2 = "SELECT GioiTinh FROM `khach_hang` WHERE `UID` = ?";
+        $sql2 = "SELECT GioiTinh FROM `KHACH_HANG` WHERE `UID` = ?";
         $stmt2 = $this->conn->prepare($sql2);
         $stmt2->bind_param("i", $id);
         $stmt2->execute();
@@ -47,7 +48,7 @@ class OrderService {
     }
 
     public function getPaid($uid) {
-        $sql1 = "SELECT ID_DonHang, NgayDat, TrangThai FROM don_hang WHERE `UID` = ? ORDER BY ID_DonHang DESC";
+        $sql1 = "SELECT ID_DonHang, NgayDat, TrangThai FROM DON_HANG WHERE `UID` = ? ORDER BY ID_DonHang DESC";
         $stmt1 = $this->conn->prepare($sql1);
         $stmt1->bind_param("i", $uid);
         $stmt1->execute();
@@ -65,7 +66,7 @@ class OrderService {
         $result = [];
         foreach ($order as $row) {
             $idOrder = $row['ID_DonHang'];
-            $sql2 = "SELECT ID_SP, SUM(SoLuong) AS COUNT FROM gom WHERE ID_DonHang = ? GROUP BY ID_SP";
+            $sql2 = "SELECT ID_SP, SUM(SoLuong) AS COUNT FROM GOM WHERE ID_DonHang = ? GROUP BY ID_SP";
             $stmt2 = $this->conn->prepare($sql2);
             $stmt2->bind_param("i", $idOrder);
             $stmt2->execute();
@@ -78,7 +79,7 @@ class OrderService {
             if ($product) {
                 $id = $product['ID_SP'];
                 $image = $this->product->getImage($id);
-                $sql3 = "SELECT TenSP, Gia FROM san_pham WHERE ID_SP = ?";
+                $sql3 = "SELECT TenSP, Gia FROM SAN_PHAM WHERE ID_SP = ?";
                 $stmt3 = $this->conn->prepare($sql3);
                 $stmt3->bind_param("i", $id);
                 $stmt3->execute();
@@ -103,7 +104,7 @@ class OrderService {
     }
 
     public function getInfo($uid, $ID_DonHang) {
-        $sql = "SELECT NgayDat, ThanhToan, TrangThai, SDT, DiaChi, TenNguoiNhan FROM don_hang WHERE `UID` = ? AND ID_DonHang = ?";
+        $sql = "SELECT NgayDat, ThanhToan, TrangThai, SDT, DiaChi, TenNguoiNhan FROM DON_HANG WHERE `UID` = ? AND ID_DonHang = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $uid, $ID_DonHang);
         $stmt->execute();
@@ -156,14 +157,14 @@ class OrderService {
             return ['success' => false, 'message' => 'Không đủ hàng trong kho'];
         }
         if ($MaGiamGia == '') {
-            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO DON_HANG (`UID`, NgayDat, TongTien, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("isissssi", $uid, $NgayDat, $bill, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan, $bill);
             $stmt->execute();
         }
         else {
             $sale = $this->sale($bill, $MaGiamGia, 0, $PhuongThucThanhToan)['tong_tien_phai_tra'];
-            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO DON_HANG (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("isisssssi", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan, $sale);
             $stmt->execute();
@@ -171,13 +172,13 @@ class OrderService {
         $id_don_hang = mysqli_insert_id($this->conn);
         $type = 'Đơn hàng';
         $date = $this->support->startTime();
-        $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $NoiDung = "Đơn hàng " . $id_don_hang . " được đặt thành công"; 
         $stmt->bind_param("isss", $uid, $NoiDung, $type, $date);
         $stmt->execute();
         $id_thong_bao = mysqli_insert_id($this->conn);
-        $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+        $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $id_thong_bao, $id_don_hang);
         $stmt->execute();
@@ -190,32 +191,32 @@ class OrderService {
         $type = 'Đơn hàng';
         $date = $this->support->startTime();
         if ($trang_thai != '') {
-            $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $NoiDung = "Đơn hàng " . $id . ": " . $trang_thai;
             $stmt->bind_param("isss", $order['UID'], $NoiDung, $type. $date);
             $stmt->execute();
             $id_thong_bao = mysqli_insert_id($this->conn);
-            $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+            $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("ii", $id_thong_bao, $id);
             $stmt->execute();
         }
         if ($thanh_toan != '') {
-            $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $NoiDung = "Đơn hàng " . $id . ": " . $thanh_toan . " thành công";
             $stmt->bind_param("isss", $order['UID'], $NoiDung, $type, $date);
             $stmt->execute();
             $id_thong_bao = mysqli_insert_id($this->conn);
-            $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+            $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("ii", $id_thong_bao, $id);
             $stmt->execute();
         }
         $thanh_toan = $thanh_toan != '' ? $thanh_toan : $order['ThanhToan'];
         $trang_thai = $trang_thai != '' ? $trang_thai : $order['TrangThai'];
-        $sql = "UPDATE don_hang SET ThanhToan = ?, TrangThai = ? WHERE ID_DonHang =?";
+        $sql = "UPDATE DON_HANG SET ThanhToan = ?, TrangThai = ? WHERE ID_DonHang =?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssi", $thanh_toan, $trang_thai, $id);
         $stmt->execute();
@@ -223,7 +224,7 @@ class OrderService {
     }
 
     public function list() {
-        $sql = "SELECT `UID`, ID_DonHang FROM don_hang";
+        $sql = "SELECT `UID`, ID_DonHang FROM DON_HANG";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -247,14 +248,14 @@ class OrderService {
     }
 
     public function profile($uid) {
-        $sql = 'SELECT COUNT(*) AS count FROM don_hang WHERE `UID` = ?';
+        $sql = 'SELECT COUNT(*) AS count FROM DON_HANG WHERE `UID` = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $uid);
         $stmt->execute();
         $result = $stmt->get_result();
         $num = $result->fetch_assoc()['count'];
         $sql = 'SELECT TrangThai, HoaDon
-                FROM don_hang 
+                FROM DON_HANG 
                 WHERE `UID` = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $uid);
@@ -287,7 +288,7 @@ class OrderService {
     }
 
     public function checkCart($uid) {
-        $sql = 'SELECT * FROM trong_gio_hang WHERE `UID` = ?';
+        $sql = 'SELECT * FROM TRONG_GIO_HANG WHERE `UID` = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $uid);
         $stmt->execute();
@@ -297,7 +298,7 @@ class OrderService {
     }
 
     private function checkSale($MaGiamGia) {
-        $sql = "SELECT SoLuong FROM `ma_giam_gia` WHERE `Ma` = ?";
+        $sql = "SELECT SoLuong FROM `MA_GIAM_GIA` WHERE `Ma` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $MaGiamGia);
         $stmt->execute();
@@ -311,7 +312,7 @@ class OrderService {
         if ($sale['success'] == false) return false;
         $rac = $sale['so_luong'] - 1;
         if ($rac >= 0) {
-            $sql = 'UPDATE ma_giam_gia SET SoLuong = ? WHERE Ma = ?';
+            $sql = 'UPDATE MA_GIAM_GIA SET SoLuong = ? WHERE Ma = ?';
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("is", $rac, $MaGiamGia);
             $stmt->execute();
@@ -327,7 +328,7 @@ class OrderService {
     }
 
     public function checkProduct($ID_SP, $quantity) {
-        $sql = "SELECT SoLuongKho FROM san_pham WHERE ID_SP = ?";
+        $sql = "SELECT SoLuongKho FROM SAN_PHAM WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $ID_SP);
         $stmt->execute();
@@ -343,7 +344,7 @@ class OrderService {
         $num = $rac['so_luong'];
         if ($num >= $quantity) {
             $num -= $quantity;
-            $sql = 'UPDATE san_pham SET SoLuongKho = ? WHERE ID_SP = ?';
+            $sql = 'UPDATE SAN_PHAM SET SoLuongKho = ? WHERE ID_SP = ?';
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param('ii', $num, $ID_SP);
             $stmt->execute();
@@ -355,7 +356,7 @@ class OrderService {
         foreach ($product_list as $ID_SP) {
             $rac = $this->countProduct($uid, $ID_SP);
             if ($rac != 0) {
-                $sql = "INSERT INTO gom (ID_DonHang, ID_SP, SoLuong) VALUES (?, ?, ?)";
+                $sql = "INSERT INTO GOM (ID_DonHang, ID_SP, SoLuong) VALUES (?, ?, ?)";
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bind_param("iii", $ID_DonHang, $ID_SP, $rac);
                 $stmt->execute();
@@ -370,7 +371,7 @@ class OrderService {
     }
 
     private function countProduct($uid, $ID_SP) {
-        $sql = "SELECT SoLuong FROM trong_gio_hang WHERE `UID` = ? AND ID_SP = ?";
+        $sql = "SELECT SoLuong FROM TRONG_GIO_HANG WHERE `UID` = ? AND ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $uid, $ID_SP);
         $stmt->execute();
@@ -380,7 +381,7 @@ class OrderService {
     }
 
     public function getCostProduct($ID_SP) {
-        $sql = "SELECT Gia, TyLeGiamGia FROM san_pham WHERE ID_SP = ?";
+        $sql = "SELECT Gia, TyLeGiamGia FROM SAN_PHAM WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $ID_SP);
         $stmt->execute();
@@ -390,7 +391,7 @@ class OrderService {
     }
 
     private function getProduct($orderId) {
-        $sql = "SELECT ID_SP, SoLuong FROM gom WHERE ID_DonHang = ? ORDER BY ID_SP DESC";
+        $sql = "SELECT ID_SP, SoLuong FROM GOM WHERE ID_DonHang = ? ORDER BY ID_SP DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $orderId);
         $stmt->execute();
@@ -429,7 +430,7 @@ class OrderService {
     }
 
     private function getPayment($orderId) {
-        $sql = "SELECT TongTien, ThanhToan, PhuongThucThanhToan, MaGiamGia, HoaDon FROM don_hang WHERE ID_DonHang = ?";
+        $sql = "SELECT TongTien, ThanhToan, PhuongThucThanhToan, MaGiamGia, HoaDon FROM DON_HANG WHERE ID_DonHang = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $orderId);
         $stmt->execute();
@@ -469,7 +470,7 @@ class OrderService {
     }    
 
     private function getUser($uid) {  
-        $sql = "SELECT Ten FROM `login` WHERE `UID` = ?";
+        $sql = "SELECT Ten FROM `LOGIN` WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();
@@ -487,7 +488,7 @@ class OrderService {
     }    
 
     private function getProductById($id) {
-        $sql = "SELECT * FROM san_pham WHERE ID_SP = ?";
+        $sql = "SELECT * FROM SAN_PHAM WHERE ID_SP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -503,7 +504,7 @@ class OrderService {
     }
 
     private function getOrderById($ID_DonHang) {
-        $sql = "SELECT * FROM don_hang WHERE ID_DonHang =?";
+        $sql = "SELECT * FROM DON_HANG WHERE ID_DonHang =?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $ID_DonHang);
         $stmt->execute();

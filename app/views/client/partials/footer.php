@@ -1,5 +1,5 @@
 <footer
-    class="flex items-center justify-between bg-white border-t font-medium text-gray-500 text-center p-4 w-full fixed bottom-0 block md:hidden rounded-t-xl shadow-lg text-xs z-40">
+    class="flex items-center justify-between bg-white border-t font-medium text-gray-500 text-center p-4 w-full fixed bottom-0 block lg:hidden rounded-t-xl shadow-lg text-xs z-40">
     <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 1) ? 'text-custom-blue' : ''; ?>" onclick="goHome()">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
             stroke-width="2">
@@ -9,7 +9,7 @@
         </svg>
         <div>Trang chủ</div>
     </div>
-    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 4) ? 'text-custom-blue' : ''; ?>">
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 4) ? 'text-custom-blue' : ''; ?>" onclick="goKhuyenMai()">
         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20.1367 10H4.13672V18C4.13672 21 5.13672 22 8.13672 22H16.1367C19.1367 22 20.1367 21 20.1367 18V10Z" 
                 stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -24,7 +24,7 @@
         </svg>
         <div>Khuyến mãi</div>
     </div>
-    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 5) ? 'text-custom-blue' : ''; ?>">
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 5) ? 'text-custom-blue' : ''; ?>" onclick="goTinTuc()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -42,7 +42,7 @@
         </svg>
         <div>Thông báo</div>
     </div>
-    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 3) ? 'text-custom-blue' : ''; ?>">
+    <div class="flex flex-col gap-1 items-center justify-center cursor-pointer footer-item <?php echo ($page == 3) ? 'text-custom-blue' : ''; ?>" onclick="goTaiKhoan()">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" 
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -52,7 +52,7 @@
         <div>Tài khoản</div>
     </div>
 </footer>
-<footer class="bg-white border-t text-white p-12 hidden md:block">
+<footer class="bg-white border-t text-white p-12 hidden lg:block">
     <div class="container max-w-screen-1200 mx-auto flex">
         <div class="w-1/3 pr-8">
             <div class="flex items-center gap-2 text-3xl font-bold text-custom-blue cursor-pointer pb-4"
@@ -70,11 +70,8 @@
                 văn phòng cũng như tất cả Hệ Thống BKSTORE trên toàn quốc.
             </div>
             <div class="text-gray-800 pb-2">Kết nối với chúng tôi</div>
-            <div class="flex items-center gap-3">
-                <img src="/public/image/facebook.png" alt="social logo" class="w-8 h-8" >
-                <img src="/public/image/instagram.png" alt="social logo" class="w-8 h-8">
-                <img src="/public/image/youtube.png" alt="social logo" class="w-8 h-8" >
-                <img src="/public/image/telegram.png" alt="social logo" class="w-8 h-8">
+            <div class="flex items-center gap-3 container-mxh">
+    
             </div>
         </div>
         <div>
@@ -112,14 +109,64 @@
                 <div class="pt-5">
                     Đối tác kết hợp
                 </div>
-                <div class="pt-2 flex flex-wrap gap-10">
-                    <img src="/public/image/vnpost1.png" alt="shipping logo" class="h-8">
-                    <img src="/public/image/Logo_ninjavan.webp" alt="shipping logo" class="h-8">
-                    <img src="/public/image/ahamove_logo3.webp" alt="shipping logo" class="h-8">
-                    <img src="/public/image/icon_snappy1.webp" alt="shipping logo" class="h-8">
-                    <img src="/public/image/payos.svg" alt="payment logo" class="h-8">
-                </div>
+                <div class="pt-2 flex flex-wrap gap-10 container-doitac"></div>
             </div>
         </div>
     </div>
 </footer>
+<script>
+    try{
+        function getinfo(){
+            let mang_xa_hoi = [];
+            let doi_tac = [];
+
+            fetch('/api/system/footer')
+            .then(response => response.json())
+            .then(data => {
+                mang_xa_hoi = data.mang_xa_hoi;
+                doi_tac = data.doi_tac;
+                const thong_tin_lien_he = data.thong_tin_lien_he;
+            })
+            .catch(error => {
+                console.error('Error fetching items:', error);
+            })
+            .finally(() => {
+                const socialIconsContainer = document.querySelector('.container-mxh');
+                mang_xa_hoi.forEach(icon => {
+                    const anchor = document.createElement('a');
+                    anchor.href = icon.LienKet;
+                    anchor.target = '_blank';
+                    anchor.rel = 'noopener noreferrer';
+
+                    const img = document.createElement('img');
+                    img.src = "/"+icon.HinhAnh;
+                    img.alt = "mxh";
+                    img.classList.add('w-8', 'h-8');
+                    anchor.appendChild(img);
+
+                    socialIconsContainer.appendChild(anchor);
+                });
+
+                const partnerIconsContainer = document.querySelector('.container-doitac');
+                doi_tac.forEach(icon => {
+                    const anchor = document.createElement('a');
+                    anchor.href = icon.LienKet;
+                    anchor.target = '_blank';
+                    anchor.rel = 'noopener noreferrer';
+
+                    const img = document.createElement('img');
+                    img.src = "/"+icon.HinhAnh;
+                    img.alt = icon.Ten;
+                    img.classList.add('h-8');
+                    anchor.appendChild(img);
+
+                    partnerIconsContainer.appendChild(anchor);
+                });
+
+                
+            });
+        }
+
+        getinfo();
+    } catch {}
+</script>
