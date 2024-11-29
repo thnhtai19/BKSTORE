@@ -12,13 +12,14 @@ class AdminService {
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->conn->set_charset('utf8mb4');
         $this->support = new support();
         $this->user = new UserService($conn);
         $this->product = new ProductService($conn);
     }
 
     public function getUsers() {
-        $sql = "SELECT `UID` FROM khach_hang";
+        $sql = "SELECT `UID` FROM KHACH_HANG";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -88,7 +89,7 @@ class AdminService {
     }
 
     public function addProductInfo($TenSp, $MoTa, $Gia, $TyLeGiamGia, $SoLuongKho, $NXB, $KichThuoc, $SoTrang, $PhanLoai, $TuKhoa, $HinhThuc, $TacGia, $NgonNgu, $NamXB) {
-        $sql = "SELECT ID_SP FROM san_pham WHERE TenSp = ? AND NXB = ? AND NamXB = ? AND TacGia = ?";
+        $sql = "SELECT ID_SP FROM SAN_PHAM WHERE TenSp = ? AND NXB = ? AND NamXB = ? AND TacGia = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssis", $TenSp, $NXB, $NamXB, $TacGia);
         $stmt->execute();
@@ -96,11 +97,11 @@ class AdminService {
         if ($result->num_rows > 0) {
             return ["success" => false, "message" => "Sản phẩm đã có trong kho"];
         }
-        $sql = "INSERT INTO san_pham (TenSp, MoTa, Gia, TyLeGiamGia, SoLuongKho, NXB, KichThuoc, SoTrang, PhanLoai, TuKhoa, HinhThuc, TacGia, NgonNgu, NamXB) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO SAN_PHAM (TenSp, MoTa, Gia, TyLeGiamGia, SoLuongKho, NXB, KichThuoc, SoTrang, PhanLoai, TuKhoa, HinhThuc, TacGia, NgonNgu, NamXB) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssidississsssi",$TenSp, $MoTa, $Gia, $TyLeGiamGia, $SoLuongKho, $NXB, $KichThuoc, $SoTrang, $PhanLoai, $TuKhoa, $HinhThuc, $TacGia, $NgonNgu, $NamXB);
         $stmt->execute();
-        $sql = "SELECT ID_SP FROM san_pham WHERE TenSp = ? AND NXB = ? AND NamXB = ? AND TacGia = ?";
+        $sql = "SELECT ID_SP FROM SAN_PHAM WHERE TenSp = ? AND NXB = ? AND NamXB = ? AND TacGia = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssis", $TenSp, $NXB, $NamXB, $TacGia);
         $stmt->execute();
@@ -111,7 +112,7 @@ class AdminService {
 
     public function addProductImage ($Anh, $ID_SP) {
         $relativeAvatarPath = "public/image/product/$ID_SP/" . basename($Anh);
-        $sql = "INSERT INTO hinh_anh (Anh, ID_SP) VALUES (?, ?)";
+        $sql = "INSERT INTO HINH_ANH (Anh, ID_SP) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("si", $relativeAvatarPath, $ID_SP);
         $stmt->execute();
@@ -143,7 +144,7 @@ class AdminService {
     }
 
     public function updatePropose($status, $content, $id) {
-        $sql = 'SELECT * FROM san_pham_de_xuat WHERE MaDeXuat = ?';
+        $sql = 'SELECT * FROM SAN_PHAM_DE_XUAT WHERE MaDeXuat = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -166,7 +167,7 @@ class AdminService {
         $stmt->bind_param("ii", $id_thong_bao, $id);
         $stmt->execute();
         $content = $content != '' ? $content : $result['GhiChu'];
-        $sql = "UPDATE san_pham_de_xuat SET TrangThai = ?, GhiChu = ? WHERE MaDeXuat = ?";
+        $sql = "UPDATE SAN_PHAM_DE_XUAT SET TrangThai = ?, GhiChu = ? WHERE MaDeXuat = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssi", $status, $content, $id);
         $stmt->execute();
@@ -175,13 +176,13 @@ class AdminService {
 
     public function statusComment($id, $trang_thai, $content) {
         if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy bình luận'];
-        $sql = 'SELECT * FROM binh_luan WHERE MaBinhLuan = ?';
+        $sql = 'SELECT * FROM BINH_LUAN WHERE MaBinhLuan = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows == 0) return ['success'=> false, 'message'=> 'Không tìm thấy bình luận'];
-        $sql = 'UPDATE binh_luan SET TrangThai = ?, PhanHoi = ? WHERE MaBinhLuan = ?';
+        $sql = 'UPDATE BINH_LUAN SET TrangThai = ?, PhanHoi = ? WHERE MaBinhLuan = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('ssi', $trang_thai, $content, $id);
         $stmt->execute();
@@ -190,13 +191,13 @@ class AdminService {
 
     public function statusReview($id, $trang_thai, $content) {
         if (!is_numeric($id)) return ['success' => false, 'message' => 'Không tìm thấy đánh giá'];
-        $sql = 'SELECT * FROM danh_gia WHERE MaDanhGia = ?';
+        $sql = 'SELECT * FROM DANH_GIA WHERE MaDanhGia = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows == 0) return ['success'=> false, 'message'=> 'Không tìm thấy đánh giá'];
-        $sql = 'UPDATE danh_gia SET TrangThai = ?, PhanHoi = ? WHERE MaDanhGia = ?';
+        $sql = 'UPDATE DANH_GIA SET TrangThai = ?, PhanHoi = ? WHERE MaDanhGia = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('ssi', $trang_thai, $content, $id);
         $stmt->execute();
@@ -216,7 +217,7 @@ class AdminService {
     }
 
     public function conditionSale() {
-        $sql = 'SELECT DieuKien FROM ma_giam_gia WHERE TrangThai != ?';
+        $sql = 'SELECT DieuKien FROM MA_GIAM_GIA WHERE TrangThai != ?';
         $stmt = $this->conn->prepare($sql);
         $rac = 'Đã xóa';
         $stmt->bind_param('s', $rac);
@@ -238,7 +239,7 @@ class AdminService {
         $SoLuong = $SoLuong < 0 ? $rac['SoLuong'] : $SoLuong;
         $TrangThai = $TrangThai == '' ? $rac['TrangThai'] : $TrangThai; 
         // // Cập nhật database
-        $sql = 'UPDATE ma_giam_gia SET Ma = ?, TienGiam = ?, DieuKien = ?, SoLuong = ?, TrangThai = ? WHERE ID_GiamGia = ?';
+        $sql = 'UPDATE MA_GIAM_GIA SET Ma = ?, TienGiam = ?, DieuKien = ?, SoLuong = ?, TrangThai = ? WHERE ID_GiamGia = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('sssiss', $Ma, $TienGiam, $DieuKien, $SoLuong, $TrangThai, $ID_GiamGia);
         $stmt->execute();
@@ -247,7 +248,7 @@ class AdminService {
 
     public function setSale($Ma, $TienGiam, $DieuKien, $SoLuong) {
         if (!(is_numeric($TienGiam) && is_numeric($SoLuong) && $this->checkConditionSale($DieuKien))) return ['success'=> false,'message'=> 'Đầu vào không hợp lệ'];
-        $sql = "INSERT INTO ma_giam_gia (Ma, TienGiam, DieuKien, SoLuong) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO MA_GIAM_GIA (Ma, TienGiam, DieuKien, SoLuong) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sisi", $Ma, $TienGiam, $DieuKien, $SoLuong);
         $stmt->execute();
@@ -274,7 +275,7 @@ class AdminService {
     }
 
     private function getSaleById($id) {
-        $sql = 'SELECT * FROM ma_giam_gia WHERE ID_GiamGia = ?';
+        $sql = 'SELECT * FROM MA_GIAM_GIA WHERE ID_GiamGia = ?';
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -283,7 +284,7 @@ class AdminService {
     }
 
     private function proposeInfo() {
-        $sql = "SELECT * FROM san_pham_de_xuat";
+        $sql = "SELECT * FROM SAN_PHAM_DE_XUAT";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();   
         $stmt = $stmt->get_result();
@@ -331,7 +332,7 @@ class AdminService {
     $stmt->bind_param("ssidississsssii", $TenSp, $MoTa, $Gia, $TyLeGiamGia, $SoLuongKho, $NXB, $KichThuoc, $SoTrang, $PhanLoai, $TuKhoa, $HinhThuc, $TacGia, $NgonNgu, $NamXB, $ID_SP);
     $stmt->execute();
 
-    $sqlDelete = "DELETE FROM hinh_anh WHERE ID_SP = ?";
+    $sqlDelete = "DELETE FROM HINH_ANH WHERE ID_SP = ?";
     $stmtDelete = $this->conn->prepare($sqlDelete);
     $stmtDelete->bind_param("i", $ID_SP);
     $stmtDelete->execute();
@@ -346,7 +347,7 @@ class AdminService {
         // $stmtDelete->bind_param("i", $ID_SP);
         // $stmtDelete->execute();
 
-        $sqlInsert = "INSERT INTO hinh_anh (Anh, ID_SP) VALUES (?, ?)";
+        $sqlInsert = "INSERT INTO HINH_ANH (Anh, ID_SP) VALUES (?, ?)";
         $stmtInsert = $this->conn->prepare($sqlInsert);
         $stmtInsert->bind_param("si", $relativeAvatarPath, $ID_SP);
         $stmtInsert->execute();

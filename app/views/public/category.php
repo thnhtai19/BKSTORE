@@ -7,6 +7,11 @@ if ($phanloai == '') {
 ?>
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -175,7 +180,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
             let sortOrder = 'default';
 
             function fetchProducts() {
-                fetch('api/product/productType', {
+                fetch('/api/product/productType', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

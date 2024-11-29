@@ -1,3 +1,11 @@
+<?php
+require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -21,8 +29,8 @@
             <main class="container max-w-screen-1200 mx-auto min-h-screen pt-16 pb-20 lg:pb-10 px-1 lg:px-0">
                 <div class="flex gap-2 pt-4">
                     <div class="w-1/5 bg-white hidden lg:block flex flex-col rounded-xl shadow-lg p-2 pt-3 text-sm">
-                        <div
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
+                        <a
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/home.png" alt="trangchu" class="w-6 h-6 mr-2">
                                 <div>
@@ -34,9 +42,9 @@
                                     d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z">
                                 </path>
                             </svg>
-                        </div>
-                        <div
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
+                        </a>
+                        <a
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/introduction">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/intro.png" alt="intro" class="w-6 h-6 mr-2">
                                 <div>
@@ -48,13 +56,13 @@
                                     d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z">
                                 </path>
                             </svg>
-                        </div>
-                        <div
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
+                        </a>
+                        <a
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1"  href="/like">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/product.png" alt="product" class="w-6 h-6 mr-2">
                                 <div>
-                                    Danh mục sản phẩm
+                                    Sản phẩm yêu thích
                                 </div>
                             </div>
                             <svg height="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -62,9 +70,9 @@
                                     d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z">
                                 </path>
                             </svg>
-                        </div>
-                        <div
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
+                        </a>
+                        <a
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/promotion">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/sale.png" alt="sale" class="w-6 h-6 mr-2">
                                 <div>
@@ -76,9 +84,9 @@
                                     d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z">
                                 </path>
                             </svg>
-                        </div>
-                        <div
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
+                        </a>
+                        <a
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/news">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/news.png" alt="news" class="w-6 h-6 mr-2">
                                 <div>
@@ -90,9 +98,9 @@
                                     d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z">
                                 </path>
                             </svg>
-                        </div>
-                        <div
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
+                        </a>
+                        <a
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/my/support">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/phone.png" alt="phone" class="w-6 h-6 mr-2">
                                 <div>
@@ -104,9 +112,9 @@
                                     d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z">
                                 </path>
                             </svg>
-                        </div>
-                        <div
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1">
+                        </a>
+                        <a
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/comment">
                             <div class="flex justify-between items-center">
                                 <img src="/public/image/comment.png" alt="protect" class="w-6 h-6 mr-2">
                                 <div>
@@ -118,7 +126,7 @@
                                     d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z">
                                 </path>
                             </svg>
-                        </div>
+                        </a>
                     </div>
                     <div class="w-full lg:w-3/5 rounded-lg">
                         <div class="swiper-container rounded-lg">
@@ -228,7 +236,10 @@
                             productsContainer.insertAdjacentHTML('beforeend', productHTML);
                         });
                 } else {
-                    document.getElementById('products-container').innerText = data.message;
+                    if(data.message === "Người dùng chưa đăng nhập"){
+                        window.location.href = '/auth/login'
+                        return
+                    }
                 }
             })
             .catch(error => {

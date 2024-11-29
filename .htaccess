@@ -8,12 +8,15 @@ RewriteRule ^$ /app/views/public/home.php [L]
 RewriteRule ^product$ /app/views/public/product.php [L]
 RewriteRule ^contact$ /app/views/public/contact.php [L]
 RewriteRule ^category$ /app/views/public/category.php [L]
+RewriteRule ^search$ /app/views/public/search.php [L]
+RewriteRule ^maintain$ /app/views/public/maintain.php [L]
 
 #USER ROUTERS FRONTEND
 RewriteRule ^cart$ /app/views/client/cart.php [L]
 RewriteRule ^checkout/preview$ /app/views/client/payment_info.php [L]
 RewriteRule ^checkout/payment$ /app/views/client/payment.php [L]
 RewriteRule ^notice$ /app/views/client/notice.php [L]
+RewriteRule ^account$ /app/views/client/account.php [L]
 RewriteRule ^order/success$ /app/views/client/success_order.php [L]
 RewriteRule ^order/failure$ /app/views/client/failure_order.php [L]
 
@@ -33,6 +36,7 @@ RewriteRule ^admin/contact$ /app/views/admin/contact.php [L]
 RewriteRule ^admin/setting$ /app/views/admin/setting.php [L]
 RewriteRule ^admin/social$ /app/views/admin/social.php [L]
 RewriteRule ^admin/partner$ /app/views/admin/partner.php [L]
+RewriteRule ^admin/login$ /app/views/admin/login.php [L]
 
 #AUTH ROUTERS FRONTEND
 RewriteRule ^auth/login$ /app/views/auth/login.php [L]

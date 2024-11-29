@@ -157,7 +157,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                             id: order.info.id,
                                             name: order.info.ten_nguoi_nhan,
                                             ngaydat: order.info.ngay_dat,
-                                            tongtien: order.info.thong_tin_thanh_toan.tong_tien,
+                                            tongtien: Math.round(order.info.thong_tin_thanh_toan.tong_tien).toLocaleString('vi-VN'),
                                             trangthaithanhtoan: order.info.thong_tin_thanh_toan.trang_thai,
                                             trangthai: order.info.trang_thai,
                                             phone: order.info.so_dien_thoai,
@@ -235,7 +235,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                                         <div class="">
                                                             <div class="text-gray-600 font-bold">${product.ten}</div>
                                                             <div class="flex justify-between pt-2">
-                                                                <div class="text-custom-blue font-bold text-sm">${product.gia_sau_giam_gia}</div>
+                                                                <div class="text-custom-blue font-bold text-sm">${Math.round(product.gia_sau_giam_gia).toLocaleString('vi-VN')}</div>
                                                                 <div class="text-gray-600">x${product.so_luong}</div>
                                                             </div>
                                                         </div>
@@ -288,7 +288,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                 ThanhToan: thanhToan,
                 TrangThai: trangThai
             };
-            console.log(payload)
             fetch(`${window.location.origin}/api/order/update`, {
                 method: "POST",
                 headers: {
@@ -302,7 +301,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                     notyf.success(data.message);
                     setTimeout(() => {
                         location.reload();
-                    }, 5000);
+                    }, 2000);
 
                 } else {
                     notyf.error(data.message);

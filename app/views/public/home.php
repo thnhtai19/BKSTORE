@@ -21,6 +21,11 @@ function format_currency($number) {
 
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -234,7 +239,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                         </div>
                                         <div class="flex justify-between items-center">
                                             <div class="flex items-center">
-                                                <?php echo renderStars(sao: $so_sao_trung_binh); ?>
+                                                <?php echo renderStars($so_sao_trung_binh); ?>
                                             </div>
                                             <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
                                                 <button class="heart-button focus:outline-none" data-product-id="<?= $id ?>">
@@ -260,8 +265,8 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                             $the_loai = $item['the_loai'];
                             $san_pham = $item['san_pham'];
                     ?>                
-                    <div class="text-xl font-bold text-gray-700 mb-4">
-                        <?php echo mb_strtoupper($the_loai, 'UTF-8');; ?>
+                    <div class="text-xl font-bold text-gray-700 mb-4 uppercase">
+                        <?php echo $the_loai; ?>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 pb-6">
                         <?php
@@ -293,7 +298,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center">
-                                        <?php echo renderStars(sao: $so_sao_trung_binh); ?>
+                                        <?php echo renderStars($so_sao_trung_binh); ?>
                                     </div>
                                     <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
                                         <button class="heart-button focus:outline-none" data-product-id="<?= $id ?>">

@@ -1,5 +1,11 @@
 <?php
-session_start();
+require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+
 if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();

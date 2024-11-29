@@ -11,13 +11,15 @@
     ('user5@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Five', NULL),
     ('admin3@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Admin', 'Admin Three', NULL),
     ('user6@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Six', NULL),
-    ('user7@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Seven', NULL);
+    ('user7@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Seven', NULL),
+    ('tai.tranthanh@hcmut.edu.vn', '$2y$10$92USNqUYOyy0nArIY1LKouJDAWwVUh3TmNlcA4Oh3T6HjTCXc7VKS', 'Admin', 'Trần Thành Tài', NULL);
 
     INSERT INTO ADMIN (UID)
     VALUES
     (4),  -- Corresponds to 'admin1@example.com'
     (5),  -- Corresponds to 'admin2@example.com'
-    (8);  -- Corresponds to 'admin3@example.com'
+    (8),  -- Corresponds to 'admin3@example.com'
+    (11);
 
     INSERT INTO LICH_SU_DANG_NHAP (UID, ThoiGian, NoiDung)
     VALUES
@@ -183,21 +185,21 @@
     (2, 'Tin tức 2', '09:30:00 20-10-2023', 'Nội dung tin tức 2', 'sách mới, tác giả nổi tiếng', 'Đang ẩn', NULL);
 
     INSERT INTO `ANH_MINH_HOA` (`MaAnh`, `MoTa`, `LinkAnh`, `MaTinTuc`) VALUES
-    (1, 'Ảnh minh họa cho tin tức 1', 'public/image/tin1.jpg', 1),
-    (2, 'Ảnh minh họa cho tin tức 2', 'public/image/tin2.jpg', 2);
+    (1, 'Ảnh minh họa cho tin tức 1', '/public/image/tin1.jpg', 1),
+    (2, 'Ảnh minh họa cho tin tức 2', '/public/image/tin2.jpg', 2);
 
     INSERT INTO `BANNER` (`MaBanner`, `Image`, `IdSP`, `MoTa`, `TrangThai`) VALUES
-    (1, 'public/image/1.webp', 1, '', 'Đang hiện'),
-    (2, 'public/image/2.webp', 2, '', 'Đang hiện'),
-    (3, 'public/image/3.webp', 3, '', 'Đang hiện');
+    (1, '/public/image/1.webp', 1, '', 'Đang hiện'),
+    (2, '/public/image/2.webp', 2, '', 'Đang hiện'),
+    (3, '/public/image/3.webp', 3, '', 'Đang hiện');
 
     INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet, `TrangThai`)
     VALUES
-    ('Đối tác A', 'doi_tac_a.jpg', 'www.google.com', 'Đang hiện'),
-    ('Đối tác B', 'doi_tac_b.jpg', 'www.google.com', 'Đang hiện'),
-    ('Đối tác C', 'doi_tac_c.jpg', 'www.google.com', 'Đang hiện'),
-    ('Đối tác D', 'doi_tac_d.jpg', 'www.google.com', 'Đang hiện'),
-    ('Đối tác E', 'doi_tac_e.jpg', 'www.google.com', 'Đang hiện');
+    ('VNPOST', 'public/image/vnpost1.png', 'https://vnpost.vn/', 'Đang hiện'),
+    ('Ninja Van', 'public/image/Logo_ninjavan.webp', 'https://www.ninjavan.co/vi-vn', 'Đang hiện'),
+    ('Ahamove', 'public/image/ahamove_logo3.webp', 'https://www.ahamove.com/', 'Đang hiện'),
+    ('Snappy', 'public/image/icon_snappy1.webp', 'https://snappy.vn/', 'Đang hiện'),
+    ('Pay Os', 'public/image/payos.svg', 'https://payos.vn/', 'Đang hiện');
 
     INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri, TuKhoa, ClientID, APIKey, Checksum)
     VALUES
@@ -205,20 +207,19 @@
 
     INSERT INTO THONG_TIN_LIEN_HE (Loai, ThongTin, HinhAnh, TrangThai)
     VALUES
-    ('Email', 'contact@website.com', 'public/image/email.png', 'Đang hiện'),
-    ('Hotline', '+84 123 456 789', 'image_1.png', 'Đang hiện'),
-    ('Địa chỉ', '123 Đường ABC, Quận 1, TP.HCM', 'image_1.png', 'Đang hiện'),
-    ('Fanpage', 'facebook.com/website', 'image_1.png', 'Đang hiện'),
-    ('Zalo', 'Zalo: +84 987 654 321', 'image_1.png', 'Đang hiện'),
-    ('Tư vấn mua hàng', '+84 123 456 789', 'public/image/consultation.jpg', 'Đang hiện'),
-    ('Tư vấn đổi sách', '+84 123 456 745', 'public/image/warranty.jfif', 'Đang hiện'),
-    ('Khiếu nại', '+84 123 456 123', 'public/image/complaint.jfif', 'Đang hiện');
+    ('Email', 'contact@website.com', '/public/image/email.png', 'Đang hiện'),
+    ('Hotline', '+84 123 456 789', '/public/image/complaint.jfif', 'Đang hiện'),
+    ('Địa chỉ', '123 Đường ABC, Quận 1, TP.HCM', '/public/image/complaint.jfif', 'Đang hiện'),
+    ('Fanpage', 'facebook.com/website', '/public/image/complaint.jfif', 'Đang hiện'),
+    ('Zalo', 'Zalo: +84 987 654 321', '/public/image/complaint.jfif', 'Đang hiện'),
+    ('Tư vấn mua hàng', '+84 123 456 789', '/public/image/consultation.jpg', 'Đang hiện'),
+    ('Tư vấn đổi sách', '+84 123 456 745', '/public/image/warranty.jfif', 'Đang hiện'),
+    ('Khiếu nại', '+84 123 456 123', '/public/image/complaint.jfif', 'Đang hiện');
 
 
     INSERT INTO MANG_XA_HOI (HinhAnh, LienKet, TrangThai)
     VALUES
-    ('facebook_icon.jpg', 'https://www.facebook.com/website', 'Đang hiện'),
-    ('instagram_icon.jpg', 'https://www.instagram.com/website', 'Đang hiện'),
-    ('twitter_icon.jpg', 'https://www.twitter.com/website', 'Đang hiện'),
-    ('linkedin_icon.jpg', 'https://www.linkedin.com/company/website', 'Đang hiện'),
-    ('youtube_icon.jpg', 'https://www.youtube.com/website', 'Đang hiện');
+    ('public/image/facebook.png', 'https://www.facebook.com', 'Đang hiện'),
+    ('public/image/instagram.png', 'https://www.instagram.com/website', 'Đang hiện'),
+    ('public/image/youtube.png', 'https://www.youtube.com', 'Đang hiện'),
+    ('public/image/telegram.png', 'https://web.telegram.org/', 'Đang hiện');

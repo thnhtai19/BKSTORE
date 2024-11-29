@@ -3,96 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
+    <title>Star Rating Module</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/public/css/client.css">
     <link rel="stylesheet" href="/public/css/notyf.min.css">
-    <title>Tài khoản | BKSTORE</title>
 </head>
-<body class="bg-gray-100">
-    <div class="h-screen">
-        <header id="header-content" class="sticky top-0 z-50">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/header.php'; ?>
-        </header>
-        <div class="overflow-y-auto">
-            <main class="container max-w-screen-1200 min-h-screen mx-auto pt-16 pb-20 px-1 lg:px-0">
-                <div class="flex gap-4 pt-6">
-                    <div class="w-1/4 bg-white hidden lg:block flex flex-col text-gray-800 p-4 shadow-md rounded-lg ">
-                        <nav>
-                            <ul>
-                                <li class="mb-4">
-                                    <a href="#" class="block py-2 px-4 bg-blue-300 text-white rounded shadow-lg">
-                                        Trang chủ
-                                    </a>
-                                </li>
-                                <li class="mb-4">
-                                    <a href="/my/account" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
-                                        Tài khoản của bạn
-                                    </a>
-                                </li>
-                                <li class="mb-4">
-                                    <a href="/my/order" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
-                                        Lịch sử mua hàng
-                                    </a>
-                                </li>
-                                <li class="mb-4">
-                                    <a href="/my/support" class="block py-2 px-4 text-gray-800 rounded hover:bg-gray-300 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
-                                        Hỗ trợ
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="block py-2 px-4 text-gray-800 rounded hover:bg-red-500 hover:shadow-lg hover:-translate-y-1 transform transition-all duration-200">
-                                        Thoát tài khoản
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <!-- Nút mở bảng đánh giá -->
+  <button id="open-rating" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+    Đánh giá
+  </button>
 
-                    <div class="w-full lg:w-3/4 rounded-lg space-y-6">
-                        <button id="likeButton">Like Product</button>
-                        <p id="responseMessage"></p>
-                    </div>
-                </div>
-
-
-            </main>
-        </div>
-        <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
+  <!-- Bảng đánh giá (ẩn mặc định) -->
+  <div id="rating-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">Đánh giá sản phẩm:</h2>
+      <div class="flex space-x-1">
+        <button class="star text-gray-400 hover:text-yellow-500" data-value="1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+        </button>
+        <!-- Repeat the button for 2, 3, 4, and 5 stars -->
+        <button class="star text-gray-400 hover:text-yellow-500" data-value="2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+        </button>
+        <button class="star text-gray-400 hover:text-yellow-500" data-value="3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+        </button>
+        <button class="star text-gray-400 hover:text-yellow-500" data-value="4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+        </button>
+        <button class="star text-gray-400 hover:text-yellow-500" data-value="5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+        </button>
+      </div>
+      <p id="rating-output" class="text-gray-700 mt-4">Rate: <span class="font-bold">0</span> stars</p>
+      <div class="mt-4 flex justify-end space-x-2">
+        <button id="close-rating" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400">Đóng</button>
+        <button onclick="saving()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Lưu</button>
+      </div>
     </div>
-    <!-- <script src="/public/js/client.js"></script> -->
-    <script src="/public/js/notyf.min.js"></script>
-    <!-- <script src="/public/js/profile.js"></script> -->
-    
-    <script>
-        // Check if user is logged in
-        
-        document.getElementById('likeButton').addEventListener('click', () => {
-            
-            fetch(`${window.location.origin}/api/product/like`, {  // Replace with your actual API path
-                method: 'GET',
+  </div>
+  <script src="/public/js/notyf.min.js"></script>
+
+  <script>
+    var notyf = new Notyf({
+        duration: 3000,
+        position: {
+        x: 'right',
+        y: 'top',
+        },
+    });
+    // Hiển thị bảng đánh giá khi nhấn nút "Đánh giá"
+    const openRatingBtn = document.getElementById('open-rating');
+    const ratingModal = document.getElementById('rating-modal');
+    const closeRatingBtn = document.getElementById('close-rating');
+
+    openRatingBtn.addEventListener('click', () => {
+      ratingModal.classList.remove('hidden');
+    });
+
+    // Ẩn bảng đánh giá khi nhấn "Đóng"
+    closeRatingBtn.addEventListener('click', () => {
+      ratingModal.classList.add('hidden');
+    });
+
+    // Xử lý logic đánh giá sao
+    document.querySelectorAll('.star').forEach((star) => {
+      star.addEventListener('click', function () {
+        const rating = this.getAttribute('data-value');
+        document.getElementById('rating-output').querySelector('span').textContent = rating;
+
+        // Reset tất cả sao về mặc định
+        document.querySelectorAll('.star').forEach((el) => {
+          el.classList.remove('text-yellow-500');
+          el.classList.add('text-gray-400');
+        });
+
+        // Tô màu các sao đã chọn
+        for (let i = 0; i < rating; i++) {
+          document.querySelectorAll('.star')[i].classList.add('text-yellow-500');
+          document.querySelectorAll('.star')[i].classList.remove('text-gray-400');
+        }
+      });
+    });
+
+    function saving() {
+            const data = {
+                ID_SP: 1,
+                Sosao: 1,
+                NoiDung: ""
+            };
+            console.log(data)
+            fetch(`${window.location.origin}/api/user/review`, {
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                credentials: 'include'  // Include credentials if you're using sessions
+                body: JSON.stringify(data),
             })
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                if (data.success) {
-                    document.getElementById('responseMessage').innerText = 'Đã thích sản phẩm';
+                if (data.success == true) {
+                    notyf.success('Thêm vào sản phẩm vào giỏ hàng thành công!');
+
+                    CountCart();
                 } else {
-                    document.getElementById('responseMessage').innerText = data.message || 'Có lỗi xảy ra';
+                    notyf.error('Thêm vào sản phẩm vào giỏ hàng thất bại!');
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('responseMessage').innerText = 'Có lỗi xảy ra khi thực hiện yêu cầu';
+                notyf.error('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng!');
             });
-        });
-    </script>
-</body>
-</html> 
+        }
+  </script>
 </body>
 </html>
-
