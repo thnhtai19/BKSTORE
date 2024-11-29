@@ -107,6 +107,16 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
     </div>
 </div>
 <script>
+    function goSearch(){
+        const inputElement = document.getElementById('searchInput').value;
+        window.location.href = `/search?keyword=${inputElement}`
+    }
+    
+    document.getElementById('searchInput').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            goSearch();
+        }
+    });
     try {
         function CountCart(){
             let countCart = 0;
@@ -284,17 +294,6 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                 .catch(error => {
                     console.error('Lỗi:', error);
                 });
-        });
-
-        function goSearch(){
-            const inputElement = document.getElementById('searchInput').value;
-            window.location.href = `/search?keyword=${inputElement}`
-        }
-        
-        document.getElementById('searchInput').addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                goSearch();
-            }
         });
     } catch { }
 </script>
