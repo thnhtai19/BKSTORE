@@ -204,10 +204,8 @@ class AdminService {
     }
 
     public function sale() {
-        $sql = 'SELECT * FROM ma_giam_gia WHERE TrangThai != ?';
+        $sql = 'SELECT * FROM MA_GIAM_GIA ORDER BY ID_GiamGia DESC';
         $stmt = $this->conn->prepare($sql);
-        $rac = 'Đã xóa';
-        $stmt->bind_param('s', $rac);
         $stmt->execute();
         $stmt = $stmt->get_result();
         $result = [];

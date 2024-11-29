@@ -59,7 +59,7 @@ class UserService {
     }
 
     public function getBanner() {
-        $sql = "SELECT * FROM banner";
+        $sql = "SELECT MaBanner, Image, IdSP, MoTa FROM banner WHERE TrangThai != 'Đang ẩn'";
         $result = $this->conn->query($sql);
 
         if ($result->num_rows === 0) {
