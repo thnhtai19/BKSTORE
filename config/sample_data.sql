@@ -11,13 +11,15 @@
     ('user5@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Five', NULL),
     ('admin3@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Admin', 'Admin Three', NULL),
     ('user6@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Six', NULL),
-    ('user7@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Seven', NULL);
+    ('user7@example.com', '$2y$10$O5iit7HS7r3xemxSFW2gBuDPnQcgnVShE6BLjcIyn4DCBPE.48ejy', 'Customer', 'User Seven', NULL),
+    ('tai.tranthanh@hcmut.edu.vn', '$2y$10$92USNqUYOyy0nArIY1LKouJDAWwVUh3TmNlcA4Oh3T6HjTCXc7VKS', 'Admin', 'Trần Thành Tài', NULL);
 
     INSERT INTO ADMIN (UID)
     VALUES
     (4),  -- Corresponds to 'admin1@example.com'
     (5),  -- Corresponds to 'admin2@example.com'
-    (8);  -- Corresponds to 'admin3@example.com'
+    (8),  -- Corresponds to 'admin3@example.com'
+    (11);
 
     INSERT INTO LICH_SU_DANG_NHAP (UID, ThoiGian, NoiDung)
     VALUES
@@ -162,13 +164,13 @@
     (6, 5),  -- Khách hàng 6 thích sản phẩm 5
     (7, 1);  -- Khách hàng 7 thích sản phẩm 1
 
-    INSERT INTO THONG_BAO (UID, NoiDung, TrangThai, Type)
+    INSERT INTO THONG_BAO (UID, NoiDung, TrangThai, Type, NgayThongBao)
     VALUES
-    (1, 'Đơn hàng của bạn đã được xác nhận.', 'Unread', 'Đơn hàng'),
-    (2, 'Sản phẩm yêu thích của bạn đã có hàng.', 'Read', 'Đơn hàng'),
-    (3, 'Đơn hàng của bạn đang được vận chuyển.', 'Unread', 'Đơn hàng'),
-    (6, 'Bạn đã nhận được một mã giảm giá mới.', 'Read', 'Đơn hàng'),
-    (7, 'Sản phẩm trong giỏ hàng của bạn sắp hết.', 'Unread', 'Đơn hàng');
+    (1, 'Đơn hàng của bạn đã được xác nhận.', 'Unread', 'Đơn hàng', '10:00:00 21-10-2023'),
+    (2, 'Sản phẩm yêu thích của bạn đã có hàng.', 'Read', 'Đơn hàng', '10:00:00 21-10-2023'),
+    (3, 'Đơn hàng của bạn đang được vận chuyển.', 'Unread', 'Đơn hàng', '10:00:00 21-10-2023'),
+    (6, 'Bạn đã nhận được một mã giảm giá mới.', 'Read', 'Đơn hàng', '10:00:00 21-10-2023'),
+    (7, 'Sản phẩm trong giỏ hàng của bạn sắp hết.', 'Unread', 'Đơn hàng', '10:00:00 21-10-2023');
 
     INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang, MaDeXuat)
     VALUES
@@ -191,13 +193,13 @@
     (2, '/public/image/2.webp', 2, '', 'Đang hiện'),
     (3, '/public/image/3.webp', 3, '', 'Đang hiện');
 
-    INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet)
+    INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet, `TrangThai`)
     VALUES
-    ('Đối tác A', 'doi_tac_a.jpg', 'www.google.com'),
-    ('Đối tác B', 'doi_tac_b.jpg', 'www.google.com'),
-    ('Đối tác C', 'doi_tac_c.jpg', 'www.google.com'),
-    ('Đối tác D', 'doi_tac_d.jpg', 'www.google.com'),
-    ('Đối tác E', 'doi_tac_e.jpg', 'www.google.com');
+    ('VNPOST', 'public/image/vnpost1.png', 'https://vnpost.vn/', 'Đang hiện'),
+    ('Ninja Van', 'public/image/Logo_ninjavan.webp', 'https://www.ninjavan.co/vi-vn', 'Đang hiện'),
+    ('Ahamove', 'public/image/ahamove_logo3.webp', 'https://www.ahamove.com/', 'Đang hiện'),
+    ('Snappy', 'public/image/icon_snappy1.webp', 'https://snappy.vn/', 'Đang hiện'),
+    ('Pay Os', 'public/image/payos.svg', 'https://payos.vn/', 'Đang hiện');
 
     INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri, TuKhoa, ClientID, APIKey, Checksum)
     VALUES
@@ -217,8 +219,7 @@
 
     INSERT INTO MANG_XA_HOI (HinhAnh, LienKet, TrangThai)
     VALUES
-    ('facebook_icon.jpg', 'https://www.facebook.com/website', 'Đang hiện'),
-    ('instagram_icon.jpg', 'https://www.instagram.com/website', 'Đang hiện'),
-    ('twitter_icon.jpg', 'https://www.twitter.com/website', 'Đang hiện'),
-    ('linkedin_icon.jpg', 'https://www.linkedin.com/company/website', 'Đang hiện'),
-    ('youtube_icon.jpg', 'https://www.youtube.com/website', 'Đang hiện');
+    ('public/image/facebook.png', 'https://www.facebook.com', 'Đang hiện'),
+    ('public/image/instagram.png', 'https://www.instagram.com/website', 'Đang hiện'),
+    ('public/image/youtube.png', 'https://www.youtube.com', 'Đang hiện'),
+    ('public/image/telegram.png', 'https://web.telegram.org/', 'Đang hiện');

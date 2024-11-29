@@ -6,11 +6,7 @@ $db = new Database();
 $model = new ProductService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'GET') {
-    if (!isset($_SESSION["uid"])) {
-        echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
-        return;
-    }
+if ($method === 'POST') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
     if (isset($data['keyword'])) $keyword = $data['keyword'];

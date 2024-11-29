@@ -1,9 +1,16 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+
 if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();
 }
+$type = $_GET['type'];
 ?>
 
 <!DOCTYPE html>
@@ -217,48 +224,97 @@ if(!isset($_SESSION["email"])){
             });
             list = list.replace(/,\s*$/, "");
 
-            fetch('/api/order/order', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    PhuongThucThanhToan: 'COD',
-                    MaGiamGia: magiamgia,
-                    SDT: sdt,
-                    DiaChi: diachi,
-                    TenNguoiNhan: ten,
-                    product_list: list
-                }),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    notyf.error('Đã xảy ra lỗi khi đặt hàng!');
-                    return;
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success === true) {
-                    localStorage.removeItem('selectedProducts');
 
-                    if(method === 'Bank'){
-                        const res = create_link(data.ma_don_hang, amountTmp)
-                        if(res === false){
-                            window.location.href = `/order/failure?orderCode=${data.ma_don_hang}&method=${method}`
-                            return
-                        }
+            const type = '<?php echo $type; ?>';
+            const soluong = selectedProducts[0].quantity;
+            if(type == 'buynow'){
+                fetch('/api/user/buynow', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        PhuongThucThanhToan: method,
+                        MaGiamGia: magiamgia,
+                        SDT: sdt,
+                        DiaChi: diachi,
+                        TenNguoiNhan: ten,
+                        ID_SP: list,
+                        SoLuong: soluong
+                    }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        notyf.error('Đã xảy ra lỗi khi đặt hàng!');
+                        return;
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success === true) {
+                        localStorage.removeItem('selectedProducts');
 
-                    window.location.href = `/order/success?orderCode=${data.ma_don_hang}&method=${method}`
-                } else {
-                    notyf.error(data.message);
-                    return;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                        if(method === 'Bank'){
+                            const res = create_link(data.ma_don_hang, amountTmp)
+                            if(res === false){
+                                window.location.href = `/order/failure?orderCode=${data.ma_don_hang}&method=${method}`
+                                return
+                            }
+                        }
+
+                        window.location.href = `/order/success?orderCode=${data.ma_don_hang}&method=${method}`
+                    } else {
+                        notyf.error(data.message);
+                        return;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }else{
+                fetch('/api/order/order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        PhuongThucThanhToan: method,
+                        MaGiamGia: magiamgia,
+                        SDT: sdt,
+                        DiaChi: diachi,
+                        TenNguoiNhan: ten,
+                        product_list: list
+                    }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        notyf.error('Đã xảy ra lỗi khi đặt hàng!');
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success === true) {
+                        localStorage.removeItem('selectedProducts');
+
+                        if(method === 'Bank'){
+                            const res = create_link(data.ma_don_hang, amountTmp)
+                            if(res === false){
+                                window.location.href = `/order/failure?orderCode=${data.ma_don_hang}&method=${method}`
+                                return
+                            }
+                        }
+
+                        window.location.href = `/order/success?orderCode=${data.ma_don_hang}&method=${method}`
+                    } else {
+                        notyf.error(data.message);
+                        return;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
         }
 
 
@@ -300,6 +356,12 @@ if(!isset($_SESSION["email"])){
                 return false;
             });
 
+        }
+
+        function goPaymentInfo() {
+            const type = '<?php echo $type; ?>'
+            
+            window.location.href = `/checkout/preview?type=${type}`
         }
 
 

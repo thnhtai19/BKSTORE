@@ -24,7 +24,7 @@ curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
 $response = curl_exec($ch);
 $data = json_decode($response, true);
-curl_close($ch);
+curl_close(handle: $ch);
 
 function renderStars($sao)
 {
@@ -47,6 +47,11 @@ function format_currency($number) {
 
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -75,19 +80,47 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                     <label class="block text-sm font-medium text-gray-700">Trạng thái bình luận:</label>
                     <select id="trangthaicmt" class="mt-2 mb-4 w-full p-2 border rounded">
                         <option value="Đang hiện">Đang hiện</option>
-                        <option value="Đã ẩn">Đã ẩn</option>
-                        <option value="Đã xoá">Đã xoá</option>
+                        <option value="Đang ẩn">Đang ẩn</option>
                     </select>
                 </div>
             </div>
+            <div id="idcmt"></div>
             <div class="w-full">
-                <label for="mota" class="block text-sm font-medium text-gray-700">Phản hồi:</label>
-                <textarea id="phanhoi" class="mt-2 mb-4 w-full p-2 border rounded" rows="3" placeholder="Vui lòng nhập phản hồi"></textarea>
+                <label for="phanhoicmt" class="block text-sm font-medium text-gray-700">Phản hồi:</label>
+                <textarea id="phanhoicmt" class="mt-2 mb-4 w-full p-2 border rounded" rows="3" placeholder="Vui lòng nhập phản hồi"></textarea>
             </div>
 
             <div class="flex justify-end space-x-4">
                 <button onclick="updateCmt()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
                 <button onclick="closeModalCmt()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="rvModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg w-3/4 lg:w-1/4 z-50 overflow-y-auto" style="max-height: 700px">
+            <div class="flex justify-between items-start">
+                <h2 class="text-xl font-bold mb-4">Chỉnh sửa đánh giá</h2>
+                <button onclick="closeModalRv()">✕</button>
+            </div>
+            <div class="flex gap-2">
+                <div class="w-full">
+                    <label class="block text-sm font-medium text-gray-700">Trạng thái đánh giá:</label>
+                    <select id="trangthairv" class="mt-2 mb-4 w-full p-2 border rounded">
+                        <option value="Đang hiện">Đang hiện</option>
+                        <option value="Đang ẩn">Đang ẩn</option>
+                    </select>
+                </div>
+            </div>
+            <div id="idrv"></div>
+            <div class="w-full">
+                <label for="phanhoirv" class="block text-sm font-medium text-gray-700">Phản hồi:</label>
+                <textarea id="phanhoirv" class="mt-2 mb-4 w-full p-2 border rounded" rows="3" placeholder="Vui lòng nhập phản hồi"></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+                <button onclick="updateRv()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
+                <button onclick="closeModalRv()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
     </div>
@@ -119,6 +152,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                         <div class="swiper-wrapper h-full">
                             <?php
                             $banners = $data['hinh'];
+                            $save_img = $banners[0];
                             foreach ($banners as $banner) {
                             ?>
                                 <div
@@ -137,6 +171,12 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                         </div>
                     </div>
                     </div>
+                    <?php
+                        $save_id = $data['id'];
+                        $save_name = $data['ten'];
+                        $save_price = $data['gia_san_pham'];
+                        $save_pricesale = $data['gia_sau_giam_gia'];
+                    ?>
                     <div class="flex-1 h-110">
                         <div
                             class="w-full h-full bg-white p-3 pr-4 pl-4 flex flex-col justify-between rounded-b-lg lg:rounded-lg">
@@ -268,7 +308,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                             Sản phẩm tạm hết hàng
                                         </div>
                                     <?php } else { ?> 
-                                        <div
+                                        <div onclick="BuyNow()"
                                             class="bg-custom-background rounded-lg h-full flex flex-col justify-center w-2/3 items-center font-bold text-white cursor-pointer active:shadow-lg">
                                             Mua ngay
                                         </div>
@@ -385,30 +425,66 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                         $noi_dung = $item['noi_dung'];
                                         $avatar = $item['avatar'];
                                         $ten = $item['ten'];
+                                        $phanhoi = !empty($item['phan_hoi']) ? str_replace(["\r", "\n"], '', $item['phan_hoi']) : "";
+                                        $trang_thai = $item['trang_thai'];
                                         if ($avatar == null) {
                                             $avatar = "https://ui-avatars.com/api/?background=random&name=" . urlencode($ten);
                                         }
                                 ?>
-                                    <div class="review-item pt-2 pb-2 <?php echo $i >= $initialVisibleReviews ? 'hidden' : ''; ?>">
-                                        <div class="flex gap-2 text-gray-700">
-                                            <img src="<?=$avatar?>" alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
-                                            <div>
-                                                <div class="flex gap-2 items-center">
-                                                    <div class="text-base font-bold"><?=$ten?></div>
-                                                    <div class="text-xs"><?=$ngay_danh_gia?></div>
+                                    <div data-id="rvcontainer<?=$id?>" class="comment-item pt-2 pb-2 <?php echo $i >= $initialVisibleReviews ? 'hidden' : ''; ?>" style="<?php if($trang_thai=="Đang ẩn") echo"opacity: 0.6;";?>">
+                                        <div class="pt-2 pb-2">
+                                            <div class="flex gap-2 text-gray-700">
+                                                <img src="<?=$avatar?>"
+                                                    alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
+                                                <div>
+                                                    <div class="flex gap-2 items-center">
+                                                        <div>
+                                                            <div class="flex gap-2 items-center">
+                                                                <div class="text-base font-bold"><?=$ten?></div>
+                                                                <div class="text-xs"><?=$ngay_danh_gia?></div>
+                                                            </div>
+                                                        </div>
+                                                        <?php if (isset($_SESSION["Role"]) && $_SESSION["Role"] === 'Admin') { ?>
+                                                            <button onclick="OpenReview(<?=$id?>)">
+                                                                <img src="/public/image/edit.png" alt="edit" class="w-4 h-4">
+                                                            </button>
+                                                        <?php } ?>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <?php echo renderStars($so_sao); ?>
+                                                    </div>
+                                                    <div class="trangthai-rv" data-id="ttrv<?=$id?>" data-value="<?php echo $trang_thai; ?>"></div>
+                                                    <div class="text-sm pt-1 text-justify">
+                                                        <?=$noi_dung?>
+                                                    </div>
                                                 </div>
-                                                <div class="flex items-center">
-                                                    <?php echo renderStars($so_sao); ?>
-                                                </div>
-                                                <div class="text-sm pt-1 pb-1 text-justify">
-                                                    <?=$noi_dung?>
-                                                </div>
+                                            </div>
+                                            <div data-id="rv<?=$id?>">
+                                                <?php if (isset($phanhoi) && $phanhoi != '') { ?>
+                                                    <div class="flex gap-2 text-gray-700 pt-6 pl-10">
+                                                        <img src="/public/image/human.png"
+                                                            alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
+                                                        <div>
+                                                            <div class="flex gap-2 items-center">
+                                                                <div>
+                                                                    <div class="flex gap-2 items-center">
+                                                                        <div class="text-base font-bold">Quản Trị Viên</div>
+                                                                        <div class="bg-custom-background text-xs text-white px-2 rounded-md">QTV</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="text-sm pt-1 text-justify">
+                                                                <?=$phanhoi?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                         <?php 
                                         if ($i < max($totalReviews - 1, $initialVisibleReviews - 1)): 
                                         ?>
-                                            <hr>
+                                            <div class="pt-4"><hr></div> 
                                         <?php endif; ?>
                                     </div>
                                 <?php $i++;} ?>
@@ -430,7 +506,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                             <div class="text-base text-black font-bold">
                                 Nhận xét và Bình luận
                             </div>
-                            <div class="pt-4 <?php if($_SESSION["email"] == '') echo "hidden"?>">
+                            <div class="pt-4 <?php if($_SESSION["email"] == '' || $_SESSION["Role"] == 'Admin') echo "hidden"?>">
                                 <div class="flex gap-2">
                                     <img src="<?=$_SESSION["Avatar"]?>" alt="avt"
                                         class="w-10 h-10 rounded-full cursor-pointer ml-3">
@@ -458,11 +534,13 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                         $noi_dung = $item['noi_dung'];
                                         $avatar = $item['avatar'];
                                         $ten = $item['ten'];
+                                        $phanhoi = !empty($item['phan_hoi']) ? str_replace(["\r", "\n"], '', $item['phan_hoi']) : "";
+                                        $trang_thai = $item['trang_thai'];
                                         if ($avatar == null) {
                                             $avatar = "https://ui-avatars.com/api/?background=random&name=" . urlencode($ten);
                                         }
                                 ?>
-                                    <div class="comment-item pt-2 pb-2 <?php echo $i >= $initialVisibleReviews ? 'hidden' : ''; ?>">
+                                    <div data-id="cmtcontainer<?=$id?>" class="comment-item pt-2 pb-2 <?php echo $i >= $initialVisibleReviews ? 'hidden' : ''; ?>" style="<?php if($trang_thai=="Đang ẩn") echo"opacity: 0.6;";?>">
                                         <div class="pt-2 pb-2">
                                             <div class="flex gap-2 text-gray-700">
                                                 <img src="<?=$avatar?>"
@@ -481,10 +559,32 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                                             </button>
                                                         <?php } ?>
                                                     </div>
+                                                    <div class="trangthai-cmt" data-id="ttcmt<?=$id?>" data-value="<?php echo $trang_thai; ?>"></div>
                                                     <div class="text-sm pt-1 text-justify">
                                                         <?=$noi_dung?>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div data-id="cmt<?=$id?>">
+                                                <?php if (isset($phanhoi) && $phanhoi != '') { ?>
+                                                    <div class="flex gap-2 text-gray-700 pt-6 pl-10">
+                                                        <img src="/public/image/human.png"
+                                                            alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
+                                                        <div>
+                                                            <div class="flex gap-2 items-center">
+                                                                <div>
+                                                                    <div class="flex gap-2 items-center">
+                                                                        <div class="text-base font-bold">Quản Trị Viên</div>
+                                                                        <div class="bg-custom-background text-xs text-white px-2 rounded-md">QTV</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="text-sm pt-1 text-justify">
+                                                                <?=$phanhoi?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                         <?php 
@@ -596,6 +696,8 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
             const newComment = document.createElement('div');
             newComment.classList.add('comment-item', 'pt-2', 'pb-2');
 
+            console.log(commentData.id)
+
             newComment.innerHTML = `
                 <div class="pt-2 pb-2">
                     <div class="flex gap-2 text-gray-700">
@@ -609,10 +711,13 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                                         <div class="text-xs">${commentData.ngay_binh_luan}</div>
                                     </div>
                                 </div>
-                                <button>
-                                    <img src="/public/image/edit.png" alt="edit" class="w-4 h-4">
-                                </button>
+                                <?php if (isset($_SESSION["Role"]) && $_SESSION["Role"] === 'Admin') { ?>
+                                    <button onclick="OpenComment(${commentData.id})">
+                                        <img src="/public/image/edit.png" alt="edit" class="w-4 h-4">
+                                    </button>
+                                <?php } ?>
                             </div>
+                            <div class="trangthai-cmt" data-id="ttcmt${commentData.id}" data-value="Đang hiện"></div>
                             <div class="text-sm pt-1 text-justify">
                                 ${commentData.noi_dung}
                             </div>
@@ -642,7 +747,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
 
             const data = { ID_SP: <?= json_encode($data['id']); ?>, NoiDung: content};
 
-            fetch('api/user/comment', {
+            fetch('/api/user/comment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -660,7 +765,7 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
                     const year = currentDate.getFullYear();
                     const formattedDate = `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
 
-                    addCommentToTop({ten: <?= json_encode($_SESSION["Ten"])?>, avatar: <?= json_encode($_SESSION["Avatar"])?>, noi_dung: content, ngay_binh_luan: formattedDate}); 
+                    addCommentToTop({id: result.idcmt,ten: <?= json_encode($_SESSION["Ten"])?>, avatar: <?= json_encode($_SESSION["Avatar"])?>, noi_dung: content, ngay_binh_luan: formattedDate}); 
                     document.getElementById('content-cmt').value = '';
 
                     try {
@@ -679,10 +784,225 @@ require_once dirname(__DIR__, 3) . '/config/db.php';
 
         function OpenComment(idcmt){
             document.getElementById("cmtModal").classList.remove("hidden");
+
+            const commentElement = document.querySelector(`div[data-id="cmt${idcmt}"]`);
+
+            const commentContentElement = commentElement ? commentElement.querySelector('.text-sm.pt-1.text-justify') : null;
+            const phanhoi = commentContentElement ? commentContentElement.textContent.trim() : "";
+
+            const commentElement2 = document.querySelector(`div[data-id="cmtcontainer${idcmt}"]`);
+            const trangthaiElement = commentElement2 ? commentElement2.querySelector('.trangthai-cmt') : null;
+
+            const trangthai = trangthaiElement ? trangthaiElement.getAttribute('data-value') : "";
+
+            document.getElementById("phanhoicmt").value = phanhoi;
+            document.getElementById("idcmt").value = idcmt;
+            document.getElementById("trangthaicmt").value = trangthai;
+
         }
 
         function closeModalCmt(){
             document.getElementById("cmtModal").classList.add("hidden");
+        }
+
+        function updateCmt(){
+            const idcmt = document.getElementById('idcmt').value
+            const phanhoicmt = document.getElementById('phanhoicmt').value
+            const trangthaicmt = document.getElementById('trangthaicmt').value
+
+            const trangthaiElement = document.querySelector(`.trangthai-cmt[data-id="ttcmt${idcmt}"]`);
+            trangthaiElement.setAttribute('data-value', trangthaicmt);
+
+            const data = {
+                MaBinhLuan: idcmt,
+                TrangThai: trangthaicmt,
+                PhanHoi: phanhoicmt
+            };
+
+            fetch('/api/admin/comment/status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    notyf.success('Cập nhật bình luận thành công!');
+
+                    closeModalCmt()
+
+                    const adminCmtElement = document.querySelector(`[data-id="cmt${idcmt}"]`);
+                    adminCmtElement.innerHTML = '';
+
+                    const divElement = document.querySelector(`div[data-id="cmtcontainer${idcmt}"]`);
+                    if (trangthaicmt === "Đang ẩn") {
+                        divElement.style.opacity = '0.6';
+                    }else{
+                        divElement.style.opacity = '1';
+                    }
+
+                    if(phanhoicmt){
+                        const adminResponseDiv = document.createElement('div');
+                        adminResponseDiv.classList.add('flex', 'gap-2', 'text-gray-700', 'pt-6', 'pl-10');
+                        
+                        adminResponseDiv.innerHTML = `
+                            <img src="/public/image/human.png" alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
+                            <div>
+                                <div class="flex gap-2 items-center">
+                                    <div>
+                                        <div class="flex gap-2 items-center">
+                                            <div class="text-base font-bold">Quản Trị Viên</div>
+                                            <div class="bg-custom-background text-xs text-white px-2 rounded-md">QTV</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-sm pt-1 text-justify">
+                                    ${phanhoicmt}
+                                </div>
+                            </div>
+                        `;
+                        
+                        adminCmtElement.appendChild(adminResponseDiv);
+                    }
+
+                } else {
+                    notyf.error('Cập nhật bình luận thất bại!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                notyf.error('Đã xảy ra lỗi khi cập nhật bình luận!');
+            });
+
+        }
+
+        function OpenReview(idcmt){
+            document.getElementById("rvModal").classList.remove("hidden");
+
+            const commentElement = document.querySelector(`div[data-id="rv${idcmt}"]`);
+
+            const commentContentElement = commentElement ? commentElement.querySelector('.text-sm.pt-1.text-justify') : null;
+            const phanhoi = commentContentElement ? commentContentElement.textContent.trim() : "";
+
+            const commentElement2 = document.querySelector(`div[data-id="rvcontainer${idcmt}"]`);
+            const trangthaiElement = commentElement2 ? commentElement2.querySelector('.trangthai-rv') : null;
+
+            const trangthai = trangthaiElement ? trangthaiElement.getAttribute('data-value') : "";
+
+            document.getElementById("phanhoirv").value = phanhoi;
+            document.getElementById("idrv").value = idcmt;
+            document.getElementById("trangthairv").value = trangthai;
+
+        }
+
+        function closeModalRv(){
+            document.getElementById("rvModal").classList.add("hidden");
+        }
+
+        function updateRv(){
+            const idcmt = document.getElementById('idrv').value
+            const phanhoicmt = document.getElementById('phanhoirv').value
+            const trangthaicmt = document.getElementById('trangthairv').value
+        
+            const trangthaiElement = document.querySelector(`.trangthai-rv[data-id="ttrv${idcmt}"]`);
+            trangthaiElement.setAttribute('data-value', trangthaicmt);
+
+            const data = {
+                MaDanhGia: idcmt,
+                TrangThai: trangthaicmt,
+                PhanHoi: phanhoicmt
+            };
+
+            fetch('/api/admin/review/status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    notyf.success('Cập nhật đánh giá thành công!');
+
+                    closeModalRv()
+
+                    const adminCmtElement = document.querySelector(`[data-id="rv${idcmt}"]`);
+                    adminCmtElement.innerHTML = '';
+
+                    const divElement = document.querySelector(`div[data-id="rvcontainer${idcmt}"]`);
+                    if (trangthaicmt === "Đang ẩn") {
+                        divElement.style.opacity = '0.6';
+                    }else{
+                        divElement.style.opacity = '1';
+                    }
+
+                    if(phanhoicmt){
+                        const adminResponseDiv = document.createElement('div');
+                        adminResponseDiv.classList.add('flex', 'gap-2', 'text-gray-700', 'pt-6', 'pl-10');
+                        
+                        adminResponseDiv.innerHTML = `
+                            <img src="/public/image/human.png" alt="avt" class="w-10 h-10 rounded-full cursor-pointer ml-3">
+                            <div>
+                                <div class="flex gap-2 items-center">
+                                    <div>
+                                        <div class="flex gap-2 items-center">
+                                            <div class="text-base font-bold">Quản Trị Viên</div>
+                                            <div class="bg-custom-background text-xs text-white px-2 rounded-md">QTV</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-sm pt-1 text-justify">
+                                    ${phanhoicmt}
+                                </div>
+                            </div>
+                        `;
+                        
+                        adminCmtElement.appendChild(adminResponseDiv);
+                    }
+
+                } else {
+                    notyf.error('Cập nhật đánh giá thất bại!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                notyf.error('Đã xảy ra lỗi khi cập nhật đánh giá!');
+            });
+
+        }
+
+        function BuyNow(){
+            const email = '<?php echo $_SESSION['email'];?>';
+            if(!email){
+                notyf.error('Vui lòng đăng nhập để mua ngay!');
+                setTimeout(() => {
+                    window.location.href = 'auth/login';
+                }, 2000);
+                return
+            }
+            
+            let selectedProducts = []
+            const quatity = document.getElementById('quantity').value
+            if(quatity < 0){
+                notyf.error('Số lượng phải lớn hơn 0');
+                return
+            }
+
+            selectedProducts.push({
+                id: '<?php echo $save_id; ?>',
+                name: '<?php echo $save_name; ?>',
+                price: <?php echo $save_price; ?>,
+                pricesale: <?php echo $save_pricesale; ?>,
+                quantity: `${quatity}`,
+                imageUrl: '/<?php echo $save_img; ?>'
+            });
+
+            localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+
+            window.location.href = '/checkout/preview?type=buynow'
         }
 
     </script>

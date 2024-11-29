@@ -14,6 +14,10 @@ if ($method === 'POST') {
         echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
         return;
     }
+    if (!isset($_SESSION["uid"])) {
+        echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
+        return;
+    }
     echo json_encode($model->proposeInfo($_SESSION["uid"], $MaDeXuat));
 }
 else {

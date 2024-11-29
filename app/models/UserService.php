@@ -11,6 +11,7 @@ class UserService {
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->conn->set_charset('utf8mb4');
         $this->support = new support();
         $this->product = new ProductService($conn);
         $this->order = new OrderService($conn);
@@ -42,7 +43,7 @@ class UserService {
     }
 
     public function diary($id) {
-        $sql = "SELECT * FROM lich_su_dang_nhap WHERE `UID` = ?";
+        $sql = "SELECT * FROM LICH_SU_DANG_NHAP WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -59,7 +60,7 @@ class UserService {
     }
 
     public function getBanner() {
-        $sql = "SELECT * FROM banner";
+        $sql = "SELECT * FROM BANNER";
         $result = $this->conn->query($sql);
 
         if ($result->num_rows === 0) {
@@ -84,7 +85,7 @@ class UserService {
     }
 
     public function setAvatar($id, $avatarFileName) {
-        $sql = "SELECT * FROM `login` WHERE `UID` = ?";
+        $sql = "SELECT * FROM `LOGIN` WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -97,7 +98,7 @@ class UserService {
         $relativeAvatarPath = "public/image/user/$id/" . basename($avatarFileName);
     
         // Lưu đường dẫn và tệp ảnh vào cơ sở dữ liệu
-        $avatar_sql = "UPDATE `login` SET `Avatar` = ? WHERE `UID` = ?";
+        $avatar_sql = "UPDATE `LOGIN` SET `Avatar` = ? WHERE `UID` = ?";
         $stmt_avatar = $this->conn->prepare($avatar_sql);
         $stmt_avatar->bind_param("si", $relativeAvatarPath, $id);
         $stmt_avatar->execute();
@@ -118,20 +119,20 @@ class UserService {
         if ($rac['success'] == false) return $rac;
         if ($this->product->checkProduct($ID_SP) == false) return ['success'=> false,'message'=> 'Không tìm thấy sản phẩm'];
         $date = $this->support->getDateNow();
-        $sql_check = "SELECT * FROM danh_gia WHERE UID = ? AND ID_SP = ?";
+        $sql_check = "SELECT * FROM DANH_GIA WHERE UID = ? AND ID_SP = ?";
         $stmt_check = $this->conn->prepare($sql_check);
         $stmt_check->bind_param("ii", $uid, $ID_SP);
         $stmt_check->execute();
         $result_check = $stmt_check->get_result();
 
         if ($result_check->num_rows > 0) {
-            $sql_update = "UPDATE danh_gia SET SoSao = ?, NoiDung = ?, NgayDanhGia = ? WHERE UID = ? AND ID_SP = ?";
+            $sql_update = "UPDATE DANH_GIA SET SoSao = ?, NoiDung = ?, NgayDanhGia = ? WHERE UID = ? AND ID_SP = ?";
             $stmt_update = $this->conn->prepare($sql_update);
             $stmt_update->bind_param("issii", $SoSao, $NoiDung, $date, $uid, $ID_SP);
             $stmt_update->execute();
         } 
         else {
-            $sql_insert = "INSERT INTO danh_gia (UID, ID_SP, SoSao, NoiDung, NgayDanhGia) VALUES (?, ?, ?, ?, ?)";
+            $sql_insert = "INSERT INTO DANH_GIA (UID, ID_SP, SoSao, NoiDung, NgayDanhGia) VALUES (?, ?, ?, ?, ?)";
             $stmt_insert = $this->conn->prepare($sql_insert);
             $stmt_insert->bind_param("iiiss", $uid, $ID_SP, $SoSao, $NoiDung, $date);
             $stmt_insert->execute();
@@ -143,17 +144,18 @@ class UserService {
         if ($this->product->checkProduct($ID_SP) == false) return ['success'=> false,'message'=> 'Không tìm thấy sản phẩm'];
         $date = $this->support->getDateNow();
 
-        $sql_insert = "INSERT INTO binh_luan (`UID`, ID_SP, NoiDung, NgayBinhLuan) VALUES (?, ?, ?, ?)";
+        $sql_insert = "INSERT INTO BINH_LUAN (`UID`, ID_SP, NoiDung, NgayBinhLuan) VALUES (?, ?, ?, ?)";
         $stmt_insert = $this->conn->prepare($sql_insert);
         $stmt_insert->bind_param("iiss", $uid, $ID_SP, $NoiDung, $date);
         $stmt_insert->execute();
-        return ['success'=> true, 'message'=> 'Bình luận thành công'];
+        $newCommentId = $this->conn->insert_id;
+        return ['success'=> true, 'message'=> 'Bình luận thành công', "idcmt" => $newCommentId];
     }
 
     public function like($uid, $ID_SP) {
         if ($this->product->checkProduct($ID_SP) == false) return ['success'=> false, 'message'=> 'Không tìm thấy sản phẩm'];
         if ($this->product->thich($ID_SP) == false) {
-            $sql = "INSERT INTO thich (`UID`, ID_SP) VALUES (?, ?)";
+            $sql = "INSERT INTO THICH (`UID`, ID_SP) VALUES (?, ?)";
             $stmt_like = $this->conn->prepare($sql);
             $stmt_like->bind_param("ii", $uid, $ID_SP);
             $stmt_like->execute();
@@ -163,7 +165,7 @@ class UserService {
 
     public function unlike($uid, $ID_SP) {
         if ($this->product->thich($ID_SP) == false) return ['success'=> false, 'message'=> 'Chưa thích sản phẩm này!'];
-        $sql = "DELETE FROM thich WHERE `UID` = ? AND `ID_SP` = ?";
+        $sql = "DELETE FROM THICH WHERE `UID` = ? AND `ID_SP` = ?";
         $stmt_like = $this->conn->prepare($sql);
         $stmt_like->bind_param("ii", $uid, $ID_SP);
         $stmt_like->execute();
@@ -171,7 +173,7 @@ class UserService {
     }
 
     public function getNotice($uid) {
-        $sql = "SELECT * FROM thong_bao WHERE `UID` = ?";
+        $sql = "SELECT * FROM THONG_BAO WHERE `UID` = ? ORDER BY MaThongBao DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();
@@ -179,57 +181,37 @@ class UserService {
         $result = [];
         while ($row = $notice->fetch_assoc()) {
             if ($row['Type'] == 'Đơn hàng') {
-                $sql = "SELECT ID_DonHang FROM loai_thong_bao WHERE MaThongBao = ?";
+                $sql = "SELECT ID_DonHang FROM LOAI_THONG_BAO WHERE MaThongBao = ?";
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bind_param("i", $row['MaThongBao']);
                 $stmt->execute();
                 $stmt = $stmt->get_result();
                 $row['ID_DonHang'] = $stmt->fetch_assoc()['ID_DonHang'];
                 $result[] = [
-                    'id' => $row['MaThongBao'],
+                    'MaThongBao' => $row['MaThongBao'],
                     'noi_dung' => $row['NoiDung'],
                     'TrangThai' => $row['TrangThai'],
                     'type' => $row['Type'],
-                    'ID_DonHang' => $row['ID_DonHang']
+                    'ID_Redirect' => $row['ID_DonHang']
                 ];
             }
             else if ($row['Type'] == 'Yêu cầu') {
-                $sql = "SELECT MaDeXuat FROM loai_thong_bao WHERE MaThongBao = ?";
+                $sql = "SELECT MaDeXuat FROM LOAI_THONG_BAO WHERE MaThongBao = ?";
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bind_param("i", $row['MaThongBao']);
                 $stmt->execute();
                 $stmt = $stmt->get_result();
                 $row['MaDeXuat'] = $stmt->fetch_assoc()['MaDeXuat'];
                 $result[] = [
-                    'id' => $row['MaThongBao'],
+                    'MaThongBao' => $row['MaThongBao'],
                     'noi_dung' => $row['NoiDung'],
                     'TrangThai' => $row['TrangThai'],
                     'type' => $row['Type'],
-                    'MaDeXuat' => $row['MaDeXuat']
+                    'ID_Redirect' => $row['MaDeXuat']
                 ];
             }
             else return ['sucess' => false, 'message' => 'Đầu vào không hợp lệ'];
         }
-        foreach ($result as $row) {
-            if ($row['type'] == 'Đơn hàng') {
-                $sql = "SELECT ID_DonHang FROM loai_thong_bao WHERE MaThongBao = ?";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bind_param("i", $row['id']);
-                $stmt->execute();
-                $stmt = $stmt->get_result();
-                $row['ID_DonHang'] = $stmt->fetch_assoc()['ID_DonHang'];
-            }
-            else if ($row['type'] == 'Yêu cầu') {
-                $sql = "SELECT MaDeXuat FROM loai_thong_bao WHERE MaThongBao = ?";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bind_param("i", $row['id']);
-                $stmt->execute();
-                $stmt = $stmt->get_result();
-                $row['MaDeXuat'] = $stmt->fetch_assoc()['MaDeXuat'];
-            }
-            else return ['sucess' => false, 'message' => 'Đầu vào không hợp lệ'];
-        }
-        // $this->updateStatusNotice($uid);
         return ['sucess' => true, 'notice_list' => $result];
     }
 
@@ -238,19 +220,19 @@ class UserService {
             return ['success' => false, 'message' => 'Mã giảm giá không tồn tại'];
         }
         $bill = $this->order->getCostProduct($ID_SP) * $SoLuong;
-        if ($bill == 0) return ['success'=> false, 'message' => 'Danh sách sản phẩm không hợp lệ'];
+        if ($bill == 0) return ['success'=> false, 'message' => 'Dữ liệu không hợp lệ'];
         $NgayDat = $this->support->getDateNow();
         if ($this->order->checkProduct($ID_SP, $SoLuong)['success'] == false)
             return ['success' => false, 'message' => 'Không đủ hàng trong kho'];
         if ($MaGiamGia == '') {
-            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO DON_HANG (`UID`, NgayDat, TongTien, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("isissssi", $uid, $NgayDat, $bill, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan, $bill);
             $stmt->execute();
         }
         else {
             $sale = $this->order->sale($bill, $MaGiamGia, 0, $PhuongThucThanhToan)['tong_tien_phai_tra'];
-            $sql = "INSERT INTO don_hang (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO DON_HANG (`UID`, NgayDat, TongTien, MaGiamGia, SDT, DiaChi, PhuongThucThanhToan, TenNguoiNhan, HoaDon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("isisssssi", $uid, $NgayDat, $bill, $MaGiamGia, $SDT, $DiaChi, $PhuongThucThanhToan, $TenNguoiNhan, $sale);
             $stmt->execute();
@@ -258,13 +240,14 @@ class UserService {
         $id_don_hang = mysqli_insert_id($this->conn);
         $this->addProductToOrder($id_don_hang, $ID_SP, $SoLuong);
         $type = 'Đơn hàng';
-        $sql = "INSERT INTO thong_bao (`UID`, NoiDung, `Type`) VALUES (?, ?, ?)";
+        $date = $this->support->startTime();
+        $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $NoiDung = "Đơn hàng " . $id_don_hang . " được đặt thành công"; 
-        $stmt->bind_param("iss", $uid, $NoiDung, $type);
+        $stmt->bind_param("isss", $uid, $NoiDung, $type, $date);
         $stmt->execute();
         $id_thong_bao = mysqli_insert_id($this->conn);
-        $sql = "INSERT INTO loai_thong_bao (MaThongBao, ID_DonHang) VALUES (?, ?)";
+        $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $id_thong_bao, $id_don_hang);
         $stmt->execute();
@@ -272,7 +255,7 @@ class UserService {
     }
 
     public function addProductToOrder($ID_DonHang, $ID_SP, $SoLuong) {
-        $sql = "INSERT INTO gom (ID_DonHang, ID_SP, SoLuong) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO GOM (ID_DonHang, ID_SP, SoLuong) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("iii", $ID_DonHang, $ID_SP, $SoLuong);
         $stmt->execute();
@@ -280,7 +263,7 @@ class UserService {
     }
 
     public function updateStatusNotice($uid, $MaThongBao) {
-        $sql = 'UPDATE thong_bao SET TrangThai = ? WHERE `UID` = ? AND MaThongBao = ?';
+        $sql = 'UPDATE THONG_BAO SET TrangThai = ? WHERE `UID` = ? AND MaThongBao = ?';
         $stmt = $this->conn->prepare($sql);
         $rac1 = 'Read';
         $stmt->bind_param('sis', $rac1, $uid, $MaThongBao);
@@ -290,8 +273,8 @@ class UserService {
 
     private function buyed ($uid, $ID_SP) {
         $sql = "SELECT TrangThai 
-                FROM don_hang D 
-                JOIN gom G ON G.ID_DonHang = D.ID_DonHang 
+                FROM DON_HANG D 
+                JOIN GOM G ON G.ID_DonHang = D.ID_DonHang 
                 WHERE G.ID_SP = ? AND D.UID = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $ID_SP, $uid,);
@@ -314,7 +297,7 @@ class UserService {
         if ($sex == '') $sex = $user['sex'];
         if ($phone == '') $phone = $user['phone'];
         if ($addr == '') $addr = $user['address'];
-        $sql = "UPDATE khach_hang SET GioiTinh = ?, SDT = ?, DiaChi = ? WHERE `UID` = ?";
+        $sql = "UPDATE KHACH_HANG SET GioiTinh = ?, SDT = ?, DiaChi = ? WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sssi", $sex, $phone, $addr, $uid);
         $stmt->execute();
@@ -327,7 +310,7 @@ class UserService {
             return ["success" => false, "message" => $login['message']];
         }
         if ($name == '') $name = $login['name'];
-        $sql = "UPDATE `login` SET Ten = ? WHERE `UID` = ?";
+        $sql = "UPDATE `LOGIN` SET Ten = ? WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("si", $name, $uid);
         $stmt->execute();
@@ -335,7 +318,7 @@ class UserService {
     }
 
     public function getUserInfo($uid) {
-        $sql = "SELECT * FROM khach_hang WHERE `UID` = ?";
+        $sql = "SELECT * FROM KHACH_HANG WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();
@@ -348,7 +331,7 @@ class UserService {
     }
 
     public function getLoginInfo($uid) {
-        $sql = "SELECT * FROM `login` WHERE `UID` = ?";
+        $sql = "SELECT * FROM `LOGIN` WHERE `UID` = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();

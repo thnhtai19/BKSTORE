@@ -1,9 +1,5 @@
 <?php
 $phanloai = $_GET['keyword'];
-if ($phanloai == '') {
-    header("Location: 404");
-    exit;
-}
 ?>
 <?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
@@ -39,6 +35,9 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                         <div>&rsaquo;</div>
                         <div class="text-gray-500"><?= $phanloai ?></div>
                     </nav>
+                    <div id="searchResult" class="pb-4 text-gray-500 text-sm text-center hidden">
+                        Tìm thấy <b id="resultCount"></b> kết quả cho từ khoá <b id="searchKeyword"></b>
+                    </div>
                     <div class="flex gap-2 pb-4 h-12" id="buttonSort">
                         <button id="sortDefault"
                             class="rounded-lg bg-blue-100 border-custom-blue text-custom-blue text-sm w-24 flex items-center justify-center">
@@ -180,18 +179,30 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             let sortOrder = 'default';
 
             function fetchProducts() {
-                fetch('/api/product/productType', {
+                const keyword = "<?php echo $phanloai; ?>";
+                fetch('/api/product/keyword', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        PhanLoai: "<?php echo $phanloai; ?>"
+                        keyword: keyword
                     })
                 })
                     .then(response => response.json())
                     .then(data => {
-                        allProducts = data.DanhSachSanPham;
+                        if(data.success){
+                            allProducts = data.message;
+
+                            document.getElementById('searchResult').classList.remove('hidden');
+                            document.getElementById('searchInput').value = keyword; 
+                            
+                            const resultCountElement = document.getElementById("resultCount");
+                            const searchKeywordElement = document.getElementById("searchKeyword");
+
+                            resultCountElement.textContent = data.message.length;
+                            searchKeywordElement.textContent = `"${keyword}"`;
+                        }
                         renderPage();
                     })
                     .catch(error => {
@@ -201,9 +212,9 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
 
             function sortProducts(products) {
                 if (sortOrder === 'priceHigh') {
-                    return products.sort((a, b) => b.GiaSauGiam - a.GiaSauGiam);
+                    return products.sort((a, b) => b.gia_sau_giam_gia - a.gia_sau_giam_gia);
                 } else if (sortOrder === 'priceLow') {
-                    return products.sort((a, b) => a.GiaSauGiam - b.GiaSauGiam);
+                    return products.sort((a, b) => a.gia_sau_giam_gia - b.gia_sau_giam_gia);
                 }
                 return products;
             }
@@ -254,26 +265,26 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                     const productDiv = document.createElement('div');
                     productDiv.innerHTML = `
                 <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                    <div class="cursor-pointer" onclick="redirectToPage(${product.ID_SP})">
+                    <div class="cursor-pointer" onclick="redirectToPage(${product.id})">
                             <div class="h-44 flex justify-center">
-                                <img src="${product.Hinh}" alt="Product Image" class="object-cover h-full rounded-md">
+                                <img src="${product.hinh[0]}" alt="Product Image" class="object-cover h-full rounded-md">
                             </div>
                             <div class="pt-4 pb-4 text-sm">
-                                <div class="font-semibold mt-2 h-16 text-black-700">${product.TenSP}</div>
+                                <div class="font-semibold mt-2 h-16 text-black-700">${product.ten}</div>
                                 <div class="flex gap-2 items-center">
-                                    <p class="text-custom-blue font-bold text-base">${formatCurrency(product.GiaSauGiam)}</p>
-                                    <p class="text-gray-500 text-sm"><del>${formatCurrency(product.Gia)}</del></p>                                             
+                                    <p class="text-custom-blue font-bold text-base">${formatCurrency(product.gia_sau_giam_gia)}</p>
+                                    <p class="text-gray-500 text-sm"><del>${formatCurrency(product.gia_goc)}</del></p>                                             
                                 </div>
                             </div>
                     </div>
                     <div class="flex justify-between items-center">
                         <div class="flex items-center">
-                            ${renderStars(product.SoSao)}
+                            ${renderStars(product.so_sao_trung_binh)}
                         </div>
                         <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
-                            <button class="heart-button focus:outline-none" data-product-id="${product.ID_SP}" onclick="toggleHeart(this)">
+                            <button class="heart-button focus:outline-none" data-product-id="${product.id}" onclick="toggleHeart(this)">
                                 <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out"
-                                    xmlns="http://www.w3.org/2000/svg" fill="${product.YeuThich == 1 ? 'currentColor' : 'none'}" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg" fill="${product.thich == true ? 'currentColor' : 'none'}" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />

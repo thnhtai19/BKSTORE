@@ -11,14 +11,10 @@ if ($method === 'GET') {
     $data = json_decode($json, true);
 
     $response = $model->getInfoList();
-    if ($response) {
-        echo json_encode($response);
-    } else {
-        echo json_encode(['status' => 'Error', 'message' => 'Có lỗi xảy ra!']);
-    }
+    echo json_encode(['success' => 'true', 'danh_sach_tin_tuc' => $response]);
 }
 else {
-    $response = ['error' => 'Invalid request method'];
+    $response = ['error' => 'Sai phương thức yêu cầu'];
     header('Content-Type: application/json');
     echo json_encode($response);
 }

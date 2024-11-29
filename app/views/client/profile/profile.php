@@ -1,6 +1,13 @@
 <?php
 require_once dirname(__DIR__, 4) . '/config/db.php';
 require_once dirname(__DIR__, 3) . '/models/UserService.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+
+
 if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();
@@ -59,14 +66,25 @@ if(!isset($_SESSION["email"])){
 
                     <div class="w-full lg:w-3/4 rounded-lg space-y-6">
 
-                        <div class="flex items-center space-x-6" >
-                            <img src="<?php echo $_SESSION["Avatar"]; ?>"
-                                alt="User Avatar" class="w-16 h-16 rounded-full cursor-pointer" onclick="openAvatarModal()" id="avatarProfile">
-                            <div class="flex-1">
-                                <div class="text-2xl font-bold"><?php echo $_SESSION["Ten"]; ?></div>
-                                <div class="text-sm text-gray-700"><?php echo $_SESSION["email"]; ?></div>
+
+                    <div class="flex items-center space-x-6 cursor-pointer">
+                        <div class="relative" onclick="openAvatarModal()">
+                            <div class="absolute opacity-70 bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-8 bg-white rounded-b-full flex items-center justify-center text-white text-xs">
+                                <div class="opacity-100 text-gray-400">Thay đổi</div>
                             </div>
+                            <img id="avatarProfile" 
+                                src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION['Ten']); ?>" 
+                                alt="User Avatar" 
+                                class="w-16 h-16 rounded-full">
                         </div>
+                        <div class="flex-1">
+                            <div class="text-2xl font-bold"><?php echo $_SESSION['Ten']; ?></div>
+                            <div class="text-sm text-gray-700"><?php echo $_SESSION['email']; ?></div>
+                        </div>
+                    </div>
+
+
+                       
                         
                         <div class="flex flex-col md:flex-row gap-2">
                             <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
@@ -109,7 +127,6 @@ if(!isset($_SESSION["email"])){
         </div>
         <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
-    <!-- <script src="/public/js/client.js"></script> -->
     <script src="/public/js/notyf.min.js"></script>
     <!-- <script src="/public/js/profile.js"></script> -->
     <script>
@@ -187,6 +204,7 @@ if(!isset($_SESSION["email"])){
         }
     } catch { }
     </script>
+    <script src="/public/js/client.js"></script>
 </body>
 </html> 
 </body>

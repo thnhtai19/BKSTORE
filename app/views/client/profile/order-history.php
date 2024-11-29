@@ -1,6 +1,12 @@
 <?php
 require_once dirname(__DIR__, 4) . '/config/db.php';
 require_once dirname(__DIR__, 3) . '/models/UserService.php';
+
+if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
+    header("Location: /maintain");
+    exit;
+}
+
 if(!isset($_SESSION["email"])){
     header("Location: /auth/login");
     exit();
