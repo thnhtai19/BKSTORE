@@ -113,6 +113,7 @@ RewriteRule ^api/order/order$ /app/controllers/order/order.php [L]
 RewriteRule ^api/order/update$ /app/controllers/order/update.php [L]
 RewriteRule ^api/order/list$ /app/controllers/order/list.php [L]
 RewriteRule ^api/order/profile$ /app/controllers/order/profile.php [L]
+RewriteRule ^api/order/delete$ /app/controllers/order/delete.php [L]
 
 #SYSTEM ROUTERS BACKEND
 RewriteRule ^api/system/contact$ /app/controllers/system/contactInfo.php [L]

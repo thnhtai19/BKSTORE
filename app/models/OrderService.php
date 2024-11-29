@@ -268,6 +268,50 @@ class OrderService {
         return ['success' => true, 'So_tien_da_mua' => $this->purchasedAmount($result), 'So_don_hang' => $num];
     }
 
+    public function delete($uid, $ID_DonHang) {
+        $sql = 'SELECT * FROM `DON_HANG` WHERE `UID` = ? AND ID_DonHang = ? AND (TrangThai = "Chờ xác nhận" OR TrangThai = "Đã xác nhận")';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('ii', $uid, $ID_DonHang);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) return ['success' => false, 'message' => 'Không tìm thấy đơn hàng'];
+        $sql = 'UPDATE don_hang SET TrangThai = "Đã hủy" WHERE ID_DonHang = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $ID_DonHang);
+        $stmt->execute();
+        $this->cancelOrder($this->getProductOrder($ID_DonHang));
+        return ['success' => true, 'message' => 'Hủy đơn hàng thành công'];
+    }
+
+    private function getProductOrder($ID_DonHang) {
+        $sql = 'SELECT ID_SP, SoLuong FROM GOM WHERE ID_DonHang =?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $ID_DonHang);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $product_list = [];
+        while ($row = $result->fetch_assoc()) {
+            $product_list[] = $row;
+        }
+        return $product_list;
+    }
+
+    private function cancelOrder($product_list) {
+        foreach ($product_list as $row) {
+            $sql = 'SELECT SoLuongKho FROM san_pham WHERE ID_SP = ?';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('i', $row['ID_SP']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $result = $result->fetch_assoc();
+            $new_quantity = $result['SoLuongKho'] + $row['SoLuong'];
+            $sql = 'UPDATE san_pham SET SoLuongKho = ? WHERE ID_SP = ?';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('ii', $new_quantity, $row['ID_SP']);
+            $stmt->execute();
+        }
+    }
+
     private function purchasedAmount($data) {
         $money = 0;
         foreach ($data as $order) {
@@ -318,12 +362,6 @@ class OrderService {
             $stmt->execute();
         }
         else return false;
-        // else {
-        //     $sql = 'DELETE FROM ma_giam_gia WHERE Ma = ?';
-        //     $stmt = $this->conn->prepare($sql);
-        //     $stmt->bind_param('s', $MaGiamGia);
-        //     $stmt->execute();
-        // }
         return true;
     }
 

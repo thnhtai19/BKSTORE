@@ -20,7 +20,7 @@ class support {
     public function handle_charge($MaGiamGia, $TienGiam, $DieuKien, $tienHang, $phiVanChuyen, $PhuongThucThanhToan, $sex) {
         if (!$this->checkCondition($DieuKien, $sex, $PhuongThucThanhToan, $tienHang)) {
             return ['success' => false, 'message' => [
-                'mesage' => 'Không thể áp mã giảm giá này cho đơn hàng', 
+                'message' => 'Không thể áp mã giảm giá này cho đơn hàng', 
                 'Gioi_tinh' => $sex, 
                 'DB' => $DieuKien
             ]];

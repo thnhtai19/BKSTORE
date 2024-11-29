@@ -12,7 +12,7 @@ class SystemService {
         $this->support = new support();
     }
 
-    public function getInfoList() {
+    public function getNewInfo() {
         // Query to fetch MaTinTuc and TieuDe
         $sql1 = "SELECT MaTinTuc, TieuDe FROM TIN_TUC WHERE TrangThai != 'Đang ẩn' ORDER BY MaTinTuc DESC";
         $query1 = $this->conn->prepare($sql1);
@@ -106,7 +106,9 @@ class SystemService {
         $stmt->bind_param('i', $MaTinTuc);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        $result = $result->fetch_assoc();
+        $result['Anh'] = $this->getImageNews($MaTinTuc);
+        return $result;
     }
 
     public function footer() {
@@ -118,7 +120,7 @@ class SystemService {
     }
 
     public function getNewsList() {
-        $sql = 'SELECT MaTinTuc, TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa FROM TIN_TUC ORDER BY MaTinTuc DESC';
+        $sql = 'SELECT * FROM tin_tuc ORDER BY MaTinTuc DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -127,12 +129,13 @@ class SystemService {
             $row['Anh'] = $this->getImageNews($row['MaTinTuc']);
             $result[] = [
                 'MaTinTuc' => $row['MaTinTuc'],
-                'tieu_de' => $row['TieuDe'],
-                'anh' => $row['Anh'],
-                'noi_dung' => $row['NoiDung'],
-                'thoi_gian_tao' => $row['ThoiGianTao'],
-                'tu_khoa' => $row['TuKhoa'],
-                'mo_ta' => $row['MoTa'],
+                'TieuDe' => $row['TieuDe'],
+                'Anh' => $row['Anh'],
+                'NoiDung' => $row['NoiDung'],
+                'ThoiGianTao' => $row['ThoiGianTao'],
+                'TuKhoa' => $row['TuKhoa'],
+                'MoTa' => $row['MoTa'],
+                'TrangThai' => $row['TrangThai']
             ];
         }
         return $result;
@@ -231,7 +234,8 @@ class SystemService {
                 'Image' => $row['Image'],
                 'IdSP' => $row['IdSP'],
                 'MoTa' => $row['MoTa'],
-                'TenSP' => $tenSP
+                'TenSP' => $tenSP,
+                'TrangThai' => $row['TrangThai']
             ];
         }
         return $result;
@@ -296,9 +300,10 @@ class SystemService {
         while ($row = $stmt->fetch_assoc()) {
             $result[] = [
                 'MaThongTin' => $row['MaThongTin'],
-                'Image' => $row['HinhAnh'],
+                'Anh' => $row['HinhAnh'],
                 'Loai' => $row['Loai'],
-                'ThongTin' => $row['ThongTin']
+                'ThongTin' => $row['ThongTin'],
+                'TrangThai' => $row['TrangThai']
             ];
         }
         return $result;
@@ -355,7 +360,7 @@ class SystemService {
     }
 
     public function getSocialList() {
-        $sql = 'SELECT MaMXH, HinhAnh, LienKet FROM MANG_XA_HOI ORDER BY MaMXH DESC';
+        $sql = 'SELECT * FROM mang_xa_hoi ORDER BY MaMXH DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -364,7 +369,8 @@ class SystemService {
             $result[] = [
                 'MaMXH' => $row['MaMXH'],
                 'Image' => $row['HinhAnh'],
-                'Link' => $row['LienKet']
+                'Link' => $row['LienKet'],
+                'TrangThai' => $row['TrangThai']
             ];
         }
         return $result;
@@ -420,7 +426,7 @@ class SystemService {
     }
 
     public function getPartnerList() {
-        $sql = 'SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM DOI_TAC ORDER BY MaDoiTac DESC';
+        $sql = 'SELECT * FROM doi_tac ORDER BY MaDoiTac DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -430,7 +436,8 @@ class SystemService {
                 'MaDoiTac' => $row['MaDoiTac'],
                 'name' => $row['Ten'],
                 'image' => $row['HinhAnh'],
-                'link' => $row['LienKet']
+                'link' => $row['LienKet'],
+                'TrangThai' => $row['TrangThai']
             ];
         }
         return $result;
