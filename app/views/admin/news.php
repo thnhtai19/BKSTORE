@@ -13,11 +13,21 @@ if(!($_SESSION["Role"] == 'Admin')){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="/public/css/admin.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <title>Quản lý tin tức | ADMIN BKSTORE</title>
 </head>
 
 <body class="bg-gray-100">
+    <div id="confirmModal" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <p class="text-lg mb-4 text-center">Bạn có muốn xoá tintuc này không?</p>
+            <div class="flex justify-end gap-4">
+                <button id="confirmDelete" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Có</button>
+                <button id="cancelDelete" class="bg-gray-300 text-gray-800 py-2 px-4 rounded hover:bg-gray-400">Không</button>
+            </div>
+        </div>
+    </div>
     <div id="editNewsModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-40">
         <div class="bg-white p-6 rounded-lg w-11/12 lg:w-2/4 z-50 overflow-y-auto" style="max-height: 700px">
             <div class="flex justify-between items-start">
@@ -37,7 +47,7 @@ if(!($_SESSION["Role"] == 'Admin')){
             <div class="flex gap-2">
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Thời gian tạo:</label>
-                    <input id="thoigiantao" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <input id="thoigiantao" class="mt-2 mb-4 w-full p-2 border rounded" disabled>
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Trạng thái:</label>
@@ -54,19 +64,19 @@ if(!($_SESSION["Role"] == 'Admin')){
             </div>
 
             <div class="w-full">
+                <label class="block text-sm font-medium text-gray-700">Mô tả tiêu đề:</label>
+                <input type="text" id="motatintuc" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập mô tả tiêu đề">
+            </div>
+
+            <div class="w-full">
                 <label for="mota" class="block text-sm font-medium text-gray-700">Nội dung:</label>
                 <textarea id="noidung" class="mt-2 mb-4 w-full p-2 border rounded" rows="3" placeholder="Nhập mô tả"></textarea>
             </div>
             
             <div class="w-full">
                 <label for="hinhanh" class="block text-sm font-medium text-gray-700">Hình ảnh:</label>
-                <div class="flex flex-wrap gap-4 mt-2">
-                    <div class="relative border border-gray-300 p-1 rounded-md">
-                        <img src="/public/image/book1.webp" alt="Hình ảnh 1" class="w-16 h-16 object-cover rounded">
-                        <button class="absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">
-                            ✕
-                        </button>
-                    </div>
+                <div class="flex flex-wrap gap-4 mt-2" id="imagePreviewContainer">
+                    
                     <div class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
                         <input type="file" id="uploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUpload(this)">
                         <span class="text-gray-400">+</span>
@@ -76,7 +86,7 @@ if(!($_SESSION["Role"] == 'Admin')){
             
             <div class="flex justify-end space-x-4 pt-6">
                 <button onclick="updateNews()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
-                <button class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
+                <button onclick="deleteNews()" class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
                 <button onclick="closeNewsModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
@@ -92,24 +102,29 @@ if(!($_SESSION["Role"] == 'Admin')){
             <div class="flex gap-2">
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Tiêu đề:</label>
-                    <input type="text" id="tieude" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập tiêu đề">
+                    <input type="text" id="themtieude" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập tiêu đề">
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Từ khoá:</label>
-                    <input id="tukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập từ khoá">
+                    <input id="themtukhoa" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập từ khoá">
                 </div>
+            </div>
+
+            <div class="w-full">
+                <label class="block text-sm font-medium text-gray-700">Mô tả tiêu đề:</label>
+                <input type="text" id="themmotatintuc" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập mô tả tiêu đề">
             </div>
             
             <div class="w-full">
                 <label for="mota" class="block text-sm font-medium text-gray-700">Nội dung:</label>
-                <textarea id="noidung" class="mt-2 mb-4 w-full p-2 border rounded" rows="3" placeholder="Nhập mô tả"></textarea>
+                <textarea id="themnoidung" class="mt-2 mb-4 w-full p-2 border rounded" rows="3" placeholder="Nhập mô tả"></textarea>
             </div>
             
             <div class="w-full">
                 <label for="hinhanh" class="block text-sm font-medium text-gray-700">Hình ảnh:</label>
-                <div class="flex flex-wrap gap-4 mt-2">
+                <div id="previewImage" class="flex flex-wrap gap-4 mt-2">
                     <div class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
-                        <input type="file" id="uploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUpload(this)">
+                        <input type="file" id="addUploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUploadAdd(this)">
                         <span class="text-gray-400">+</span>
                     </div>
                 </div>
@@ -155,20 +170,8 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 action: 'Hành động'
                             };
 
-                            const data = [
-                                {
-                                    id: '2210',
-                                    tieude: "IPhone 16 mới ra mắt siêu xịn",
-                                    thoigiantao: "04/11/2024",
-                                    trangthai: "Đang hiện",
-                                    tukhoa: "Từ khoá của tin tức",
-                                    noidung: 'Nội dung tin tức',
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editNews' },
-                                    ]
-                                },
-                                
-                            ];
+                            let data = [];
+                            let AnhMuonXoa = []; 
 
                             function editNews(item) {
                                 document.getElementById("editNewsModal").classList.remove("hidden");
@@ -180,10 +183,42 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 document.getElementById("trangthai").value = parseItem.trangthai; 
                                 document.getElementById("tukhoa").value = parseItem.tukhoa;  
                                 document.getElementById("noidung").value = parseItem.noidung;              
+                                document.getElementById("motatintuc").value = parseItem.mota;              
+                            
+                                const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                                const imageDiv = document.createElement('div');
+                                imageDiv.classList.add('relative', 'border', 'border-gray-300', 'p-1', 'rounded-md');
+                                imageDiv.innerHTML = `
+                                    <img src="${parseItem.hinhanh}" alt="Hình ảnh" class="w-16 h-16 object-cover rounded">
+                                    <button class="delete-image absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">✕</button>
+                                `;
+                                imagePreviewContainer.appendChild(imageDiv);
+                                attachDeleteEvent();
+                            }
+
+                            function attachDeleteEvent() {
+                                const deleteButtons = document.querySelectorAll('.delete-image');
+                                deleteButtons.forEach(button => {
+
+                                    button.addEventListener('click', function () {
+                                        const src = this.parentElement.querySelector("img").src;
+                                        const relativePath  = new URL(src).pathname;
+                                        AnhMuonXoa.push(relativePath);
+                                        const imageDiv = this.parentElement;
+                                        imageDiv.remove();
+                                        console.log("Danh sách AnhMuonXoa:", AnhMuonXoa);
+                                    });
+                                });
                             }
 
                             function closeNewsModal() {
                                 document.getElementById("editNewsModal").classList.add("hidden");
+                                document.getElementById('imagePreviewContainer').innerHTML = `
+                                    <div class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
+                                        <input type="file" id="uploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUpload(this)">
+                                        <span class="text-gray-400">+</span>
+                                    </div>
+                                `;
                             }
 
                             function addNews() {
@@ -193,6 +228,45 @@ if(!($_SESSION["Role"] == 'Admin')){
                             function closeModalAddNews() {
                                 document.getElementById("addNewsModal").classList.add("hidden");
                             }
+
+                            async function getData() {
+                                const response = await fetch(`${window.location.origin}/api/news`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+                                if (response.ok) {
+                                    const dataNews = await response.json();
+                                    console.log(dataNews); 
+                                    dataNews.forEach(news => {
+                                        data.push({
+                                            id: news.MaTinTuc,
+                                            tieude: news.TieuDe,
+                                            thoigiantao: news.ThoiGianTao,
+                                            trangthai: news.TrangThai,
+                                            tukhoa: news.TuKhoa,
+                                            noidung: news.NoiDung,
+                                            hinhanh: news.Anh,
+                                            mota: news.MoTa,    
+                                            action: [
+                                                { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editNews' },
+                                            ]
+                                        });
+                                    });
+                                    console.log(data); 
+
+                                    const event = new CustomEvent('dataReady', { detail: dataNews });
+                                    window.dispatchEvent(event);
+                                } else {
+                                    console.error("Lỗi khi lấy dữ liệu từ API:", response.status);
+                                }
+                            }
+
+                            window.onload = async function() {
+                                await getData(); 
+                            };
 
 
                         </script>
@@ -207,6 +281,243 @@ if(!($_SESSION["Role"] == 'Admin')){
         </div>
     </div>
     <script src="/public/js/sidebar.js"></script>
+    <script src="/public/js/notyf.min.js"></script>
+    <script>
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+
+        function deleteNews(){
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('hidden');
+
+            document.getElementById('confirmDelete').onclick = function() {
+                modal.classList.add('hidden');
+                const MaTinTuc = Number(document.getElementById("idNews").value.trim());
+                if (!/^\d+$/.test(MaTinTuc)) {
+                    return notyf.error("ID không hợp lệ. Vui lòng kiểm tra lại.");
+                }
+
+                const formData = {
+                    MaTinTuc: MaTinTuc
+                };
+                fetch(`${window.location.origin}/api/news/delete`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.success) {
+                        notyf.success(data.message);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        notyf.error(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    notyf.error("Không thể kết nối đến server. Vui lòng thử lại sau.");
+                });
+            }
+
+            document.getElementById('cancelDelete').onclick = function() {
+                modal.classList.add('hidden');
+            }
+            
+        }
+
+        function handleImageUploadAdd(input) {
+            const previewContainer = document.getElementById('previewImage');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imageWrapper = document.createElement('div');
+                    imageWrapper.className = "relative border border-gray-300 p-1 rounded-md";
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = "Uploaded Image";
+                    img.className = "w-16 h-16 object-cover rounded";
+
+                    const removeButton = document.createElement('button');
+                    removeButton.className = "absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none";
+                    removeButton.innerHTML = "✕";
+
+                    removeButton.onclick = function () {
+                        previewContainer.removeChild(imageWrapper);
+                    };
+
+                    imageWrapper.appendChild(img);
+                    imageWrapper.appendChild(removeButton);
+
+                    previewContainer.appendChild(imageWrapper);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function handleImageUpload(input) {
+            const previewContainer = document.getElementById('imagePreviewContainer');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imageWrapper = document.createElement('div');
+                    imageWrapper.className = "relative border border-gray-300 p-1 rounded-md";
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = "Uploaded Image";
+                    img.className = "w-16 h-16 object-cover rounded";
+
+                    const removeButton = document.createElement('button');
+                    removeButton.className = "absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none";
+                    removeButton.innerHTML = "✕";
+
+                    removeButton.onclick = function () {
+                        previewContainer.removeChild(imageWrapper);
+                    };
+
+                    imageWrapper.appendChild(img);
+                    imageWrapper.appendChild(removeButton);
+
+                    previewContainer.appendChild(imageWrapper);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function updateNews() {
+            const apiUrl = '/api/news/update';
+            const MaTinTuc = document.getElementById("idNews").value.trim();
+            const TieuDe = document.getElementById("tieude").value.trim();
+            const TuKhoa = document.getElementById("themtukhoa").value.trim();
+            const MoTaTinTuc = document.getElementById("motatintuc").value.trim();
+            const NoiDung = document.getElementById("noidung").value.trim();
+            const TrangThai = document.getElementById("trangthai").value.trim();
+
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const images = previewContainer.querySelectorAll('img');
+            if (images.length === 0) {
+                return notyf.error("Bạn cần tải lên ít nhất một hình ảnh.");
+            }
+
+            const formData = new FormData();
+            formData.append('TuKhoa', TuKhoa);
+            formData.append('MoTaTinTuc', MoTaTinTuc);
+            formData.append('NoiDung', NoiDung);
+            formData.append('TieuDe', TieuDe);
+            formData.append('MaTinTuc', MaTinTuc);
+            formData.append('TrangThai', TrangThai);
+            
+            for (const anh of AnhMuonXoa) {
+                formData.append('AnhMuonXoa[]', anh);
+            }
+            
+
+            for (const img of images) {
+                const response = await fetch(img.src);
+                const blob = await response.blob();
+                formData.append('product[]', blob, `image_${Date.now()}.jpg`);
+                formData.append(`MoTaHinhAnh[]`, "");
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    notyf.error('Xảy ra lỗi khi thêm sản phẩm!');
+                    return
+                }
+
+                const result = await response.json();
+                if(result['success']){
+                    notyf.success(result.message);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);   
+                }else{
+                    notyf.error(result.message);
+                    return
+                }
+            } catch (error) {
+                console.log(error)
+                notyf.error('Xảy ra lỗi khi thêm sản phẩm!');
+            }
+        }
+
+        async function updateAddNews() {
+            const apiUrl = '/api/news';
+            const TieuDe = document.getElementById("themtieude").value.trim();
+            const TuKhoa = document.getElementById("themtukhoa").value.trim();
+            const MoTaTinTuc = document.getElementById("themmotatintuc").value.trim();
+            const NoiDung = document.getElementById("themnoidung").value.trim();
+
+            const previewContainer = document.getElementById('previewImage');
+            const images = previewContainer.querySelectorAll('img');
+            if (images.length === 0) {
+                return notyf.error("Bạn cần tải lên ít nhất một hình ảnh.");
+            }
+
+            const formData = new FormData();
+            formData.append('TuKhoa', TuKhoa);
+            formData.append('MoTaTinTuc', MoTaTinTuc);
+            formData.append('NoiDung', NoiDung);
+            formData.append('TieuDe', TieuDe);
+
+            for (const img of images) {
+                const response = await fetch(img.src);
+                const blob = await response.blob();
+                formData.append('product[]', blob, `image_${Date.now()}.jpg`);
+                formData.append(`MoTaHinhAnh[]`, "");
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    notyf.error('Xảy ra lỗi khi thêm sản phẩm!');
+                    return
+                }
+
+                const result = await response.json();
+                if(result['success']){
+                    notyf.success(result.message);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);   
+                }else{
+                    notyf.error('Thêm sản phẩm thất bại!');
+                    return
+                }
+            } catch (error) {
+                notyf.error('Xảy ra lỗi khi thêm sản phẩm!');
+            }
+        }
+
+
+    </script>
 </body>
 
 </html>

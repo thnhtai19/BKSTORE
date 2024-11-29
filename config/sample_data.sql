@@ -185,13 +185,13 @@
     (2, 'Tin tức 2', '09:30:00 20-10-2023', 'Nội dung tin tức 2', 'sách mới, tác giả nổi tiếng', 'Đang ẩn', NULL);
 
     INSERT INTO `ANH_MINH_HOA` (`MaAnh`, `MoTa`, `LinkAnh`, `MaTinTuc`) VALUES
-    (1, 'Ảnh minh họa cho tin tức 1', 'public/image/tin1.jpg', 1),
-    (2, 'Ảnh minh họa cho tin tức 2', 'public/image/tin2.jpg', 2);
+    (1, 'Ảnh minh họa cho tin tức 1', '/public/image/tin1.jpg', 1),
+    (2, 'Ảnh minh họa cho tin tức 2', '/public/image/tin2.jpg', 2);
 
     INSERT INTO `BANNER` (`MaBanner`, `Image`, `IdSP`, `MoTa`, `TrangThai`) VALUES
-    (1, 'public/image/1.webp', 1, '', 'Đang hiện'),
-    (2, 'public/image/2.webp', 2, '', 'Đang hiện'),
-    (3, 'public/image/3.webp', 3, '', 'Đang hiện');
+    (1, '/public/image/1.webp', 1, '', 'Đang hiện'),
+    (2, '/public/image/2.webp', 2, '', 'Đang hiện'),
+    (3, '/public/image/3.webp', 3, '', 'Đang hiện');
 
     INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet, `TrangThai`)
     VALUES
@@ -207,14 +207,14 @@
 
     INSERT INTO THONG_TIN_LIEN_HE (Loai, ThongTin, HinhAnh, TrangThai)
     VALUES
-    ('Email', 'contact@website.com', 'public/image/email.png', 'Đang hiện'),
-    ('Hotline', '+84 123 456 789', 'image_1.png', 'Đang hiện'),
-    ('Địa chỉ', '123 Đường ABC, Quận 1, TP.HCM', 'image_1.png', 'Đang hiện'),
-    ('Fanpage', 'facebook.com/website', 'image_1.png', 'Đang hiện'),
-    ('Zalo', 'Zalo: +84 987 654 321', 'image_1.png', 'Đang hiện'),
-    ('Tư vấn mua hàng', '+84 123 456 789', 'public/image/consultation.jpg', 'Đang hiện'),
-    ('Tư vấn đổi sách', '+84 123 456 745', 'public/image/warranty.jfif', 'Đang hiện'),
-    ('Khiếu nại', '+84 123 456 123', 'public/image/complaint.jfif', 'Đang hiện');
+    ('Email', 'contact@website.com', '/public/image/email.png', 'Đang hiện'),
+    ('Hotline', '+84 123 456 789', '/public/image/complaint.jfif', 'Đang hiện'),
+    ('Địa chỉ', '123 Đường ABC, Quận 1, TP.HCM', '/public/image/complaint.jfif', 'Đang hiện'),
+    ('Fanpage', 'facebook.com/website', '/public/image/complaint.jfif', 'Đang hiện'),
+    ('Zalo', 'Zalo: +84 987 654 321', '/public/image/complaint.jfif', 'Đang hiện'),
+    ('Tư vấn mua hàng', '+84 123 456 789', '/public/image/consultation.jpg', 'Đang hiện'),
+    ('Tư vấn đổi sách', '+84 123 456 745', '/public/image/warranty.jfif', 'Đang hiện'),
+    ('Khiếu nại', '+84 123 456 123', '/public/image/complaint.jfif', 'Đang hiện');
 
 
     INSERT INTO MANG_XA_HOI (HinhAnh, LienKet, TrangThai)

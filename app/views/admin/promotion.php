@@ -13,6 +13,7 @@ if(!($_SESSION["Role"] == 'Admin')){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="/public/css/admin.css">
+    <link rel="stylesheet" href="/public/css/notyf.min.css">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <title>Chương trình khuyến mãi | ADMIN BKSTORE</title>
 </head>
@@ -42,7 +43,14 @@ if(!($_SESSION["Role"] == 'Admin')){
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Điều kiện:</label>
-                    <input id="dieukien" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <select id="dieukien" class="mt-2 mb-4 w-full p-2 border rounded">
+                        <option value="Tất cả">Tất cả</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Chẵn">Chẵn</option>
+                        <option value="Lẻ">Lẻ</option>
+                        <option value="COD">COD</option>
+                    </select>
                 </div>
             </div>
             <div class="flex gap-2">
@@ -92,12 +100,19 @@ if(!($_SESSION["Role"] == 'Admin')){
                 </div>
                 <div class="w-1/2">
                 <label class="block text-sm font-medium text-gray-700">Điều kiện:</label>
-                <input id="themdieukien" class="mt-2 mb-4 w-full p-2 border rounded" placeholder="Nhập điều kiện">
+                <select id="themdieukien" class="mt-2 mb-4 w-full p-2 border rounded">
+                    <option value="Tất cả">Tất cả</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Chẵn">Chẵn</option>
+                    <option value="Lẻ">Lẻ</option>
+                    <option value="COD">COD</option>
+                </select>
             </div>
             </div>
             
             <div class="flex justify-end space-x-4 pt-6">
-                <button class="bg-green-500 text-white px-4 py-2 rounded">Thêm</button>
+                <button onclick="addPromotion()" class="bg-green-500 text-white px-4 py-2 rounded">Thêm</button>
                 <button onclick="closeModalAddPromotion()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
@@ -137,19 +152,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 action: "Hành động"
                             };
 
-                            const data = [
-                                {
-                                    id: '2210',
-                                    ma: 'NAPCARD20K',
-                                    tiengiam: '20K',
-                                    dieukien: "Nạp lần đầu",
-                                    soluong: '100',
-                                    trangthai: 'Kích hoạt',
-                                    action: [
-                                        { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editPromotion' },
-                                    ]
-                                }
-                            ];
+                            let data = [];
 
                             function editPromotion(item) {
                                 document.getElementById("editPromotionModal").classList.remove("hidden");
@@ -183,6 +186,43 @@ if(!($_SESSION["Role"] == 'Admin')){
                             function closeModalAddPromotion() {
                                 document.getElementById("addPromotionModal").classList.add("hidden");
                             }
+
+                            async function getData() {
+                                const response = await fetch(`${window.location.origin}/api/admin/sale`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+                                if (response.ok) {
+                                    const dataSale = await response.json();
+                                    console.log(dataSale); 
+                                    dataSale['danh_sach_khuyen_mai'].forEach(sale => {
+                                        data.push({
+                                            id: sale.ID_GiamGia,
+                                            ma: sale.Ma,
+                                            tiengiam: Math.round(sale.TienGiam).toLocaleString('vi-VN'),
+                                            dieukien: sale.DieuKien,
+                                            soluong: sale.SoLuong,
+                                            trangthai: sale.TrangThai,
+                                            action: [
+                                                { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editPromotion' },
+                                            ]
+                                        });
+                                    });
+                                    console.log(data); 
+
+                                    const event = new CustomEvent('dataReady', { detail: dataSale });
+                                    window.dispatchEvent(event);
+                                } else {
+                                    console.error("Lỗi khi lấy dữ liệu từ API:", response.status);
+                                }
+                            }
+
+                            window.onload = async function() {
+                                await getData(); 
+                            };
                         </script>
                         <?php
                             $title = "Quản lý sản phẩm";
@@ -195,6 +235,148 @@ if(!($_SESSION["Role"] == 'Admin')){
         </div>
     </div>
     <script src="/public/js/sidebar.js"></script>
+    <script src="/public/js/notyf.min.js"></script>
+    <script>
+        var notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'right',
+            y: 'top',
+            },
+        });
+
+        function updatePromotion() {
+            const id = Number(document.getElementById("id").value.trim());
+            const maGiamGia = document.getElementById("magiamgia").value.trim();
+            let tienGiam = document.getElementById("tiengiam").value.trim();
+            const dieuKien = document.getElementById("dieukien").value.trim();
+            const soLuong = Number(document.getElementById("soluong").value.trim());
+            const trangThai = document.getElementById("trangthai").value.trim();
+
+            
+            if (!/^\d+$/.test(id)) {
+                return notyf.error("ID không hợp lệ. Vui lòng kiểm tra lại.");
+            }
+
+            if (!maGiamGia || !/^[a-zA-Z0-9_-]+$/.test(maGiamGia)) {
+                return notyf.error("Mã giảm giá không hợp lệ. Chỉ cho phép chữ, số, gạch ngang và gạch dưới.");
+            }
+
+            if (/^[\d.]+$/.test(tienGiam)) {
+                tienGiam = parseInt(tienGiam.replace(/\./g, ''), 10);
+                if (!/^\d+$/.test(tienGiam) || parseInt(tienGiam) <= 0) {
+                    return notyf.error("Tiền giảm phải là số nguyên dương.");
+                }
+            } else {
+                return notyf.error("Tiền giảm phải là số nguyên dương.");
+            }
+
+            if (!['Male', 'Female', 'COD', 'Tất cả', 'Chẵn', 'lẻ'].includes(dieuKien)) {
+                return notyf.error("Điều kiện không hợp lệ.");
+            }
+
+            if (!/^\d+$/.test(soLuong) || parseInt(soLuong) <= 0) {
+                return notyf.error("Số lượng phải là số nguyên dương.");
+            }
+
+            const validTrangThai = ["Kích hoạt", "Hết hạn"];
+            if (!validTrangThai.includes(trangThai)) {
+                return notyf.error("Trạng thái không hợp lệ.");
+            }
+
+            const dataUpdate = {
+                ID_GiamGia: id, 
+                Ma: maGiamGia,
+                TienGiam: tienGiam,
+                DieuKien: dieuKien,
+                SoLuong: soLuong,
+                TrangThai: trangThai,
+            };
+            console.log(dataUpdate)
+            fetch(`${window.location.origin}/api/admin/updateSale`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataUpdate)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.success) {
+                    notyf.success(data.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    notyf.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                notyf.error("Không thể kết nối đến server. Vui lòng thử lại sau.");
+            });
+        }
+
+        function addPromotion() {
+            const themMaGiamGia = document.getElementById("themmagiamgia").value.trim();
+            let themTienGiam = document.getElementById("themtiengiam").value.trim();
+            const themDieuKien = document.getElementById("themdieukien").value.trim();
+            const themSoLuong = Number(document.getElementById("themsoluong").value.trim());
+
+            if (!themMaGiamGia || !/^[a-zA-Z0-9_-]+$/.test(themMaGiamGia)) {
+                return notyf.error("Mã giảm giá không hợp lệ. Chỉ cho phép chữ, số, gạch ngang và gạch dưới.");
+            }
+
+            if (/^[\d.]+$/.test(themTienGiam)) {
+                themTienGiam = parseInt(themTienGiam.replace(/\./g, ''), 10);
+                if (!/^\d+$/.test(themTienGiam) || parseInt(themTienGiam) <= 0) {
+                    return notyf.error("Tiền giảm phải là số nguyên dương.");
+                }
+            } else {
+                return notyf.error("Tiền giảm phải là số nguyên dương.");
+            }
+
+            if (!['Male', 'Female', 'COD', 'Tất cả', 'Chẵn', 'lẻ'].includes(themDieuKien)) {
+                return notyf.error("Điều kiện không hợp lệ.");
+            }
+
+            if (!/^\d+$/.test(themSoLuong) || parseInt(themSoLuong) <= 0) {
+                return notyf.error("Số lượng phải là số nguyên dương.");
+            }
+
+            const dataUpdate = {
+                Ma: themMaGiamGia,
+                TienGiam: themTienGiam,
+                DieuKien: themDieuKien,
+                SoLuong: themSoLuong,
+            };
+            console.log(dataUpdate)
+            fetch(`${window.location.origin}/api/admin/sale`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataUpdate)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.success) {
+                    notyf.success(data.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    notyf.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                notyf.error("Không thể kết nối đến server. Vui lòng thử lại sau.");
+            });
+        }
+    </script>
 </body>
 
 </html>

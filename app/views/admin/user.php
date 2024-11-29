@@ -50,7 +50,11 @@ if(!($_SESSION["Role"] == 'Admin')){
             <div class="flex gap-2">
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Giới tính:</label>
-                    <input type="text" id="sex" class="mt-2 mb-4 w-full p-2 border rounded h-10">
+                    <select id="sex" class="mt-2 mb-4 w-full p-2 border rounded h-10">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Trạng thái:</label>
@@ -136,7 +140,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                             email: user.email,
                                             phone: user.phone,
                                             address: user.address,
-                                            status: "Đang hoạt động", //chưa có trong dữ liệu lấy đc    
+                                            status: user.status,    
                                             sex: user.sex,
                                             action: [
                                                 { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editUser' },
@@ -178,16 +182,38 @@ if(!($_SESSION["Role"] == 'Admin')){
             },
         });
         function updateUser() {
-            const uid = document.getElementById("idUser").value;
-            const name = document.getElementById("nameUser").value;
-            const email = document.getElementById("email").value;
-            const phone = document.getElementById("phone").value;
-            const sex = document.getElementById("sex").value;
-            const status = document.getElementById("trangthai").value;
-            const address = document.getElementById("address").value;
+            const uid = Number(document.getElementById("idUser").value.trim());
+            const name = document.getElementById("nameUser").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const sex = document.getElementById("sex").value.trim();
+            const status = document.getElementById("trangthai").value.trim();
+            const address = document.getElementById("address").value.trim();
+
+            if (!/^\d+$/.test(uid)) {
+                return notyf.error("UID không hợp lệ.");
+            }
+            if (!/^[a-zA-Z\s]+$/.test(name) || name.length > 50) {
+                return notyf.error("Tên không hợp lệ hoặc quá dài.");
+            }
+            if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+                return notyf.error("Email không hợp lệ.");
+            }
+            if (!/^\d{9,15}$/.test(phone)) {
+                return notyf.error("Số điện thoại không hợp lệ.");
+            }
+            if (!['Male', 'Female', 'Other'].includes(sex)) {
+                return notyf.error("Giới tính không hợp lệ.");
+            }
+            if (!['Đang hoạt động', 'Bị cấm'].includes(status)) {
+                return notyf.error("Trạng thái không hợp lệ.");
+            }
+            if (address.length > 200) {
+                return notyf.error("Địa chỉ quá dài.");
+            }
 
             const payload = {
-                UID: Number(uid), 
+                UID: uid, 
                 name: name,
                 email: email,
                 phone: phone,
@@ -206,7 +232,9 @@ if(!($_SESSION["Role"] == 'Admin')){
             .then(data => {
                 if (data.success) {
                     notyf.success(data.message);
-                    location.reload();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
                 } else {
                     notyf.error(data.message);
                 }
