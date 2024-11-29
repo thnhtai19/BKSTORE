@@ -48,7 +48,7 @@ class SystemService {
     }
     
     public function getContactInfo() {
-        $sql = "SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM THONG_TIN_LIEN_HE";
+        $sql = "SELECT MaThongTin, Loai, ThongTin, HinhAnh FROM THONG_TIN_LIEN_HE WHERE TrangThai != 'Đang ẩn' ORDER BY MaThongTin DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -67,6 +67,39 @@ class SystemService {
         return ['success' => true, 'info' => $contact];
     }
 
+    public function getSocialInfo() {
+        $sql = "SELECT MaMXH, HinhAnh, LienKet FROM MANG_XA_HOI WHERE TrangThai != 'Đang ẩn' ORDER BY MaMXH DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = [
+                'MaMXH' => $row['MaMXH'],
+                'Image' => $row['HinhAnh'],
+                'Link' => $row['LienKet']
+            ];
+        }
+        return $result;
+    }
+
+    public function getPartnerInfo() {
+        $sql = "SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM DOI_TAC WHERE TrangThai != 'Đang ẩn' ORDER BY MaDoiTac DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        $result = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $result[] = [
+                'MaDoiTac' => $row['MaDoiTac'],
+                'name' => $row['Ten'],
+                'image' => $row['HinhAnh'],
+                'link' => $row['LienKet']
+            ];
+        }
+        return $result;
+    }
+
     public function getNew($MaTinTuc) {
         $sql = 'SELECT * FROM TIN_TUC WHERE MaTinTuc = ?';
         $stmt = $this->conn->prepare($sql);
@@ -78,14 +111,14 @@ class SystemService {
 
     public function footer() {
         return [
-            'mang_xa_hoi' => $this->getSocialList(),
-            'doi_tac' => $this->getPartnerList(),
-            'thong_tin_lien_he' => $this->getContactList()
+            'mang_xa_hoi' => $this->getSocialInfo(),
+            'doi_tac' => $this->getPartnerInfo(),
+            'thong_tin_lien_he' => $this->getContactInfo()
         ];
     }
 
     public function getNewsList() {
-        $sql = 'SELECT MaTinTuc, TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa FROM TIN_TUC WHERE TrangThai != "Đang ẩn" ORDER BY MaTinTuc DESC';
+        $sql = 'SELECT MaTinTuc, TieuDe, ThoiGianTao, NoiDung, TuKhoa, MoTa FROM TIN_TUC ORDER BY MaTinTuc DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -186,7 +219,7 @@ class SystemService {
     }
 
     public function getBannerList() {
-        $sql = 'SELECT * FROM BANNER WHERE TrangThai != "Đang ẩn" ORDER BY MaBanner DESC';
+        $sql = 'SELECT * FROM BANNER ORDER BY MaBanner DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -255,7 +288,7 @@ class SystemService {
     }
 
     public function getContactList() {
-        $sql = 'SELECT * FROM THONG_TIN_LIEN_HE WHERE TrangThai != "Đang ẩn" ORDER BY MaThongTin DESC';
+        $sql = 'SELECT * FROM THONG_TIN_LIEN_HE ORDER BY MaThongTin DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -322,7 +355,7 @@ class SystemService {
     }
 
     public function getSocialList() {
-        $sql = 'SELECT MaMXH, HinhAnh, LienKet FROM MANG_XA_HOI WHERE TrangThai != "Đang ẩn" ORDER BY MaMXH DESC';
+        $sql = 'SELECT MaMXH, HinhAnh, LienKet FROM MANG_XA_HOI ORDER BY MaMXH DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();
@@ -387,7 +420,7 @@ class SystemService {
     }
 
     public function getPartnerList() {
-        $sql = 'SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM DOI_TAC WHERE TrangThai != "Đang ẩn" ORDER BY MaDoiTac DESC';
+        $sql = 'SELECT MaDoiTac, Ten, HinhAnh, LienKet FROM DOI_TAC ORDER BY MaDoiTac DESC';
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $stmt = $stmt->get_result();

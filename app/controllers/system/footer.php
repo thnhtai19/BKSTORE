@@ -7,10 +7,7 @@ $model = new SystemService($db->conn);
 header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
-    if (!isset($_SESSION["email"])) {
-        echo json_encode(['success' => false, 'message' => 'Người dùng chưa đăng nhập']);
-    }
-    else echo json_encode($model->footer());
+    echo json_encode($model->footer());
 }
 else {
     $response = ['error' => 'Sai phương thức yêu cầu'];
