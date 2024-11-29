@@ -59,10 +59,12 @@ if(!isset($_SESSION["email"])){
 
                     <div class="w-full lg:w-3/4 rounded-lg space-y-6">
                         <div class="flex gap-2 pb-4">
-                        <button data-status="all" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Tất cả</button>
+                            <button data-status="all" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Tất cả</button>
                             <button data-status="Đã giao hàng" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đã giao hàng</button>
                             <button data-status="Đang xử lý" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đang xử lý</button>
                             <button data-status="Đã hủy" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đã hủy</button>
+                            <button data-status="Đã xác nhận" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đã xác nhận</button>
+                            <button data-status="Chờ xác nhận" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Chờ xác nhận</button>
                         </div>
 
                         <div id="order-list" class="space-y-6"></div>
@@ -131,6 +133,12 @@ if(!isset($_SESSION["email"])){
                             bgColor = 'bg-blue-200';
                             break;
                         case 'Đã hủy':
+                            bgColor = 'bg-red-200';
+                            break;
+                        case 'Đã xác nhận':
+                            bgColor = 'bg-blue-200';
+                            break;
+                        case 'Chờ xác nhận':
                             bgColor = 'bg-red-200';
                             break;
                         default:

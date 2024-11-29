@@ -60,26 +60,25 @@ if(!isset($_SESSION["email"])){
                     <div class="w-full lg:w-3/4 rounded-lg space-y-6">
 
                         <div class="flex items-center space-x-6" >
-                            <img src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION["Ten"]); ?>"
+                            <img src="<?php echo $_SESSION["Avatar"]; ?>"
                                 alt="User Avatar" class="w-16 h-16 rounded-full cursor-pointer" onclick="openAvatarModal()" id="avatarProfile">
                             <div class="flex-1">
                                 <div class="text-2xl font-bold"><?php echo $_SESSION["Ten"]; ?></div>
                                 <div class="text-sm text-gray-700"><?php echo $_SESSION["email"]; ?></div>
                             </div>
                         </div>
-                       
                         
                         <div class="flex flex-col md:flex-row gap-2">
                             <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">4</h3>
+                                <h3 class="text-xl text-center font-bold my-2" id="tongdon">4</h3>
                                 <p class="text-sm text-center text-gray-600 mb-2">Đơn hàng</p>
                             </div>
                             <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2">14M</h3>
+                                <h3 class="text-xl text-center font-bold my-2" id="tongtien">14M</h3>
                                 <p class="text-sm text-center text-gray-600 mb-2">Tổng tiền mua hàng</p>
                             </div>
                             <div class="flex-1 bg-white p-10 shadow-md rounded-lg">
-                                <h3 class="text-xl text-center font-bold my-2" id="role"></h3>
+                                <h3 class="text-xl text-center font-bold my-2" id="role"><?php echo $_SESSION["Role"]; ?></h3>
                                 <p class="text-sm text-center text-gray-600 mb-2">Cấp bậc</p>
                             </div>
                         </div>
@@ -112,7 +111,82 @@ if(!isset($_SESSION["email"])){
     </div>
     <!-- <script src="/public/js/client.js"></script> -->
     <script src="/public/js/notyf.min.js"></script>
-    <script src="/public/js/profile.js"></script>
+    <!-- <script src="/public/js/profile.js"></script> -->
+    <script>
+        var notyf = new Notyf({
+        duration: 3000,
+        position: {
+        x: 'right',
+        y: 'top',
+        },
+    });
+    try {
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchUserData();
+        });
+
+        function openAvatarModal() {
+            document.getElementById('avatarModal').classList.remove('hidden');
+        }
+
+        function closeAvatarModal() {
+            document.getElementById('avatarModal').classList.add('hidden');
+        }
+
+        function uploadAvatar() {
+            const fileInput = document.getElementById('avatarUpload');
+
+            if (!fileInput || fileInput.files.length === 0) {
+                notyf.error('Vui lòng chọn một ảnh.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('avatar', fileInput.files[0]);
+
+            fetch(`${window.location.origin}/api/user/avatar`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    notyf.success('Cập nhật avatar thành công!');
+                    fetchUserData()
+                    closeAvatarModal();
+                } else {
+                    notyf.error('Lỗi: 001' + data.message);
+                }
+            })
+            .catch(error => {
+                notyf.error('Đã xảy ra lỗi khi tải ảnh lên.');
+                console.error(error);
+            });
+        }
+
+        function fetchUserData() {
+            fetch(`${window.location.origin}/api/order/profile`, {
+                method: 'GET',
+                headers: { 
+                    'Content-Type': 'application/json' 
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if(data.success) {
+                    document.getElementById('tongdon').textContent = data.So_don_hang;
+                    document.getElementById('tongdon').textContent = data.So_tien_da_mua;
+
+                }
+            })
+            .catch(error => {
+                notyf.error('Lỗi kết nối');
+            });
+        }
+    } catch { }
+    </script>
 </body>
 </html> 
 </body>

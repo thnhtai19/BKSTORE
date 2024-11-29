@@ -58,16 +58,15 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    console.log(data[0].MaTinTuc)
                     const contentNew = document.getElementById("content-new");
                     contentNew.innerHTML = `
                         <div class="flex flex-col justify-center items-center text-center">
-                            <h3 class="text-xl font-semibold text-blue-600">${data[0].TieuDe}</h3>
+                            <h3 class="text-xl font-semibold text-blue-600">${data.TieuDe}</h3>
                         </div>
-                        <p class="ml-2 text-gray-400">${data[0].ThoiGianTao}</p>
+                        <p class="ml-2 text-gray-400">${data.ThoiGianTao}</p>
                         <div class="ml-2 space-y-4">
                             <p class="text-gray-700">
-                                ${data[0].NoiDung}
+                                ${data.NoiDung}
                             </p>
                         </div>
                     `;

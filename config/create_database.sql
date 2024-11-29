@@ -169,7 +169,7 @@ CREATE TABLE SAN_PHAM (
         NoiDung TEXT,
         TrangThai ENUM('Unread', 'Read') DEFAULT "Unread",
         Type ENUM('Yêu cầu', 'Đơn hàng'),
-        FOREIGN KEY (UID) REFERENCES KHACH_HANG(UID)
+        FOREIGN KEY (UID) REFERENCES LOGIN(UID)
     );
 
     -- Table for LOẠI THÔNG_BÁO

@@ -59,6 +59,7 @@ try {
         })
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             if(!(data.thong_tin.avatar == null)) {
                 const avatarURL = `/` + data.thong_tin.avatar;
                 document.getElementById('avatarProfile').src = avatarURL;
