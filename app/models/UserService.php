@@ -277,7 +277,7 @@ class UserService {
                 JOIN GOM G ON G.ID_DonHang = D.ID_DonHang 
                 WHERE G.ID_SP = ? AND D.UID = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $ID_SP, $uid,);
+        $stmt->bind_param('ii', $ID_SP, $uid);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows == 0) return ["success"=> false,"message"=> "Người dùng chưa mua sản phẩm"];

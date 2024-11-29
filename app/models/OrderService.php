@@ -96,11 +96,22 @@ class OrderService {
                     'gia' => $productDetails['Gia'],
                     'trang_thai' => $row['TrangThai'],
                     'ngay_dat' => $row['NgayDat'],
-                    'so_luong_san_pham' => $product['COUNT']
+                    'so_luong_san_pham' => $product['COUNT'],
+                    'danh_gia' => $this->review($id, $uid)
                 ];
             }
         }
         return ['success' => true, 'message' => $result];
+    }
+
+    private function review($ID_SP, $uid) {
+        $sql = "SELECT * FROM DANH_GIA WHERE ID_SP = ? AND `UID` = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $ID_SP, $uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) return true;
+        return false;
     }
 
     public function getInfo($uid, $ID_DonHang) {
