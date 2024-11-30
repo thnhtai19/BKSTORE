@@ -634,7 +634,7 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             .then(response => response.json())
             .then(data => {
                 const newsContainer = document.getElementById('news-container');
-                newsContainer.innerHTML = data.map(item => `
+                newsContainer.innerHTML = data.danh_sach_tin_tuc.map(item => `
                     <div class="flex gap-4">
                         <img src="${item.AnhMinhHoa[0].LinkAnh}" alt="Tin tức" class="rounded-lg w-32">
                         <a href="/news/detail?id=${item.MaTinTuc}" class="text-sm text-gray-700 hover:underline">${item.TieuDe}</a>

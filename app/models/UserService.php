@@ -192,7 +192,8 @@ class UserService {
                     'noi_dung' => $row['NoiDung'],
                     'TrangThai' => $row['TrangThai'],
                     'type' => $row['Type'],
-                    'ID_Redirect' => $row['ID_DonHang']
+                    'ID_Redirect' => $row['ID_DonHang'],
+                    'NgayThongBao'  => $row['NgayThongBao']
                 ];
             }
             else if ($row['Type'] == 'Yêu cầu') {
@@ -207,7 +208,8 @@ class UserService {
                     'noi_dung' => $row['NoiDung'],
                     'TrangThai' => $row['TrangThai'],
                     'type' => $row['Type'],
-                    'ID_Redirect' => $row['MaDeXuat']
+                    'ID_Redirect' => $row['MaDeXuat'],
+                    'NgayThongBao'  => $row['NgayThongBao']
                 ];
             }
             else return ['sucess' => false, 'message' => 'Đầu vào không hợp lệ'];

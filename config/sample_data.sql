@@ -199,11 +199,11 @@
 
     INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet, `TrangThai`)
     VALUES
-    ('VNPOST', 'public/image/vnpost1.png', 'https://vnpost.vn/', 'Đang hiện'),
-    ('Ninja Van', 'public/image/Logo_ninjavan.webp', 'https://www.ninjavan.co/vi-vn', 'Đang hiện'),
-    ('Ahamove', 'public/image/ahamove_logo3.webp', 'https://www.ahamove.com/', 'Đang hiện'),
-    ('Snappy', 'public/image/icon_snappy1.webp', 'https://snappy.vn/', 'Đang hiện'),
-    ('Pay Os', 'public/image/payos.svg', 'https://payos.vn/', 'Đang hiện');
+    ('VNPOST', '/public/image/vnpost1.png', 'https://vnpost.vn/', 'Đang hiện'),
+    ('Ninja Van', '/public/image/Logo_ninjavan.webp', 'https://www.ninjavan.co/vi-vn', 'Đang hiện'),
+    ('Ahamove', '/public/image/ahamove_logo3.webp', 'https://www.ahamove.com/', 'Đang hiện'),
+    ('Snappy', '/public/image/icon_snappy1.webp', 'https://snappy.vn/', 'Đang hiện'),
+    ('Pay Os', '/public/image/payos.svg', 'https://payos.vn/', 'Đang hiện');
 
     INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri, TuKhoa, ClientID, APIKey, Checksum)
     VALUES
@@ -223,7 +223,7 @@
 
     INSERT INTO MANG_XA_HOI (HinhAnh, LienKet, TrangThai)
     VALUES
-    ('public/image/facebook.png', 'https://www.facebook.com', 'Đang hiện'),
-    ('public/image/instagram.png', 'https://www.instagram.com/website', 'Đang hiện'),
-    ('public/image/youtube.png', 'https://www.youtube.com', 'Đang hiện'),
-    ('public/image/telegram.png', 'https://web.telegram.org/', 'Đang hiện');
+    ('/public/image/facebook.png', 'https://www.facebook.com', 'Đang hiện'),
+    ('/public/image/instagram.png', 'https://www.instagram.com/website', 'Đang hiện'),
+    ('/public/image/youtube.png', 'https://www.youtube.com', 'Đang hiện'),
+    ('/public/image/telegram.png', 'https://web.telegram.org/', 'Đang hiện');

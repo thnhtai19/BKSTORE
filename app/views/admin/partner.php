@@ -216,13 +216,13 @@
                                         }
                                     }
 
-                                    dataItems.forEach(item => {
+                                    dataItems.danh_sach_doi_tac.forEach(item => {
                                         data.push({
                                             id: item.MaDoiTac,
                                             tendoitac: item.Ten,
-                                            lienket: item.LienKet,
-                                            hinhanh: item.HinhAnh,
-                                            trangthai: "Đang hiện",
+                                            lienket: item.link,
+                                            hinhanh: item.image,
+                                            trangthai: item.TrangThai,
                                             action: [
                                                 { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editPartner' },
                                             ]
@@ -368,6 +368,7 @@
             formData.append('MaDoiTac', idPartner);
             formData.append('Ten', namePartner);
             formData.append('LienKet', lienket);
+            formData.append('TrangThai', trangthai);
 
             for (const img of images) {
                 const response = await fetch(img.src);

@@ -434,7 +434,7 @@ class SystemService {
         while ($row = $stmt->fetch_assoc()) {
             $result[] = [
                 'MaDoiTac' => $row['MaDoiTac'],
-                'name' => $row['Ten'],
+                'Ten' => $row['Ten'],
                 'image' => $row['HinhAnh'],
                 'link' => $row['LienKet'],
                 'TrangThai' => $row['TrangThai']

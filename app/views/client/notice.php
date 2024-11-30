@@ -52,7 +52,7 @@ if(!isset($_SESSION["email"])){
         <?php $page = 2;
         include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
-    <script src="/public/js/client.js"></script>
+    <!-- <script src="/public/js/client.js"></script> -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
         async function fetchNotifications() {
@@ -77,14 +77,14 @@ if(!isset($_SESSION["email"])){
             notices.forEach(notice => {
                 const statusClass = notice.TrangThai === "Unread" ? "bg-blue-100" : "bg-gray-200";
                 const notificationHTML = `
-                    <div class="bg-white h-24 w-full rounded-lg ${statusClass} p-4 flex gap-4 cursor-pointer" onclick="go('${notice.type}', '${notice.ID_Redirect}', ${notice.id})">
+                    <div class="bg-white h-24 w-full rounded-lg ${statusClass} p-4 flex gap-4 cursor-pointer" onclick="go('${notice.type}', '${notice.ID_Redirect}', ${notice.MaThongBao})">
                         <div class="flex justify-center items-center rounded-full bg-custom-background h-14 w-14">
                             <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
                         </div>
                         <div class="text-sm text-gray-800 flex-1">
                             <div class="flex flex-col justify-between h-full">
                                 <div>${notice.noi_dung}</div>
-                                <div class="text-xs text-gray-500">${notice.type}</div>
+                                <div class="text-xs text-gray-500">${notice.NgayThongBao}</div>
                             </div>
                         </div>
                     </div>

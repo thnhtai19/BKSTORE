@@ -122,11 +122,11 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                             </svg>
                         </a>
                         <a
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/my/support">
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/suggest">
                             <div class="flex justify-between items-center">
-                                <img src="/public/image/phone.png" alt="phone" class="w-6 h-6 mr-2">
+                                <img src="/public/image/icons8-pull-request-100.png" alt="phone" class="w-6 h-6 mr-2">
                                 <div>
-                                    Liên hệ
+                                    Sách đã góp ý
                                 </div>
                             </div>
                             <svg height="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">

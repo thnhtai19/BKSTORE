@@ -139,7 +139,7 @@
                     anchor.rel = 'noopener noreferrer';
 
                     const img = document.createElement('img');
-                    img.src = "/"+icon.Image;
+                    img.src = icon.Image;
                     img.alt = "mxh";
                     img.classList.add('w-8', 'h-8');
                     anchor.appendChild(img);
@@ -155,7 +155,7 @@
                     anchor.rel = 'noopener noreferrer';
 
                     const img = document.createElement('img');
-                    img.src = "/"+icon.image;
+                    img.src = icon.image;
                     img.alt = icon.Ten;
                     img.classList.add('h-8');
                     anchor.appendChild(img);
