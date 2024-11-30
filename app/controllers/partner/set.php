@@ -36,7 +36,7 @@ if ($method === 'POST') {
                 $newsPath = $uploadDir . $newsFileName;
 
                 if (move_uploaded_file($newsTmpPath, $newsPath)) {
-                    $result = $model->updatePartner($MaDoiTac, "/public/image/partner/$MaDoiTac/" . $newsFileName, null, null);
+                    $result = $model->updatePartner($MaDoiTac, "/public/image/partner/$MaDoiTac/" . $newsFileName, null, null, '');
                     $uploaded = true;
                 }
 
