@@ -121,7 +121,7 @@ if(!($_SESSION["Role"] == 'Admin')){
             </div>
             <div class="flex justify-end space-x-4">
                 <button onclick="handleUpdateProduct()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
-                <button onclick="deleteProduct()" class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
+                <button onclick="hdelete()" class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
                 <button onclick="closeModalProduct()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
@@ -261,9 +261,23 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                             let data = []
                             let categorys = []
+                            
+                            function clearImages() {
+                                const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+                                if (imagePreviewContainer) {
+                                    const imageDivs = imagePreviewContainer.querySelectorAll('div.relative.border.border-gray-300.p-1.rounded-md');
+                                    imageDivs.forEach(imageDiv => {
+                                        imageDiv.remove();
+                                    });
+                                } else {
+                                    console.error("Không tìm thấy phần tử với id 'imagePreviewContainer'");
+                                }
+                            }
 
                             function editProduct(item) {
                                 document.getElementById("editProductModal").classList.remove("hidden");
+                                clearImages()
                                 const parseItem= JSON.parse(decodeURIComponent(item));
 
                                 document.getElementById("idProduct").value = parseItem.id;
@@ -383,7 +397,8 @@ if(!($_SESSION["Role"] == 'Admin')){
                                             nxb: item.thong_tin_chi_tiet.nha_xuat_ban,
                                             namxb: item.thong_tin_chi_tiet.nam_xuat_ban,
                                             sotrang: item.thong_tin_chi_tiet.so_trang,
-                                            hinhthuc: item.thong_tin_chi_tiet.hinhthuc,
+                                            hinhthuc: item.thong_tin_chi_tiet.hinh_thuc,
+                                            tukhoa: item.thong_tin_chi_tiet.tu_khoa,
                                             ngonngu: item.thong_tin_chi_tiet.ngon_ngu,
                                             soluongkho: item.so_luong_ton_kho,
                                             mota: item.mo_ta,
@@ -746,6 +761,47 @@ if(!($_SESSION["Role"] == 'Admin')){
             } catch (error) {
                 notyf.error('Xảy ra lỗi khi cập nhật sản phẩm!');
             }
+        }
+
+        function hdelete(){
+            const idSocial = document.getElementById("idProduct").value;
+
+            if(!idSocial){
+                notyf.error("Không tìm thấy mã sản phẩm!")
+                return;
+            }
+
+            fetch('/api/admin/deleteProduct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ID_SP: idSocial
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    notyf.error("Đã xảy ra lỗi khi xoá sản phẩm")
+                    return false;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    notyf.success("Xoá sản phẩm thành công!")
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    notyf.error("Xoá sản phẩm thất bại!")
+                }
+            })
+            .catch(error => {
+                notyf.error("Đã xảy ra lỗi khi xoá sản phẩm")
+            });
+
+
         }
 
 

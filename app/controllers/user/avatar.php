@@ -36,7 +36,9 @@ if ($method === 'POST') {
 
             if (move_uploaded_file($avatarTmpPath, $avatarPath)) {
                 $result = $model->setAvatar($id, $avatarPath);
-                echo json_encode($result);
+                $img = $result['image'];
+                $_SESSION['Avatar'] = $img;
+                echo json_encode(value: $result);
                 $uploaded = true;
                 break;
             }

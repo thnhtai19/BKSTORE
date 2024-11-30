@@ -102,8 +102,10 @@ class UserService {
         $stmt_avatar = $this->conn->prepare($avatar_sql);
         $stmt_avatar->bind_param("si", $relativeAvatarPath, $id);
         $stmt_avatar->execute();
+
+        $img = "/".$relativeAvatarPath;
     
-        return ['success' => true, 'message' => 'Thay đổi ảnh đại diện thành công'];
+        return ['success' => true, 'message' => 'Thay đổi ảnh đại diện thành công', 'image' => $img];
     }    
 
     public function setInfo($uid, $sex, $phone, $addr, $name) {

@@ -73,7 +73,7 @@ if(!isset($_SESSION["email"])){
                                 <div class="opacity-100 text-gray-400">Thay đổi</div>
                             </div>
                             <img id="avatarProfile" 
-                                src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION['Ten']); ?>" 
+                                src="<?php echo $_SESSION['Avatar'];?>" 
                                 alt="User Avatar" 
                                 class="w-16 h-16 rounded-full">
                         </div>
@@ -171,6 +171,10 @@ if(!isset($_SESSION["email"])){
                     notyf.success('Cập nhật avatar thành công!');
                     fetchUserData()
                     closeAvatarModal();
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
                 } else {
                     notyf.error('Lỗi: 001' + data.message);
                 }
