@@ -86,7 +86,7 @@ class ProductService {
     public function getProductList($typeList) {
         $result = [];
         foreach ($typeList as $type) {
-            $sql = "SELECT * FROM SAN_PHAM WHERE PhanLoai = ?";
+            $sql = "SELECT * FROM SAN_PHAM WHERE PhanLoai = ? AND TrangThai != 'Đã xóa'";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("s", $type);
             $stmt->execute();
@@ -291,7 +291,7 @@ class ProductService {
     }
 
     private function getProductById($id) {
-        $sql = "SELECT * FROM SAN_PHAM WHERE ID_SP = ?";
+        $sql = "SELECT * FROM SAN_PHAM WHERE ID_SP = ? AND TrangThai != 'Đã xóa'";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -463,9 +463,9 @@ class ProductService {
                 ON 
                     SAN_PHAM.ID_SP = DANH_GIA.ID_SP 
                 WHERE 
-                    SAN_PHAM.PhanLoai = ?
+                    SAN_PHAM.PhanLoai = ? AND SAN_PHAM.TrangThai != 'Đã xóa'
                 GROUP BY 
-                    SAN_PHAM.ID_SP, SAN_PHAM.TenSP, SAN_PHAM.Gia;";
+                    SAN_PHAM.ID_SP, SAN_PHAM.TenSP, SAN_PHAM.Gia, SAN_PHAM.HinhThuc;";
         $sql2 = "SELECT 
                     SAN_PHAM.ID_SP, 
                     SAN_PHAM.TenSP, 
@@ -485,7 +485,7 @@ class ProductService {
                 ON 
                     SAN_PHAM.ID_SP = DANH_GIA.ID_SP 
                 WHERE 
-                    SAN_PHAM.PhanLoai = ?
+                    SAN_PHAM.PhanLoai = ? AND SAN_PHAM.TrangThai != 'Đã xóa'
                 GROUP BY 
                     SAN_PHAM.ID_SP, SAN_PHAM.TenSP, SAN_PHAM.Gia, SAN_PHAM.HinhThuc;";
         if($login) $query = $this->conn->prepare($sql2);

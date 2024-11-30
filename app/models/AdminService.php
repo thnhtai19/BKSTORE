@@ -372,8 +372,23 @@ class AdminService {
         }
     
         $stmt->close();
+        $this->updateLike($ID_SP);
+        $this->updateCart($ID_SP);
         return ["success" => true, "message" => "Xóa sản phẩm thành công"];
     }
     
+    private function updateLike($ID_SP) {
+        $sql = "DELETE FROM THICH WHERE ID_SP = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $ID_SP);
+        $stmt->execute();
+    }
+
+    private function updateCart($ID_SP) {
+        $sql = "DELETE FROM TRONG_GIO_HANG WHERE ID_SP = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $ID_SP);
+        $stmt->execute();
+    }
 }
 ?>
