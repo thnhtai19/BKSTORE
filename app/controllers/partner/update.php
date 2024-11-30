@@ -45,7 +45,7 @@ if ($method === 'POST') {
                 }
             }
             else {
-                $result = $model->updatePartner($MaDoiTac, null, $LienKet, $Ten);
+                $result = $model->updatePartner($MaDoiTac, null, $LienKet, $Ten, $TrangThai);
                 if ($result) echo json_encode(['success' => true, 'message' => 'Cập nhật đối tác thành công']);
                 else echo json_encode(['success' => false, 'message' => 'Cập nhật đối tác thất bại']);
             }
