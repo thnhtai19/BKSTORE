@@ -60,6 +60,8 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<?=$data['ten']?>">
+    <meta name="keywords" content="<?=$data['thong_tin_chi_tiet']['tu_khoa']?>">
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/swiper-bundle.min.css">
