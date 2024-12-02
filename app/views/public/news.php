@@ -65,7 +65,7 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    newsData = data;
+                    newsData = data.danh_sach_tin_tuc;
                     renderNews('all', currentPage);
                     renderNewsSide();
                 })

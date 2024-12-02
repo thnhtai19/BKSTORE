@@ -69,7 +69,6 @@ if(!($_SESSION["Role"] == 'Admin')){
         
             <div class="flex justify-end space-x-4 pt-6">
                 <button onclick="updatePromotion()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
-                <button class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
                 <button onclick="closeModalPromotion()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
@@ -264,7 +263,7 @@ if(!($_SESSION["Role"] == 'Admin')){
 
             if (/^[\d.]+$/.test(tienGiam)) {
                 tienGiam = parseInt(tienGiam.replace(/\./g, ''), 10);
-                if (!/^\d+$/.test(tienGiam) || parseInt(tienGiam) <= 0) {
+                if (!/^\d+$/.test(tienGiam) || parseInt(tienGiam) < 0) {
                     return notyf.error("Tiền giảm phải là số nguyên dương.");
                 }
             } else {

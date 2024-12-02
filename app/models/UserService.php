@@ -95,14 +95,14 @@ class UserService {
         }
 
         // Đường dẫn đầy đủ đến tệp ảnh
-        $relativeAvatarPath = "public/image/user/$id/" . basename($avatarFileName);
+        $relativeAvatarPath = "/public/image/user/$id/" . basename($avatarFileName);
     
         // Lưu đường dẫn và tệp ảnh vào cơ sở dữ liệu
         $avatar_sql = "UPDATE `LOGIN` SET `Avatar` = ? WHERE `UID` = ?";
         $stmt_avatar = $this->conn->prepare($avatar_sql);
         $stmt_avatar->bind_param("si", $relativeAvatarPath, $id);
         $stmt_avatar->execute();
-    
+        $_SESSION['Avatar'] = $relativeAvatarPath;
         return ['success' => true, 'message' => 'Thay đổi ảnh đại diện thành công'];
     }    
 

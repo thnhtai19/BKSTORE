@@ -65,12 +65,14 @@ if(!isset($_SESSION["email"])){
 
                     <div class="w-full lg:w-3/4 rounded-lg space-y-6">
                         <div class="flex gap-2 pb-4">
-                            <button data-status="all" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Tất cả</button>
-                            <button data-status="Đã giao hàng" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đã giao hàng</button>
-                            <button data-status="Đang xử lý" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đang xử lý</button>
-                            <button data-status="Đã hủy" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đã hủy</button>
-                            <button data-status="Đã xác nhận" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Đã xác nhận</button>
-                            <button data-status="Chờ xác nhận" class="filter-btn px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Chờ xác nhận</button>
+                            <select id="status-filter" class="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">
+                                <option value="all">Tất cả</option>
+                                <option value="Đã giao hàng">Đã giao hàng</option>
+                                <option value="Đang vận chuyển">Đang vận chuyển</option>
+                                <option value="Đã xác nhận">Đã xác nhận</option>
+                                <option value="Chờ xác nhận">Chờ xác nhận</option>
+                                <option value="Đã hủy">Đã hủy</option>
+                            </select>
                         </div>
 
                         <div id="order-list" class="space-y-6"></div>
@@ -87,7 +89,7 @@ if(!isset($_SESSION["email"])){
         document.addEventListener('DOMContentLoaded', function () {
             const orderList = document.getElementById('order-list');
             const pagination = document.getElementById('pagination');
-            const filterButtons = document.querySelectorAll('.filter-btn');
+            const statusFilter = document.getElementById('status-filter');;
             let ordersData = [];
             let currentPage = 1;
             const ordersPerPage = 3;
@@ -135,7 +137,7 @@ if(!isset($_SESSION["email"])){
                         case 'Đã giao hàng':
                             bgColor = 'bg-green-200';
                             break;
-                        case 'Đang xử lý':
+                        case 'Đang vận chuyển':
                             bgColor = 'bg-blue-200';
                             break;
                         case 'Đã hủy':
@@ -196,7 +198,7 @@ if(!isset($_SESSION["email"])){
                     pageButton.classList.add('bg-blue-500', 'text-white');
                     
                     pageButton.addEventListener('click', () => {
-                        renderOrders(document.querySelector('.filter-btn.bg-gray-300')?.getAttribute('data-status') || 'all', i);
+                        renderOrders(statusFilter.value, i);
                         currentPage = i;
                     });
 
@@ -204,12 +206,9 @@ if(!isset($_SESSION["email"])){
                 }
             }
 
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const status = button.getAttribute('data-status');
-                    renderOrders(status, 1);
-                });
-            });
+            statusFilter.addEventListener('change', () => {
+                renderOrders(statusFilter.value, 1);
+            }); 
         });
     </script>
 </body>
