@@ -19,6 +19,10 @@ if ($method === 'POST') {
     else $sex = '';
     if (isset($data['phone'])) $phone = $data['phone'];
     else $phone = '';
+    if (strlen($phone) < 10) {
+        echo json_encode(['success' => false,'message' => 'Số điện thoại phải có 10 chữ số']);
+        return;
+    }
     if (isset($data['address'])) $addr = $data['address'];
     else $addr = '';
     echo json_encode($model->setInfo($_SESSION["uid"], $sex, $phone, $addr, $name));

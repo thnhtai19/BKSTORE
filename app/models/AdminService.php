@@ -19,7 +19,7 @@ class AdminService {
     }
 
     public function getUsers() {
-        $sql = "SELECT `UID` FROM KHACH_HANG";
+        $sql = "SELECT `UID` FROM LOGIN WHERE ROLE = 'Customer' ORDER BY `UID` DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -121,7 +121,7 @@ class AdminService {
 
     public function propose() {
         $propose_list = $this->proposeInfo();
-        foreach ($propose_list as &$propose) {
+        foreach ($propose_list as $propose) {
             $user = $this->user->getUserInfo($propose["UID"]);
             if ($user['success'] === false) {
                 return ['success' => false, 'message' => $user['message']];
