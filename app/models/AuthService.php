@@ -23,6 +23,13 @@ class AuthService {
         if (!password_verify($password, $user['Password'])) {
             return ['success' => false, 'message' => 'Sai mật khẩu'];
         }
+        $stmt = $this->conn->prepare("SELECT * FROM KHACH_HANG WHERE `UID` = ? AND TrangThai = 'Đang hoạt động'");
+        $stmt->bind_param("i", $user['UID']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
+            return ['success' => false, 'message' => 'Tài khoản đã bị ban'];
+        }
         $ip = $this->getIPAddress();
         $thoi_gian = $this->support->startTime();
         $uid = $user['UID'];

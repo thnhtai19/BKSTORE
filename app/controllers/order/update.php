@@ -22,7 +22,7 @@ if ($method === 'POST') {
             }
             if (isset($data['ThanhToan'])) $ThanhToan = $data['ThanhToan'];
             else $ThanhToan = '';
-            if ($ThanhToan != 'Chưa thanh toán' && $ThanhToan != 'Đã thanh toán' && $ThanhToan != 'Hủy thanh toán' && $ThanhToan != '') {
+            if ($ThanhToan != 'Chưa thanh toán' && $ThanhToan != 'Đã thanh toán' && $ThanhToan != 'Huỷ thanh toán' && $ThanhToan != '') {
                 echo json_encode(['success'=> false, 'message'=> 'Trạng thái thanh toán không hợp lệ']);
                 return;
             }

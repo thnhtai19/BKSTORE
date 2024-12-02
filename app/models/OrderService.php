@@ -96,8 +96,7 @@ class OrderService {
                     'gia' => $productDetails['Gia'],
                     'trang_thai' => $row['TrangThai'],
                     'ngay_dat' => $row['NgayDat'],
-                    'so_luong_san_pham' => $product['COUNT'],
-                    'danh_gia' => $this->review($id, $uid)
+                    'so_luong_san_pham' => $product['COUNT']
                 ];
             }
         }
@@ -133,7 +132,8 @@ class OrderService {
         $user = $this->getUser($uid);
         if ($user['success'] === false) return ['success' => false, 'message' => $user['message']];
 
-        $product = $this->getProduct($ID_DonHang);
+        if ($order['TrangThai'] == 'Đã giao hàng') $product = $this->getProduct($ID_DonHang, $uid, 1);
+        else $product = $this->getProduct($ID_DonHang, $uid, 0);
         if ($product['success'] === false) return ['success' => false, 'message' => $product['message']];
         $product = $product['san_pham'];
         $so_luong_san_pham = count($product);
@@ -151,7 +151,7 @@ class OrderService {
                 'ten_khach_hang' => $user['ten'],
                 'ten_nguoi_nhan' => $order['TenNguoiNhan'],
                 'so_dien_thoai' => $order['SDT'],
-                'dia_chi_giao_hang' => $order['DiaChi']
+                'dia_chi_giao_hang' => $order['DiaChi'],
             ]
         ];
     }
@@ -227,6 +227,7 @@ class OrderService {
         }
         $thanh_toan = $thanh_toan != '' ? $thanh_toan : $order['ThanhToan'];
         $trang_thai = $trang_thai != '' ? $trang_thai : $order['TrangThai'];
+        if ($trang_thai == 'Đã giao hàng') $thanh_toan = 'Đã thanh toán';
         $sql = "UPDATE DON_HANG SET ThanhToan = ?, TrangThai = ? WHERE ID_DonHang =?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssi", $thanh_toan, $trang_thai, $id);
@@ -235,7 +236,7 @@ class OrderService {
     }
 
     public function list() {
-        $sql = "SELECT `UID`, ID_DonHang FROM DON_HANG";
+        $sql = "SELECT `UID`, ID_DonHang FROM DON_HANG ORDER BY ID_DonHang DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -439,7 +440,7 @@ class OrderService {
         return round($result['Gia'] - $result['Gia'] * $result['TyLeGiamGia'], 2);
     }
 
-    private function getProduct($orderId) {
+    private function getProduct($orderId, $uid, $status) {
         $sql = "SELECT ID_SP, SoLuong FROM GOM WHERE ID_DonHang = ? ORDER BY ID_SP DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $orderId);
@@ -456,20 +457,41 @@ class OrderService {
         }
     
         $resultList = [];
-        foreach ($order as $products) {
-            $product = $this->getProductById($products['ID_SP']);
-            if ($product['success'] === false) {
-                return ['success' => false, 'message' => $product['message']];
+        if ($status) {
+            foreach ($order as $products) {
+                $product = $this->getProductById($products['ID_SP']);
+                if ($product['success'] === false) {
+                    return ['success' => false, 'message' => $product['message']];
+                }
+        
+                $resultList[] = [
+                    'id' => $product['ID_SP'],
+                    'anh' => $this->product->getImage($product['ID_SP']),
+                    'ten' => $product['TenSP'],
+                    'so_luong' => $products['SoLuong'],
+                    'gia_san_pham' => $product['Gia'],
+                    'gia_sau_giam_gia' => round($product['Gia'] * (1 - $product['TyLeGiamGia']), 2),
+                    'isReviewed' => $this->review($products['ID_SP'], $uid)
+                ];
             }
-    
-            $resultList[] = [
-                'id' => $product['ID_SP'],
-                'anh' => $this->product->getImage($product['ID_SP']),
-                'ten' => $product['TenSP'],
-                'so_luong' => $products['SoLuong'],
-                'gia_san_pham' => $product['Gia'],
-                'gia_sau_giam_gia' => round($product['Gia'] * (1 - $product['TyLeGiamGia']), 2),
-            ];
+        }
+        else {
+            foreach ($order as $products) {
+                $product = $this->getProductById($products['ID_SP']);
+                if ($product['success'] === false) {
+                    return ['success' => false, 'message' => $product['message']];
+                }
+        
+                $resultList[] = [
+                    'id' => $product['ID_SP'],
+                    'anh' => $this->product->getImage($product['ID_SP']),
+                    'ten' => $product['TenSP'],
+                    'so_luong' => $products['SoLuong'],
+                    'gia_san_pham' => $product['Gia'],
+                    'gia_sau_giam_gia' => round($product['Gia'] * (1 - $product['TyLeGiamGia']), 2),
+                    'isReviewed' => false
+                ];
+            }
         }
     
         return [

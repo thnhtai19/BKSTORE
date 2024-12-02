@@ -26,6 +26,10 @@ if ($method === 'POST') {
         echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
         return;
     }
+    if (strlen($SĐT) < 10) {
+        echo json_encode(['success'=> false,'message'=> 'Số điện thoại phải có 10 chữ số']);
+        return;
+    }
     if (isset($data['DiaChi'])) $DiaChi = $data['DiaChi'];
     else {
         echo json_encode(['success'=> false,'message'=> 'Chưa điền đủ thông tin']);
