@@ -62,7 +62,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                 <label for="hinhanh" class="block text-sm font-medium text-gray-700">Hình ảnh:</label>
                 <div class="flex flex-wrap gap-4 mt-2" id="imagePreviewContainer">
                     
-                    <div class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
+                    <div id="updateThemAnh" class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100 hidden">
                         <input type="file" id="uploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUpload(this)">
                         <span class="text-gray-400">+</span>
                     </div>
@@ -98,7 +98,7 @@ if(!($_SESSION["Role"] == 'Admin')){
             <div class="w-full">
                 <label for="hinhanh" class="block text-sm font-medium text-gray-700">Hình ảnh:</label>
                 <div id="previewImage" class="flex flex-wrap gap-4 mt-2">
-                    <div class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
+                    <div id="updateThemAnhAdd" class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
                         <input type="file" id="addUploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUploadAdd(this)">
                         <span class="text-gray-400">+</span>
                     </div>
@@ -157,13 +157,17 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 document.getElementById("trangthai").value = parseItem.trangthai; 
                                 
                                 const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-                                const imageDiv = document.createElement('div');
-                                imageDiv.classList.add('relative', 'border', 'border-gray-300', 'p-1', 'rounded-md');
-                                imageDiv.innerHTML = `
-                                    <img src="${parseItem.hinhanh}" alt="Hình ảnh" class="w-16 h-16 object-cover rounded">
-                                    <button class="delete-image absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">✕</button>
-                                `;
-                                imagePreviewContainer.appendChild(imageDiv);
+                                if(parseItem.hinhanh){
+                                    const imageDiv = document.createElement('div');
+                                    imageDiv.classList.add('relative', 'border', 'border-gray-300', 'p-1', 'rounded-md');
+                                    imageDiv.innerHTML = `
+                                        <img src="${parseItem.hinhanh}" alt="Hình ảnh" class="w-16 h-16 object-cover rounded">
+                                        <button class="delete-image absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">✕</button>
+                                    `;
+                                    imagePreviewContainer.appendChild(imageDiv);
+                                }else{
+                                    document.getElementById('updateThemAnh').classList.remove('hidden');
+                                }
                                 attachDeleteEvent();
                             }
 
@@ -173,6 +177,9 @@ if(!($_SESSION["Role"] == 'Admin')){
                                     button.addEventListener('click', function () {
                                         const imageDiv = this.parentElement;
                                         imageDiv.remove();
+                                        
+                                        const addImageButton = document.getElementById('updateThemAnh');
+                                        addImageButton.classList.remove('hidden');
                                     });
                                 });
                             }
@@ -180,15 +187,18 @@ if(!($_SESSION["Role"] == 'Admin')){
                             function closeContactModal() {
                                 document.getElementById("editContactModal").classList.add("hidden");
                                 document.getElementById('imagePreviewContainer').innerHTML = `
-                                    <div class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100">
+                                    <div id="updateThemAnh" class="relative border-2 border-dashed border-gray-300 w-20 h-20 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100 hidden">
                                         <input type="file" id="uploadImage" class="opacity-0 absolute inset-0 cursor-pointer" accept="image/*" onchange="handleImageUpload(this)">
                                         <span class="text-gray-400">+</span>
                                     </div>
                                 `;
+
+                                document.getElementById('updateThemAnh').classList.add('hidden');
                             }
 
                             function addContact() {
                                 document.getElementById("addContactModal").classList.remove("hidden");
+                                document.getElementById('updateThemAnhAdd').classList.remove('hidden');
                             }
 
                             function closeModalAddContact() {
@@ -206,13 +216,13 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 if (response.ok) {
                                     const dataContact = await response.json();
                                     console.log(dataContact); 
-                                    dataContact.forEach(contact => {
+                                    dataContact.danh_sach_lien_he.forEach(contact => {
                                         data.push({
                                             id: contact.MaThongTin,
                                             loai: contact.Loai,
                                             thongtin: contact.ThongTin,
                                             trangthai: contact.TrangThai,
-                                            hinhanh: contact.HinhAnh,
+                                            hinhanh: contact.Anh,
                                             action: [
                                                 { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editContact' },
                                             ]
@@ -318,6 +328,8 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                     removeButton.onclick = function () {
                         previewContainer.removeChild(imageWrapper);
+                    
+                        document.getElementById('updateThemAnhAdd').classList.remove('hidden');
                     };
 
                     imageWrapper.appendChild(img);
@@ -327,6 +339,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                 };
 
                 reader.readAsDataURL(input.files[0]);
+                document.getElementById('updateThemAnhAdd').classList.add('hidden');
             }
         }
 
@@ -351,6 +364,7 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                     removeButton.onclick = function () {
                         previewContainer.removeChild(imageWrapper);
+                        document.getElementById('updateThemAnh').classList.remove('hidden');
                     };
 
                     imageWrapper.appendChild(img);
@@ -360,6 +374,8 @@ if(!($_SESSION["Role"] == 'Admin')){
                 };
 
                 reader.readAsDataURL(input.files[0]);
+
+                document.getElementById('updateThemAnh').classList.add('hidden');
             }
         }
 
@@ -428,12 +444,12 @@ if(!($_SESSION["Role"] == 'Admin')){
             const fileInput = document.getElementById("addUploadImage");
             const file = fileInput.files[0];
 
-            if (Loai.length > 255) {
-                return notyf.error("loại quá dài.");
+            if (Loai.length > 255 || Loai.length == 0) {
+                return notyf.error("loại không hợp lệ");
             }
 
-            if (ThongTin.length > 500) {
-                return notyf.error("thông tin quá dài.");
+            if (ThongTin.length > 500 || ThongTin.length == 0) {
+                return notyf.error("thông tin không hợpleej");
             }
             if (!file) {
                 return notyf.error("không có hình ảnh");

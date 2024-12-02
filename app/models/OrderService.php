@@ -205,7 +205,7 @@ class OrderService {
             $sql = "INSERT INTO THONG_BAO (`UID`, NoiDung, `Type`, NgayThongBao) VALUES (?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $NoiDung = "Đơn hàng " . $id . ": " . $trang_thai;
-            $stmt->bind_param("isss", $order['UID'], $NoiDung, $type. $date);
+            $stmt->bind_param("isss", $order['UID'], $NoiDung, $type, $date);
             $stmt->execute();
             $id_thong_bao = mysqli_insert_id($this->conn);
             $sql = "INSERT INTO LOAI_THONG_BAO (MaThongBao, ID_DonHang) VALUES (?, ?)";

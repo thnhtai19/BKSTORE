@@ -152,6 +152,7 @@ class AdminService {
         if ($result->num_rows == 0) {
             return ["success"=> false,"message"=> "Không tìm thấy đề xuất"];
         }
+        $propose = $result->fetch_assoc();
         if ($status != 'Đang chờ duyệt' && $status != 'Đã duyệt' && $status != 'Đã từ chối') 
             return ['success'=> false, 'message' => 'Cập nhật thất bại'];
         $type = 'Yêu cầu';
@@ -166,7 +167,7 @@ class AdminService {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $id_thong_bao, $id);
         $stmt->execute();
-        $content = $content != '' ? $content : $result['GhiChu'];
+        $content = $content != '' ? $content : $propose['GhiChu'];
         $sql = "UPDATE SAN_PHAM_DE_XUAT SET TrangThai = ?, GhiChu = ? WHERE MaDeXuat = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssi", $status, $content, $id);

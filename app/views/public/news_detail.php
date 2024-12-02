@@ -17,6 +17,8 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
     <link rel="stylesheet" href="/public/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/public/css/client.css">
     <link rel="stylesheet" href="/public/css/notyf.min.css">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
     <title>Tin tức | BKSTORE</title>
 </head>
 
@@ -36,8 +38,8 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                                 </button>
                             </div>
                             <hr>
-                            <div class="content space-y-4" id="content-new">
-                            </div>
+                            <div class="content space-y-4" id="content-new"></div>
+                            <div id="imageContainer" class="ml-2 space-y-4"></div>
                         </div>
                     </div>
                 </div>
@@ -67,6 +69,18 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                 .then(data => {
                     console.log(data)
                     const contentNew = document.getElementById("content-new");
+
+                    let metaDescription = document.querySelector('meta[name="description"]');
+                    if (metaDescription) {
+                        metaDescription.setAttribute('content', data.MoTa);
+                    }
+
+                    // Cập nhật meta keywords
+                    let metaKeywords = document.querySelector('meta[name="keywords"]');
+                    if (metaKeywords) {
+                        metaKeywords.setAttribute('content', data.TuKhoa);
+                    }
+
                     contentNew.innerHTML = `
                         <div class="flex flex-col justify-center items-center text-center">
                             <h3 class="text-xl font-semibold text-blue-600">${data.TieuDe}</h3>
@@ -78,6 +92,16 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                             </p>
                         </div>
                     `;
+
+                    const imageContainer = document.getElementById('imageContainer');
+
+                    data.Anh.forEach(imageSrc => {
+                        const imageDiv = document.createElement('div');
+                        imageDiv.innerHTML = `
+                            <img src="${imageSrc}" alt="Hình ảnh">
+                        `;
+                        imageContainer.appendChild(imageDiv);
+                    });
                 })
                 .catch(error => {
                     console.error("Lỗi khi gọi API:", error);

@@ -121,14 +121,14 @@ if(!isset($_SESSION["email"])){
                     const imageComplait = document.getElementById("imgComplait")
 
                     console.log(data)
-                    supportEmail.innerHTML = `${data.info[0].thong_tin}`;
-                    supportBuy.innerHTML = `${data.info[5].thong_tin}`;
-                    supportChange.innerHTML = `${data.info[6].thong_tin}`;
-                    supportComplait.innerHTML = `${data.info[7].thong_tin}`;
-                    imageEmail.src = `/${data.info[0].hinh_anh}`;
-                    imageBuy.src = `/${data.info[5].hinh_anh}`;
-                    imageChange.src = `/${data.info[6].hinh_anh}`;
-                    imageComplait.src = `/${data.info[7].hinh_anh}`;
+                    supportEmail.innerHTML = `${data.info[7].thong_tin}`;
+                    supportBuy.innerHTML = `${data.info[2].thong_tin}`;
+                    supportChange.innerHTML = `${data.info[1].thong_tin}`;
+                    supportComplait.innerHTML = `${data.info[0].thong_tin}`;
+                    imageEmail.src = `${data.info[7].hinh_anh}`;
+                    imageBuy.src = `${data.info[2].hinh_anh}`;
+                    imageChange.src = `${data.info[1].hinh_anh}`;
+                    imageComplait.src = `${data.info[0].hinh_anh}`;
 
 
                 })
