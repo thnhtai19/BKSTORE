@@ -62,13 +62,6 @@ if(isset($_SESSION["email"])){
                                 </button>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <input id="remember_me" name="remember_me" type="checkbox"
-                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                                <label for="remember_me" class="ml-2 block text-sm text-gray-900"> Ghi nhớ mặt khẩu</label>
-                            </div>
-                        </div>
 
                         <div>
                             <button id="submit" type="submit"
@@ -105,7 +98,6 @@ if(isset($_SESSION["email"])){
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('remember_me').checked;
 
             if (!email || !password) {
                 notyf.error('Vui lòng nhập đầy đủ thông tin!');
