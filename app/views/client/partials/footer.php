@@ -115,6 +115,26 @@
     </div>
 </footer>
 <script>
+    function goNotice() {
+        window.location.href = "/notice"
+    }
+
+    function goHome() {
+        window.location.href = "/"
+    }
+
+    function goKhuyenMai() {
+        window.location.href = "/promotion"
+    }
+
+    function goTinTuc() {
+        window.location.href = "/news"
+    }
+
+    function goTaiKhoan() {
+        window.location.href = "/account"
+    }
+    
     try{
         function getinfo(){
             let mang_xa_hoi = [];
