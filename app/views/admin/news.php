@@ -186,13 +186,16 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 document.getElementById("motatintuc").value = parseItem.mota;              
                             
                                 const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-                                const imageDiv = document.createElement('div');
-                                imageDiv.classList.add('relative', 'border', 'border-gray-300', 'p-1', 'rounded-md');
-                                imageDiv.innerHTML = `
-                                    <img src="${parseItem.hinhanh}" alt="Hình ảnh" class="w-16 h-16 object-cover rounded">
-                                    <button class="delete-image absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">✕</button>
-                                `;
-                                imagePreviewContainer.appendChild(imageDiv);
+
+                                parseItem.hinhanh.forEach(imageSrc => {
+                                    const imageDiv = document.createElement('div');
+                                    imageDiv.classList.add('relative', 'border', 'border-gray-300', 'p-1', 'rounded-md');
+                                    imageDiv.innerHTML = `
+                                        <img src="${imageSrc}" alt="Hình ảnh" class="w-16 h-16 object-cover rounded">
+                                        <button class="delete-image absolute top-0.5 right-0.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 focus:outline-none">✕</button>
+                                    `;
+                                    imagePreviewContainer.appendChild(imageDiv);
+                                });
                                 attachDeleteEvent();
                             }
 
@@ -240,7 +243,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 if (response.ok) {
                                     const dataNews = await response.json();
                                     console.log(dataNews); 
-                                    dataNews.forEach(news => {
+                                    dataNews.danh_sach_tin_tuc.forEach(news => {
                                         data.push({
                                             id: news.MaTinTuc,
                                             tieude: news.TieuDe,

@@ -78,6 +78,7 @@ if(!isset($_SESSION["email"])){
                         <div>
                             <p class="text-gray-500 mt-1">Mã đơn hàng: <span class="font-medium text-gray-700" id="order-id"></span></p>
                             <p class="text-gray-500 mt-1">Ngày đặt: <span class="font-medium text-gray-700" id="order-date"></span></p>
+                            <p id="order-status" class="text-sm px-3 py-1 text-green-700 font-medium rounded-full inline-block mt-2"></p>
                         </div>
                         
                         <div>
@@ -139,32 +140,35 @@ if(!isset($_SESSION["email"])){
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-lg font-bold text-gray-800 mb-4">Đánh giá sản phẩm:</h2>
             <div class="flex space-x-1">
-            <button class="star text-gray-400 hover:text-yellow-500" data-value="1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                </svg>
-            </button>
-            <!-- Repeat the button for 2, 3, 4, and 5 stars -->
-            <button class="star text-gray-400 hover:text-yellow-500" data-value="2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                </svg>
-            </button>
-            <button class="star text-gray-400 hover:text-yellow-500" data-value="3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                </svg>
-            </button>
-            <button class="star text-gray-400 hover:text-yellow-500" data-value="4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                </svg>
-            </button>
-            <button class="star text-gray-400 hover:text-yellow-500" data-value="5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                </svg>
-            </button>
+                <button class="star text-gray-400 hover:text-yellow-500" data-value="1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                </button>
+                <button class="star text-gray-400 hover:text-yellow-500" data-value="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                </button>
+                <button class="star text-gray-400 hover:text-yellow-500" data-value="3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                </button>
+                <button class="star text-gray-400 hover:text-yellow-500" data-value="4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                </button>
+                <button class="star text-gray-400 hover:text-yellow-500" data-value="5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="mt-4">
+                <label for="review-text" class="block text-gray-700 font-bold mb-2">Nội dung đánh giá:</label>
+                <textarea id="review-text" rows="4" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Nhập nội dung đánh giá của bạn..."></textarea>
             </div>
             <p id="rating-output" class="text-gray-700 mt-4">Rate: <span class="font-bold">0</span> stars</p>
             <div class="mt-4 flex justify-end space-x-2">
@@ -204,96 +208,74 @@ if(!isset($_SESSION["email"])){
                         document.getElementById('order-id').textContent = info.id;
                         document.getElementById('order-date').textContent = info.ngay_dat;
 
+                        const statusOrder = document.getElementById('order-status');
+                        statusOrder.textContent = info.trang_thai;
+                        let bgColor;
+                        switch (info.trang_thai) {
+                            case 'Đã giao hàng':
+                                bgColor = 'bg-green-200';
+                                break;
+                            case 'Đang vận chuyển':
+                                bgColor = 'bg-blue-200';
+                                break;
+                            case 'Đã hủy':
+                                bgColor = 'bg-red-200';
+                                break;
+                            case 'Đã xác nhận':
+                                bgColor = 'bg-blue-200';
+                                break;
+                            case 'Chờ xác nhận':
+                                bgColor = 'bg-red-200';
+                                break;
+                            default:
+                                bgColor = 'bg-gray-200';
+                        }
+                        statusOrder.classList.add(bgColor);
+
                         const productsContainer = document.getElementById('products-container');
                         let productFirst = true;
-                        productsContainer.innerHTML = ''; // Xóa nội dung cũ
+                        productsContainer.innerHTML = ''; 
                         info.danh_sach_san_pham.forEach(product => {
-                            let productHTML = '';
-                            if(productFirst) {
-                                productHTML = `
-                                <div class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">
-                                    <div class="flex-1 pb-2">
-                                        <div class="flex flex-col md:flex-row">
-                                            <div class="w-full md:w-40">
-                                                <img id="" src="/${product.anh[0]}" alt="product">
-                                            </div>
-                                            <div class="flex-1">
-                                                <div class="h-full w-full">
-                                                    <div class="flex flex-col justify-between md:flex-1 md:px-4 mx-10">
-                                                        <div class="flex flex-col space-y-2 md:space-y-1 items-start">
-                                                            <p class="text-gray-700 font-medium">Tên sản phẩm: ${product.ten}</p>
-                                                            <p class="text-gray-700 font-semibold">Số lượng: ${product.so_luong}</p>
-                                                            <p class="text-gray-700 font-semibold">Giá: ${product.gia_sau_giam_gia.toLocaleString('vi-VN')} đ</p>
-                                                            <p class="text-sm px-3 py-1 bg-green-100 text-green-700 font-medium rounded-full inline-block">
-                                                                ${info.trang_thai}
-                                                            </p>
-                                                        </div>
-                                                        <div class="flex flex-col md:justify-between items-start md:items-end mt-2 md:mt-0">
-                                                            <div class="flex justify-end items-center">
-                                                                <div class="flex items-center space-x-2">
-                                                                    <button
-                                                                        onclick="openRating(${product.id})"
-                                                                        class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                                        Đánh giá
-                                                                    </button>
-                                                                    <button 
-                                                                        onclick="addToCart(${product.id})"
-                                                                        class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                                        Mua lại
-                                                                    </button>
-                                                                </div>
+                        let productHTML = '';
+                            productHTML = `
+                            <div class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">
+                                <div class="flex-1 pb-2">
+                                    <div class="flex flex-col md:flex-row">
+                                        <div class="w-full md:w-40">
+                                            <img id="" src="/${product.anh[0]}" alt="product">
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="h-full w-full">
+                                                <div class="flex flex-col justify-between md:flex-1 md:px-4 mx-10">
+                                                    <div class="flex flex-col space-y-2 md:space-y-1 items-start">
+                                                        <p class="text-gray-700 font-medium">Tên sản phẩm: ${product.ten}</p>
+                                                        <p class="text-gray-700 font-semibold">Số lượng: ${product.so_luong}</p>
+                                                        <p class="text-gray-700 font-semibold">Giá: ${product.gia_sau_giam_gia.toLocaleString('vi-VN')} đ</p>
+                                                    </div>
+                                                    <div class="flex flex-col md:justify-between items-start md:items-end mt-2 md:mt-0 md:pt-8">
+                                                        <div class="flex justify-end items-center">
+                                                            <div class="flex items-center space-x-2">
+                                                                <button
+                                                                    onclick="openRating(${product.id})"
+                                                                    class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                    Đánh giá
+                                                                </button>
+                                                                <button
+                                                                    onclick="addToCart(${product.id})"
+                                                                    class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                    Mua lại
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
-                                `;
-                                productFirst = false;
-                            } else {
-                                productHTML = `
-                                <div class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">
-                                    <div class="flex-1 pb-2">
-                                        <div class="flex flex-col md:flex-row">
-                                            <div class="w-full md:w-40">
-                                                <img id="" src="/${product.anh[0]}" alt="product">
-                                            </div>
-                                            <div class="flex-1">
-                                                <div class="h-full w-full">
-                                                    <div class="flex flex-col justify-between md:flex-1 md:px-4 mx-10">
-                                                        <div class="flex flex-col space-y-2 md:space-y-1 items-start">
-                                                            <p class="text-gray-700 font-medium">Tên sản phẩm: ${product.ten}</p>
-                                                            <p class="text-gray-700 font-semibold">Số lượng: ${product.so_luong}</p>
-                                                            <p class="text-gray-700 font-semibold">Giá: ${product.gia_sau_giam_gia.toLocaleString('vi-VN')} đ</p>
-                                                        </div>
-                                                        <div class="flex flex-col md:justify-between items-start md:items-end mt-2 md:mt-0 md:pt-8">
-                                                            <div class="flex justify-end items-center">
-                                                                <div class="flex items-center space-x-2">
-                                                                    <button
-                                                                        onclick="openRating(${product.id})"
-                                                                        class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                                        Đánh giá
-                                                                    </button>
-                                                                    <button
-                                                                        onclick="addToCart(${product.id})"
-                                                                        class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                                        Mua lại
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                `;
-                            }
+                            </div>
+                            `;
                             
                             productsContainer.insertAdjacentHTML('beforeend', productHTML);
                         });
@@ -381,15 +363,22 @@ if(!isset($_SESSION["email"])){
 
         function saving() {
             const rating = parseInt(document.getElementById('rating-output').querySelector('span').textContent);
+            const reviewText = document.getElementById('review-text').value.trim();
+
             if (isNaN(rating) || rating < 1 || rating > 5) {
-                console.error("Rating không hợp lệ:", rating);
                 notyf.error("Vui lòng chọn số sao từ 1 đến 5.");
                 return;
             }
+
+            if (!reviewText || reviewText.length < 5) {
+                notyf.error("Nội dung đánh giá phải có ít nhất 5 ký tự.");
+                return;
+            }
+
             const data = {
                 ID_SP: ID_SP,
                 SoSao: rating,
-                NoiDung: ""
+                NoiDung: reviewText
             };
             console.log(data)
             fetch(`${window.location.origin}/api/user/review`, {
@@ -403,8 +392,8 @@ if(!isset($_SESSION["email"])){
             .then(data => {
                 console.log("Raw response:", data);
                 try {
-                    if (jsonData.success) {
-                        notyf.success(jsonData.message);
+                    if (data.success) {
+                        notyf.success(data.message);
                     } else {
                         notyf.error('Đánh giá sản phẩm thất bại!');
                     }

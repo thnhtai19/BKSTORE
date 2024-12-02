@@ -73,7 +73,7 @@ if(!isset($_SESSION["email"])){
                                 <div class="opacity-100 text-gray-400">Thay đổi</div>
                             </div>
                             <img id="avatarProfile" 
-                                src="https://ui-avatars.com/api/?background=random&name=<?php echo urlencode($_SESSION['Ten']); ?>" 
+                                src="<?=$_SESSION["Avatar"]?>" 
                                 alt="User Avatar" 
                                 class="w-16 h-16 rounded-full">
                         </div>
@@ -169,8 +169,10 @@ if(!isset($_SESSION["email"])){
             .then(data => {
                 if (data.success) {
                     notyf.success('Cập nhật avatar thành công!');
-                    fetchUserData()
                     closeAvatarModal();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 } else {
                     notyf.error('Lỗi: 001' + data.message);
                 }
@@ -194,8 +196,7 @@ if(!isset($_SESSION["email"])){
                 console.log(data)
                 if(data.success) {
                     document.getElementById('tongdon').textContent = data.So_don_hang;
-                    document.getElementById('tongdon').textContent = data.So_tien_da_mua;
-
+                    document.getElementById('tongtien').textContent = `${Math.round(data.So_tien_da_mua).toLocaleString('vi-VN')} ₫`;
                 }
             })
             .catch(error => {
