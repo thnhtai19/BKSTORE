@@ -245,7 +245,7 @@ class ProductService {
     }
 
     public function getPropose($uid) {
-        $sql = "SELECT MaDeXuat, TenSP, NoiDung FROM SAN_PHAM_DE_XUAT WHERE `UID` = ?";
+        $sql = "SELECT MaDeXuat, TenSP, NoiDung, TrangThai, NgayYeuCau FROM SAN_PHAM_DE_XUAT WHERE `UID` = ? ORDER BY MaDeXuat DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $uid);
         $stmt->execute();

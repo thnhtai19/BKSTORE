@@ -60,6 +60,8 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<?=$data['ten']?>">
+    <meta name="keywords" content="<?=$data['thong_tin_chi_tiet']['tu_khoa']?>">
     <link rel="icon" href="/public/image/logo.png" type="image/x-icon">
     <link href="/public/css/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/public/css/swiper-bundle.min.css">
@@ -634,7 +636,7 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             .then(response => response.json())
             .then(data => {
                 const newsContainer = document.getElementById('news-container');
-                newsContainer.innerHTML = data.map(item => `
+                newsContainer.innerHTML = data.danh_sach_tin_tuc.map(item => `
                     <div class="flex gap-4">
                         <img src="${item.AnhMinhHoa[0].LinkAnh}" alt="Tin tức" class="rounded-lg w-32">
                         <a href="/news/detail?id=${item.MaTinTuc}" class="text-sm text-gray-700 hover:underline">${item.TieuDe}</a>

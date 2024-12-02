@@ -178,7 +178,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                         Notice.forEach(order => {
                             const notificationItem = document.createElement("div");
                             notificationItem.onclick = function () {
-                                go(order.type, order.ID_Redirect, order.id)
+                                go(order.type, order.ID_Redirect, order.MaThongBao)
                             };
                             notificationItem.className = `flex gap-2 cursor-pointer rounded-md py-2 px-1 ${order.TrangThai === "Unread" ? 'bg-blue-100' : ''}`;
 
@@ -186,8 +186,11 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                                 <div class="flex justify-center items-center rounded-full bg-custom-background h-12 w-12">
                                     <img src="/public/image/notice.png" alt="Bell" class="h-10 w-10">
                                 </div>
-                                <div class="text-sm flex-1">
-                                    ${order.noi_dung}
+                                <div class="text-sm text-gray-800 flex-1">
+                                    <div class="flex flex-col justify-between h-full">
+                                        <div>${order.noi_dung}</div>
+                                        <div class="text-xs text-gray-500">${order.NgayThongBao}</div>
+                                    </div>
                                 </div>
                             `;
 
@@ -243,7 +246,7 @@ require_once dirname(__DIR__, 4) . '/config/db.php';
                 })
                 .catch(error => {})
                 .finally(() => {
-                    window.location.href = `/my/order/detail?id=${id}`
+                    window.location.href = `/suggest/detail?id=${id}`
                 })
             }
 

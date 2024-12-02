@@ -100,11 +100,11 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                             </svg>
                         </a>
                         <a
-                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/my/support">
+                            class="flex justify-between items-center hover:bg-gray-100 cursor-pointer p-1 rounded-sm mb-1" href="/suggest">
                             <div class="flex justify-between items-center">
-                                <img src="/public/image/phone.png" alt="phone" class="w-6 h-6 mr-2">
+                                <img src="/public/image/icons8-pull-request-100.png" alt="phone" class="w-6 h-6 mr-2">
                                 <div>
-                                    Liên hệ
+                                    Sách đã góp ý
                                 </div>
                             </div>
                             <svg height="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -181,6 +181,10 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                         <div class="swiper-wrapper" id="products-container">
                         </div>
                     </div>
+                    <div class="flex flex-col items-center justify-center gap-2 pt-5 pb-10 hidden" id="noProduct">
+                        <img src="/public/image/icons8-sad-100.png" alt="sad-icon" class="w-8 h-8">
+                        <div class="text-center text-gray-500">Chưa có sản phẩm nào trong mục yêu thích</div>
+                    </div>
                 </div>
             </main>
         </div>
@@ -239,6 +243,13 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                     if(data.message === "Người dùng chưa đăng nhập"){
                         window.location.href = '/auth/login'
                         return
+                    }
+
+                    if(data.message === "Chưa thích sản phẩm nào"){
+                        document.getElementById('noProduct').classList.remove('hidden')
+
+
+
                     }
                 }
             })

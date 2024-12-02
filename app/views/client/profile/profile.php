@@ -170,6 +170,7 @@ if(!isset($_SESSION["email"])){
                 if (data.success) {
                     notyf.success('Cập nhật avatar thành công!');
                     closeAvatarModal();
+
                     setTimeout(() => {
                         window.location.reload();
                     }, 2000);

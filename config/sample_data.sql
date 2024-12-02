@@ -39,10 +39,14 @@
     (1, 'Male', '0123456789', '123 Main St', 'Đang hoạt động'),
     (2, 'Female', '0987654321', '456 Oak Ave', 'Đang hoạt động'),
     (3, 'Male', '0123456789', '789 Pine Rd', 'Đang hoạt động'),
+    (4, 'Male', '0123456789', '789 Pine Rd', 'Đang hoạt động'),
+    (5, 'Male', '0123456789', '789 Pine Rd', 'Đang hoạt động'),
     (6, 'Female', '0987654321', '101 Birch Ln', 'Đang hoạt động'),
     (7, 'Male', '0123456789', '202 Cedar St', 'Đang hoạt động'),
+    (8, 'Male', '0123456789', '789 Pine Rd', 'Đang hoạt động'),
     (9, 'Female', '0987654321', '303 Maple Ave', 'Đang hoạt động'),
-    (10, 'Male', '0123456789', '404 Elm St', 'Đang hoạt động');
+    (10, 'Male', '0123456789', '404 Elm St', 'Đang hoạt động'),
+    (11, 'Male', '0123456789', '404 Elm St', 'Đang hoạt động');
 
     INSERT INTO `SAN_PHAM` (`ID_SP`, `TenSP`, `MoTa`, `Gia`, `TyLeGiamGia`, `SoLuongKho`, `NXB`, `KichThuoc`, `SoTrang`, `PhanLoai`, `TuKhoa`, `HinhThuc`, `TacGia`, `NgonNgu`, `NamXB`) VALUES
     (1, 'Văn Học Tuổi Hoa - Nhà', '\"Nhà\" là sự chắp nối những mảnh kí ức bé nhỏ, rời rạc của cô bé tên Liên đi tìm chính mình trong thời niên thiếu. Sống ở một thị trấn nhỏ, giữa bao biến chuyển, giao thoa cũ – mới ồ ạt những năm 90, Liên tò mò, choáng ngợp, hoài nghi về khát khao và vai trò của một người phụ nữ, để rồi tách mình khỏi những thứ cô bé cho là không đặc biệt. Cũng từ đây, Liên định nghĩa lại ước mong của mình và thử đón nhận tình yêu thương tưởng chừng luôn thiếu vắng.\n\n“Trong cơn mơ ngủ, có lẽ tôi đã đơn giản thiếp đi giữa lòng mẹ. Có lẽ tất cả cuộc đối thoại này chỉ là ảo giác sinh ra từ tâm trí mệt mỏi của tôi. Một hình bóng trong mơ, một sự tồn tại trong tiềm thức của tôi đã nhẹ nhàng đến thế chỗ bà… Như thể, điều tôi tìm kiếm mãi mãi, từ lúc ra đời, chỉ đơn giản là quay trở lại trạng thái này. Rằng bao lâu, tôi đã khao khát, chờ đợi, tìm kiếm chính điều này đây.”\n\n', 65000, 0.13, 50, 'NXB Kim Đồng', '19 x 13 x 1.4 cm', 280, 'Sách Văn Học', 'Thiếu nhi, giáo dục', 'Bìa mềm', '	\nNguyễn Dương Quỳnh', 'Tiếng Việt', 2024),
@@ -195,11 +199,11 @@
 
     INSERT INTO DOI_TAC (Ten, HinhAnh, LienKet, `TrangThai`)
     VALUES
-    ('VNPOST', 'public/image/vnpost1.png', 'https://vnpost.vn/', 'Đang hiện'),
-    ('Ninja Van', 'public/image/Logo_ninjavan.webp', 'https://www.ninjavan.co/vi-vn', 'Đang hiện'),
-    ('Ahamove', 'public/image/ahamove_logo3.webp', 'https://www.ahamove.com/', 'Đang hiện'),
-    ('Snappy', 'public/image/icon_snappy1.webp', 'https://snappy.vn/', 'Đang hiện'),
-    ('Pay Os', 'public/image/payos.svg', 'https://payos.vn/', 'Đang hiện');
+    ('VNPOST', '/public/image/vnpost1.png', 'https://vnpost.vn/', 'Đang hiện'),
+    ('Ninja Van', '/public/image/Logo_ninjavan.webp', 'https://www.ninjavan.co/vi-vn', 'Đang hiện'),
+    ('Ahamove', '/public/image/ahamove_logo3.webp', 'https://www.ahamove.com/', 'Đang hiện'),
+    ('Snappy', '/public/image/icon_snappy1.webp', 'https://snappy.vn/', 'Đang hiện'),
+    ('Pay Os', '/public/image/payos.svg', 'https://payos.vn/', 'Đang hiện');
 
     INSERT INTO HE_THONG (MaHeThong, TrangThaiBaoTri, TuKhoa, ClientID, APIKey, Checksum)
     VALUES
@@ -219,7 +223,7 @@
 
     INSERT INTO MANG_XA_HOI (HinhAnh, LienKet, TrangThai)
     VALUES
-    ('public/image/facebook.png', 'https://www.facebook.com', 'Đang hiện'),
-    ('public/image/instagram.png', 'https://www.instagram.com/website', 'Đang hiện'),
-    ('public/image/youtube.png', 'https://www.youtube.com', 'Đang hiện'),
-    ('public/image/telegram.png', 'https://web.telegram.org/', 'Đang hiện');
+    ('/public/image/facebook.png', 'https://www.facebook.com', 'Đang hiện'),
+    ('/public/image/instagram.png', 'https://www.instagram.com/website', 'Đang hiện'),
+    ('/public/image/youtube.png', 'https://www.youtube.com', 'Đang hiện'),
+    ('/public/image/telegram.png', 'https://web.telegram.org/', 'Đang hiện');

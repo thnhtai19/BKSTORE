@@ -102,8 +102,10 @@ class UserService {
         $stmt_avatar = $this->conn->prepare($avatar_sql);
         $stmt_avatar->bind_param("si", $relativeAvatarPath, $id);
         $stmt_avatar->execute();
-        $_SESSION['Avatar'] = $relativeAvatarPath;
-        return ['success' => true, 'message' => 'Thay đổi ảnh đại diện thành công'];
+
+        $img = "/".$relativeAvatarPath;
+    
+        return ['success' => true, 'message' => 'Thay đổi ảnh đại diện thành công', 'image' => $img];
     }    
 
     public function setInfo($uid, $sex, $phone, $addr, $name) {
@@ -192,7 +194,8 @@ class UserService {
                     'noi_dung' => $row['NoiDung'],
                     'TrangThai' => $row['TrangThai'],
                     'type' => $row['Type'],
-                    'ID_Redirect' => $row['ID_DonHang']
+                    'ID_Redirect' => $row['ID_DonHang'],
+                    'NgayThongBao'  => $row['NgayThongBao']
                 ];
             }
             else if ($row['Type'] == 'Yêu cầu') {
@@ -207,7 +210,8 @@ class UserService {
                     'noi_dung' => $row['NoiDung'],
                     'TrangThai' => $row['TrangThai'],
                     'type' => $row['Type'],
-                    'ID_Redirect' => $row['MaDeXuat']
+                    'ID_Redirect' => $row['MaDeXuat'],
+                    'NgayThongBao'  => $row['NgayThongBao']
                 ];
             }
             else return ['sucess' => false, 'message' => 'Đầu vào không hợp lệ'];

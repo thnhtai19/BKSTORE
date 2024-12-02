@@ -1,3 +1,7 @@
+<?php
+error_reporting(0);
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -59,7 +63,7 @@
     <div id="addSocialModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-40">
         <div class="bg-white p-6 rounded-lg w-11/12 lg:w-2/4 z-50 overflow-y-auto" style="max-height: 700px">
             <div class="flex justify-between items-start">
-                <h2 class="text-xl font-bold mb-4">Thêm liên hệ</h2>
+                <h2 class="text-xl font-bold mb-4">Thêm mạng xã hội</h2>
                 <button onclick="closeModalAddSocial()">✕</button>
             </div>
            
@@ -206,11 +210,11 @@
                                         }
                                     }
 
-                                    dataItems.forEach(item => {
+                                    dataItems.danh_sach_mang_xa_hoi.forEach(item => {
                                         data.push({
                                             id: item.MaMXH,
-                                            lienket: item.LienKet,
-                                            hinhanh: item.HinhAnh,
+                                            lienket: item.Link,
+                                            hinhanh: item.Image,
                                             trangthai: item.TrangThai,
                                             action: [
                                                 { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editSocial' },

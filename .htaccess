@@ -19,6 +19,8 @@ RewriteRule ^notice$ /app/views/client/notice.php [L]
 RewriteRule ^account$ /app/views/client/account.php [L]
 RewriteRule ^order/success$ /app/views/client/success_order.php [L]
 RewriteRule ^order/failure$ /app/views/client/failure_order.php [L]
+RewriteRule ^suggest$ /app/views/client/suggest.php [L]
+RewriteRule ^suggest/detail$ /app/views/client/suggest_detail.php [L]
 
 
 #ADMIN ROUTERS FRONTEND
