@@ -212,10 +212,6 @@
     INSERT INTO THONG_TIN_LIEN_HE (Loai, ThongTin, HinhAnh, TrangThai)
     VALUES
     ('Email', 'contact@website.com', '/public/image/email.png', 'Đang hiện'),
-    ('Hotline', '+84 123 456 789', '/public/image/complaint.jfif', 'Đang hiện'),
-    ('Địa chỉ', '123 Đường ABC, Quận 1, TP.HCM', '/public/image/complaint.jfif', 'Đang hiện'),
-    ('Fanpage', 'facebook.com/website', '/public/image/complaint.jfif', 'Đang hiện'),
-    ('Zalo', 'Zalo: +84 987 654 321', '/public/image/complaint.jfif', 'Đang hiện'),
     ('Tư vấn mua hàng', '+84 123 456 789', '/public/image/consultation.jpg', 'Đang hiện'),
     ('Tư vấn đổi sách', '+84 123 456 745', '/public/image/warranty.jfif', 'Đang hiện'),
     ('Khiếu nại', '+84 123 456 123', '/public/image/complaint.jfif', 'Đang hiện');

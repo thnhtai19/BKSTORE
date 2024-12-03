@@ -236,47 +236,88 @@ if(!isset($_SESSION["email"])){
                         let productFirst = true;
                         productsContainer.innerHTML = ''; 
                         info.danh_sach_san_pham.forEach(product => {
-                        let productHTML = '';
-                            productHTML = `
-                            <div class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">
-                                <div class="flex-1 pb-2">
-                                    <div class="flex flex-col md:flex-row">
-                                        <div class="w-full md:w-40">
-                                            <img id="" src="/${product.anh[0]}" alt="product">
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="h-full w-full">
-                                                <div class="flex flex-col justify-between md:flex-1 md:px-4 mx-10">
-                                                    <div class="flex flex-col space-y-2 md:space-y-1 items-start">
-                                                        <p class="text-gray-700 font-medium">Tên sản phẩm: ${product.ten}</p>
-                                                        <p class="text-gray-700 font-semibold">Số lượng: ${product.so_luong}</p>
-                                                        <p class="text-gray-700 font-semibold">Giá: ${product.gia_sau_giam_gia.toLocaleString('vi-VN')} đ</p>
-                                                    </div>
-                                                    <div class="flex flex-col md:justify-between items-start md:items-end mt-2 md:mt-0 md:pt-8">
-                                                        <div class="flex justify-end items-center">
-                                                            <div class="flex items-center space-x-2">
-                                                                <button
-                                                                    onclick="openRating(${product.id})"
-                                                                    class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                                    Đánh giá
-                                                                </button>
-                                                                <button
-                                                                    onclick="addToCart(${product.id})"
-                                                                    class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                                    Mua lại
-                                                                </button>
+                            let productHTML = '';
+                            if(product.isReviewed) {
+                                productHTML = `
+                                <div class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">
+                                    <div class="flex-1">
+                                        <div class="flex">
+                                            <div class="w-32">
+                                                <img src="/${product.anh[0]}" alt="product">
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="h-full w-full">
+                                                    <div class="flex flex-col justify-between md:flex-1 md:px-4">
+                                                        <div class="flex">
+                                                            <div>
+                                                                <p class="text-gray-700 font-medium">Tên sản phẩm: ${product.ten}</p>
+                                                                <p class="text-gray-700 font-semibold">Số lượng: ${product.so_luong}</p>
+                                                                <p class="text-gray-700 font-semibold">Giá: ${product.gia_sau_giam_gia.toLocaleString('vi-VN')} đ</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex flex-col md:justify-between items-start md:items-end mt-2 md:mt-0 md:pt-8">
+                                                            <div class="flex justify-end items-center">
+                                                                    <div class="flex items-center space-x-2">
+                                                                        <button
+                                                                            onclick="addToCart(${product.id})"
+                                                                            class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                            Mua lại
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            `;
-                            
+                                `;
+                            }
+                            else {
+                                productHTML = `
+                                <div class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">
+                                    <div class="flex-1">
+                                        <div class="flex">
+                                            <div class="w-32">
+                                                <img src="/${product.anh[0]}" alt="product">
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="h-full w-full">
+                                                    <div class="flex flex-col justify-between md:flex-1 md:px-4">
+                                                        <div class="flex">
+                                                            <div>
+                                                                <p class="text-gray-700 font-medium">Tên sản phẩm: ${product.ten}</p>
+                                                                <p class="text-gray-700 font-semibold">Số lượng: ${product.so_luong}</p>
+                                                                <p class="text-gray-700 font-semibold">Giá: ${product.gia_sau_giam_gia.toLocaleString('vi-VN')} đ</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex flex-col md:justify-between items-start md:items-end mt-2 md:mt-0 md:pt-8">
+                                                            <div class="flex justify-end items-center">
+                                                                    <div class="flex items-center space-x-2">
+                                                                        <button
+                                                                            onclick="openRating(${product.id})"
+                                                                            class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                            Đánh giá
+                                                                        </button>
+                                                                        <button
+                                                                            onclick="addToCart(${product.id})"
+                                                                            class="flex justify-center py-2 px-4 border text-sm font-medium rounded-md text-black hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                            Mua lại
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                `;
+                            }
                             productsContainer.insertAdjacentHTML('beforeend', productHTML);
                         });
 
@@ -394,6 +435,9 @@ if(!isset($_SESSION["email"])){
                 try {
                     if (data.success) {
                         notyf.success(data.message);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         notyf.error('Đánh giá sản phẩm thất bại!');
                     }

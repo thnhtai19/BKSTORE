@@ -275,10 +275,30 @@ if(!isset($_SESSION["email"])){
                             }
 
                             function updateUserInfo() {
-                                const name = document.getElementById('full-name').value;
-                                const sex = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : '';
-                                const phone = document.getElementById('phone').value;
-                                const address = document.getElementById('address').value;
+                                const name = document.getElementById('full-name').value.trim();
+                                const sex = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value.trim() : '';
+                                const phone = document.getElementById('phone').value.trim();
+                                const address = document.getElementById('address').value.trim();
+
+                                if (name.length < 3 || name.length > 50 || !/^[a-zA-Z\s]+$/.test(name)) {
+                                    notyf.error('Tên không hợp lệ. Vui lòng nhập tên từ 3-50 ký tự, chỉ bao gồm chữ và khoảng trắng.');
+                                    return;
+                                }
+
+                                if (sex !== "male" && sex !== "female" && sex !== "other") {
+                                    notyf.error('Giới tính không hợp lệ.');
+                                    return;
+                                }
+
+                                if (!/^\d{10}$/.test(phone)) {
+                                    notyf.error('Số điện thoại không hợp lệ. Vui lòng nhập số đúng 10 chữ số.');
+                                    return;
+                                }
+
+                                if (address.length < 5 || address.length > 100) {
+                                    notyf.error('Địa chỉ không hợp lệ. Vui lòng nhập địa chỉ từ 5-100 ký tự.');
+                                    return;
+                                }
 
                                 fetch(`${window.location.origin}/api/user/info`, {
                                     method: 'POST',

@@ -121,7 +121,7 @@ class AdminService {
 
     public function propose() {
         $propose_list = $this->proposeInfo();
-        foreach ($propose_list as $propose) {
+        foreach ($propose_list as &$propose) {
             $user = $this->user->getUserInfo($propose["UID"]);
             if ($user['success'] === false) {
                 return ['success' => false, 'message' => $user['message']];

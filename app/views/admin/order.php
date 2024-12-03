@@ -81,6 +81,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                         <option value="Đã xác nhận">Đã xác nhận</option>
                         <option value="Đang vận chuyển">Đang vận chuyển</option>
                         <option value="Đã giao hàng">Đã giao hàng</option>
+                        <option value="Đã hủy">Đã hủy</option>
                     </select>
                 </div>
             </div>
@@ -205,7 +206,8 @@ if(!($_SESSION["Role"] == 'Admin')){
                                     "Chờ xác nhận",
                                     "Đã xác nhận",
                                     "Đang vận chuyển",
-                                    "Đã giao hàng"
+                                    "Đã giao hàng",
+                                    "Đã hủy"
                                 ];
                                 let currentIndex = statusOrder.indexOf(currentValue);
                                 Array.from(trangThai.options).forEach((option, index) => {
@@ -283,6 +285,24 @@ if(!($_SESSION["Role"] == 'Admin')){
             const thanhToan = document.getElementById("trangthaithanhtoan").value;
             const trangThai = document.getElementById("trangthaidonhang").value;
 
+            let statusOrder = [
+                "Chờ xác nhận",
+                "Đã xác nhận",
+                "Đang vận chuyển",
+                "Đã giao hàng",
+                "Đã hủy"
+            ];
+            if (!statusOrder.includes(trangThai)) {
+                return notyf.error("Trạng thái không hợp lệ!");
+            }
+            statusOrder = [
+                "Chưa thanh toán",
+                "Đã thanh toán",
+                "Huỷ thanh toán"
+            ];
+            if (!statusOrder.includes(thanhToan)) {
+                return notyf.error("trạng thái thanh toán không hợp lệ!");
+            }
             const payload = {
                 ID_DonHang: ID_DonHang,
                 ThanhToan: thanhToan,

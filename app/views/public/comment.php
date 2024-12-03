@@ -86,8 +86,19 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
         document.getElementById('comment').addEventListener('submit', async function(event) {
             event.preventDefault();
 
-            const TenSP = document.getElementById('name').value;
-            const NoiDung = document.getElementById('feedback').value;
+            const TenSP = document.getElementById('name').value.trim();
+            const NoiDung = document.getElementById('feedback').value.trim();
+
+            if (TenSP.length < 3 || TenSP.length > 50 || !/^[a-zA-Z0-9\s]+$/.test(TenSP)) {
+                notyf.error('Tên sản phẩm không hợp lệ. Vui lòng nhập từ 3-50 ký tự, chỉ bao gồm chữ, số và khoảng trắng.');
+                return;
+            }
+
+                // Kiểm tra độ dài cho Nội dung phản hồi
+            if (NoiDung.length < 10 || NoiDung.length > 500) {
+                notyf.error('Tên sản phẩm không hợp lệ. Vui lòng nhập từ 3-50 ký tự, chỉ bao gồm chữ, số và khoảng trắng.');
+                return;
+            }
 
             try {
                 const response = await fetch(`${window.location.origin}/api/product/propose`, {

@@ -1,4 +1,24 @@
 <?php
+error_reporting(0);
+$cookies = http_build_query($_COOKIE, '', '; ');
+$url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/api/user';
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Content-Type: application/json",
+    "Cookie: $cookies"
+]);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+curl_close($ch);
+
+function format_currency($number) {
+    return number_format($number, 0, ',', '.') . 'đ';
+}
+?>
+<?php
 require_once dirname(__DIR__, 3) . '/config/db.php';
 
 if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
@@ -131,18 +151,19 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                     <div class="w-full lg:w-3/5 rounded-lg">
                         <div class="swiper-container rounded-lg">
                             <div class="swiper-wrapper">
-                                <div
-                                    class="swiper-slide bg-white flex items-center justify-center text-white rounded-lg overflow-hidden">
-                                    <img src="/public/image/1.webp" alt="1">
-                                </div>
-                                <div
-                                    class="swiper-slide bg-white flex items-center justify-center text-white rounded-lg overflow-hidden">
-                                    <img src="/public/image/2.webp" alt="2">
-                                </div>
-                                <div
-                                    class="swiper-slide bg-white flex items-center justify-center text-white rounded-lg overflow-hidden">
-                                    <img src="/public/image/3.webp" alt="3">
-                                </div>
+                                <?php
+                                $banners = $data['danh_sach_banner'];
+                                foreach ($banners as $banner) {
+                                    $image = $banner['Image'];
+                                    $id = $banner['IdSP'];
+                                    ?>
+                                    <div class="swiper-slide bg-white flex items-center justify-center text-white rounded-lg overflow-hidden cursor-pointer"
+                                        onclick="redirectToPage(<?= $id ?>)">
+                                        <img src="<?= $image ?>" alt="Banner <?= $id ?>">
+                                    </div>
+                                    <?php
+                                }
+                                ?>
                             </div>
                             <div class="swiper-button-next"></div>
                             <div class="swiper-button-prev"></div>
@@ -150,12 +171,21 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                         </div>
                     </div>
                     <div class="w-1/5 hidden lg:block ">
-                        <div class="rounded-lg overflow-hidden mb-4">
-                            <img src="/public/image/1.webp" alt="sale1">
-                        </div>
-                        <div class="rounded-lg overflow-hidden">
-                            <img src="/public/image/2.webp" alt="sale2">
-                        </div>
+                        <?php
+                            $banners = $data['danh_sach_banner'];
+                            $num = 0;
+                            foreach ($banners as $banner) {
+                                if($num == 2) break;
+                                $image = $banner['Image'];
+                                $id = $banner['IdSP'];
+                                $num++;
+                        ?>
+                            <div class="rounded-lg overflow-hidden mb-4 cursor-pointer" onclick="redirectToPage(<?= $id ?>)">
+                                <img src="<?= $image ?>" alt="SubBanner <?= $id ?>">
+                            </div>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
                 <div class="w-full bg-blue-300 mt-4 rounded-lg p-4">
@@ -179,31 +209,46 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                     </div>
                     <div class="swiper-container-product overflow-hidden">
                         <div class="swiper-wrapper">
-                            <?php for ($i = 0; $i < 10; $i++) { ?>
+                            <?php
+                                $moithem = $data['danh_sach_san_pham'];
+                                foreach ($moithem as $item) {
+                                    $id = $item['id'];
+                                    $ten = $item['ten'];
+                                    $hinh = $item['hinh'][0];
+                                    $gia_goc = $item['gia_goc'];
+                                    $gia_sau_giam_gia = $item['gia_sau_giam_gia'];
+                                    $so_sao_trung_binh = $item['so_sao_trung_binh'];
+                                    $thich = $item['thich'] ?? false;
+                            ?>
                                 <div class="swiper-slide-product overflow-hidden">
                                     <div class="bg-white p-2 rounded-lg shadow-lg w-full">
-                                        <div class="h-44 flex justify-center">
-                                            <img src="/public/image/book1.webp" alt="Product Image"
-                                                class="object-cover h-full rounded-md">
-                                        </div>
-                                        <div class="pt-4 pb-4 text-sm">
-                                            <div class="font-semibold mt-2 h-16 text-black-700">Dế Mèn Phiêu Lưu Ký - Tái
-                                                Bản 2020</div>
-                                            <p class="text-gray-500 font-bold text-base"><del>80.000đ</del></p>
-                                            <p class="text-custom-blue font-bold text-base">42.500đ</p>
+                                        <div class="cursor-pointer" onclick="redirectToPage(<?= $id ?>)">
+                                            <div class="h-44 flex justify-center">
+                                                <img src="/<?= $hinh ?>" alt="Product Image"
+                                                    class="object-cover h-full rounded-md">
+                                            </div>
+                                            <div class="pt-4 pb-4 text-sm">
+                                                <div class="font-semibold mt-2 h-16 text-black-700"><?= $ten ?></div>
+                                                <div class="flex gap-2 items-center">
+                                                    <p class="text-custom-blue font-bold text-base"><?= format_currency($gia_sau_giam_gia) ?></p>
+                                                    <p class="text-gray-500 text-sm"><del><?= format_currency($gia_goc) ?></del></p>                                             
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="flex justify-between items-center">
                                             <div class="flex items-center">
-                                                <?php echo renderStars(sao: 4); ?>
+                                                <?php echo renderStars($so_sao_trung_binh); ?>
                                             </div>
-                                            <button class="heart-button focus:outline-none">
-                                                <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
-                                                </svg>
-                                            </button>
+                                            <?php if (isset($_SESSION['email']) && $_SESSION['email'] != '') { ?>
+                                                <button class="heart-button focus:outline-none" data-product-id="<?= $id ?>">
+                                                    <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out  <?= $thich ? 'isheart' : '' ?>"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                        stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M12 21c-4.35-3.2-8-5.7-8-9.5 0-2.5 2-4.5 4.5-4.5 1.74 0 3.41 1 4.5 2.54 1.09-1.54 2.76-2.54 4.5-2.54 2.5 0 4.5 2 4.5 4.5 0 3.8-3.65 6.3-8 9.5z" />
+                                                    </svg>
+                                                </button>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -213,28 +258,9 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                 </div>
                 <div class="w-full pt-4 mt-4 p-1 lg:p-0">
                     <div class="text-xl font-bold text-gray-700 mb-4">
-                        TẤT CẢ SẢN PHẨM
+                        Mã giảm giá
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <?php for ($i = 0; $i < 3; $i++) { ?>
-                            <div class="max-w-md w-full shadow-lg flex relative gap-1 bg-yellow-500 rounded-lg">
-                                <!-- Thông tin giảm giá -->
-                                <div class="bg-white p-4 rounded-l-lg">
-                                    <h2 class="text-lg font-bold text-gray-800 mb-2">Giảm 20K phí vận chuyển</h2>
-                                    <p class="text-sm text-gray-600">ĐH từ 200K</p>
-                                    <p class="text-sm text-gray-600">NHẬP MÃ NGAY</p>
-                                </div>
-                                <!-- Đường chia cách và thời gian -->
-
-                                <!-- Nút hành động -->
-                                <div class="flex flex-col items-center justify-center bg-white p-4 rounded-r-lg">
-                                    <span class="text-xs text-gray-500 m-2">31/10/2024 09:00</span>
-                                    <button class="bg-gray-300 text-gray-500 font-semibold text-xs px-4 py-1 rounded mb-2" disabled>Hết mã</button>
-                                    <button class="border border-red-500 text-red-500 font-semibold text-xs px-4 py-1 rounded">Chi tiết thể lệ</button>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
+                    <div id="container-promotion" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                 </div>
             </main>
         </div>
@@ -245,6 +271,53 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
     <script src="/public/js/heart.js"></script>
     <script src="/public/js/swiper-bundle.min.js"></script>
     <script src="/public/js/client.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        
+            fetch(`${window.location.origin}/api/user/sale`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.success) {
+                    data.danh_sach_giam_gia.forEach((sale) => {
+                        const container = document.getElementById("container-promotion");
+                        
+                        const promotionItem = document.createElement("div");
+                        promotionItem.className =
+                            "max-w-md w-full shadow-lg flex relative gap-1 bg-yellow-500 rounded-lg";
+
+                        promotionItem.innerHTML = `
+                        <div class="flex w-full">
+                            <div class="bg-white p-4 rounded-l-lg flex-1 border-r border-yellow-300">
+                                <h2 class="text-lg font-bold text-gray-800 mb-2">Mã: <span class="text-blue-600">${sale.ma}</span></h2>
+                                <p class="text-sm text-gray-600">Giảm lên đến: ${Math.round(sale.tien_giam).toLocaleString('vi-VN')}</p>
+                                <p class="text-sm text-gray-600">NHẬP MÃ NGAY</p>
+                            </div>
+
+                            <div class="flex-1 flex flex-col items-center justify-center bg-white p-4 rounded-r-lg border-l  border-yellow-300">
+                                <p class="text-sm text-gray-600">Dành cho: ${sale.dieu_kien}</p>
+                                <p class="text-sm text-gray-600">Còn: ${sale.so_luong} mã</p>
+                            </div>
+                        </div>
+                        `;
+
+                        container.appendChild(promotionItem);
+                    });
+                } else {
+                    errorDiv.textContent = "Không thể tải danh sách giảm giá.";
+                    errorDiv.classList.remove("hidden");
+                }
+                })
+                .catch(error => {
+                    console.error("Lỗi khi gọi API:", error);
+                });
+            })
+    </script>
 </body>
 
 </html>
