@@ -128,7 +128,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                     console.log(ListRequest); 
                                     ListRequest['message'].forEach(request => {
                                         data.push({
-                                            id: request.UID,
+                                            id: request.MaDeXuat,
                                             name: request.ten,
                                             email: request.email,
                                             date: request.NgayYeuCau,
@@ -202,8 +202,8 @@ if(!($_SESSION["Role"] == 'Admin')){
         var notyf = new Notyf({
             duration: 3000,
             position: {
-            x: 'right',
-            y: 'top',
+                x: 'right',
+                y: 'top',
             },
         });
         function updateRequest() {

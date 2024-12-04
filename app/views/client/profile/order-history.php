@@ -133,24 +133,31 @@ if(!isset($_SESSION["email"])){
                     orderItem.classList.add('flex', 'flex-col', 'md:flex-row', 'bg-white', 'border', 'rounded-lg', 'p-4', 'md:h-42');
                     
                     let bgColor;
+                    let textColor;
                     switch (order.trang_thai) {
                         case 'Đã giao hàng':
                             bgColor = 'bg-green-200';
+                            textColor = 'text-green-800';
                             break;
                         case 'Đang vận chuyển':
                             bgColor = 'bg-blue-200';
+                            textColor = 'text-blue-800';
                             break;
                         case 'Đã hủy':
                             bgColor = 'bg-red-200';
+                            textColor = 'text-red-800';
                             break;
                         case 'Đã xác nhận':
                             bgColor = 'bg-blue-200';
+                            textColor = 'text-blue-800';
                             break;
                         case 'Chờ xác nhận':
                             bgColor = 'bg-red-200';
+                            textColor = 'text-red-800';
                             break;
                         default:
                             bgColor = 'bg-gray-200';
+                            textColor = 'text-white';
                     }
 
                     orderItem.innerHTML = `
@@ -171,7 +178,7 @@ if(!isset($_SESSION["email"])){
                                                 </div>
                                             </div>
                                             <div class="flex flex-col md:justify-between md:items-end mt-2 md:mt-0">
-                                                <p class="text-sm px-3 py-1 ${bgColor} text-green-700 font-medium rounded-full">${order.trang_thai}</p>
+                                                <p class="text-sm px-3 py-1 ${bgColor} ${textColor} font-medium rounded-full">${order.trang_thai}</p>
                                                 <a href="/my/order/detail?id=${order.id}" class="text-blue-500 hover:underline font-medium">Xem chi tiết>></a>
                                             </div>
                                         </div>

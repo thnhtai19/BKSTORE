@@ -64,7 +64,7 @@ if(!isset($_SESSION["email"])){
                         </nav>
                     </div>
 
-                    <div class="w-full lg:w-3/4 rounded-lg space-y-6">
+                    <!-- <div class="w-full lg:w-3/4 rounded-lg space-y-6">
                         <div class="flex flex-col md:flex-row md:space-x-6 space-x-0 md:space-y-0 space-y-6">
                             <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
                                 <div class="w-20 h-20 float-left mr-2">
@@ -99,7 +99,9 @@ if(!isset($_SESSION["email"])){
                                 <p class="text-lg text-yellow-500" id="spEmail"></p>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+
+                    <div id="contact-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 w-full lg:w-3/4 rounded-lg"></div>
                 </div>
             </main>
         </div>
@@ -111,26 +113,32 @@ if(!isset($_SESSION["email"])){
             fetch(`${window.location.origin}/api/system/contact`)
                 .then(response => response.json())
                 .then(data => {
-                    const supportEmail = document.getElementById('spEmail');
-                    const supportBuy = document.getElementById('spBuy');
-                    const supportChange = document.getElementById('spChange');
-                    const supportComplait = document.getElementById('spComplait');
-                    const imageEmail = document.getElementById("imgEmail")
-                    const imageBuy = document.getElementById("imgBuy")
-                    const imageChange = document.getElementById("imgChange")
-                    const imageComplait = document.getElementById("imgComplait")
-
                     console.log(data)
-                    supportEmail.innerHTML = `${data.info[7].thong_tin}`;
-                    supportBuy.innerHTML = `${data.info[2].thong_tin}`;
-                    supportChange.innerHTML = `${data.info[1].thong_tin}`;
-                    supportComplait.innerHTML = `${data.info[0].thong_tin}`;
-                    imageEmail.src = `${data.info[7].hinh_anh}`;
-                    imageBuy.src = `${data.info[2].hinh_anh}`;
-                    imageChange.src = `${data.info[1].hinh_anh}`;
-                    imageComplait.src = `${data.info[0].hinh_anh}`;
+                    if (data.success) {
+                            const contactContainer = document.getElementById("contact-container");
+                            contactContainer.innerHTML = "";
 
+                            data.info.forEach((contact) => {
+                            const contactItem = document.createElement("div");
+                            contactItem.className =
+                                "flex-1 bg-white p-5 shadow-md rounded-xl flex items-center";
 
+                            // Nội dung HTML
+                            contactItem.innerHTML = `
+                                <div class="w-16 h-16 flex-shrink-0 mr-4">
+                                <img src="${contact.hinh_anh}" alt="${contact.loai}" class="w-full h-full object-cover rounded-full">
+                                </div>
+                                <div>
+                                <h5 class="font-bold text-lg text-gray-800 capitalize">${contact.loai}</h5>
+                                <p class="text-lg text-yellow-500">${contact.thong_tin}</p>
+                                </div>
+                            `;
+
+                            contactContainer.appendChild(contactItem);
+                            });
+                        } else {
+                            console.log("lỗi kết nối với api")
+                        }
                 })
                 .catch(error => console.error('Error fetching contact info:', error));
         });

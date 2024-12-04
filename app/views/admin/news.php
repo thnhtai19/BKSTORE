@@ -196,6 +196,8 @@ if(!($_SESSION["Role"] == 'Admin')){
                                     `;
                                     imagePreviewContainer.appendChild(imageDiv);
                                 });
+                                AnhMuonXoa = parseItem.hinhanh;
+                                console.log(AnhMuonXoa)
                                 attachDeleteEvent();
                             }
 
@@ -204,12 +206,8 @@ if(!($_SESSION["Role"] == 'Admin')){
                                 deleteButtons.forEach(button => {
 
                                     button.addEventListener('click', function () {
-                                        const src = this.parentElement.querySelector("img").src;
-                                        const relativePath  = new URL(src).pathname;
-                                        AnhMuonXoa.push(relativePath);
                                         const imageDiv = this.parentElement;
                                         imageDiv.remove();
-                                        console.log("Danh sách AnhMuonXoa:", AnhMuonXoa);
                                     });
                                 });
                             }
