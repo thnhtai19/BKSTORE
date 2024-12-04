@@ -101,7 +101,7 @@ if(!isset($_SESSION["email"])){
                         </div>
                     </div> -->
 
-                    <div id="contact-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4"></div>
+                    <div id="contact-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 w-full lg:w-3/4 rounded-lg"></div>
                 </div>
             </main>
         </div>
