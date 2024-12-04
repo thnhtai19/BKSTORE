@@ -78,7 +78,7 @@ if(!isset($_SESSION["email"])){
                         <div>
                             <p class="text-gray-500 mt-1">Mã đơn hàng: <span class="font-medium text-gray-700" id="order-id"></span></p>
                             <p class="text-gray-500 mt-1">Ngày đặt: <span class="font-medium text-gray-700" id="order-date"></span></p>
-                            <p id="order-status" class="text-sm px-3 py-1 text-green-700 font-medium rounded-full inline-block mt-2"></p>
+                            <p id="order-status" class="text-sm px-3 py-1 font-medium rounded-full inline-block mt-2"></p>
                         </div>
                         
                         <div>
@@ -177,7 +177,6 @@ if(!isset($_SESSION["email"])){
             </div>
         </div>
     </div>
-    <script src="/public/js/client.js"></script>
     <script src="/public/js/notyf.min.js"></script>
     <script>
         var notyf = new Notyf({
@@ -201,7 +200,6 @@ if(!isset($_SESSION["email"])){
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     if (data.success) {
                         const info = data.info;
 
@@ -211,33 +209,42 @@ if(!isset($_SESSION["email"])){
                         const statusOrder = document.getElementById('order-status');
                         statusOrder.textContent = info.trang_thai;
                         let bgColor;
+                        let textColor;
+
                         switch (info.trang_thai) {
                             case 'Đã giao hàng':
                                 bgColor = 'bg-green-200';
+                                textColor = 'text-green-800';
                                 break;
                             case 'Đang vận chuyển':
                                 bgColor = 'bg-blue-200';
+                                textColor = 'text-blue-800';
                                 break;
                             case 'Đã hủy':
                                 bgColor = 'bg-red-200';
+                                textColor = 'text-red-800';
                                 break;
                             case 'Đã xác nhận':
                                 bgColor = 'bg-blue-200';
+                                textColor = 'text-blue-800';
                                 break;
                             case 'Chờ xác nhận':
                                 bgColor = 'bg-red-200';
+                                textColor = 'text-red-800';
                                 break;
                             default:
+                                textColor = 'text-gray-800';
                                 bgColor = 'bg-gray-200';
                         }
                         statusOrder.classList.add(bgColor);
+                        statusOrder.classList.add(textColor);
 
                         const productsContainer = document.getElementById('products-container');
                         let productFirst = true;
                         productsContainer.innerHTML = ''; 
                         info.danh_sach_san_pham.forEach(product => {
                             let productHTML = '';
-                            if(product.isReviewed) {
+                            if(product.isReviewed || info.trang_thai != "Đã giao hàng") {
                                 productHTML = `
                                 <div class="flex flex-col md:flex-row bg-white border rounded-lg p-4 md:h-46">
                                     <div class="flex-1">
@@ -348,7 +355,6 @@ if(!isset($_SESSION["email"])){
                 id: id,
                 quantity: "1"
             };
-            console.log(data)
             fetch(`${window.location.origin}/api/user/cart`, {
                 method: 'POST',
                 headers: {
@@ -358,7 +364,6 @@ if(!isset($_SESSION["email"])){
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success == true) {
                     notyf.success('Thêm vào sản phẩm vào giỏ hàng thành công!');
 
@@ -421,7 +426,6 @@ if(!isset($_SESSION["email"])){
                 SoSao: rating,
                 NoiDung: reviewText
             };
-            console.log(data)
             fetch(`${window.location.origin}/api/user/review`, {
                 method: 'POST',
                 headers: {
@@ -431,7 +435,6 @@ if(!isset($_SESSION["email"])){
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Raw response:", data);
                 try {
                     if (data.success) {
                         notyf.success(data.message);
@@ -450,6 +453,9 @@ if(!isset($_SESSION["email"])){
                 console.error("Error:", error);
                 notyf.error('Đã xảy ra lỗi khi đánh giá sản phẩm!');
             });
+        }
+        function goBack() {
+            window.history.back();
         }
     </script>
 </body>

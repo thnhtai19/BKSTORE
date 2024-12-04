@@ -203,7 +203,6 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success) {
                     const list = data.product_list;
 

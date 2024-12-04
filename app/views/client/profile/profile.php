@@ -194,7 +194,6 @@ if(!isset($_SESSION["email"])){
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if(data.success) {
                     document.getElementById('tongdon').textContent = data.So_don_hang;
                     document.getElementById('tongtien').textContent = `${Math.round(data.So_tien_da_mua).toLocaleString('vi-VN')} ₫`;
@@ -206,7 +205,6 @@ if(!isset($_SESSION["email"])){
         }
     } catch { }
     </script>
-    <script src="/public/js/client.js"></script>
 </body>
 </html> 
 </body>

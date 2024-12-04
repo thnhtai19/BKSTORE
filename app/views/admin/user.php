@@ -132,7 +132,6 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                                 if (response.ok) {
                                     const dataUser = await response.json();
-                                    console.log(dataUser); 
                                     dataUser['user-list'].forEach(user => {
                                         data.push({
                                             id: user.uid,
@@ -147,7 +146,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                                             ]
                                         });
                                     });
-                                    console.log(data); 
 
                                     const event = new CustomEvent('dataReady', { detail: dataUser });
                                     window.dispatchEvent(event);

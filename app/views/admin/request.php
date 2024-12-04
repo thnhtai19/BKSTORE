@@ -125,7 +125,6 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                                 if (response.ok) {
                                     const ListRequest = await response.json();
-                                    console.log(ListRequest); 
                                     ListRequest['message'].forEach(request => {
                                         data.push({
                                             id: request.MaDeXuat,
@@ -143,7 +142,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                                         });
 
                                     });
-                                    console.log(data); 
 
                                     const event = new CustomEvent('dataReady', { detail: ListRequest });
                                     window.dispatchEvent(event);
@@ -216,7 +214,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                 TrangThai: TrangThai,
                 GhiChu: GhiChu
             };
-            console.log(payload)
             fetch(`${window.location.origin}/api/admin/propose`, {
                 method: "POST",
                 headers: {

@@ -215,7 +215,6 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                                 if (response.ok) {
                                     const dataContact = await response.json();
-                                    console.log(dataContact); 
                                     dataContact.danh_sach_lien_he.forEach(contact => {
                                         data.push({
                                             id: contact.MaThongTin,
@@ -285,7 +284,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     if (data.success) {
                         notyf.success(data.message);
                         setTimeout(() => {

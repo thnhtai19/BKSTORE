@@ -84,7 +84,6 @@ if(!isset($_SESSION["email"])){
         </div>
         <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
-    <script src="/public/js/client.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const orderList = document.getElementById('order-list');
@@ -97,7 +96,6 @@ if(!isset($_SESSION["email"])){
             fetch(`${window.location.origin}/api/order/paid`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     if (data.success) {
                         ordersData = data.message;
                         renderOrders('all', currentPage);
@@ -177,9 +175,9 @@ if(!isset($_SESSION["email"])){
                                                     <p class="text-gray-700 font-semibold">${order.gia.toLocaleString('vi-VN')}₫</p>
                                                 </div>
                                             </div>
-                                            <div class="flex flex-col md:justify-between md:items-end mt-2 md:mt-0">
-                                                <p class="text-sm px-3 py-1 ${bgColor} ${textColor} font-medium rounded-full">${order.trang_thai}</p>
-                                                <a href="/my/order/detail?id=${order.id}" class="text-blue-500 hover:underline font-medium">Xem chi tiết>></a>
+                                            <div class="md:flex md:flex-col md:justify-between md:items-end mt-2 md:mt-0">
+                                                <p class="text-sm px-3 py-1 ${bgColor} ${textColor} font-medium rounded-full inline">${order.trang_thai}</p>
+                                                <a href="/my/order/detail?id=${order.id}" class="text-blue-500 hover:underline font-medium  block">Xem chi tiết>></a>
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +194,6 @@ if(!isset($_SESSION["email"])){
             function renderPagination(totalOrders, currentPage) {
                 pagination.innerHTML = '';
                 const totalPages = Math.ceil(totalOrders / ordersPerPage);
-                console.log(totalOrders)
                 
                 for (let i = 1; i <= totalPages; i++) {
                     const pageButton = document.createElement('button');

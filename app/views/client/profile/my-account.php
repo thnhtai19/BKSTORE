@@ -230,7 +230,6 @@ if(!isset($_SESSION["email"])){
                                 })
                                 .then(response => response.json())
                                 .then(dataUser => {
-                                    console.log(dataUser);
                                     try {
                                         document.getElementById("full-name").value = dataUser.thong_tin.name;
                                         if(dataUser.thong_tin.phone) {
@@ -285,7 +284,7 @@ if(!isset($_SESSION["email"])){
                                     return;
                                 }
 
-                                if (sex !== "male" && sex !== "female" && sex !== "other") {
+                                if (sex !== "Male" && sex !== "Female" && sex !== "NULL") {
                                     notyf.error('Giới tính không hợp lệ.');
                                     return;
                                 }
@@ -324,7 +323,6 @@ if(!isset($_SESSION["email"])){
 
                             window.onload = async function() {
                                 await fetchUserData(); 
-                                console.log(data)
                             };
 
                         </script>
@@ -338,6 +336,5 @@ if(!isset($_SESSION["email"])){
         </div>
         <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
-    <script src="/public/js/client.js"></script>
 </body>
 </html>

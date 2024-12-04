@@ -64,56 +64,17 @@ if(!isset($_SESSION["email"])){
                         </nav>
                     </div>
 
-                    <!-- <div class="w-full lg:w-3/4 rounded-lg space-y-6">
-                        <div class="flex flex-col md:flex-row md:space-x-6 space-x-0 md:space-y-0 space-y-6">
-                            <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
-                                <div class="w-20 h-20 float-left mr-2">
-                                    <img id="imgBuy" src="/public/image/consultation.jpg" alt="consultation">
-                                </div>
-                                <h5 class="font-bold mt-3">Tư vấn mua hàng (8h00 - 22h20)</h5>
-                                <p class="text-lg text-yellow-500" id="spBuy">1800.2097</p>
-                            </div>
-
-                            <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
-                                <div class="w-20 h-20 float-left mr-2">
-                                    <img id="imgChange" src="/public/image/warranty.jfif" alt="warranty">
-                                </div>
-                                <h5 class="font-bold mt-3">Tư vấn đổi sách (8h00 - 21h00)</h5>
-                                <p class="text-lg text-yellow-500" id="spChange">1800.2088</p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col md:flex-row md:space-x-6 space-x-0 md:space-y-0 space-y-6">
-                            <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
-                                <div class="w-20 h-20 float-left mr-2">
-                                    <img id="imgComplait" src="/public/image/complaint.jfif" alt="complaint">
-                                </div>
-                                <h5 class="font-bold mt-3">Khiếu nại (8h00 - 21h30)</h5>
-                                <p class="text-lg text-yellow-500" id="spComplait">1800.2088</p>
-                            </div>
-                            <div class="flex-1 bg-white p-5 shadow-md rounded-xl">
-                                <div class="w-20 h-20 float-left mr-2">
-                                    <img id="imgEmail" src="/public/image/email.png" alt="email">
-                                </div>
-                                <h5 class="font-bold mt-3">Email</h5>
-                                <p class="text-lg text-yellow-500" id="spEmail"></p>
-                            </div>
-                        </div>
-                    </div> -->
-
                     <div id="contact-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 w-full lg:w-3/4 rounded-lg"></div>
                 </div>
             </main>
         </div>
         <?php $page = 1; include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
-    <script src="/public/js/client.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             fetch(`${window.location.origin}/api/system/contact`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     if (data.success) {
                             const contactContainer = document.getElementById("contact-container");
                             contactContainer.innerHTML = "";
