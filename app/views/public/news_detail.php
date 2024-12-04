@@ -98,7 +98,7 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                     data.Anh.forEach(imageSrc => {
                         const imageDiv = document.createElement('div');
                         imageDiv.innerHTML = `
-                            <img src="${imageSrc}" alt="Hình ảnh">
+                            <img src="${imageSrc}" alt="Hình ảnh" class="p-2">
                         `;
                         imageContainer.appendChild(imageDiv);
                     });

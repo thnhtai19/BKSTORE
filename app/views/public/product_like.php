@@ -224,7 +224,7 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                                             <div class="flex items-center">
                                                 <?php echo renderStars(sao: 4); ?>
                                             </div>
-                                            <button class="heart-button focus:outline-none">
+                                            <button class="heart-button focus:outline-none" data-product-id="${product.id}" onclick="toggleHeart(this)">
                                                 <svg class="heart-icon w-6 h-6 text-red-500 transition duration-300 ease-in-out"
                                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
                                                     stroke="currentColor">
@@ -257,6 +257,75 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                 document.getElementById('products-container').innerText = 'Có lỗi xảy ra khi thực hiện yêu cầu';
             });
         });
+    </script>
+    <script>
+        function toggleHeart(button) {
+            const heartIcon = button.querySelector('.heart-icon');
+            const productId = button.getAttribute('data-product-id')
+            const isFilled = heartIcon.getAttribute('fill') === 'currentColor';
+
+            if (isFilled) {
+                const res = unlikeProduct(productId);
+                if(res){
+                    heartIcon.setAttribute('fill', 'none');
+                    notyf.success('Xoá sản phẩm khỏi mục yêu thích thành công!');
+                }
+            } else {
+                const res = likeProduct(productId);
+                if(res){
+                    heartIcon.setAttribute('fill', 'currentColor');
+                    notyf.success('Thêm vào sản phẩm yêu thích thành công!');
+                }
+            }
+        }
+
+        function likeProduct(productId) {
+            return fetch('/api/user/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ID_SP: productId,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return false;
+                }
+                return response.json();
+            })
+            .then(data => {
+                return data.success === true;
+            })
+            .catch(error => {
+                return false;
+            });
+        }
+
+        function unlikeProduct(productId) {
+            return fetch('/api/user/unlike', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ID_SP: productId,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return false;
+                }
+                return response.json();
+            })
+            .then(data => {
+                return data.success === true;
+            })
+            .catch(error => {
+                return false;
+            });
+        }
     </script>
     <script src="/public/js/notyf.min.js"></script>
     <script src="/public/js/heart.js"></script>
