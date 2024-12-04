@@ -156,7 +156,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                                     ListOrder['list'].forEach(order => {
                                         data.push({
                                             id: order.info.id,
-                                            name: order.info.ten_nguoi_nhan,
+                                            name: order.info.ten_khach_hang,
                                             ngaydat: order.info.ngay_dat,
                                             tongtien: Math.round(order.info.thong_tin_thanh_toan.tong_tien).toLocaleString('vi-VN'),
                                             trangthaithanhtoan: order.info.thong_tin_thanh_toan.trang_thai,
