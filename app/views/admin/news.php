@@ -197,7 +197,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                                     imagePreviewContainer.appendChild(imageDiv);
                                 });
                                 AnhMuonXoa = parseItem.hinhanh;
-                                console.log(AnhMuonXoa)
                                 attachDeleteEvent();
                             }
 
@@ -240,7 +239,6 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                                 if (response.ok) {
                                     const dataNews = await response.json();
-                                    console.log(dataNews); 
                                     dataNews.danh_sach_tin_tuc.forEach(news => {
                                         data.push({
                                             id: news.MaTinTuc,
@@ -256,7 +254,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                                             ]
                                         });
                                     });
-                                    console.log(data); 
 
                                     const event = new CustomEvent('dataReady', { detail: dataNews });
                                     window.dispatchEvent(event);
@@ -315,7 +312,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     if (data.success) {
                         notyf.success(data.message);
                         setTimeout(() => {
@@ -460,7 +456,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                     return
                 }
             } catch (error) {
-                console.log(error)
                 notyf.error('Xảy ra lỗi khi thêm sản phẩm!');
             }
         }

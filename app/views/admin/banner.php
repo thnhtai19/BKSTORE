@@ -214,7 +214,6 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                                 if (response.ok) {
                                     const dataBanner = await response.json();
-                                    console.log(dataBanner); 
                                     dataBanner.danh_sach_banner.forEach(banner => {
                                         data.push({
                                             id: banner.MaBanner,
@@ -284,7 +283,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     if (data.success) {
                         notyf.success(data.message);
                         setTimeout(() => {
@@ -402,7 +400,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                 return notyf.error("Trạng thái không hợp lệ!");
             }
             
-            console.log(fileInput);
             const formData = new FormData();
             formData.append("MaBanner", MaBanner);
             formData.append("IdSP", IdSP);

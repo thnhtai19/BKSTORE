@@ -71,10 +71,6 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
         include $_SERVER['DOCUMENT_ROOT'] . '/app/views/client/partials/footer.php'; ?>
     </div>
     <script src="/public/js/notyf.min.js"></script>
-    <script src="/public/js/heart.js"></script>
-    <script src="/public/js/swiper-bundle.min.js"></script>
-    <script src="/public/js/client.js"></script>
-
     <script>
         var notyf = new Notyf({
             duration: 3000,
@@ -89,14 +85,15 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             const TenSP = document.getElementById('name').value.trim();
             const NoiDung = document.getElementById('feedback').value.trim();
 
-            if (TenSP.length < 3 || TenSP.length > 50 || !/^[a-zA-Z0-9\s]+$/.test(TenSP)) {
+            console.log(TenSP.length < 3 || TenSP.length > 50)
+            if (TenSP.length < 3 || TenSP.length > 50) {
                 notyf.error('Tên sản phẩm không hợp lệ. Vui lòng nhập từ 3-50 ký tự, chỉ bao gồm chữ, số và khoảng trắng.');
                 return;
             }
 
                 // Kiểm tra độ dài cho Nội dung phản hồi
             if (NoiDung.length < 10 || NoiDung.length > 500) {
-                notyf.error('Tên sản phẩm không hợp lệ. Vui lòng nhập từ 3-50 ký tự, chỉ bao gồm chữ, số và khoảng trắng.');
+                notyf.error('Nội dung sản phẩm không hợp lệ. Vui lòng nhập từ 3-50 ký tự, chỉ bao gồm chữ, số và khoảng trắng.');
                 return;
             }
 
@@ -122,6 +119,9 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
 
             }
         });
+        function goBack() {
+            window.history.back();
+        }
     </script>
 </body>
 

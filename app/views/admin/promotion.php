@@ -196,7 +196,6 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                                 if (response.ok) {
                                     const dataSale = await response.json();
-                                    console.log(dataSale); 
                                     dataSale['danh_sach_khuyen_mai'].forEach(sale => {
                                         data.push({
                                             id: sale.ID_GiamGia,
@@ -210,7 +209,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                                             ]
                                         });
                                     });
-                                    console.log(data); 
 
                                     const event = new CustomEvent('dataReady', { detail: dataSale });
                                     window.dispatchEvent(event);
@@ -291,7 +289,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                 SoLuong: soLuong,
                 TrangThai: trangThai,
             };
-            console.log(dataUpdate)
             fetch(`${window.location.origin}/api/admin/updateSale`, {
                 method: "POST",
                 headers: {
@@ -301,7 +298,6 @@ if(!($_SESSION["Role"] == 'Admin')){
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success) {
                     notyf.success(data.message);
                     setTimeout(() => {
@@ -350,7 +346,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                 DieuKien: themDieuKien,
                 SoLuong: themSoLuong,
             };
-            console.log(dataUpdate)
             fetch(`${window.location.origin}/api/admin/sale`, {
                 method: "POST",
                 headers: {
@@ -360,7 +355,6 @@ if(!($_SESSION["Role"] == 'Admin')){
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success) {
                     notyf.success(data.message);
                     setTimeout(() => {

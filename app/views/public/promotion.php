@@ -272,6 +272,10 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
     <script src="/public/js/swiper-bundle.min.js"></script>
     <script src="/public/js/client.js"></script>
     <script>
+        function redirectToPage(id) {
+            const targetUrl = `/product?id=${id}`;
+            window.location.href = targetUrl;
+        }
         document.addEventListener('DOMContentLoaded', function () {
         
             fetch(`${window.location.origin}/api/user/sale`, {
@@ -282,7 +286,6 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success) {
                     data.danh_sach_giam_gia.forEach((sale) => {
                         const container = document.getElementById("container-promotion");

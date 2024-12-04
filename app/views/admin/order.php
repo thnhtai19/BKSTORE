@@ -152,7 +152,6 @@ if(!($_SESSION["Role"] == 'Admin')){
 
                                 if (response.ok) {
                                     const ListOrder = await response.json();
-                                    console.log(ListOrder); 
                                     ListOrder['list'].forEach(order => {
                                         data.push({
                                             id: order.info.id,
@@ -174,8 +173,6 @@ if(!($_SESSION["Role"] == 'Admin')){
                                             danh_sach_san_pham: order.info.danh_sach_san_pham
                                         });
                                     });
-                                    console.log(data); 
-                                    console.log(dataOrder); 
 
                                     const event = new CustomEvent('dataReady', { detail: ListOrder });
                                     window.dispatchEvent(event);

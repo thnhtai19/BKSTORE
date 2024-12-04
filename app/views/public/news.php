@@ -64,7 +64,6 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             fetch(`${window.location.origin}/api/system/inforList`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     newsData = data.danh_sach_tin_tuc;
                     renderNews('all', currentPage);
                     renderNewsSide();
@@ -127,7 +126,6 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             function renderPagination(totalNews, currentPage) {
                 pagination.innerHTML = '';
                 const totalPages = Math.ceil(totalNews / newsPerPage);
-                console.log(totalNews)
                 
                 for (let i = 1; i <= totalPages; i++) {
                     const pageButton = document.createElement('button');
