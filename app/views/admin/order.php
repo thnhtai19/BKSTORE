@@ -130,104 +130,118 @@ if(!($_SESSION["Role"] == 'Admin')){
                         </nav>
 
                         <script>
-                            const columnTitles = {
-                                id: 'ID',
-                                name: 'Tên khách hàng',
-                                ngaydat: 'Ngày đặt hàng',
-                                tongtien: "Tổng tiền",
-                                trangthaithanhtoan: 'Trạng thái thanh toán',
-                                trangthai: 'Trạng thái đơn hàng',
-                                action: "Hành động"
-                            };
-                            let data = [];
-                            let dataOrder = [];
+                        const columnTitles = {
+                            id: 'ID',
+                            name: 'Tên khách hàng',
+                            ngaydat: 'Ngày đặt hàng',
+                            tongtien: "Tổng tiền",
+                            trangthaithanhtoan: 'Trạng thái thanh toán',
+                            trangthai: 'Trạng thái đơn hàng',
+                            action: "Hành động"
+                        };
+                        let data = [];
+                        let dataOrder = [];
 
-                            async function getListOrder() {
-                                const response = await fetch(`${window.location.origin}/api/order/list`, {
-                                    method: 'GET',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    }
+                        async function getListOrder() {
+                            const response = await fetch(`${window.location.origin}/api/order/list`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (response.ok) {
+                                const ListOrder = await response.json();
+                                ListOrder['list'].forEach(order => {
+                                    data.push({
+                                        id: order.info.id,
+                                        name: order.info.ten_khach_hang,
+                                        ngaydat: order.info.ngay_dat,
+                                        tongtien: Math.round(order.info.thong_tin_thanh_toan
+                                            .tong_tien).toLocaleString('vi-VN'),
+                                        trangthaithanhtoan: order.info.thong_tin_thanh_toan
+                                            .trang_thai,
+                                        trangthai: order.info.trang_thai,
+                                        phone: order.info.so_dien_thoai,
+                                        diachigiaohang: order.info.dia_chi_giao_hang,
+                                        soluongsanpham: order.info.so_luong_san_pham,
+                                        magiamgia: order.info.thong_tin_thanh_toan.ma_giam_gia,
+                                        action: [{
+                                            label: 'Cập nhật',
+                                            class: 'bg-green-500 text-white',
+                                            onclick: 'editOrder'
+                                        }, ]
+                                    });
+                                    dataOrder.push({
+                                        id: order.info.id,
+                                        danh_sach_san_pham: order.info.danh_sach_san_pham
+                                    });
                                 });
 
-                                if (response.ok) {
-                                    const ListOrder = await response.json();
-                                    ListOrder['list'].forEach(order => {
-                                        data.push({
-                                            id: order.info.id,
-                                            name: order.info.ten_khach_hang,
-                                            ngaydat: order.info.ngay_dat,
-                                            tongtien: Math.round(order.info.thong_tin_thanh_toan.tong_tien).toLocaleString('vi-VN'),
-                                            trangthaithanhtoan: order.info.thong_tin_thanh_toan.trang_thai,
-                                            trangthai: order.info.trang_thai,
-                                            phone: order.info.so_dien_thoai,
-                                            diachigiaohang: order.info.dia_chi_giao_hang,
-                                            soluongsanpham: order.info.so_luong_san_pham,
-                                            magiamgia: order.info.thong_tin_thanh_toan.ma_giam_gia,
-                                            action: [
-                                                { label: 'Cập nhật', class: 'bg-green-500 text-white', onclick: 'editOrder' },
-                                            ]
-                                        });
-                                        dataOrder.push({
-                                            id: order.info.id,
-                                            danh_sach_san_pham: order.info.danh_sach_san_pham
-                                        });
-                                    });
+                                const event = new CustomEvent('dataReady', {
+                                    detail: ListOrder
+                                });
+                                window.dispatchEvent(event);
+                            } else {
+                                console.error("Lỗi khi lấy dữ liệu từ API:", response.status);
+                            }
+                        }
 
-                                    const event = new CustomEvent('dataReady', { detail: ListOrder });
-                                    window.dispatchEvent(event);
-                                } else {
-                                    console.error("Lỗi khi lấy dữ liệu từ API:", response.status);
-                                }
+                        function editOrder(item) {
+                            document.getElementById("editOrderModal").classList.remove("hidden");
+                            const parseItem = JSON.parse(decodeURIComponent(item));
+
+                            const thanhToan = document.getElementById("trangthaithanhtoan");
+                            thanhToan.value = parseItem.trangthaithanhtoan;
+                            const trangThai = document.getElementById("trangthaidonhang");
+                            trangThai.value = parseItem.trangthai;
+                            document.getElementById("idOrder").value = parseItem.id;
+                            document.getElementById("nameUser").value = parseItem.name;
+                            document.getElementById("phone").value = parseItem.phone;
+                            document.getElementById("diachigiaohang").value = parseItem.diachigiaohang;
+                            document.getElementById("soluongsanpham").value = parseItem.soluongsanpham;
+                            document.getElementById("magiamgia").value = parseItem.magiamgia;
+                            document.getElementById("tongtien").value = parseItem.tongtien;
+                            document.getElementById("ngaydat").value = parseItem.ngaydat;
+
+                            let currentValue = parseItem.trangthai;
+                            let statusOrder = [
+                                "Chờ xác nhận",
+                                "Đã xác nhận",
+                                "Đang vận chuyển",
+                                "Đã giao hàng",
+                                "Đã hủy"
+                            ];
+                            let currentIndex = statusOrder.indexOf(currentValue);
+                            Array.from(trangThai.options).forEach((option, index) => {
+                                option.disabled = index < currentIndex; 
+                            });
+
+                            if(currentIndex == 3) {
+                                trangThai.options[4].classList.add("hidden");
                             }
 
-                            function editOrder(item) {
-                                document.getElementById("editOrderModal").classList.remove("hidden");
-                                const parseItem= JSON.parse(decodeURIComponent(item));
+                            currentValue = parseItem.trangthaithanhtoan;
+                            statusOrder = [
+                                "Chưa thanh toán",
+                                "Đã thanh toán",
+                                "Huỷ thanh toán"
+                            ];
+                            currentIndex = statusOrder.indexOf(currentValue);
+                            Array.from(thanhToan.options).forEach((option, index) => {
+                                option.disabled = index < currentIndex;
+                            });
+                            
+                            if(currentIndex == 1) {
+                                thanhToan.options[2].classList.add("hidden");
+                            }
 
-                                const thanhToan = document.getElementById("trangthaithanhtoan");
-                                thanhToan.value = parseItem.trangthaithanhtoan;
-                                const trangThai = document.getElementById("trangthaidonhang");
-                                trangThai.value = parseItem.trangthai;
-                                document.getElementById("idOrder").value = parseItem.id;
-                                document.getElementById("nameUser").value = parseItem.name;
-                                document.getElementById("phone").value = parseItem.phone;
-                                document.getElementById("diachigiaohang").value = parseItem.diachigiaohang;
-                                document.getElementById("soluongsanpham").value = parseItem.soluongsanpham;
-                                document.getElementById("magiamgia").value = parseItem.magiamgia;
-                                document.getElementById("tongtien").value = parseItem.tongtien;
-                                document.getElementById("ngaydat").value = parseItem.ngaydat;
-                                
-                                let currentValue = parseItem.trangthai;
-                                let statusOrder = [
-                                    "Chờ xác nhận",
-                                    "Đã xác nhận",
-                                    "Đang vận chuyển",
-                                    "Đã giao hàng",
-                                    "Đã hủy"
-                                ];
-                                let currentIndex = statusOrder.indexOf(currentValue);
-                                Array.from(trangThai.options).forEach((option, index) => {
-                                    option.disabled = index < currentIndex; 
-                                });
-
-                                currentValue = parseItem.trangthaithanhtoan;
-                                statusOrder = [
-                                    "Chưa thanh toán",
-                                    "Đã thanh toán",
-                                    "Huỷ thanh toán"
-                                ];
-                                currentIndex = statusOrder.indexOf(currentValue);
-                                Array.from(thanhToan.options).forEach((option, index) => {
-                                    option.disabled = index < currentIndex; 
-                                });
-
-                                dataOrder.forEach(order => {
-                                    if(order.id == parseItem.id) {
-                                        const containerProduct = document.getElementById("list-product");
-                                        containerProduct.innerHTML='';
-                                        order.danh_sach_san_pham.forEach(product => {
-                                            const productHTML = `
+                            dataOrder.forEach(order => {
+                                if (order.id == parseItem.id) {
+                                    const containerProduct = document.getElementById("list-product");
+                                    containerProduct.innerHTML = '';
+                                    order.danh_sach_san_pham.forEach(product => {
+                                        const productHTML = `
                                                 <div class="w-full border border-gray-300 p-2 rounded-md flex gap-5">
                                                     <img src="/${product.anh[0]}" alt="${product.ten}" class="w-16 h-16 object-cover rounded">
                                                     <div class="flex-1">
@@ -241,21 +255,24 @@ if(!($_SESSION["Role"] == 'Admin')){
                                                     </div>
                                                 </div>
                                             `;
-                                            containerProduct.insertAdjacentHTML('afterbegin', productHTML);
-                                        });
-                                    }
-                                });
+                                        containerProduct.insertAdjacentHTML('afterbegin', productHTML);
+                                    });
+                                }
+                            });
 
-                            }
+                        }
 
-                            function closeModalOrder() {
-                                document.getElementById("editOrderModal").classList.add("hidden");
-                            }
+                        function closeModalOrder() {
+                            document.getElementById("editOrderModal").classList.add("hidden");
+                            const thanhToan = document.getElementById("trangthaithanhtoan");
+                            const trangThai = document.getElementById("trangthaidonhang");
+                            trangThai.options[4].classList.remove("hidden");
+                            thanhToan.options[2].classList.remove("hidden");
+                        }
 
-                            window.onload = async function() {
-                                await getListOrder(); 
-                            };
-
+                        window.onload = async function() {
+                            await getListOrder();
+                        };
                         </script>
                         <?php
                             $title = "Quản lý đơn hàng";
@@ -270,42 +287,43 @@ if(!($_SESSION["Role"] == 'Admin')){
     <script src="/public/js/sidebar.js"></script>
     <script src="/public/js/notyf.min.js"></script>
     <script>
-        var notyf = new Notyf({
-            duration: 3000,
-            position: {
+    var notyf = new Notyf({
+        duration: 3000,
+        position: {
             x: 'right',
             y: 'top',
-            },
-        });
-        function updateOrder() {
-            const ID_DonHang = document.getElementById("idOrder").value;
-            const thanhToan = document.getElementById("trangthaithanhtoan").value;
-            const trangThai = document.getElementById("trangthaidonhang").value;
+        },
+    });
 
-            let statusOrder = [
-                "Chờ xác nhận",
-                "Đã xác nhận",
-                "Đang vận chuyển",
-                "Đã giao hàng",
-                "Đã hủy"
-            ];
-            if (!statusOrder.includes(trangThai)) {
-                return notyf.error("Trạng thái không hợp lệ!");
-            }
-            statusOrder = [
-                "Chưa thanh toán",
-                "Đã thanh toán",
-                "Huỷ thanh toán"
-            ];
-            if (!statusOrder.includes(thanhToan)) {
-                return notyf.error("trạng thái thanh toán không hợp lệ!");
-            }
-            const payload = {
-                ID_DonHang: ID_DonHang,
-                ThanhToan: thanhToan,
-                TrangThai: trangThai
-            };
-            fetch(`${window.location.origin}/api/order/update`, {
+    function updateOrder() {
+        const ID_DonHang = document.getElementById("idOrder").value;
+        const thanhToan = document.getElementById("trangthaithanhtoan").value;
+        const trangThai = document.getElementById("trangthaidonhang").value;
+
+        let statusOrder = [
+            "Chờ xác nhận",
+            "Đã xác nhận",
+            "Đang vận chuyển",
+            "Đã giao hàng",
+            "Đã hủy"
+        ];
+        if (!statusOrder.includes(trangThai)) {
+            return notyf.error("Trạng thái không hợp lệ!");
+        }
+        statusOrder = [
+            "Chưa thanh toán",
+            "Đã thanh toán",
+            "Huỷ thanh toán"
+        ];
+        if (!statusOrder.includes(thanhToan)) {
+            return notyf.error("trạng thái thanh toán không hợp lệ!");
+        }
+        const payload = {
+            ID_DonHang: ID_DonHang,
+            ThanhToan: thanhToan,
+            TrangThai: trangThai
+        };
+        fetch(`${window.location.origin}/api/order/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -328,7 +346,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                 console.error("Error:", error);
                 notyf.error("Không thể kết nối đến server. Vui lòng thử lại sau.");
             });
-        }
+    }
     </script>
 </body>
 
