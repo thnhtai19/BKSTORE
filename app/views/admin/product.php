@@ -121,7 +121,7 @@ if(!($_SESSION["Role"] == 'Admin')){
             </div>
             <div class="flex justify-end space-x-4">
                 <button onclick="handleUpdateProduct()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
-                <button onclick="hdelete()" class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
+                <button onclick="deleteProduct()" class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
                 <button onclick="closeModalProduct()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
@@ -451,7 +451,7 @@ if(!($_SESSION["Role"] == 'Admin')){
             const id = document.getElementById('idProduct').value
 
             document.getElementById('confirmDelete').onclick = function() {
-                
+                hdelete()
 
                 modal.classList.add('hidden');
             }

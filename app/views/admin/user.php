@@ -51,9 +51,9 @@ if(!($_SESSION["Role"] == 'Admin')){
                 <div class="w-1/2">
                     <label class="block text-sm font-medium text-gray-700">Giới tính:</label>
                     <select id="sex" class="mt-2 mb-4 w-full p-2 border rounded h-10">
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="Male">Nam</option>
+                        <option value="Female">Nữ</option>
+                        <option value="Other">Khác</option>
                     </select>
                 </div>
                 <div class="w-1/2">

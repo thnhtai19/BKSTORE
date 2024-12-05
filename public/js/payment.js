@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('sdt').value = customerInfo.customerPhone;
     }
 
-    const codRadio = document.getElementById("cod");
-    const bankRadio = document.getElementById("bank");
+    const codRadio = document.getElementById("COD");
+    const bankRadio = document.getElementById("Bank");
     const discountInput = document.querySelector('input[placeholder="Nhập mã giảm giá"]');
     const applyButton = document.querySelector('button.bg-gray-200');
 

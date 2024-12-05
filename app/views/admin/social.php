@@ -16,6 +16,15 @@ session_start();
 </head>
 
 <body class="bg-gray-100">
+    <div id="confirmModal" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <p class="text-lg mb-4 text-center">Bạn có muốn xoá mạng xã hội này không?</p>
+            <div class="flex justify-end gap-4">
+                <button id="confirmDelete" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Có</button>
+                <button id="cancelDelete" class="bg-gray-300 text-gray-800 py-2 px-4 rounded hover:bg-gray-400">Không</button>
+            </div>
+        </div>
+    </div>
     <div id="editSocialModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-40">
         <div class="bg-white p-6 rounded-lg w-11/12 lg:w-2/4 z-50 overflow-y-auto" style="max-height: 700px">
             <div class="flex justify-between items-start">
@@ -54,7 +63,7 @@ session_start();
             
             <div class="flex justify-end space-x-4 pt-6">
                 <button onclick="hupdate()" class="bg-green-500 text-white px-4 py-2 rounded">Cập nhật</button>
-                <button onclick="hdelete()" class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
+                <button onclick="deleteProduct()" class="bg-red-500 text-white px-8 py-2 rounded">Xoá</button>
                 <button onclick="closeSocialModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Thoát</button>
             </div>
         </div>
@@ -502,6 +511,23 @@ session_start();
                 console.log(error)
             }
         }
+
+        function deleteProduct(){
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('hidden');
+
+            document.getElementById('confirmDelete').onclick = function() {
+                hdelete()
+
+                modal.classList.add('hidden');
+            }
+
+            document.getElementById('cancelDelete').onclick = function() {
+                modal.classList.add('hidden');
+            }
+            
+        }
+
     </script>
 </body>
 
