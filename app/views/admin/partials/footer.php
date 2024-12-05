@@ -1,3 +1,3 @@
-<footer class="bg-blue-600 text-white p-4">
-    <p>&copy; 2024 Your Company</p>
+<footer class="bg- text-gray-700 p-4 border">
+    <p>&copy; 2024 BKStore</p>
 </footer>
