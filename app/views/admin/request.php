@@ -227,7 +227,7 @@ if(!($_SESSION["Role"] == 'Admin')){
                     notyf.success(data.message);
                     setTimeout(() => {
                         location.reload();
-                    }, 5000);
+                    }, 2000);
 
                 } else {
                     notyf.error(data.message);

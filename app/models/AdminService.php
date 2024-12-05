@@ -285,7 +285,7 @@ class AdminService {
     }
 
     private function proposeInfo() {
-        $sql = "SELECT * FROM SAN_PHAM_DE_XUAT";
+        $sql = "SELECT * FROM SAN_PHAM_DE_XUAT ORDER BY MaDeXuat DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();   
         $stmt = $stmt->get_result();

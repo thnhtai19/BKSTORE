@@ -85,15 +85,8 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
             const TenSP = document.getElementById('name').value.trim();
             const NoiDung = document.getElementById('feedback').value.trim();
 
-            console.log(TenSP.length < 3 || TenSP.length > 50)
-            if (TenSP.length < 3 || TenSP.length > 50) {
-                notyf.error('Tên sản phẩm không hợp lệ. Vui lòng nhập từ 3-50 ký tự, chỉ bao gồm chữ, số và khoảng trắng.');
-                return;
-            }
-
-                // Kiểm tra độ dài cho Nội dung phản hồi
-            if (NoiDung.length < 10 || NoiDung.length > 500) {
-                notyf.error('Nội dung sản phẩm không hợp lệ. Vui lòng nhập từ 3-50 ký tự, chỉ bao gồm chữ, số và khoảng trắng.');
+            if (!TenSP || !NoiDung) {
+                notyf.error('Vui lòng nhập đầy đủ thông tin!');
                 return;
             }
 
@@ -110,6 +103,9 @@ if($TrangThaiBaoTri && $_SESSION['Role'] != 'Admin'){
                 console.log(result)
                 if (result.success) {
                     notyf.success(result.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
                 } else {
                     notyf.error(result.message);
                 }

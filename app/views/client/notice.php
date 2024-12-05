@@ -46,6 +46,10 @@ if(!isset($_SESSION["email"])){
                             
                         </div>
                     </div>
+                    <div class="flex flex-col items-center justify-center gap-2 pt-10 hidden" id="noNotice">
+                        <img src="/public/image/icons8-sad-100.png" alt="sad-icon" class="w-8 h-8">
+                        <div class="text-center text-gray-500">Chưa có thông báo nào</div>
+                    </div>
                 </div>
             </main>
         </div>
@@ -73,6 +77,10 @@ if(!isset($_SESSION["email"])){
         function renderNotifications(notices) {
             const container = document.querySelector(".flex.flex-col.gap-2");
             container.innerHTML = ""; 
+
+            if(notices.length === 0){
+                document.getElementById('noNotice').classList.remove('hidden');
+            }
 
             notices.forEach(notice => {
                 const statusClass = notice.TrangThai === "Unread" ? "bg-blue-100" : "bg-gray-200";

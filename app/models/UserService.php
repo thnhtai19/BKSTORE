@@ -103,7 +103,7 @@ class UserService {
         $stmt_avatar->bind_param("si", $relativeAvatarPath, $id);
         $stmt_avatar->execute();
 
-        $img = "/".$relativeAvatarPath;
+        $img = $relativeAvatarPath;
     
         return ['success' => true, 'message' => 'Thay đổi ảnh đại diện thành công', 'image' => $img];
     }    
